@@ -1,6 +1,6 @@
 ## **selfstudy-server**
 
-**English | [中文](https://github.com/yang-jiacheng/selfstudy-server/README.zh-CN.md)**
+**English | [中文](https://github.com/yang-jiacheng/selfstudy-server/blob/master/README.zh-CN.md)**
 
 ### 1. Introduction
 
