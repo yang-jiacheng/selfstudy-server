@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../layui_v2.6.8/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
+    <link rel="stylesheet" type="text/css" href="../zoomify/zoomify.min.css"/>
+    <style>
+        .edit-avatar {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: start;
+            align-items: flex-start;
+        }
+        .avatar-divider {
+            display: inline-block;
+            border-left: 1px solid #ccd0d7;
+            height: 50px;
+            align-self: center;
+            margin: 0px 20px;
+        }
+        .edit-avatar-content {
+            display: inline-block;
+        }
+        .img-avatar {
+            display: inline-block !important;
+            width: 64px;
+            height: 64px;
+            line-height: 64px;
+            text-align: center;
+            vertical-align: middle;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+            margin-left: 26px;
+        }
+        .img-avatar-48 {
+            width: 48px;
+            height: 48px;
+            line-height: 48px;
+        }
+        .wid-95{
+            width: 95%;
+        }
+        .form-control:focus,
+        .has-success .form-control:focus,
+        .has-warning .form-control:focus,
+        .has-error .form-control:focus {
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+        .disabled-col{
+            background-color: #eee !important;
+        }
+    </style>
+</head>
+<body class="cm-body-BackCol">
+<div class="cm-container">
+
+    <div class="cm-title">
+        <blockquote class="elem-quote ">
+            个人信息
+        </blockquote>
+    </div>
+
+    <div class="cm-detial">
+        <div style="padding: 1rem">
+
+            <!-- 页面主题内容写在这 -->
+            <div class="layui-form">
+
+                <div class="edit-avatar" >
+
+                    <img  id="pic"  class="img-avatar zoomify">
+                    <div class="avatar-divider"></div>
+                    <div class="edit-avatar-content">
+                        <button class="layui-btn layui-btn-primary" id="test1">修改头像</button>
+                        <p class="m-0" style="color: #2c95e9">选择一张你喜欢的图片，上传后会自动显示264x264大小，上传图片大小不能超过2M。</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="layui-form-item " style="margin-top: 15px;">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block ">
+                        <input type="text" id="username"  placeholder="请输入"  disabled="disabled" class="layui-input disabled-col">
+                    </div>
+                </div>
+
+                <div class="layui-form-item " >
+                    <label class="layui-form-label">注册时间</label>
+                    <div class="layui-input-block ">
+                        <input type="text" id="createTime"  placeholder="请输入" disabled="disabled"   class="layui-input disabled-col">
+                    </div>
+                </div>
+
+                <div class="layui-form-item " >
+                    <label class="layui-form-label">昵称</label>
+                    <div class="layui-input-block ">
+                        <input type="text" id="name"  placeholder="请输入"   class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item " >
+                    <label class="layui-form-label">旧密码</label>
+                    <div class="layui-input-block ">
+                        <input type="password" id="oldPassword"  placeholder="请输入"   class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item " >
+                    <label class="layui-form-label">新密码</label>
+                    <div class="layui-input-block ">
+                        <input type="password" id="newPassword"  placeholder="请输入"   class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item com-center ">
+                    <label class="layui-form-label"></label>
+                    <button style="width: 200px;" class="layui-btn layui-btn-radius comBackCol-brightCyan" onclick="saveAdminInfo()">保存</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<input id="imgPath" type="hidden" />
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../zoomify/zoomify.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/encode-word.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var form;
+    var layer;
+    var table;
+    var laypage;
+    var laydate;
+    var formSelects;
+    var upload;
+
+    var adminId
+    $(function(){
+        layui.use(['layer', 'form' ,'table','laypage','laydate','upload'], function () {
+            layer = layui.layer;
+            form = layui.form;
+            table = layui.table;
+            laypage = layui.laypage;
+            laydate = layui.laydate;
+            formSelects = layui.formSelects;
+            upload=layui.upload;
+
+            getAdminInfo()
+
+            var uploadInst=upload.render({
+                elem: '#test1'
+                ,url: '../resources/upload'
+                ,accept: 'images'//允许上传的文件类型，有：images（图片）、file（所有文件）、video（视频）、audio（音频）
+                ,acceptMime: 'image/*'//打开文件选择框时，筛选出的文件类型
+                //,size: 2048
+                ,before: function(obj){
+                    layer.load();
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        var a= $('#pic').attr('src', result); //图片链接（base64）
+                    });
+                }
+                //上传成功
+                ,done: function(res){
+                    layer.closeAll('loading');
+                    if (res.code===0){
+                        layer.msg('上传成功',{icon:1});
+                        var imgPath=res.result[0];
+                        $("#imgPath").val(imgPath)
+                        return ;
+                    }
+                    layer.msg('上传失败',{icon:2});
+
+                },error: function(index, upload){
+                    layer.closeAll('loading');
+                }
+            });
+
+
+            $(".zoomify").zoomify()
+        });
+    });
+
+    function getAdminInfo(){
+        $.ajax({
+            url:'../personalManage/getPersonalById',
+            type:'POST',
+            cache:false,//关缓存
+            async:false,//关闭异步
+            data:{},
+            dataType:"json", //期望服务端返回的数据类型
+            success:function (data) {
+                if (data.code===0){
+                    var obj=data.result
+                    adminId=obj.id
+                    if (obj.profilePath!==null){
+                        var imgPath=obj.profilePath
+                        $("#pic").attr('src',imgPath)
+                        $("#imgPath").val(imgPath.substring(imgPath.indexOf('/upload')))
+                    }
+                    $("#username").val(obj.username)
+                    $("#name").val(obj.name)
+                    $("#createTime").val(obj.createTime)
+                    form.render()
+                    return;
+                }
+                layer.msg(data.msg,{icon : 8})
+            },error:function (jqXHR, textStatus, errorThrown) {
+                layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+            }
+        });
+    }
+
+    function saveAdminInfo(){
+        var name=$("#name").val()
+        var oldPassword=$("#oldPassword").val()
+        var newPassword=$("#newPassword").val()
+        var profilePath=$("#imgPath").val()
+
+        if (name===''){
+            layer.msg('昵称是必填项！',{icon : 8})
+            return
+        }
+        //{"id":adminId,"name":name,"oldPassword":sha256_digest(oldPassword),"newPassword":sha256_digest(newPassword),"profilePath":profilePath}
+        var obj = {}
+        obj.id = adminId
+        obj.name =name
+        obj.profilePath = profilePath
+        if ( !strIsEmpty(oldPassword) && !strIsEmpty(newPassword)  ){
+            obj.oldPassword = sha256_digest(oldPassword)
+            obj.newPassword = sha256_digest(newPassword)
+        }
+
+        $.ajax({
+            url:'../personalManage/updatePersonal',
+            type:'POST',
+            cache:false,//关缓存
+            async:false,//关闭异步
+            data: obj,
+            dataType:"json", //期望服务端返回的数据类型
+            success:function (data) {
+                if (data.code===0){
+                    layer.msg("保存成功！",{icon : 1})
+                    return;
+                }
+                layer.msg(data.msg,{icon : 8})
+            },error:function (jqXHR, textStatus, errorThrown) {
+                layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

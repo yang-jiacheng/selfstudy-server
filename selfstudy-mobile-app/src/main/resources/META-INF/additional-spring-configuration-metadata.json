@@ -1,0 +1,48 @@
+{
+  "properties": [
+    {
+      "name": "ali.accesskey.id",
+      "type": "java.lang.String",
+      "description": "Description for ali.accesskey.id."
+    },
+    {
+      "name": "ali.accesskey.secret",
+      "type": "java.lang.String",
+      "description": "Description for ali.accesskey.secret."
+    },
+    {
+      "name": "oss.config.enabled",
+      "type": "java.lang.String",
+      "description": "Description for oss.config.enabled."
+    },
+    {
+      "name": "oss.config.path",
+      "type": "java.lang.String",
+      "description": "Description for oss.config.path."
+    },
+    {
+      "name": "oss.config.bucket",
+      "type": "java.lang.String",
+      "description": "Description for oss.config.bucket."
+    },
+    {
+      "name": "host.name",
+      "type": "java.lang.String",
+      "description": "Description for host.name."
+    },
+    {
+      "name": "sourse.config.file",
+      "type": "java.lang.String",
+      "description": "Description for sourse.config.file."
+    },
+    {
+      "name": "sourse.config.upload",
+      "type": "java.lang.String",
+      "description": "Description for sourse.config.upload."
+    },
+    {
+      "name": "oss.config.endpoint",
+      "type": "java.lang.String",
+      "description": "Description for oss.config.endpoint."
+    }
+  ] }

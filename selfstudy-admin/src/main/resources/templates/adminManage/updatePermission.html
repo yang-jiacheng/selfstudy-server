@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="icon" href="../img/lslogo.jpg" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="../layui_v2.6.8/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../multipleSel/formSelects-v4.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
+    <link rel="stylesheet" type="text/css" href="../zoomify/zoomify.css"/>
+</head>
+<style>
+    .wid-95{
+        width: 95%;
+    }
+</style>
+<body>
+<div class="layui-form" style="margin-top: 20px;">
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">权限名称</label>
+        <div class="layui-input-block">
+            <input type="text" id="name" placeholder="请输入权限名称" class="layui-input ">
+        </div>
+    </div>
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">权限代码</label>
+        <div class="layui-input-block">
+            <input type="text" id="url" placeholder="请输入权限代码" class="layui-input ">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text wid-95">
+        <label class="layui-form-label">权限描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入描述" id="description" rows="7" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../multipleSel/formSelects-v4.js" type="text/javascript" charset="utf-8"></script>
+<script src="../zoomify/zoomify.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var form;
+    var layer;
+    var table;
+    var laypage;
+    var laydate;
+    var formSelects;
+
+    var permissionId = getQueryString("permissionId")
+    $(function(){
+        layui.use(['layer', 'form' ,'table','laypage','laydate','formSelects'], function () {
+            layer = layui.layer;
+            form = layui.form;
+            table = layui.table;
+            laypage = layui.laypage;
+            laydate = layui.laydate;
+            formSelects = layui.formSelects;
+
+            if (permissionId!=='null'){
+                getPermissionById()
+            }
+
+        });
+    });
+
+    function getPermissionById(){
+        $.ajax({
+            url:'../roleManage/getPermissionById',
+            type:'POST',
+            cache:false,//关缓存
+            async:false,//关闭异步
+            data:{"id":permissionId},
+            dataType:"json", //期望服务端返回的数据类型
+            success:function (data) {
+                var obj = data.result;
+                $("#name").val(obj.name)
+                $("#description").val(obj.description)
+                $("#url").val(obj.url)
+                form.render()
+            },error:function (jqXHR, textStatus, errorThrown) {
+                layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+            }
+        });
+    }
+
+    //获取url的参数
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var array = window.location.search.substr(1).match(reg);
+        if (array != null) {
+            return decodeURIComponent(array[2])
+        }
+        return ""
+    }
+</script>
+</body>
+</html>

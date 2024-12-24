@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxy.common.mapper.FeedbackMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lxy.common.po.Feedback">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="content" property="content" />
+        <result column="pic" property="pic" />
+        <result column="reply" property="reply" />
+        <result column="admin_id" property="adminId" />
+        <result column="create_time" property="createTime" />
+        <result column="reply_time" property="replyTime" />
+        <result column="status" property="status" />
+        <result column="reply_status" property="replyStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, content, pic, reply, admin_id, create_time, reply_time, status, reply_status
+    </sql>
+
+    <select id="getFeedBackList" resultType="com.lxy.common.vo.FeedbackVO">
+        SELECT
+            f.id,
+            f.user_id,
+            f.content,
+            f.pic,
+            f.reply,
+            f.admin_id,
+            f.create_time,
+            f.reply_time,
+            f.`status`,
+            f.reply_status,
+            u.NAME,
+            u.phone,
+            u.profile_path,
+            ai.`name` AS adminName
+        FROM
+            feedback f
+            INNER JOIN USER u ON u.id = f.user_id
+            LEFT JOIN admin_info ai ON ai.id = f.admin_id
+        <where>
+            <if test="content != null and content != ''">
+                and f.content like concat ('%',#{content},'%')
+            </if>
+            <if test="replyStatus != null ">
+                and  f.reply_status = #{replyStatus}
+            </if>
+            <if test="status != null ">
+                and f.status = #{status}
+            </if>
+            <if test="userId != null ">
+                and f.user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getFeedBackList_COUNT" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        feedback f
+        INNER JOIN USER u ON u.id = f.user_id
+        LEFT JOIN admin_info ai ON ai.id = f.admin_id
+        <where>
+            <if test="content != null and content != ''">
+                and f.content like concat ('%',#{content},'%')
+            </if>
+            <if test="replyStatus != null ">
+                and f.reply_status = #{replyStatus}
+            </if>
+            <if test="status != null ">
+                and  f.status = #{status}
+            </if>
+            <if test="userId != null ">
+                and  f.user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getFeedBackDetail" resultType="com.lxy.common.vo.FeedbackVO">
+        SELECT
+            f.id,
+            f.user_id,
+            f.content,
+            f.pic,
+            f.reply,
+            f.admin_id,
+            f.create_time,
+            f.reply_time,
+            f.`status`,
+            f.reply_status,
+            u.NAME,
+            u.phone,
+            u.profile_path,
+            ai.`name` AS adminName
+        FROM
+            feedback f
+            INNER JOIN USER u ON u.id = f.user_id
+            LEFT JOIN admin_info ai ON ai.id = f.admin_id
+        where f.id=#{id}
+    </select>
+
+</mapper>

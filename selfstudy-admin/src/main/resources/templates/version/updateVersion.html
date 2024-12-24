@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../layui_v2.6.8/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
+    <link rel="stylesheet" type="text/css" href="../zoomify/zoomify.min.css"/>
+</head>
+<body>
+<div class="layui-form" style="margin-top: 15px;">
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">版本号</label>
+        <div class="layui-input-block">
+            <input type="number" id="versionCode" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">版本名称</label>
+        <div class="layui-input-block">
+            <input type="text" id="versionName" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">检测更新</label>
+        <div class="layui-input-block">
+            <input type="radio"  name="checkUpdate" id="checkUpdateYes" value="1" title="是" >
+            <input type="radio"  name="checkUpdate" id="checkUpdateNo" value="0" title="否">
+        </div>
+    </div>
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">强制更新</label>
+        <div class="layui-input-block">
+            <input type="radio"  name="status" id="statusYes" value="1" title="是" >
+            <input type="radio"  name="status" id="statusNo" value="0" title="否">
+        </div>
+    </div>
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">下载地址</label>
+        <div class="layui-input-block">
+            <input style="position: absolute;top: 50px;display: none" id="ossUp-file" type="file" accept=".apk"  name="file">
+            <button id="ossUp-button" class="layui-btn layui-btn-primary layui-border-black" style="margin-bottom: 10px;">点击上传</button>
+            <br/>
+            <input type="text" id="downloadUrl" autocomplete="off"  class="layui-input">
+        </div>
+    </div>
+
+
+</div>
+
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../zoomify/zoomify.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../ali-oss-6.22.0/aliyun-oss-sdk.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../ali-oss-6.22.0/ossUtil.js" type="text/javascript" charset="utf-8"></script>
+<!--<script src="../js/encode-word.js" type="text/javascript" charset="utf-8"></script>-->
+<script type="text/javascript">
+    var form;
+    var layer;
+
+
+    var vid = getQueryString("vid")
+    var obj = new Object()
+    $(function(){
+        layui.use(['layer', 'form','upload' ], function () {
+            layer = layui.layer;
+            form = layui.form;
+            upload = layui.upload;
+            getVersionById()
+
+            listeningFileInput(`ossUp-file`,`ossUp-button`, "downloadUrl",2,['.apk'])
+        });
+    });
+
+    function getVersionById(){
+        ajaxPost('./getVersionById',{"id":vid},function (data) {
+            obj = data.result
+            var status=obj.status
+            var checkUpdate=obj.checkUpdate
+            $('#versionCode').val(obj.versionCode)
+            $('#versionName').val(obj.versionName)
+            $('#downloadUrl').val(obj.downloadUrl)
+
+            if (status === 0){
+                $("#statusNo").attr("checked",true)
+                $("#statusYes").removeAttr("checked",true)
+            }else if (status === 1){
+                $("#statusYes").attr("checked",true)
+                $("#statusNo").removeAttr("checked",true)
+            }
+
+            if (checkUpdate === 0){
+                $("#checkUpdateNo").attr("checked",true)
+                $("#checkUpdateYes").removeAttr("checked",true)
+            }else if (checkUpdate === 1){
+                $("#checkUpdateYes").attr("checked",true)
+                $("#checkUpdateNo").removeAttr("checked",true)
+            }
+
+            form.render()
+        });
+    }
+
+    function getVersionObj(){
+        obj.versionCode = $("#versionCode").val()
+        obj.versionName = $("#versionName").val()
+        obj.downloadUrl = $("#downloadUrl").val()
+        obj.checkUpdate=$("input[name='checkUpdate']:checked").val();
+        obj.status=$("input[name='status']:checked").val();
+
+        return obj
+    }
+
+
+</script>
+</body>
+</html>

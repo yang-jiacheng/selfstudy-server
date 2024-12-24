@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../layui_v2.6.8/css/layui.css"/>
+</head>
+<body>
+<div class="layui-form " style="width: 95%;margin: 10px auto auto auto">
+
+    <table  class="layui-table" id="commentTable" lay-filter="commentTable" style="table-layout: fixed; "></table>
+
+</div>
+
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var form;
+    var layer;
+    var laypage;
+    var table;
+    var errList=JSON.parse(getQueryString("errList"));
+    var pageNum=1
+
+    $(function () {
+        layui.use(['laypage', 'layer', 'form', 'table' ], function () {
+            layer = layui.layer;
+            laypage = layui.laypage;
+            form = layui.form;
+            table=layui.table;
+
+            layer.msg("导入失败！",{icon: 2})
+
+            table.render({
+                id: 'commentTable'
+                , elem: '#commentTable'
+                , skin: 'row ' //行边框风格
+                , even: true    //开启隔行背景
+                ,data: errList
+                ,limit:9
+                , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                    layout: ['count', 'prev', 'page', 'next', 'skip']
+                    ,theme: '#0095ff'
+                    //,curr: 5 //设定初始在第 5 页
+                    , groups: 5 //只显示 1 个连续页码
+                    , first: "首页"
+                    , last: "尾页"
+                }
+                ,cellMinWidth: 80
+                , cols: [
+                    [
+                        {field: 'position',   title: '报错位置'}
+                        , {field: 'reason',   title: '原因'}
+                        , {field: 'dispose',  title: '描述'}
+                    ]
+                ]
+                ,done: function(res, curr, count){
+
+                }
+            });
+
+        });
+    });
+
+    function show(){
+        // setTimeout(data=>{
+        //     layer.msg("导入失败！",{icon: 5})
+        // },2000)
+    }
+
+    //获取url的参数
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var array = window.location.search.substr(1).match(reg);
+        if (array != null) {
+            return decodeURIComponent(array[2])
+        }
+        return ""
+    }
+</script>
+</body>
+</html>

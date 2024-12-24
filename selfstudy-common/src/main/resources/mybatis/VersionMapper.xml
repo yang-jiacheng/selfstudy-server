@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxy.common.mapper.VersionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lxy.common.po.Version">
+        <id column="id" property="id" />
+        <result column="version_code" property="versionCode" />
+        <result column="version_name" property="versionName" />
+        <result column="download_url" property="downloadUrl" />
+        <result column="status" property="status" />
+        <result column="check_update" property="checkUpdate" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, version_code, version_name, download_url, status, check_update, update_time
+    </sql>
+
+</mapper>

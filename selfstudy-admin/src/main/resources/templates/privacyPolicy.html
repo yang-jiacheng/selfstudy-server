@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../layui_v2.6.8/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
+
+</head>
+<style>
+    .pol{
+        margin: 15px auto 5px auto;
+        text-align: center;
+        color: #258EEC;
+    }
+    .btnMar{
+        margin-top: 10px;
+    }
+    .form-mar{
+        margin: auto;width: 95%
+    }
+    .form-agree{
+        margin: 40px auto auto auto;width: 95%
+    }
+</style>
+<body class="cm-body-BackCol">
+<div class="cm-container">
+
+    <div class="cm-title">
+        <blockquote class="elem-quote ">
+            隐私政策与用户协议
+        </blockquote>
+    </div>
+
+    <div class="cm-detial">
+        <div style="padding: 1rem">
+
+            <!-- 页面主题内容写在这 -->
+            <div class="layui-form">
+                <div class="layui-form-item form-mar" >
+
+                    <h3 class="pol">隐私政策</h3>
+                    <textarea placeholder="请输入内容" id="policy" class="layui-textarea"></textarea>
+                    <button class="layui-btn comBackCol-brightCyan btnMar" onclick="savePolicy()">保存</button>
+
+                </div>
+
+                <hr style="margin: 40px auto auto auto;width: 95%;border-bottom: 1px solid #e0cdcd!important" >
+
+                <div class="layui-form-item form-agree" >
+                    <h3 class="pol">用户协议</h3>
+                    <textarea placeholder="请输入内容" id="agreement" class="layui-textarea"></textarea>
+                    <button class="layui-btn comBackCol-brightCyan btnMar" onclick="saveAgreement()">保存</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../tinymce/tinymce.min.js"></script>
+<script src="../tinymce/tinymce-util.js"></script>
+<script>
+    var form;
+    var layer;
+
+    const tinyID='policy';
+    const tinyIDAgree='agreement';
+
+    var policyContent = ""
+    var agreementContent = ""
+    $(function(){
+        layui.use(['layer', 'form'], function () {
+            layer = layui.layer;
+            form = layui.form;
+            getAgreement()
+        });
+    });
+
+    function getAgreement(){
+        ajaxPost('./getAgreement',{},function (data) {
+            if (data.code !== 0){
+                layer.msg(data.msg,{icon : 2})
+                return
+            }
+            policyContent = data.result.policy
+            agreementContent = data.result.agreement
+            initTiny(tinyID,policyContent)
+            initTiny(tinyIDAgree,agreementContent)
+        })
+    }
+
+    function savePolicy(){
+        policyContent =  getTinyContent(tinyID)
+        ajaxPost('./saveAgreement',{"type":1,"content":policyContent},function (data) {
+            if (data.code !== 0){
+                layer.msg(data.msg,{icon : 2})
+                return
+            }
+            layer.msg('保存成功',{icon : 1})
+        })
+    }
+
+    function saveAgreement(){
+        agreementContent =  getTinyContent(tinyIDAgree)
+        ajaxPost('./saveAgreement',{"type":2,"content":agreementContent},function (data) {
+            if (data.code !== 0){
+                layer.msg(data.msg,{icon : 2})
+                return
+            }
+            layer.msg('保存成功',{icon : 1})
+        })
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/materialdesignicons.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
+</head>
+<body>
+<div class="container-fluid" style="margin-top: 20px;">
+    <div class="lyear-layout-sidebar-scroll" style="background-color: #F2F2F2;">
+        <div class="row">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card bg-primary">
+                    <div class="card-body clearfix">
+                        <div class="pull-right">
+                            <p class="h6 text-white m-t-0">课程统计</p>
+                            <p class="h3 text-white m-b-0 fa-1-5x courseCount"></p>
+                        </div>
+                        <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-book-open-page-variant fa-1-5x"></i></span> </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card bg-danger">
+                    <div class="card-body clearfix">
+                        <div class="pull-right">
+                            <p class="h6 text-white m-t-0">视频统计</p>
+                            <p class="h3 text-white m-b-0 fa-1-5x videoCount"></p>
+                        </div>
+                        <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-file-video fa-1-5x"></i></span> </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card bg-success">
+                    <div class="card-body clearfix">
+                        <div class="pull-right">
+                            <p class="h6 text-white m-t-0">学员统计</p>
+                            <p class="h3 text-white m-b-0 fa-1-5x userCount"></p>
+                        </div>
+                        <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-account-multiple fa-1-5x"></i></span> </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card bg-purple">
+                    <div class="card-body clearfix">
+                        <div class="pull-right">
+                            <p class="h6 text-white m-t-0">今日注册学员统计</p>
+                            <p class="h3 text-white m-b-0 fa-1-5x nowUserCount"></p>
+                        </div>
+                        <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-account-plus fa-1-5x"></i></span> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header"><h4>浏览统计</h4></div>
+                    <div class="card-body">
+                        <canvas id="chart-vbar-2"  ></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header"><h4>课程统计</h4></div>
+                    <div class="card-body" >
+                        <canvas id="chart-doughnut"  style="text-align: center;margin: 0 auto;" ></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-6" >
+                <div class="card">
+                    <div class="card-header">
+                        <h4>热门观看</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th style="font-size: 13px !important;">排名</th>
+                                    <th style="font-size: 13px !important;">课程名称</th>
+                                    <th style="font-size: 13px !important;">观看次数</th>
+                                </tr>
+                                </thead>
+                                <tbody id="hotLook" style="font-size: 13px !important;">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header"><h4>热门销售</h4></div>
+                    <div class="card-body" id="hootBuy" >
+                        <div class="alert alert-success" >无</div>
+                        <div class="alert alert-danger" >无</div>
+                        <div class="alert alert-warning" >无</div>
+                        <div class="alert alert-info" >无</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="../js/perfect-scrollbar.min.js" ></script>
+<script src="../js/Chart.js" ></script>
+<script type="text/javascript">
+    var loopInfo={"lectureHall":3,"groupCount":12,"dibbling":29,"live":5}
+    var countdata={"msg":"调用成功","playCount":[460092,495099,1230246,620124],"buyCount":[0,0,0,0],"code":0,"viewCount":[34017,58029,140070,56028]}
+    var hotView={"msg":"调用成功","result":[{"id":208,"teacherId":19,"assistantTeacherIds":null,"materialId":null,"name":"测试专业一列表多课程显示点播课","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987328949026686.png\" title=\"1646987328949026686.png\" alt=\"1.png\"><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987337086012868.png\" title=\"1646987337086012868.png\" alt=\"2.png\"></p>","score":100.00,"plan":null,"teachingTime":"3000","coverPath":"/upload/4e/1d/eo/20220323_82018.jpg","filePath":null,"playCount":1000,"unlockCount":1000,"useType":1,"sort":1,"showType":"[\"1\",\"2\",\"3\"]"},{"id":153,"teacherId":16,"assistantTeacherIds":null,"materialId":null,"name":"高等数学·精英班","subhead":"","description":"适用于江苏专转本考生（大一至大三皆可）","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220415/1649988760682058352.jpg\" title=\"1649988760682058352.jpg\" alt=\"公共课-长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/hw/o0/au/20220122_28993.jpg","filePath":null,"playCount":853,"unlockCount":853,"useType":1,"sort":1,"showType":"[\"1\",\"2\",\"3\"]"},{"id":154,"teacherId":17,"assistantTeacherIds":null,"materialId":null,"name":"大学语文·精英班","subhead":"","description":"适用于江苏专转本考生（大一至大三皆可）","level":1,"playType":1,"introduce":"<p><img src=\"http://oss.fhzjedu.com/upload/image/20220122/1642857448206093402.jpg\" title=\"1642857448206093402.jpg\" alt=\"公共课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/7w/79/nq/20220122_71292.jpg","filePath":null,"playCount":631,"unlockCount":631,"useType":1,"sort":2,"showType":"[\"1\",\"2\",\"3\"]"},{"id":94,"teacherId":19,"assistantTeacherIds":null,"materialId":null,"name":"英语B级通关班","subhead":"","description":"凤凰职教江苏专转本网校","level":1,"playType":1,"introduce":"<p><img src=\"http://oss.fhzjedu.com/upload/image/20220118/1642494802207060729.jpg\" title=\"1642494802207060729.jpg\" alt=\"AB级.jpg\"></p>","score":100.00,"plan":"<p><img src=\"http://oss.fhzjedu.com/upload/image/20211105/1636101860377073726.png\" title=\"1636101860377073726.png\" alt=\"图怪兽_7a22cc467f3847eff0f3fe0777428fe2_39376.png\"></p>","teachingTime":"2000","coverPath":"/upload/uy/85/9n/20210922_82924.png","filePath":null,"playCount":400,"unlockCount":400,"useType":1,"sort":4,"showType":"[\"1\",\"2\",\"3\"]"},{"id":143,"teacherId":16,"assistantTeacherIds":null,"materialId":null,"name":"专转本数学历年真题书课包","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"http://oss.fhzjedu.com/upload/image/20220118/1642486092008058206.jpg\" title=\"1642486092008058206.jpg\" alt=\"initpi777.jpg\"></p>","score":0.00,"plan":"<p><img src=\"http://oss.fhzjedu.com/upload/image/20211108/1636387085391071967.png\" title=\"1636387085391071967.png\" alt=\"联系我们.png\"></p>","teachingTime":"00:00","coverPath":"/upload/mp/70/o2/20211108_11466.jpg","filePath":null,"playCount":387,"unlockCount":387,"useType":1,"sort":9,"showType":"[\"1\",\"2\",\"3\"]"},{"id":93,"teacherId":19,"assistantTeacherIds":null,"materialId":null,"name":"英语A级通关班","subhead":"","description":"凤凰职教江苏专转本网校","level":1,"playType":1,"introduce":"<p><img src=\"http://oss.fhzjedu.com/upload/image/20220118/1642494789742091019.jpg\" title=\"1642494789742091019.jpg\" alt=\"AB级.jpg\"></p>","score":100.00,"plan":"<p><img src=\"http://oss.fhzjedu.com/upload/image/20211105/1636101851824016420.png\" title=\"1636101851824016420.png\" alt=\"图怪兽_7a22cc467f3847eff0f3fe0777428fe2_39376.png\"></p>","teachingTime":"1000","coverPath":"/upload/6a/hf/ex/20210922_35315.png","filePath":null,"playCount":320,"unlockCount":320,"useType":1,"sort":3,"showType":"[\"1\",\"2\",\"3\"]"},{"id":144,"teacherId":17,"assistantTeacherIds":null,"materialId":null,"name":"专转本语文历年真题书课包","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"http://oss.fhzjedu.com/upload/image/20220118/1642486222337016028.jpg\" title=\"1642486222337016028.jpg\" alt=\"initpintu_副本.jpg\"></p>","score":0.00,"plan":"<p><img src=\"http://oss.fhzjedu.com/upload/image/20211108/1636387141026093179.png\" title=\"1636387141026093179.png\" alt=\"联系我们.png\"></p>","teachingTime":"00:00","coverPath":"/upload/ky/y6/dp/20211108_19310.jpg","filePath":null,"playCount":285,"unlockCount":285,"useType":1,"sort":10,"showType":"[\"1\",\"2\",\"3\"]"},{"id":163,"teacherId":31,"assistantTeacherIds":null,"materialId":null,"name":"财经类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220127/1643295829210057555.jpg\" title=\"1643295829210057555.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/e5/nj/b9/20220127_86351.jpg","filePath":null,"playCount":200,"unlockCount":200,"useType":1,"sort":1,"showType":"[\"1\",\"2\",\"3\"]"},{"id":164,"teacherId":31,"assistantTeacherIds":null,"materialId":null,"name":"财经类专业课  早鸟营","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220127/1643296155597084445.jpg\" title=\"1643296155597084445.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/6b/ok/vp/20220127_82330.jpg","filePath":null,"playCount":200,"unlockCount":200,"useType":1,"sort":20,"showType":"[\"1\",\"2\",\"3\"]"},{"id":214,"teacherId":18,"assistantTeacherIds":null,"materialId":null,"name":"全国英语四级通关班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220303/1646295544406052629.jpg\" title=\"1646295544406052629.jpg\" alt=\"QQ图片20220303161854.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"500","coverPath":"/upload/uf/7e/3q/20220303_18288.jpg","filePath":null,"playCount":200,"unlockCount":200,"useType":1,"sort":5,"showType":"[\"1\",\"2\",\"3\"]"},{"id":241,"teacherId":19,"assistantTeacherIds":null,"materialId":null,"name":"统考英语·精英班（师范）","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987328949026686.png\" title=\"1646987328949026686.png\" alt=\"1.png\"><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987337086012868.png\" title=\"1646987337086012868.png\" alt=\"2.png\"></p>","score":100.00,"plan":null,"teachingTime":"360","coverPath":"/upload/oe/2n/j5/20220323_62908.jpg","filePath":null,"playCount":142,"unlockCount":142,"useType":1,"sort":2,"showType":"[\"1\",\"2\",\"3\"]"},{"id":197,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"法学类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643713901257049058.jpg\" title=\"1643713901257049058.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/w6/sb/ck/20220201_47789.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":31,"showType":"[\"1\",\"2\",\"3\"]"},{"id":191,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"教育类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643705520572044237.jpg\" title=\"1643705520572044237.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/56/sn/yx/20220201_53795.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":29,"showType":"[\"1\",\"2\",\"3\"]"},{"id":193,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"机械工程类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643705745361059699.jpg\" title=\"1643705745361059699.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/kp/gi/xf/20220201_32956.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":11,"showType":"[\"1\",\"2\",\"3\"]"},{"id":194,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"机械工程类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643705821975052030.jpg\" title=\"1643705821975052030.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/qu/i6/h1/20220201_13489.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":30,"showType":"[\"1\",\"2\",\"3\"]"},{"id":196,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"法学类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643713825002085205.jpg\" title=\"1643713825002085205.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/fn/6r/x6/20220201_54633.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":12,"showType":"[\"1\",\"2\",\"3\"]"},{"id":190,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"教育类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643705450446057962.jpg\" title=\"1643705450446057962.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/pv/05/3q/20220201_71794.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":10,"showType":"[\"1\",\"2\",\"3\"]"},{"id":199,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"新闻传播类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643714018287086905.jpg\" title=\"1643714018287086905.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/j3/3b/tz/20220201_31773.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":13,"showType":"[\"1\",\"2\",\"3\"]"},{"id":200,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"新闻传播类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643714072744068985.jpg\" title=\"1643714072744068985.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/3c/f1/sq/20220201_21142.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":32,"showType":"[\"1\",\"2\",\"3\"]"},{"id":202,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"英语类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643714205717031494.jpg\" title=\"1643714205717031494.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/w7/jo/bv/20220201_81936.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":14,"showType":"[\"1\",\"2\",\"3\"]"},{"id":204,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"食品类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643714312162002914.jpg\" title=\"1643714312162002914.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/cc/u4/u4/20220201_96702.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":16,"showType":"[\"1\",\"2\",\"3\"]"},{"id":205,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"音乐类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643714392011026928.jpg\" title=\"1643714392011026928.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/fh/ay/z5/20220201_51872.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":17,"showType":"[\"1\",\"2\",\"3\"]"},{"id":206,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"农林类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643714456086041237.jpg\" title=\"1643714456086041237.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/dx/p6/29/20220201_96834.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":18,"showType":"[\"1\",\"2\",\"3\"]"},{"id":207,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"资源环境类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643714499389025811.jpg\" title=\"1643714499389025811.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/ul/md/g9/20220201_30132.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":19,"showType":"[\"1\",\"2\",\"3\"]"},{"id":187,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"电子信息类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643705241030002572.jpg\" title=\"1643705241030002572.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/bk/ir/l5/20220201_91173.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":9,"showType":"[\"1\",\"2\",\"3\"]"},{"id":166,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"管理类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220131/1643623768320087915.jpg\" title=\"1643623768320087915.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/zy/6i/mx/20220131_17566.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":2,"showType":"[\"1\",\"2\",\"3\"]"},{"id":167,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"管理类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220131/1643623928032036307.jpg\" title=\"1643623928032036307.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/jz/dd/zd/20220131_83589.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":21,"showType":"[\"1\",\"2\",\"3\"]"},{"id":169,"teacherId":21,"assistantTeacherIds":null,"materialId":null,"name":"计算机类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220131/1643624771102079381.jpg\" title=\"1643624771102079381.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/5v/o3/nq/20220131_44239.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":3,"showType":"[\"1\",\"2\",\"3\"]"},{"id":170,"teacherId":21,"assistantTeacherIds":null,"materialId":null,"name":"计算机类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220131/1643624816106042029.jpg\" title=\"1643624816106042029.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/y6/e1/9q/20220131_22511.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":22,"showType":"[\"1\",\"2\",\"3\"]"},{"id":172,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"文史类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220131/1643625194328078229.jpg\" title=\"1643625194328078229.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/aj/4l/uy/20220131_98401.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":4,"showType":"[\"1\",\"2\",\"3\"]"},{"id":173,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"文史类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/sl/lw/h4/20220131_49206.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":23,"showType":"[\"1\",\"2\",\"3\"]"},{"id":188,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"电子信息类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643705317799086510.jpg\" title=\"1643705317799086510.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/pf/il/j3/20220201_37945.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":28,"showType":"[\"1\",\"2\",\"3\"]"},{"id":175,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"美术设计类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220131/1643625759187049934.jpg\" title=\"1643625759187049934.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/9b/r6/xd/20220131_86027.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":5,"showType":"[\"1\",\"2\",\"3\"]"},{"id":178,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"土木建筑类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643704440721074973.jpg\" title=\"1643704440721074973.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/l3/c4/1c/20220201_53130.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":6,"showType":"[\"1\",\"2\",\"3\"]"},{"id":179,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"土木建筑类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643704532505002680.jpg\" title=\"1643704532505002680.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/nx/kd/e0/20220201_63627.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":25,"showType":"[\"1\",\"2\",\"3\"]"},{"id":181,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"医护类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643704772671098265.jpg\" title=\"1643704772671098265.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/qp/qn/3c/20220201_74616.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":7,"showType":"[\"1\",\"2\",\"3\"]"},{"id":182,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"医护类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643704820989072592.jpg\" title=\"1643704820989072592.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/g1/sa/3z/20220201_83294.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":26,"showType":"[\"1\",\"2\",\"3\"]"},{"id":184,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"化学生物类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643704982868082966.jpg\" title=\"1643704982868082966.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/ds/kv/ft/20220201_39975.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":8,"showType":"[\"1\",\"2\",\"3\"]"},{"id":185,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"化学生物类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643705034137080923.jpg\" title=\"1643705034137080923.jpg\" alt=\"专业课长图.jpg\"></p>","score":1000.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/9y/qa/ln/20220201_57296.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":27,"showType":"[\"1\",\"2\",\"3\"]"},{"id":176,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"美术设计类专业课  早鸟班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220131/1643625829262022583.jpg\" title=\"1643625829262022583.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/l0/u8/as/20220131_65491.jpg","filePath":null,"playCount":100,"unlockCount":100,"useType":1,"sort":24,"showType":"[\"1\",\"2\",\"3\"]"},{"id":223,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"二师范《计算机科学与技术》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987250494019422.jpg\" title=\"1646987250494019422.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/ts/9e/ht/20220309_28678.jpg","filePath":null,"playCount":68,"unlockCount":68,"useType":1,"sort":8,"showType":"[\"1\",\"2\",\"3\"]"},{"id":213,"teacherId":21,"assistantTeacherIds":null,"materialId":null,"name":"全国计算机一级通关班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220228/1646036224227059153.jpg\" title=\"1646036224227059153.jpg\" alt=\"全国计算机一级全程班.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/5m/65/mg/20220228_43824.jpg","filePath":null,"playCount":68,"unlockCount":68,"useType":1,"sort":6,"showType":"[\"1\",\"2\",\"3\"]"},{"id":218,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"金科院《计算机科学与技术》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987177293036183.jpg\" title=\"1646987177293036183.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/ut/7p/jy/20220309_21009.jpg","filePath":null,"playCount":60,"unlockCount":60,"useType":1,"sort":3,"showType":"[\"1\",\"2\",\"3\"]"},{"id":220,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"三江《土木工程》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987203903091663.jpg\" title=\"1646987203903091663.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/p0/qt/pi/20220309_54881.jpg","filePath":null,"playCount":58,"unlockCount":58,"useType":1,"sort":5,"showType":"[\"1\",\"2\",\"3\"]"},{"id":225,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"苏州城市学院《国际贸易》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987272044097829.jpg\" title=\"1646987272044097829.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":0.00,"plan":null,"teachingTime":"00:00","coverPath":"/upload/x0/mu/0s/20220309_74947.jpg","filePath":null,"playCount":55,"unlockCount":55,"useType":1,"sort":10,"showType":"[\"1\",\"2\",\"3\"]"},{"id":227,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"南传《文化产业管理》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987295875065038.jpg\" title=\"1646987295875065038.jpg\" alt=\"专业课精英班（详情）.jpg\"><br></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/4j/tb/1d/20220309_60985.jpg","filePath":null,"playCount":44,"unlockCount":44,"useType":1,"sort":12,"showType":"[\"1\",\"2\",\"3\"]"},{"id":221,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"二师范《汉语言文学》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987214268057333.jpg\" title=\"1646987214268057333.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/7z/hd/rk/20220309_19037.jpg","filePath":null,"playCount":42,"unlockCount":42,"useType":1,"sort":6,"showType":"[\"1\",\"2\",\"3\"]"},{"id":219,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"金科院《机械设计制造》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987190798001330.jpg\" title=\"1646987190798001330.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/zd/el/yh/20220309_65096.jpg","filePath":null,"playCount":36,"unlockCount":36,"useType":1,"sort":4,"showType":"[\"1\",\"2\",\"3\"]"},{"id":228,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"淮工《秘书学》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987307398023031.jpg\" title=\"1646987307398023031.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/mn/jd/gq/20220309_61601.jpg","filePath":null,"playCount":35,"unlockCount":35,"useType":1,"sort":13,"showType":"[\"1\",\"2\",\"3\"]"},{"id":216,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"南晓庄《秘书学》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987133675033356.jpg\" title=\"1646987133675033356.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"00:00","coverPath":"/upload/y3/dr/nw/20220308_68807.jpg","filePath":null,"playCount":30,"unlockCount":30,"useType":1,"sort":1,"showType":"[\"1\",\"2\",\"3\"]"},{"id":150,"teacherId":31,"assistantTeacherIds":null,"materialId":null,"name":"2022注册会计师全程班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"http://oss.fhzjedu.com/upload/image/20211230/1640865078310041267.jpg\" title=\"1640865078310041267.jpg\" alt=\"a.jpg\"><img src=\"http://oss.fhzjedu.com/upload/image/20211230/1640865082945030600.jpg\" title=\"1640865082945030600.jpg\" alt=\"b.jpg\"><br></p>","score":100.00,"plan":"","teachingTime":"2000","coverPath":"/upload/85/k0/c3/20211230_24193.JPG","filePath":null,"playCount":23,"unlockCount":28,"useType":1,"sort":null,"showType":"[\"1\",\"2\",\"3\"]"},{"id":226,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"苏大应用《市场营销》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987283093098157.jpg\" title=\"1646987283093098157.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/x2/wj/9l/20220309_97929.jpg","filePath":null,"playCount":22,"unlockCount":22,"useType":1,"sort":11,"showType":"[\"1\",\"2\",\"3\"]"},{"id":242,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"三江《电气工程及自动化》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987295875065038.jpg\" title=\"1646987295875065038.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/63/wc/o3/20220402_19720.jpg","filePath":null,"playCount":16,"unlockCount":16,"useType":1,"sort":14,"showType":"[\"1\",\"2\",\"3\"]"},{"id":224,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"南工职大《软件工程》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987261717068215.jpg\" title=\"1646987261717068215.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/ij/fs/3f/20220309_40585.jpg","filePath":null,"playCount":0,"unlockCount":0,"useType":1,"sort":9,"showType":"[\"1\",\"2\",\"3\"]"},{"id":222,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"二师范《财务管理》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987238560072341.jpg\" title=\"1646987238560072341.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"1000","coverPath":"/upload/19/cu/yl/20220309_12333.jpg","filePath":null,"playCount":0,"unlockCount":0,"useType":1,"sort":7,"showType":"[\"1\",\"2\",\"3\"]"},{"id":217,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"南晓庄《软件工程》精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220311/1646987163315057907.jpg\" title=\"1646987163315057907.jpg\" alt=\"专业课精英班（详情）.jpg\"></p>","score":0.00,"plan":null,"teachingTime":"00:00","coverPath":"/upload/d7/2d/w1/20220309_16670.jpg","filePath":null,"playCount":0,"unlockCount":0,"useType":1,"sort":2,"showType":"[\"1\",\"2\",\"3\"]"},{"id":212,"teacherId":16,"assistantTeacherIds":null,"materialId":null,"name":"职教高考语文·精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"","score":0.00,"plan":null,"teachingTime":"00:00","coverPath":"/upload/k3/hp/1i/20220210_72033.jpg","filePath":null,"playCount":0,"unlockCount":0,"useType":1,"sort":null,"showType":"[\"1\",\"2\",\"3\"]"},{"id":211,"teacherId":16,"assistantTeacherIds":null,"materialId":null,"name":"职教高考英语·精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"","score":0.00,"plan":null,"teachingTime":"00:00","coverPath":"/upload/am/jz/ha/20220210_95592.jpg","filePath":null,"playCount":0,"unlockCount":0,"useType":1,"sort":null,"showType":"[\"1\",\"2\",\"3\"]"},{"id":210,"teacherId":16,"assistantTeacherIds":null,"materialId":null,"name":"职教高考数学·精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"","score":0.00,"plan":null,"teachingTime":"00:00","coverPath":"/upload/0x/ne/0n/20220210_53708.jpg","filePath":null,"playCount":0,"unlockCount":0,"useType":1,"sort":null,"showType":"[\"1\",\"2\",\"3\"]"},{"id":203,"teacherId":74,"assistantTeacherIds":null,"materialId":null,"name":"日语类专业课  精英班","subhead":"","description":"","level":1,"playType":1,"introduce":"<p><img src=\"https://oss.fhzjedu.com/upload/image/20220201/1643714257126050454.jpg\" title=\"1643714257126050454.jpg\" alt=\"专业课长图.jpg\"></p>","score":100.00,"plan":null,"teachingTime":"2000","coverPath":"/upload/xa/jl/fy/20220201_64124.jpg","filePath":null,"playCount":0,"unlockCount":0,"useType":1,"sort":15,"showType":"[\"1\",\"2\",\"3\"]"}],"code":0}
+    $(document).ready(function(e) {
+
+        getHeaderCount()
+        getLookChart()
+        getCourseChart()
+        getHotView()
+        getHotBuy()
+    });
+
+    function getHotView(){
+        // $.ajax({
+        //     url:'../studentManage/getHotView',
+        //     type:'POST',
+        //     cache:false,//关缓存
+        //     //async:false,//关闭异步
+        //     dataType:"json", //期望服务端返回的数据类型
+        //     success:function (data) {
+        //         renderHotView(data.result)
+        //     },error:function (jqXHR, textStatus, errorThrown) {
+        //         layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+        //     }
+        // });
+        renderHotView(hotView.result)
+    }
+
+    function renderHotView(objList){
+        var str = '';
+        for (var i = 0; i < objList.length; i++) {
+            var obj = objList[i];
+            if (i < 5) {
+                str += '<tr>' + '	<td>' + (i + 1) + '</td>' + '	<td>'
+                    + obj.name + '</td>' + '	<td>' + obj.playCount
+                    + '</td>' + '</tr>';
+            }
+        }
+        $("#hotLook").html(str);
+    }
+
+    function getHotBuy(){
+        // $.ajax({
+        //     url:'../studentManage/getHotSale',
+        //     type:'POST',
+        //     cache:false,//关缓存
+        //     //async:false,//关闭异步
+        //     dataType:"json", //期望服务端返回的数据类型
+        //     success:function (data) {
+        //         renderHotBuy(data.result)
+        //     },error:function (jqXHR, textStatus, errorThrown) {
+        //         layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+        //     }
+        // });
+        renderHotBuy(new Array())
+    }
+
+    function renderHotBuy(list){
+        if (list.length>3){
+            var a=list[0]
+            var b=list[1]
+            var c=list[2]
+            var d=list[3]
+            var str='';
+            str+= '<div class="alert alert-success" >'
+                +  (1) + '.' + a.name + '  ' + a.selectCount + '人，共计' + a.discountPrice + '元' + '</div>'
+                + '<div class="alert alert-danger" >'
+                +  (2) + '.' + b.name + '  ' + b.selectCount + '人，共计' + b.discountPrice + '元' + '</div>'
+                + '<div class="alert alert-warning" >'
+                +  (3) + '.' + c.name + '  ' + c.selectCount + '人，共计' + c.discountPrice + '元' + '</div>'
+                + '<div class="alert alert-info" >'
+                +  (4) + '.' + d.name + '  ' + d.selectCount + '人，共计' + d.discountPrice + '元' + '</div>'
+
+            $("#hootBuy").html(str);
+        }
+    }
+
+    function getHeaderCount(){
+        // $.ajax({
+        //     url:'../studentManage/getHeaderInfo',
+        //     type:'POST',
+        //     cache:false,//关缓存
+        //     //async:false,//关闭异步
+        //     dataType:"json", //期望服务端返回的数据类型
+        //     success:function (data) {
+        //         if (data.code===0){
+        //             $(".courseCount").text(data.courseCount);
+        //             $(".videoCount").text(data.videoCount);
+        //             $(".userCount").text(data.userCount);
+        //             $(".nowUserCount").text(data.nowUserCount);
+        //         }
+        //     },error:function (jqXHR, textStatus, errorThrown) {
+        //         layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+        //     }
+        // });
+        $(".courseCount").text(34);
+        $(".videoCount").text(666);
+        $(".userCount").text(676868);
+        $(".nowUserCount").text(259);
+    }
+
+    function getLookChart(){
+        // $.ajax({
+        //     url:'../studentManage/getCountData',
+        //     type:'POST',
+        //     cache:false,//关缓存
+        //     //async:false,//关闭异步
+        //     dataType:"json", //期望服务端返回的数据类型
+        //     success:function (data) {
+        //         if (data.code===0){
+        //             var a = data.playCount;
+        //             var b = data.viewCount;
+        //             var c = data.buyCount;
+        //             renderLookChart(a,b)
+        //         }
+        //     },error:function (jqXHR, textStatus, errorThrown) {
+        //         layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+        //     }
+        // });
+        var a = countdata.playCount;
+        var b = countdata.viewCount;
+        renderLookChart(a,b)
+    }
+
+    function renderLookChart(a,b){
+        if (a.length===0){
+            a.push(100)
+        }
+        if (b.length===0){
+            b.push(70)
+        }
+        //最大次数
+        var maxValue1 = findMax(a);
+        var data1=getRandomArray(maxValue1)
+
+        var maxValue2 = findMax(b);
+        var data2=getRandomArray(maxValue2)
+
+        var hello=new Chart($("#chart-vbar-2"), {
+            type: 'bar',
+            data: {
+                labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月" ,"8月","9月","10月","11月","12月"],
+                datasets: [{
+                    label: "浏览量",
+                    backgroundColor: "rgba(51,202,185,0.5)",
+                    borderColor: "rgba(0,0,0,0)",
+                    hoverBackgroundColor: "rgba(51,202,185,0.7)",
+                    hoverBorderColor: "rgba(0,0,0,0)",
+                    data: data1
+                },
+                {
+                    label: "访问量",
+                    backgroundColor: "#818fee",
+                    borderColor: "rgba(0,0,0,0)",
+                    hoverBackgroundColor: "#6e7eee",
+                    hoverBorderColor: "rgba(0,0,0,0)",
+                    data: data2
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+
+    function getCourseChart(){
+        // $.ajax({
+        //     url:'../studentManage/getLoopInfo',
+        //     type:'POST',
+        //     cache:false,//关缓存
+        //     //async:false,//关闭异步
+        //     dataType:"json", //期望服务端返回的数据类型
+        //     success:function (data) {
+        //
+        //         var groupCount = data.groupCount;
+        //         var dibbling = data.dibbling;
+        //         var live = data.live;
+        //         var lectureHall = data.lectureHall;
+        //         renderCourseChart(groupCount,dibbling,live,lectureHall)
+        //
+        //     },error:function (jqXHR, textStatus, errorThrown) {
+        //         layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+        //     }
+        // });
+        var groupCount = loopInfo.groupCount;
+        var dibbling = loopInfo.dibbling;
+        var live = loopInfo.live;
+        var lectureHall = loopInfo.lectureHall;
+        renderCourseChart(groupCount,dibbling,live,lectureHall)
+    }
+
+    function renderCourseChart(a,b,c,d){
+        var hrllo2=new Chart($("#chart-doughnut"), {
+            type: 'doughnut',
+            data: {
+                labels: ["精选班级", "点播课程","直播课程","精选讲堂"],
+                datasets: [{
+                    data: [a, b, c,d],
+                    backgroundColor: ['#33cabb', '#818fee', '#f96197','#8d6658']
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    }
+
+    function getRandomArray(max){
+        var data=new Array();
+        data.push(max)
+        for (let i = 0; i < 11; i++) {
+            var num = Math.floor(Math.random() * (max - 0));
+            data.push(num)
+        }
+        return data;
+    }
+
+    function findMax(arr) {
+        return Math.max.apply(Math,arr);
+    }
+
+</script>
+</body>
+</html>

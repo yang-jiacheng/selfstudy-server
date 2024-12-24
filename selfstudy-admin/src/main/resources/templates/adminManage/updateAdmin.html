@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="icon" href="../img/lslogo.jpg" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="../layui_v2.6.8/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../multipleSel/formSelects-v4.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
+</head>
+<style>
+    .wid-95{
+        width: 95%;
+    }
+    /*.xm-select-parent .xm-select-title  {*/
+    /*    position: relative;*/
+    /*    max-height: 36px;*/
+    /*    width: 95%;*/
+    /*}*/
+
+</style>
+<body>
+<div class="layui-form" style="margin-top: 20px;">
+
+    <div class="layui-form-item wid-95" >
+        <label class="layui-form-label">选择角色</label>
+        <div class="layui-input-block">
+            <select class="roles" id="roles" xm-select="roles" xm-select-search  xm-select-show-count="3"  xm-select-skin="lby" xm-select-height="36px"  >
+                <option value="">请选择</option>
+                <option  th:each="issueTag,userStat:${list}" th:value="${issueTag.id}" th:text="${issueTag.name}"></option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" id="username" placeholder="请输入用户名" class="layui-input ">
+        </div>
+    </div>
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" id="password" placeholder="请输入密码" class="layui-input ">
+        </div>
+    </div>
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">昵称</label>
+        <div class="layui-input-block">
+            <input type="text" id="name" placeholder="请输入昵称" class="layui-input ">
+        </div>
+    </div>
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">手机号</label>
+        <div class="layui-input-block">
+            <input type="text" id="phone" placeholder="请输入手机号" class="layui-input ">
+        </div>
+    </div>
+
+
+</div>
+
+
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../multipleSel/formSelects-v4.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/encode-word.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var form;
+    var layer;
+    var table;
+    var laypage;
+    var laydate;
+    var formSelects;
+
+    var adminId = getQueryString("adminId")
+    $(function(){
+        layui.use(['layer', 'form' ,'table','laypage','laydate','formSelects'], function () {
+            layer = layui.layer;
+            form = layui.form;
+            table = layui.table;
+            laypage = layui.laypage;
+            laydate = layui.laydate;
+            formSelects = layui.formSelects;
+
+
+
+            //是修改
+            if (adminId!=='null'){
+                getAdminInfoById()
+            }
+            customizeSel()
+
+        });
+    });
+
+    function customizeSel(){
+        formSelects.btns('roles', ['select', 'remove','skin'] , {show: '', space: '10px'});
+    }
+
+    function getAdminInfoById(){
+        $.ajax({
+            url:'../adminManage/getAdminInfoById',
+            type:'POST',
+            cache:false,//关缓存
+            async:false,//关闭异步
+            data:{"id":adminId},
+            dataType:"json", //期望服务端返回的数据类型
+            success:function (data) {
+                var adminInfo = data.result.adminInfo;
+                var roles = data.result.roles
+                $("#username").val(adminInfo.username)
+                $("#name").val(adminInfo.name)
+                $("#phone").val(adminInfo.phone)
+                if (roles.length>0){
+                    formSelects.value('roles', roles);
+                }
+                form.render()
+            },error:function (jqXHR, textStatus, errorThrown) {
+                layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+            }
+        });
+    }
+
+    function getAdmin(){
+        var username = $("#username").val()
+        var name = $("#name").val()
+        var phone = $("#phone").val()
+        var roles = formSelects.value('roles', 'val');
+        var password = $("#password").val()
+
+        var obj = {
+            "id":adminId,"username":username,"name":name,"phone":phone,"roles":roles,"password":sha256_digest(password)
+        }
+
+        return obj
+    }
+
+    //获取url的参数
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var array = window.location.search.substr(1).match(reg);
+        if (array != null) {
+            return decodeURIComponent(array[2])
+        }
+        return ""
+    }
+
+</script>
+</body>
+</html>

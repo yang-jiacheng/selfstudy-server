@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../layui_v2.6.8/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
+    <link rel="stylesheet" type="text/css" href="../zoomify/zoomify.min.css"/>
+</head>
+<body>
+<div class="layui-form" style="margin-top: 15px;">
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">文件名</label>
+        <div class="layui-input-block">
+            <input type="text" id="fileName" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item wid-95">
+        <label class="layui-form-label">下载地址</label>
+        <div class="layui-input-block">
+            <input style="position: absolute;top: 50px;display: none" id="ossUp-file" type="file"   name="file">
+            <button id="ossUp-button" class="layui-btn layui-btn-primary layui-border-black" style="margin-bottom: 10px;">点击上传</button>
+            <br/>
+            <input type="text" id="downloadUrl" autocomplete="off"  class="layui-input">
+        </div>
+    </div>
+
+
+</div>
+
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../zoomify/zoomify.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../ali-oss-6.22.0/aliyun-oss-sdk.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../ali-oss-6.22.0/ossUtil.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var form;
+    var layer;
+
+    var fileObj = {};
+    $(function(){
+        layui.use(['layer', 'form','upload' ], function () {
+            layer = layui.layer;
+            form = layui.form;
+            upload = layui.upload;
+
+            listeningFileInput(`ossUp-file`,`ossUp-button`, "downloadUrl",1,[])
+        });
+    });
+
+    function listeningFileInput(id,btnId,inpId,type,allowedTypes) {
+        // 点击按钮时，触发隐藏的文件选择器的click事件
+        $(`#${btnId}`).on('click', function () {
+            $(`#${id}`).click();
+        });
+        $(`#${id}`).on('change', async function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const fileSize = file.size;
+                const fileName = file.name;
+                const maxSize = 1024 * 1024  * 1024; //1024MB
+                // 检查文件大小
+                if (fileSize > maxSize) {
+                    $(this).val(''); // 清空文件选择器
+                    layer.msg('文件大小不能超过1GB！', { icon: 2 });
+                    return;
+                }
+
+
+                const result = await multipartUploadFile(file,type);
+                $(this).val(''); // 清空文件选择器
+                if (result){
+                    var path=result.res.requestUrls[0]
+                    var num = path.lastIndexOf("?")
+                    if(num>0){
+                        path = path.substring(path.indexOf("aliyuncs.com/") + 12,num)
+                    }else {
+                        path = path.substring(path.indexOf("aliyuncs.com/") + 12)
+                    }
+
+                    $(`#${inpId}`).val(ossPath+path)
+                    $(`#fileName`).val(fileName)
+                    //生成对象
+                    fileObj = {};
+                    //文件大小 MB
+                    fileObj.fileSize = (fileSize / (1024 * 1024)).toFixed(2);
+
+                }
+            }
+        });
+    }
+
+    function getFileObj(){
+        fileObj.fileName = $('#fileName').val();
+        fileObj.downloadUrl = $('#downloadUrl').val();
+        return fileObj;
+    }
+
+
+</script>
+</body>
+</html>

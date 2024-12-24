@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../layui_v2.6.8/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
+</head>
+<body>
+
+<div style="margin-top: 20px;width: 95%" class="layui-form-item layui-form-text">
+    <label class="layui-form-label">回复</label>
+    <div class="layui-input-block">
+        <textarea placeholder="请输入内容" rows="8" id="reply" class="layui-textarea"></textarea>
+    </div>
+</div>
+
+
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var form;
+    var layer;
+    var upload;
+
+    var rid = getQueryString("rid")
+    var reply = getQueryString("reply")
+
+
+    $(function(){
+        layui.use(['layer', 'form','upload' ], function () {
+            layer = layui.layer;
+            form = layui.form;
+            upload = layui.upload;
+
+            if (!strIsEmpty(reply)){
+                $("#reply").val(reply)
+            }
+
+
+
+        });
+    });
+
+</script>
+</body>
+</html>

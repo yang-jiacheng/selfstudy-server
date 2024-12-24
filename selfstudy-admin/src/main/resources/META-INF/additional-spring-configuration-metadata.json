@@ -1,0 +1,38 @@
+{
+  "properties": [
+    {
+      "name": "sourse.config.upload",
+      "type": "java.lang.String",
+      "description": "Description for sourse.config.upload."
+    },
+    {
+      "name": "sourse.config.file",
+      "type": "java.lang.String",
+      "description": "Description for sourse.config.file."
+    },
+    {
+      "name": "host.name",
+      "type": "java.lang.String",
+      "description": "Description for host.name."
+    },
+    {
+      "name": "ali.accesskey.id",
+      "type": "java.lang.String",
+      "description": "Description for ali.accesskey.id."
+    },
+    {
+      "name": "ali.accesskey.secret",
+      "type": "java.lang.String",
+      "description": "Description for ali.accesskey.secret."
+    },
+    {
+      "name": "oss.config.bucket",
+      "type": "java.lang.String",
+      "description": "Description for oss.config.bucket."
+    },
+    {
+      "name": "oss.config.endpoint",
+      "type": "java.lang.String",
+      "description": "Description for oss.config.endpoint."
+    }
+  ] }

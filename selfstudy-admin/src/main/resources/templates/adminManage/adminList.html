@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="icon" href="../img/lslogo.jpg" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="../layui_v2.6.8/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../multipleSel/formSelects-v4.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
+    <link rel="stylesheet" type="text/css" href="../zoomify/zoomify.min.css"/>
+</head>
+<body class="cm-body-BackCol">
+<div class="cm-container">
+
+    <div class="cm-title">
+        <blockquote class="elem-quote ">
+            用户管理
+        </blockquote>
+    </div>
+
+    <div class="cm-detial">
+        <div style="padding: 1rem">
+
+            <!-- 页面主题内容写在这 -->
+            <div class="layui-form">
+               <div class="layui-form-item">
+
+                   <div class="layui-inline">
+                       <label class="layui-form-label">用户名</label>
+                       <div class="layui-input-inline">
+                           <input type="text" placeholder="输入用户名查询" id="username" class="layui-input">
+                       </div>
+                   </div>
+
+                   <div class="layui-inline">
+                       <button onclick="renderUserTab()" class="layui-btn comBackCol-brightCyan"><i class="layui-icon layui-icon-search"></i></button>
+                   </div>
+
+
+               </div>
+
+                <div class="layui-form-item">
+                    <button onclick="batchDelete()" class="layui-btn layui-btn-sm layui-btn-danger">批量删除用户</button>
+                    <button style="float: right;" onclick="addUser(null)" class="layui-btn layui-btn-sm comBackCol-brightCyan"><i class="layui-icon layui-icon-addition"></i>新增用户</button>
+                    <table class="layui-table" id="commentTable" lay-filter="commentTable" style="table-layout: fixed;"></table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/html" id="barArea">
+    <button class="layui-btn layui-btn-xs layui-btn-primary layui-border-blue" lay-event="edit"><i class="layui-icon layui-icon-refresh-1"></i>修改</button>
+</script>
+<script type="text/html" id="checkboxTpl">
+    {{#  if(d.status === 1){ }}
+    <input type="checkbox" name="open" value="{{d.id}}" checked="checked" lay-filter="status" lay-skin="switch" lay-text="正常|禁用">
+    {{#  }else if(d.status === 2){ }}
+    <input type="checkbox" name="close" value="{{d.id}}" lay-skin="switch" lay-filter="status" lay-text="正常|禁用">
+    {{#  } }}
+</script>
+
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../multipleSel/formSelects-v4.js" type="text/javascript" charset="utf-8"></script>
+<script src="../zoomify/zoomify.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var form;
+    var layer;
+    var table;
+    var laypage;
+    var laydate;
+    var formSelects;
+
+    var page = 1;
+    var limit = 10;
+    $(function(){
+        layui.use(['layer', 'form' ,'table','laypage','laydate','formSelects'], function () {
+            layer = layui.layer;
+            form = layui.form;
+            table = layui.table;
+            laypage = layui.laypage;
+            laydate = layui.laydate;
+            formSelects = layui.formSelects;
+
+            getAdminInfoList()
+
+            //监听开关
+            form.on('switch(status)', function(data){
+                var userId = data.value
+                var flag = data.elem.checked //开关是否开启，true或者false
+                var status = 1;
+                if (flag === false){
+                    status = 2;
+                }
+
+                $.ajax({
+                    url:'../adminManage/disabledAdminInfo',
+                    type:'POST',
+                    cache:false,//关缓存
+                    async:false,//关闭异步
+                    data:{"id":userId,"status":status},
+                    dataType:"json", //期望服务端返回的数据类型
+                    success:function (data) {
+                        if (data.code===0){
+                            layer.msg("操作成功！",{icon : 1})
+                            return;
+                        }
+                        layer.msg(data.msg,{icon : 2})
+                    },error:function (jqXHR, textStatus, errorThrown) {
+                        layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+                    }
+                });
+
+
+            });
+
+            //监听工具条
+            table.on('tool(commentTable)', function(obj){
+                var data = obj.data;
+                var userId = data.id
+                if(obj.event === 'edit'){
+
+                    addUser(userId)
+
+                }
+            });
+
+        });
+    });
+
+    function renderUserTab(){
+        var username = $("#username").val()
+        table.reload('commentTable', {
+            page: {
+                curr: 1
+                ,layout: ['count', 'prev', 'page', 'next', 'skip']
+                , theme: '#818fee'
+                , groups: 7
+            }
+            ,limit: limit
+            , where: {
+                username: username
+            }
+        });
+    }
+
+    function getAdminInfoList(){
+        table.render({
+            id: 'commentTable'
+            , elem: '#commentTable'
+            , skin: 'row '
+            , even: true
+            , url: '../adminManage/getAdminInfoList'
+            , method:"post"
+            ,limit: limit
+            , page: {
+                layout: ['count', 'prev', 'page', 'next', 'skip']
+                , groups: 7
+            }
+            ,cellMinWidth: 80
+            , cols: [
+                [
+                    {type:'checkbox'}
+                    , {field: 'username', title: '用户名'}
+                    , {field: 'name',   title: '昵称'}
+                    , {field: 'phone',  title: '手机号'}
+                    , {field: 'createTime',  title: '创建时间'}
+                    , {field: 'status', title:'状态', templet: '#checkboxTpl' }
+                    , {title: '操作',  align: 'center', toolbar: '#barArea' }
+                ]
+            ]
+            ,done: function(res, curr, count){
+            }
+        });
+    }
+
+    function batchDelete(){
+        var checkStatus = table.checkStatus('commentTable');
+        var ids=new Array();
+        checkStatus.data.map(function(item,index){
+            ids.push(item.id)
+        });
+        console.log(ids)
+        layer.confirm("确认进行批量删除吗?", { icon: 2, title:'提示', btn: ['确定', '取消']
+            ,btn1: function(index, layero){
+                $.ajax({
+                    url:'../adminManage/removeAdminInfoByIds',
+                    type:'POST',
+                    cache:false,//关缓存
+                    async:false,//关闭异步
+                    data:{"ids":JSON.stringify(ids)},
+                    dataType:"json", //期望服务端返回的数据类型
+                    success:function (data) {
+                        if (data.code===0){
+                            renderUserTab()
+                            layer.msg("删除成功！",{icon : 1})
+                            layer.close(index);
+                            return;
+                        }
+                        layer.msg(data.msg,{icon : 2})
+                    },error:function (jqXHR, textStatus, errorThrown) {
+                        layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+                    }
+                });
+
+            }
+            ,btn2: function(index, layero){
+                layer.close(index);
+            }
+
+        });
+
+    }
+
+    function addUser(adminId){
+        layer.open({
+            title: "编辑用户",
+            content: '../adminManage/updateAdmin?adminId='+adminId,
+            type: 2,
+            btnAlign: 'c',
+            btn: ['确定', '取消'],
+            id: 'QuestionAdd',
+            area: ['55%','60%'],
+            yes: function (index, layero) {
+                var id = $("#QuestionAdd").children().attr("id"); // 获取iframe的id
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var obj = iframeWin.getAdmin()
+
+                var username = obj.username
+                var name = obj.name
+                var roles = obj.roles
+
+                if (isEmpty(username)){
+                    layer.msg("用户名是必填项！",{icon : 7})
+                    return;
+                }
+                if (isEmpty(name)){
+                    layer.msg("昵称是必填项！",{icon : 7})
+                    return;
+                }
+                if (roles.length === 0){
+                    layer.msg("角色是必选项！",{icon : 7})
+                    return;
+                }
+
+                $.ajax({
+                    url:'../adminManage/addAdminInfo',
+                    type:'POST',
+                    cache:false,//关缓存
+                    async:false,//关闭异步
+                    data:{"adminInfoJson":JSON.stringify(obj),"idsJson":JSON.stringify(roles)},
+                    dataType:"json", //期望服务端返回的数据类型
+                    success:function (data) {
+                        if (data.code===0){
+                            renderUserTab()
+                            layer.msg("编辑成功！",{icon : 1})
+                            layer.close(index);
+                            return;
+                        }
+                        layer.msg(data.msg,{icon : 2})
+                    },error:function (jqXHR, textStatus, errorThrown) {
+                        layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+                    }
+                });
+
+
+            }, btn2: function (index, layero) {
+                layer.close(index)
+            }, cancel: function (index, layero) {
+                layer.close(index)
+            }
+        });
+    }
+
+    function isEmpty(str){
+        return str==='' || str===null || str===undefined
+    }
+
+</script>
+</body>
+</html>

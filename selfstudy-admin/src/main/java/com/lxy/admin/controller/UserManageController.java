@@ -1,0 +1,189 @@
+package com.lxy.admin.controller;
+
+import cn.hutool.core.collection.CollUtil;
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lxy.admin.service.PoiService;
+import com.lxy.admin.util.ExcelUtil;
+import com.lxy.admin.vo.ExcelErrorInfoVO;
+import com.lxy.common.po.StudyRecord;
+import com.lxy.common.po.StudyStatistics;
+import com.lxy.common.po.User;
+import com.lxy.common.service.StudyRecordService;
+import com.lxy.common.service.StudyStatisticsService;
+import com.lxy.common.service.UserService;
+import com.lxy.common.util.ImgConfigUtil;
+import com.lxy.common.util.JsonUtil;
+import com.lxy.common.util.OssUtil;
+import com.lxy.common.util.PhoneUtil;
+import com.lxy.common.vo.LayUiResultVO;
+import com.lxy.common.vo.ResultVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @Description: TODO
+ * @author: jiacheng yang.
+ * @Date: 2022/12/05 18:02
+ * @Version: 1.0
+ */
+
+@RequestMapping("/userManage")
+@Controller
+@Api(tags = "学员管理")
+@PreAuthorize("hasAuthority('/userManage/toUserList')")
+public class UserManageController {
+
+    private final UserService userService;
+
+    private final StudyStatisticsService statisticsService;
+
+    private final StudyRecordService studyRecordService;
+
+    private final PoiService poiService;
+
+    @Autowired
+    public UserManageController(UserService userService, StudyStatisticsService statisticsService,
+                                StudyRecordService studyRecordService,PoiService poiService) {
+        this.userService = userService;
+        this.statisticsService = statisticsService;
+        this.studyRecordService = studyRecordService;
+        this.poiService = poiService;
+    }
+
+    @ApiOperation(value = "用户管理", produces = "application/json", notes = "jiacheng yang.")
+    @GetMapping("/toUserList")
+    public String toUserList(){
+        return "userManage/userList";
+    }
+
+    @ApiOperation(value = "编辑用户", produces = "application/json", notes = "jiacheng yang.")
+    @GetMapping("/toSaveUser")
+    public String toSaveUser(){
+        return "userManage/saveUser";
+    }
+
+    @ApiOperation(value = "错误信息", produces = "application/json", notes = "jiacheng yang.")
+    @GetMapping("/toErrInfo")
+    public String toErrInfo(){
+        return "errInfo";
+    }
+
+    @ApiOperation(value = "获取用户列表", notes = "jiacheng yang.")
+    @PostMapping(value = "/getUserPageList", produces = "application/json")
+    @ResponseBody
+    public String getUserPageList(@ApiParam(value = "当前页")@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                              @ApiParam(value = "每页数量")@RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
+                              @ApiParam(value = "昵称")@RequestParam(value = "name",required = false) String name,
+                              @ApiParam(value = "手机号")@RequestParam(value = "phone",required = false) String phone,
+                              @ApiParam(value = "开始时间")@RequestParam(value = "startTime",required = false) String startTime,
+                              @ApiParam(value = "结束时间")@RequestParam(value = "endTime",required = false) String endTime){
+        Page<User> pg = userService.getUserPageList(name, phone, startTime, endTime, page, limit);
+        return JsonUtil.toJson(new LayUiResultVO((int) pg.getTotal(), pg.getRecords()));
+    }
+
+    @ApiOperation(value = "获取用户", notes = "jiacheng yang.")
+    @PostMapping(value = "/getUserById", produces = "application/json")
+    @ResponseBody
+    public String getUserById(Integer userId){
+        User user = userService.getById(userId);
+        user.setProfilePath(ImgConfigUtil.joinUploadUrl(user.getProfilePath()));
+        return JsonUtil.toJson(new ResultVO(user));
+    }
+
+    @ApiOperation(value = "保存用户", notes = "jiacheng yang.")
+    @PostMapping(value = "/saveUser", produces = "application/json")
+    @ResponseBody
+    public String saveUser(String userJson){
+        User user = JSON.parseObject(userJson, User.class);
+        if (user == null){
+            return JsonUtil.toJson(new ResultVO(-1,"数据有误！"));
+        }
+        String phone = user.getPhone();
+        if (! cn.hutool.core.util.PhoneUtil.isMobile(phone)) {
+            return JsonUtil.toJson(new ResultVO(-1,"手机号格式不正确！"));
+        }
+
+        boolean flag = userService.saveUser(user);
+        if (!flag){
+            return JsonUtil.toJson(new ResultVO(-1,"手机号已被使用！"));
+        }
+        return JsonUtil.toJson(new ResultVO());
+    }
+
+    @ApiOperation(value = "批量删用户", notes = "jiacheng yang.")
+    @PostMapping(value = "/removeUserByIds", produces = "application/json")
+    @ResponseBody
+    public String removeUserByIds(String jsonIds){
+        List<Integer> ids = JsonUtil.getListType(jsonIds, Integer.class);
+        if (CollUtil.isEmpty(ids)){
+            return JsonUtil.toJson(new ResultVO(-1,"数据有误！"));
+        }
+        userService.removeByIds(ids);
+        userService.removeUserInfoCacheByIds(ids);
+        //删用户其他关联数据...
+        statisticsService.remove(new LambdaQueryWrapper<StudyStatistics>().in(StudyStatistics::getUserId,ids));
+        studyRecordService.remove(new LambdaQueryWrapper<StudyRecord>().in(StudyRecord::getUserId,ids));
+        return JsonUtil.toJson(new ResultVO());
+    }
+
+    @ApiIgnore
+    @GetMapping(value = "/exportUserInExcel",name = "导出用户信息")
+    public void exportUserInExcel(HttpServletResponse response){
+        String titleName= "团团云自习用户信息";
+        String fileName="团团云自习用户信息表.xlsx";
+        List<User> users = userService.list();
+        Workbook wb = poiService.exportUserInExcel(titleName,users);
+        ExcelUtil.exportExcel(response,wb,fileName);
+    }
+
+    @ApiIgnore
+    @GetMapping(value = "/downloadMaterial" ,name = "下载用户导入模板")
+    public void downloadMaterial(HttpServletResponse response,  String fileName){
+        OssUtil.downloadOssFile(response,fileName);
+    }
+
+    @ApiIgnore
+    @PostMapping(value = "/importUsersInExcel",name = "导入用户")
+    @ResponseBody
+    public String importUsersInExcel(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+        if (file.isEmpty()){
+            return JsonUtil.toJson(new ResultVO(-1, "上传失败"));
+        }
+        List<ExcelErrorInfoVO> errorList = poiService.importUsersInExcel(file);
+        return JsonUtil.toJson(new ResultVO(errorList));
+    }
+
+    @GetMapping("/hello")
+    @ResponseBody
+    public String hello(){
+        List<User> list = new ArrayList<>(100);
+        User user = null;
+        for (int i = 0; i < 100; i++) {
+            user = new User();
+            user.setPassword("8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92");
+            user.setName("测试学员" + i+1);
+            user.setPhone(PhoneUtil.createMobile(1));
+            user.setRegistType(2);
+            user.setAddress("测试地址"+ i+1);
+            list.add(user);
+        }
+        userService.saveBatch(list);
+        return "ok";
+    }
+
+}
