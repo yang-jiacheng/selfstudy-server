@@ -40,13 +40,13 @@ public class GlobalExceptionHandle {
         return R.fail(HttpStatus.HTTP_BAD_REQUEST,msg);
     }
 
-    @ExceptionHandler({Exception.class})
-    public R<Object> handleException(Exception e, HttpServletRequest request){
-        String msg = StrUtil.format("发生异常,请求地址为 {}",request.getRequestURI());
-        LOG.error(msg,e);
-        String msgRes = "无法与服务器建立安全连接";
-        return R.fail(HttpStatus.HTTP_INTERNAL_ERROR,msgRes);
-    }
+//    @ExceptionHandler({Exception.class})
+//    public R<Object> handleException(Exception e, HttpServletRequest request){
+//        String msg = StrUtil.format("发生异常,请求地址为 {}",request.getRequestURI());
+//        LOG.error(msg,e);
+//        String msgRes = "无法与服务器建立安全连接";
+//        return R.fail(HttpStatus.HTTP_INTERNAL_ERROR,msgRes);
+//    }
 
     @ExceptionHandler({NullPointerException.class})
     public R<Object> handleNullPointerException(NullPointerException e, HttpServletRequest request){

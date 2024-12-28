@@ -34,10 +34,13 @@ public class LogUtil {
 
         // 获取客户端IP
         String clientIP = ServletUtil.getClientIP(request);
-
+        String format = StrUtil.format("客户端ip: {} 操作记录: userId={}, 请求地址: {}, 参数: {}",
+                clientIP, userId, requestURI, queryString);
+        if(StrUtil.isNotEmpty(requestBody)){
+            format  = format + ", 请求体: \n" + requestBody;
+        }
         // 构建操作日志信息
-        return StrUtil.format("客户端ip: {} 操作记录: userId={}, 请求地址: {}, 参数: {}, 请求体: \n{}",
-                clientIP, userId, requestURI, queryString, requestBody);
+        return format;
     }
 
 }
