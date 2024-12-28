@@ -1,5 +1,6 @@
 package com.lxy.admin.security.service.impl;
 
+import com.lxy.admin.exception.GlobalExceptionHandle;
 import com.lxy.admin.security.service.LoginService;
 import com.lxy.common.config.properties.CustomProperties;
 import com.lxy.common.constant.CommonConstants;
@@ -11,6 +12,8 @@ import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.vo.ResultVO;
 import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +36,8 @@ import java.util.Objects;
 @Service
 public class LoginServiceImpl implements LoginService {
 
+    private final static Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+
     private final AuthenticationManager authenticationManager;
 
     private final CommonRedisService commonRedisService;
@@ -54,7 +59,7 @@ public class LoginServiceImpl implements LoginService {
         try {
             authenticate = authenticationManager.authenticate(authenticationToken);
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("用户名或密码错误",e);
             return new ResultVO(-1,"用户名或密码错误！");
         }
 

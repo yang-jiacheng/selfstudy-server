@@ -7,6 +7,7 @@ import com.lxy.common.constant.ConfigConstants;
 import com.lxy.common.domain.StatelessAdmin;
 import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.redis.util.RedisKeyUtil;
+import com.lxy.common.security.CustomHttpServletRequestWrapper;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.util.JsonUtil;
@@ -57,7 +58,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstants.COOKIE_NAME_ADMIN);
         if (accessToken == null){
             msg = "token未获取到";
-            logger.warn(msg);
+            logger.error("token未获取到");
             throw new RuntimeException(msg);
         }
         //解析token
@@ -66,9 +67,8 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
             Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
             userId = (Integer) claims.get("userId");
         }catch (Exception e){
-            e.printStackTrace();
-            msg = "token非法";
-            logger.warn(msg);
+            msg = "token解析失败";
+            logger.error("token解析失败",e);
             throw new RuntimeException(msg);
         }
         //一个号在线数
@@ -80,7 +80,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         StatelessAdmin loginStatus = commonRedisService.controlLoginNum(key,  onlineNum, endDay,accessToken);
         if (loginStatus == null){
             msg = "无法识别的登录状态";
-            logger.warn(msg);
+            logger.error(msg);
             throw new RuntimeException(msg);
         }
 
@@ -105,10 +105,13 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
                 new UsernamePasswordAuthenticationToken(loginStatus,null,loginStatus.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         //输出日志
-        msg = LogUtil.logOperation(userId, request);
+        // 创建 CustomHttpServletRequestWrapper，包装原始的 HttpServletRequest
+        CustomHttpServletRequestWrapper wrappedRequest = new CustomHttpServletRequestWrapper(request);
+        String requestBody = wrappedRequest.getBody();
+        msg = LogUtil.logOperation(userId, request,requestBody);
         logger.warn(msg);
         //放行
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(wrappedRequest, response);
 
     }
 

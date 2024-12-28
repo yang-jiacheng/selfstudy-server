@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="false" scanPeriod="60 seconds" debug="false">
     <springProperty name="APP_NAME" scope="context" source="spring.application.name"/>
-    <property name="LOG_HOME" value="/logs/selfstudy-admin"/>
+    <property name="LOG_HOME" value="/logs/selfstudy-mobile-app"/>
 
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

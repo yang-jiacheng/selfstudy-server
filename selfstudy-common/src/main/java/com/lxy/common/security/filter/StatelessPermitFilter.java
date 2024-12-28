@@ -47,13 +47,12 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
             Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
             userId = (Integer) claims.get("userId");
         }catch (Exception e){
-            e.printStackTrace();
-
+            LOG.error("解析token失败",e);
             //放行
             filterChain.doFilter(request, response);
             return;
         }
-        String msg = LogUtil.logOperation(userId, request);
+        String msg = LogUtil.logOperation(userId, request,null);
         LOG.warn(msg);
         //放行
         filterChain.doFilter(request, response);

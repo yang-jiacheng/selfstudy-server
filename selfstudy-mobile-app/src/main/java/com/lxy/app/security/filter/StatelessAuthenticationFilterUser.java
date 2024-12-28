@@ -5,6 +5,7 @@ import com.lxy.common.constant.ConfigConstants;
 import com.lxy.common.domain.StatelessUser;
 import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.redis.util.RedisKeyUtil;
+import com.lxy.common.security.CustomHttpServletRequestWrapper;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
@@ -82,8 +83,10 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginStatus,null,loginStatus.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        //输出日志
-        msg = LogUtil.logOperation(userId, request);
+        // 创建 CustomHttpServletRequestWrapper，包装原始的 HttpServletRequest
+        CustomHttpServletRequestWrapper wrappedRequest = new CustomHttpServletRequestWrapper(request);
+        String requestBody = wrappedRequest.getBody();
+        msg = LogUtil.logOperation(userId, request,requestBody);
         logger.warn(msg);
         //放行
         filterChain.doFilter(request, response);

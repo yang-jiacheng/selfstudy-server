@@ -1,12 +1,14 @@
 package com.lxy.common.util;
 
 import cn.hutool.core.net.NetUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Description: TODO
@@ -16,27 +18,26 @@ import java.util.Map;
  */
 public class LogUtil {
 
-    private final static Logger LOG = LoggerFactory.getLogger(LogUtil.class);
-
-    public static String logOperation(Integer userId, HttpServletRequest request){
-
-        // 访问的地址
+    public static String logOperation(Integer userId, HttpServletRequest request, String requestBody) {
+        // 获取访问的地址
         String requestURI = request.getRequestURI();
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        StringBuilder queryString = new StringBuilder();
-        for (String key2 : parameterMap.keySet()) {
-            String[] values = parameterMap.get(key2);
-            for (String value : values) {
-                queryString.append(key2).append("=").append(value).append("&");
-            }
-        }
-        // 去掉最后一个空格
-        if(queryString.length()>0) {
-            queryString = new StringBuilder(queryString.substring(0, queryString.length() - 1));
-        }
+
+        // 拼接查询参数
+        String queryString = request.getParameterMap().entrySet().stream()
+                .flatMap(entry -> {
+                    String key = entry.getKey();
+                    return entry.getValue() != null ?
+                            java.util.Arrays.stream(entry.getValue()).map(value -> key + "=" + value) :
+                            java.util.stream.Stream.empty();
+                })
+                .collect(Collectors.joining("&"));
+
+        // 获取客户端IP
         String clientIP = ServletUtil.getClientIP(request);
-        String msg = clientIP+"操作记录：userId--"+userId+"--请求地址--"+requestURI+"--参数--"+queryString;
-        return msg;
+
+        // 构建操作日志信息
+        return StrUtil.format("客户端ip: {} 操作记录: userId={}, 请求地址: {}, 参数: {}, 请求体: \n{}",
+                clientIP, userId, requestURI, queryString, requestBody);
     }
 
 }
