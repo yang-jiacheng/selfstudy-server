@@ -107,12 +107,13 @@ public class ImgConfigUtil {
             String ossUrl = prefix+fileName;
             //传到oss
             OssUtil.uploadFileToOss(ossUrl,inputStream);
-            os.close();
-            inputStream.close();
             return ossUrl;
         }catch (Exception e){
             LOG.error("生成二维码失败", e);
             return null;
+        }finally {
+            IoUtil.close(os);
+            IoUtil.close(inputStream);
         }
     }
 

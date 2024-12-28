@@ -1,6 +1,5 @@
 package com.lxy.admin.security.service.impl;
 
-import com.lxy.admin.exception.GlobalExceptionHandle;
 import com.lxy.admin.security.service.LoginService;
 import com.lxy.common.config.properties.CustomProperties;
 import com.lxy.common.constant.CommonConstants;

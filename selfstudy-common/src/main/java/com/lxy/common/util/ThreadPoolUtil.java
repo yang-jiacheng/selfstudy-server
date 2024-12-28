@@ -27,7 +27,7 @@ public class ThreadPoolUtil {
     // 静态代码块初始化线程池的核心线程数和最大线程数
     static {
         int availableProcessors = Runtime.getRuntime().availableProcessors();
-        LOG.error("CPU核心数: " + availableProcessors);
+        LOG.error("CPU核心数: {}", availableProcessors);
         // 根据系统的 CPU 核心数来设置线程池大小
         // 至少4个线程
         CORE_POOL_SIZE = Math.max(4, availableProcessors);
