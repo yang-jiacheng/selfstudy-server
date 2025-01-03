@@ -241,7 +241,7 @@ public class ImgConfigUtil {
         Color color = getColorFromString(fontColor);
 
         // 绘制文本到图片上
-        Font font = loadFont(fontFamily, fontStyle, fontSize);
+        Font font = FontUtil.getFont(fontStyle, fontSize);
         Graphics2D graphics = image.createGraphics();
         graphics.setFont(font);
         graphics.setColor(color);
@@ -271,28 +271,5 @@ public class ImgConfigUtil {
         return Color.BLACK; // 默认返回黑色
     }
 
-    /**
-     * 加载字体
-     */
-    public static Font loadFont(String fontFamily, int fontStyle, int fontSize) {
-        Font font = null;
-        InputStream fontStream = ImgConfigUtil.class.getResourceAsStream("/fonts/FangZheng.ttf");
-
-        try {
-            if (fontStream != null) {
-                font = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(fontStyle, fontSize);
-            } else {
-                font = new Font(fontFamily, fontStyle, fontSize);
-            }
-        } catch (Exception e) {
-            LOG.error("加载字体失败,回退到默认字体", e);
-            // 如果字体加载失败，回退到默认字体
-            font = new Font(fontFamily, fontStyle, fontSize);
-        } finally {
-            IoUtil.close(fontStream);
-        }
-
-        return font;
-    }
 
 }
