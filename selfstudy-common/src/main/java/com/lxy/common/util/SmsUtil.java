@@ -1,12 +1,17 @@
 package com.lxy.common.util;
 
+import com.aliyun.dysmsapi20170525.Client;
+import com.aliyun.dysmsapi20170525.models.QuerySmsTemplateListRequest;
+import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
+import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
+import com.aliyun.teaopenapi.models.Config;
+import com.aliyun.teautil.models.RuntimeOptions;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
-import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.lxy.common.config.properties.CustomProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
@@ -18,11 +23,38 @@ import java.util.Random;
  */
 public class SmsUtil {
 
-    private final static String REGION = "cn-hangzhou";
+    private final static Logger logger = LoggerFactory.getLogger(SmsUtil.class);
+
+    private static Client clientInstance = null;
+
+    private final static String REGION = "cn-qingdao";
+
+    private final static String ENDPOINT = "dysmsapi.aliyuncs.com";
 
     private final static String TEMPLATE_CODE = "SMS_269495080";
 
     private final static String SIGN_NAME = "团团云自习";
+
+    public static Client getClient(){
+        //旧sdk已废弃
+//        DefaultProfile profile = DefaultProfile.getProfile(REGION, CustomProperties.accessKeyId, CustomProperties.accessKeySecret);
+//        IAcsClient client = new DefaultAcsClient(profile);
+        //新sdk
+        if (clientInstance == null) {
+            Config config = new Config();
+            config.setAccessKeyId("LTAI5tCuHcK8GGaBqKX7thJD");
+            config.setAccessKeySecret("nfxYQqeRgg0LqHj1fcOyJUo3XnaXiI");
+            config.setRegionId(REGION);
+            config.setEndpoint(ENDPOINT);
+            try {
+                clientInstance = new Client(config);
+            }catch (Exception e) {
+                clientInstance = null;
+                logger.error("短信客户端初始化失败",e);
+            }
+        }
+        return clientInstance;
+    }
 
     /**
      * 发送短信
@@ -31,27 +63,39 @@ public class SmsUtil {
      */
     public static boolean sendMessage(String phoneNumbers,String param){
         boolean flag = false;
-        DefaultProfile profile = DefaultProfile.getProfile(REGION, CustomProperties.accessKeyId, CustomProperties.accessKeySecret);
-        IAcsClient client = new DefaultAcsClient(profile);
-
+        Client client = getClient();
         SendSmsRequest request = new SendSmsRequest();
         request.setPhoneNumbers(phoneNumbers);
         request.setSignName(SIGN_NAME);
         request.setTemplateCode(TEMPLATE_CODE);
         request.setTemplateParam("{\"code\":\""+param+"\"}");
         try {
-            SendSmsResponse response = client.getAcsResponse(request);
-            String code = response.getCode();
-            if ("OK".equals(code)){
-                flag = true;
-                System.out.println("短信发送成功");
-            }
 
-        }catch (ClientException e) {
-            e.printStackTrace();
+            RuntimeOptions runtime = new RuntimeOptions();
+            SendSmsResponse response = client.sendSmsWithOptions(request, runtime);
+            String code = response.getBody().getCode();
+            if (code.equals("OK")){
+                flag = true;
+                logger.info("短信发送成功，手机号：{},验证码：{}", phoneNumbers, param);
+            }
+        }catch (Exception e) {
+            logger.error("短信发送失败",e);
         }
         return flag;
     }
+
+//    public static void querySmsTemplateList(){
+//        IAcsClient client = getClient();
+//        QuerySmsTemplateListRequest request = new QuerySmsTemplateListRequest();
+//        request.setPageIndex(1).setPageSize(50);
+//        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+//        try {
+//            client.querySmsTemplateListWithOptions(querySmsTemplateListRequest, runtime);
+//
+//        }catch (Exception e) {
+//            logger.error("查询短信模板失败",e);
+//        }
+//    }
 
     public static String getRandomCode(){
         Random random = new Random();
@@ -60,7 +104,8 @@ public class SmsUtil {
     }
 
     public static void main(String[] args) {
-
+        String code = SmsUtil.getRandomCode();
+        boolean flag = SmsUtil.sendMessage("17508660924", code);
     }
 
 }

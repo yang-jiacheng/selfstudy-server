@@ -1,14 +1,13 @@
 package com.lxy.app.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.lxy.common.domain.R;
 import com.lxy.common.po.Role;
+import com.lxy.common.util.SmsUtil;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -34,6 +33,11 @@ public class IndexController {
         return "hello selfstudy-mobile-app !";
     }
 
-
+    @GetMapping("/sendSMS")
+    public R<Object> sendSMS(@RequestParam("phone") String phone) {
+        String code = SmsUtil.getRandomCode();
+        boolean flag = SmsUtil.sendMessage(phone, code);
+        return R.ok(flag);
+    }
 
 }

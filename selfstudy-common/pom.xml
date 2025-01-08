@@ -210,9 +210,13 @@
         </dependency>
 
         <!--   阿里云短信   -->
+<!--        <dependency>-->
+<!--            <groupId>com.aliyun</groupId>-->
+<!--            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+            <artifactId>dysmsapi20170525</artifactId>
         </dependency>
         <!--   阿里云OSS   -->
         <dependency>
