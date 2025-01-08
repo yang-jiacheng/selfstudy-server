@@ -33,11 +33,4 @@ public class IndexController {
         return "hello selfstudy-mobile-app !";
     }
 
-    @GetMapping("/sendSMS")
-    public R<Object> sendSMS(@RequestParam("phone") String phone) {
-        String code = SmsUtil.getRandomCode();
-        boolean flag = SmsUtil.sendMessage(phone, code);
-        return R.ok(flag);
-    }
-
 }
