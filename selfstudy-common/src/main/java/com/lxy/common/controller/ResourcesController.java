@@ -55,14 +55,14 @@ public class ResourcesController {
 
 
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", produces = "application/json")
     @ResponseBody
     public R<Object> upload(@RequestParam("file") MultipartFile[] file, HttpServletRequest request){
         R<Object> r = resourcesService.uploadFile(file);
         return r;
     }
 
-    @PostMapping("/getStsToken")
+    @PostMapping(value = "/getStsToken", produces = "application/json")
     @ResponseBody
     public R<Object> getStsToken(){
         AssumeRoleResponse assumeRoleResponse = OssUtil.getStsCredentials();
@@ -75,13 +75,13 @@ public class ResourcesController {
         return R.ok(map);
     }
 
-    @PostMapping("/getUploadPrefix")
+    @PostMapping(value = "/getUploadPrefix", produces = "application/json")
     @ResponseBody
     public String getUploadPrefix(){
         return JsonUtil.toJson(new ResultVO(ImgConfigUtil.getPrefix()));
     }
 
-    @PostMapping("/getAccessUrl")
+    @PostMapping(value = "/getAccessUrl", produces = "application/json")
     @ResponseBody
     public String getAccessUrl(){
         return JsonUtil.toJson(new ResultVO(ImgConfigUtil.getAccessUrl()));

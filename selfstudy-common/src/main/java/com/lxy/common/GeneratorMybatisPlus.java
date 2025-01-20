@@ -38,6 +38,8 @@ public class GeneratorMybatisPlus {
 
 	public static final String AUTHOR="jiacheng yang.";
 
+	public static final String[] TABS = {"trip_record"};
+
 	public static String DRIVER_NAME="";
 	public static String URL="";
 	public static String USERNAME="";
@@ -72,11 +74,11 @@ public class GeneratorMybatisPlus {
 
 		//数据库表配置：是否大写命名、【实体】是否为 lombok 模型、需要包含的表名、数据库表字段映射到实体的命名策略, 未指定按照 naming 执行、数据库表映射到实体的命名策略
 		/* -------------------------- 表名写在这里 --------------------------- */
-		String[] tabs = {"object_storage"};
+
 		StrategyConfig strategyConfig = new StrategyConfig();
 		strategyConfig.setCapitalMode(true)
 				.setEntityLombokModel(false)
-				.setInclude(tabs)
+				.setInclude(TABS)
 				.setColumnNaming(NamingStrategy.underline_to_camel)
 				.setNaming(NamingStrategy.underline_to_camel);
 		mpg.setStrategy(strategyConfig);

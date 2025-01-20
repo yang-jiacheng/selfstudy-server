@@ -13,8 +13,8 @@
 }
 .cm-container{
 	background:rgba(244,244,244,0.6);
-	padding: 1rem 1rem 0; 
-	
+	padding: 1rem 1rem 0;
+
 	min-height: 96%;
 }
 .cm-detial{
@@ -22,6 +22,12 @@
 	margin-top: 1rem;
 	border-radius:0.2rem;
 	box-shadow:0rem 0.1rem 0.4rem 0rem rgba(0,0,0,0.06);
+}
+.cm-detail-body{
+	padding: 1rem;
+	background-color: #fff;
+	border-radius:0.2rem;
+	box-shadow:0 0.1rem 0.4rem 0 rgba(0,0,0,0.06);
 }
 .elem-quote {
 	margin-bottom: 10px;
@@ -125,10 +131,10 @@ td,th {
 	color: #926dde !important;
 }
 .comBackCol-brightBlue{
-	background-color: #48b0f7 !important;
+	background-color: #1890FF !important;
 }
 .comCol-brightBlue{
-	color: #48b0f7 !important;
+	color: #1890FF !important;
 }
 .comBackCol-brightRed{
 	background-color: #f96868 !important;
