@@ -42,8 +42,8 @@ public class SmsUtil {
         //新sdk
         if (clientInstance == null) {
             Config config = new Config();
-            config.setAccessKeyId("LTAI5tCuHcK8GGaBqKX7thJD");
-            config.setAccessKeySecret("nfxYQqeRgg0LqHj1fcOyJUo3XnaXiI");
+            config.setAccessKeyId(CustomProperties.accessKeyId);
+            config.setAccessKeySecret(CustomProperties.accessKeySecret);
             config.setRegionId(REGION);
             config.setEndpoint(ENDPOINT);
             try {
@@ -105,7 +105,7 @@ public class SmsUtil {
 
     public static void main(String[] args) {
         String code = SmsUtil.getRandomCode();
-        boolean flag = SmsUtil.sendMessage("17508660924", code);
+        boolean flag = SmsUtil.sendMessage("15607150562", code);
     }
 
 }
