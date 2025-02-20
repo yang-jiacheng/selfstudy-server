@@ -2,6 +2,7 @@ package com.lxy.common.util;
 
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +34,8 @@ public class LogUtil {
                 .collect(Collectors.joining("&"));
 
         // 获取客户端IP
-        
-        String clientIP = ServletUtil.getClientIP(request);
+
+        String clientIP = JakartaServletUtil.getClientIP(request);
         String format = StrUtil.format("客户端ip: {} 操作记录: userId={}, 请求地址: {}, 参数: {}",
                 clientIP, userId, requestURI, queryString);
         if(StrUtil.isNotEmpty(requestBody)){
