@@ -3,13 +3,21 @@
     <springProperty name="APP_NAME" scope="context" source="spring.application.name"/>
     <property name="LOG_HOME" value="/logs/selfstudy-admin"/>
 
+    <!-- 启用 ANSI 颜色输出（兼容终端） -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+
+    <!-- 控制台输出 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{25}:%line %msg%n</pattern>
+            <pattern>
+                %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){cyan} %clr([%thread]){blue} %clr(%-5level) %clr(%logger{25}:%line){magenta} %msg %n
+            </pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
 
+    <!--  滚动策略  -->
     <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件的命名规则 -->
@@ -27,6 +35,7 @@
         </encoder>
     </appender>
 
+    <!-- 异步日志 -->
     <appender name="asyncFile" class="ch.qos.logback.classic.AsyncAppender">
         <discardingThreshold>0</discardingThreshold>
         <queueSize>2048</queueSize>
@@ -35,6 +44,7 @@
     </appender>
 
     <!-- MyBatis log configure -->
+    <!-- 日志 打印sql   -->
     <logger name="com.lxy.common.mapper" level="DEBUG"/>
     <logger name="com.apache.ibatis" level="INFO"/>
     <logger name="org.mybatis.spring" level="INFO"/>
@@ -43,17 +53,23 @@
     <logger name="java.sql.PreparedStatement" level="INFO"/>
     <logger name="org.hibernate.validator.internal.util.Version" level="off"/>
 
-    <springProfile name="dev">
-        <root level="info">
-            <appender-ref ref="stdout"/>
-            <appender-ref ref="rollingFile"/>
-        </root>
-    </springProfile>
+    <!--    <springProfile name="dev">-->
+    <!--        <root level="info">-->
+    <!--            <appender-ref ref="stdout"/>-->
+    <!--            <appender-ref ref="rollingFile"/>-->
+    <!--        </root>-->
+    <!--    </springProfile>-->
 
-    <springProfile name="prod">
-        <root level="info">
-            <appender-ref ref="asyncFile"/>
-        </root>
-    </springProfile>
+    <!--    <springProfile name="prod">-->
+    <!--        <root level="info">-->
+    <!--            <appender-ref ref="asyncFile"/>-->
+    <!--        </root>-->
+    <!--    </springProfile>-->
+
+    <root level="info">
+        <appender-ref ref="stdout"/>
+        <!-- 日志文件用异步 -->
+        <appender-ref ref="asyncFile"/>
+    </root>
 
 </configuration>

@@ -6,6 +6,8 @@ import com.lxy.common.po.Role;
 import com.lxy.common.po.User;
 import com.lxy.common.service.UserService;
 import com.lxy.common.util.SmsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,8 @@ import java.util.*;
 @RestController
 public class IndexController {
 
+    private final static Logger logger = LoggerFactory.getLogger(IndexController.class);
+
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -32,6 +36,7 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index() {
+
         return "hello selfstudy-mobile-app !";
     }
 
