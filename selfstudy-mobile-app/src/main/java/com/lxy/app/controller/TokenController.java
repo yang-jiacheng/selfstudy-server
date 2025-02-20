@@ -11,10 +11,6 @@ import com.lxy.common.service.UserService;
 import com.lxy.common.util.EncryptUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
-import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,15 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/10/09 15:10
- * @Version: 1.0
+ * Description: 身份认证
+ * author: jiacheng yang.
+ * Date: 2022/10/09 15:10
+ * Version: 1.0
  */
 
 @RequestMapping("/token")
 @RestController
-@Api(tags = "用户登录、登出")
 public class TokenController {
 
     private final UserService userService;
@@ -46,18 +41,27 @@ public class TokenController {
         this.phoneCodeService = phoneCodeService;
     }
 
-    @ApiOperation(value = "登录", produces = "application/json", notes = "jiacheng yang.")
+    /**
+     * Description: 密码登录
+     * author: jiacheng yang.
+     * Date: 2025/02/20 10:17
+     * Param: [phone 手机号, password 密码，sha256加密（8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92）]
+     */
     @PostMapping("/login")
-    public R<Object> login(@ApiParam(value = "手机号")@RequestParam(value = "phone") String phone,
-                           @ApiParam(value = "密码，sha256加密（8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92）")@RequestParam(value = "password") String password){
+    public R<Object> login(@RequestParam(value = "phone") String phone, @RequestParam(value = "password") String password){
         R<Object> result = loginService.login(phone, password, "android");
         return result;
     }
 
-    @ApiOperation(value = "验证码登录|注册", produces = "application/json", notes = "jiacheng yang.")
+    /**
+     * Description: 验证码 登录|注册
+     * author: jiacheng yang.
+     * Date: 2025/02/20 10:16
+     * Param: [phone 手机号, verificationCode 验证码]
+     */
     @PostMapping("/loginByVerificationCode")
-    public R<Object> loginByVerificationCode(@ApiParam(value = "手机号")@RequestParam(value = "phone") String phone,
-                                          @ApiParam(value = "验证码")@RequestParam(value = "verificationCode") String verificationCode){
+    public R<Object> loginByVerificationCode(@RequestParam(value = "phone") String phone,
+                                          @RequestParam(value = "verificationCode") String verificationCode){
         if (!"111111".equals(verificationCode)){
             boolean flag = phoneCodeService.checkVerificationCode(phone, verificationCode);
             if (! flag){
@@ -79,9 +83,14 @@ public class TokenController {
         return result;
     }
 
-    @ApiOperation(value = "获取验证码", produces = "application/json", notes = "jiacheng yang.")
+    /**
+     * Description: 获取验证码
+     * author: jiacheng yang.
+     * Date: 2025/02/20 10:11
+     * Param: [phone 手机号]
+     */
     @PostMapping("/getVerificationCode")
-    public R<Object> getVerificationCode(@ApiParam(value = "手机号")@RequestParam(value = "phone") String phone){
+    public R<Object> getVerificationCode(@RequestParam(value = "phone") String phone){
         boolean flag = phoneCodeService.checkPhone(phone);
         if (!flag){
             return R.fail(-1,"今日验证码次数已到上限 5条！");
@@ -90,7 +99,12 @@ public class TokenController {
         return R.ok();
     }
 
-    @ApiOperation(value = "登出", produces = "application/json", notes = "jiacheng yang.")
+    /**
+     * Description: 登出
+     * author: jiacheng yang.
+     * Date: 2025/02/20 10:16
+     * Param: [request]
+     */
     @PostMapping("/logout")
     public R<Object> logout(HttpServletRequest request){
         String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstants.COOKIE_NAME_APP);

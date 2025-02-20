@@ -27,7 +27,7 @@ public class SelfStudyAdminApp {
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(SelfStudyAdminApp.class, args);
         FilterChainProxy bean = run.getBean(FilterChainProxy.class);
-//        System.out.println("1");
+        System.out.println("Hello World!");
     }
 
 }

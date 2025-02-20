@@ -1,7 +1,5 @@
 package com.lxy.common.po;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -10,54 +8,54 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
 /**
-* @author jiacheng yang.
-* @since 2022-10-22
-*/
+ * Description: 用户表
+ * author: jiacheng yang.
+ * Date: 2025-02-19
+ */
 
-@ApiModel(value ="用户表")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    
-   	@ApiModelProperty(value = "密码")
+
+    //密码
     private String password;
-    
-   	@ApiModelProperty(value = "姓名")
+
+    //姓名
     private String name;
-    
-   	@ApiModelProperty(value = "手机号")
+
+    //手机号
     private String phone;
-    
-   	@ApiModelProperty(value = "头像地址")
+
+    //头像地址
     private String profilePath;
 
-    @ApiModelProperty(value = "个人资料背景图")
+    //个人资料背景图
     private String coverPath;
-    
-   	@ApiModelProperty(value = "性别(男，女)")
+
+    //性别(男，女)
     private String gender;
-    
+
+    //注册时间
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
-   	@ApiModelProperty(value = "注册时间")
     private Date createTime;
-    
+
+    //修改时间
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
-   	@ApiModelProperty(value = "修改时间")
     private Date updateTime;
-    
-   	@ApiModelProperty(value = "注册类型 1。用户注册 2.后台添加")
+
+    //注册类型 1。用户注册 2.后台添加
     private Integer registType;
-    
-   	@ApiModelProperty(value = "常驻地址")
+
+    //常驻地址
     private String address;
-    
-   	@ApiModelProperty(value = "余额")
+
+    //余额
     private BigDecimal balance;
 
-    @ApiModelProperty(value = "总学习时长,单位分钟")
+    //总学习时长
     private Integer totalDuration;
 
     public User() {
@@ -84,7 +82,7 @@ public class User implements Serializable {
     public Integer getId() {
     	return id;
     }
-    
+
     public void setId(Integer id) {
     	this.id = id;
     }
@@ -92,7 +90,7 @@ public class User implements Serializable {
     public String getPassword() {
     	return password;
     }
-    
+
     public void setPassword(String password) {
     	this.password = password;
     }
@@ -100,7 +98,7 @@ public class User implements Serializable {
     public String getName() {
     	return name;
     }
-    
+
     public void setName(String name) {
     	this.name = name;
     }
@@ -108,7 +106,7 @@ public class User implements Serializable {
     public String getPhone() {
     	return phone;
     }
-    
+
     public void setPhone(String phone) {
     	this.phone = phone;
     }
@@ -116,15 +114,23 @@ public class User implements Serializable {
     public String getProfilePath() {
     	return profilePath;
     }
-    
+
     public void setProfilePath(String profilePath) {
     	this.profilePath = profilePath;
+    }
+
+    public String getCoverPath() {
+    	return coverPath;
+    }
+
+    public void setCoverPath(String coverPath) {
+    	this.coverPath = coverPath;
     }
 
     public String getGender() {
     	return gender;
     }
-    
+
     public void setGender(String gender) {
     	this.gender = gender;
     }
@@ -132,7 +138,7 @@ public class User implements Serializable {
     public Date getCreateTime() {
     	return createTime;
     }
-    
+
     public void setCreateTime(Date createTime) {
     	this.createTime = createTime;
     }
@@ -140,7 +146,7 @@ public class User implements Serializable {
     public Date getUpdateTime() {
     	return updateTime;
     }
-    
+
     public void setUpdateTime(Date updateTime) {
     	this.updateTime = updateTime;
     }
@@ -148,7 +154,7 @@ public class User implements Serializable {
     public Integer getRegistType() {
     	return registType;
     }
-    
+
     public void setRegistType(Integer registType) {
     	this.registType = registType;
     }
@@ -156,7 +162,7 @@ public class User implements Serializable {
     public String getAddress() {
     	return address;
     }
-    
+
     public void setAddress(String address) {
     	this.address = address;
     }
@@ -164,43 +170,37 @@ public class User implements Serializable {
     public BigDecimal getBalance() {
     	return balance;
     }
-    
+
     public void setBalance(BigDecimal balance) {
     	this.balance = balance;
     }
 
-    public String getCoverPath() {
-        return coverPath;
-    }
-
-    public void setCoverPath(String coverPath) {
-        this.coverPath = coverPath;
-    }
-
     public Integer getTotalDuration() {
-        return totalDuration;
+    	return totalDuration;
     }
 
     public void setTotalDuration(Integer totalDuration) {
-        this.totalDuration = totalDuration;
+    	this.totalDuration = totalDuration;
     }
+
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", profilePath='" + profilePath + '\'' +
-                ", coverPath='" + coverPath + '\'' +
-                ", gender='" + gender + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                ", registType=" + registType +
-                ", address='" + address + '\'' +
-                ", balance=" + balance +
-                ", totalDuration=" + totalDuration +
-                '}';
+	    return "User{" +
+	            ", id=" + id +
+	            ", password=" + password +
+	            ", name=" + name +
+	            ", phone=" + phone +
+	            ", profilePath=" + profilePath +
+	            ", coverPath=" + coverPath +
+	            ", gender=" + gender +
+	            ", createTime=" + createTime +
+	            ", updateTime=" + updateTime +
+	            ", registType=" + registType +
+	            ", address=" + address +
+	            ", balance=" + balance +
+	            ", totalDuration=" + totalDuration +
+	    "}";
     }
+
 }

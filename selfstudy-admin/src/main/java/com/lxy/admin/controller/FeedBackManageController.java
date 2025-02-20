@@ -9,9 +9,6 @@ import com.lxy.common.util.CommonUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.LayUiResultVO;
 import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -28,7 +25,6 @@ import java.util.Date;
 
 @RequestMapping("/feedBackManage")
 @Controller
-@Api(tags = "APP意见反馈")
 @PreAuthorize("hasAuthority('/feedBackManage/toFeedBackManage')")
 public class FeedBackManageController {
 
@@ -49,18 +45,16 @@ public class FeedBackManageController {
         return "feedBack/replyFeedback";
     }
 
-    @ApiOperation(value = "获取反馈列表",  notes = "jiacheng yang.")
     @PostMapping(value = "/getFeedBackPageList" , produces = "application/json")
     @ResponseBody
-    public String getFeedBackPageList(@ApiParam(value = "当前页")@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                                  @ApiParam(value = "每页数量")@RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
-                                  @ApiParam(value = "反馈内容")@RequestParam(value = "content",required = false) String content,
-                                  @ApiParam(value = "回复状态")@RequestParam(value = "replyStatus",required = false) Integer replyStatus){
+    public String getFeedBackPageList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                                  @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
+                                  @RequestParam(value = "content",required = false) String content,
+                                  @RequestParam(value = "replyStatus",required = false) Integer replyStatus){
         PageInfo<FeedbackVO> pg = feedbackService.getFeedBackList(content, replyStatus, null,null, page, limit);
         return JsonUtil.toJson(new LayUiResultVO((int) pg.getTotal(),pg.getList()));
     }
 
-    @ApiOperation(value = "删除反馈",  notes = "jiacheng yang.")
     @PostMapping(value = "/removeFeedBackById" , produces = "application/json")
     @ResponseBody
     public String removeFeedBackById(@RequestParam Integer id){
@@ -68,7 +62,6 @@ public class FeedBackManageController {
         return JsonUtil.toJson(new ResultVO());
     }
 
-    @ApiOperation(value = "回复反馈",  notes = "jiacheng yang.")
     @PostMapping(value = "/replyFeedBackById" , produces = "application/json")
     @ResponseBody
     public String replyFeedBackById(@RequestParam Integer id,@RequestParam String reply){

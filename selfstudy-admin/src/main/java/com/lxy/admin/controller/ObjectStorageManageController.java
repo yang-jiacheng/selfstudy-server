@@ -11,8 +11,6 @@ import com.lxy.common.service.ObjectStorageService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.LayUiResultVO;
 import com.lxy.common.vo.ObjectStorageVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +27,6 @@ import javax.validation.Valid;
 
 @RequestMapping("/objectStorageManage")
 @Controller
-@Api(tags = "对象存储管理")
 @PreAuthorize("hasAuthority('/objectStorageManage/toObjectStorageManage')")
 public class ObjectStorageManageController {
 
@@ -46,7 +43,6 @@ public class ObjectStorageManageController {
         return "objectStorageManage/saveObjectStorage";
     }
 
-    @ApiOperation(value = "获取对象列表",  notes = "jiacheng yang.")
     @PostMapping(value = "/getObjectStoragePageList" , produces = "application/json")
     @ResponseBody
     public String  getObjectStoragePageList(PageDTO pageDTO){
@@ -54,7 +50,6 @@ public class ObjectStorageManageController {
         return JsonUtil.toJson(new LayUiResultVO((int) pg.getTotal(),pg.getList()));
     }
 
-    @ApiOperation(value = "保存对象",  notes = "jiacheng yang.")
     @PostMapping(value = "/saveObjectStorage" , produces = "application/json")
     @ResponseBody
     public R<Object> saveObjectStorage(@RequestBody @Valid ObjectStorageDTO objectStorageDTO){
@@ -63,12 +58,12 @@ public class ObjectStorageManageController {
         return R.ok();
     }
 
-    @ApiOperation(value = "删除对象",  notes = "jiacheng yang.")
     @PostMapping(value = "/deleteObjectStorage" , produces = "application/json")
     @ResponseBody
     public R<Object> deleteObjectStorage(Integer id){
         objectStorageService.deleteObjectStorage(id);
         return R.ok();
     }
+
 
 }

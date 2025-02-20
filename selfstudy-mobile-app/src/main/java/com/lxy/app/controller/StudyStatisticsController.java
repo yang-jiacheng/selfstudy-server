@@ -11,9 +11,6 @@ import com.lxy.app.security.util.UserIdUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.ResultVO;
 import com.lxy.common.vo.UserRankVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +18,14 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/23 11:37
- * @Version: 1.0
+ * Description: 学情统计
+ * author: jiacheng yang.
+ * Date: 2022/12/23 11:37
+ * Version: 1.0
  */
 
 @RequestMapping("/studyStatistics")
 @RestController
-@Api(tags = "学情统计")
 public class StudyStatisticsController {
 
     private final UserService userService;
@@ -49,10 +45,15 @@ public class StudyStatisticsController {
         this.businessConfigService = businessConfigService;
     }
 
-    @ApiOperation(value = "提交学习时长",  notes = "jiacheng yang.")
+    /**
+     * Description: 提交学习时长
+     * author: jiacheng yang.
+     * Date: 2025/02/20 10:21
+     * Param: [duration 学习时长 分钟, recordId 学习记录id]
+     */
     @PostMapping(value = "/submitStudyDuration" , produces = "application/json")
-    public R<Object> submitStudyDuration(@ApiParam(value = "学习时长")@RequestParam(value = "duration") Integer duration,
-                                         @ApiParam(value = "学习记录id")@RequestParam(value = "recordId") Integer recordId){
+    public R<Object> submitStudyDuration(@RequestParam(value = "duration") Integer duration,
+                                         @RequestParam(value = "recordId") Integer recordId){
         int userId = UserIdUtil.getUserId();
         StudyRecord record = studyRecordService.getById(recordId);
         if (record != null){
@@ -63,21 +64,36 @@ public class StudyStatisticsController {
         return R.ok();
     }
 
-    @ApiOperation(value = "获取总排行榜",  notes = "jiacheng yang.")
+    /**
+     * Description: 获取总排行榜
+     * author: jiacheng yang.
+     * Date: 2025/02/20 10:23
+     * Param: []
+     */
     @PostMapping(value = "/getRankings" , produces = "application/json")
     public R<Object> getRankings(){
         List<UserRankVO> records = userService.getRankingsTotalDuration();
         return R.ok(records);
     }
 
-    @ApiOperation(value = "获取总排行榜更新规则",  notes = "jiacheng yang.")
+    /**
+     * Description: 获取总排行榜更新规则
+     * Author: jiacheng yang.
+     * Date: 2025/02/20 10:24
+     * Param: []
+     */
     @PostMapping(value = "/getRankingsRules" , produces = "application/json")
     public R<Object> getRankingsRules(){
         String value = businessConfigService.getBusinessConfigValue(ConfigConstants.GENERAL_RULES);
         return R.ok(value);
     }
 
-    @ApiOperation(value = "获取自己的排名和信息",  notes = "jiacheng yang.")
+    /**
+     * Description: 获取自己的排名和信息
+     * Author: jiacheng yang.
+     * Date: 2025/02/20 10:24
+     * Param: []
+     */
     @GetMapping(value = "/getSelfRankings" , produces = "application/json")
     public R<Object> getSelfRankings(){
         int userId = UserIdUtil.getUserId();

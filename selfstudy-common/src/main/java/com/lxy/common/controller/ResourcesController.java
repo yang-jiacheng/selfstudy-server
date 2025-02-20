@@ -14,7 +14,6 @@ import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.OssUtil;
 import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +86,6 @@ public class ResourcesController {
         return JsonUtil.toJson(new ResultVO(ImgConfigUtil.getAccessUrl()));
     }
 
-    @ApiOperation(value = "下载文件",  notes = "jiacheng yang.")
     @GetMapping("/downloadFile")
     public void downloadFile(HttpServletResponse response, String fileName){
         //是否开启OSS

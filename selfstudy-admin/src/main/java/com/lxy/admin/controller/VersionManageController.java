@@ -8,9 +8,6 @@ import com.lxy.common.service.VersionService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.LayUiResultVO;
 import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -28,7 +25,6 @@ import java.util.List;
 
 @RequestMapping("/versionManage")
 @Controller
-@Api(tags = "版本控制")
 @PreAuthorize("hasAuthority('/versionManage/toVersionManage')")
 public class VersionManageController {
 
@@ -49,7 +45,6 @@ public class VersionManageController {
         return "version/updateVersion";
     }
 
-    @ApiOperation(value = "获取版本列表", produces = "application/json", notes = "jiacheng yang.")
     @PostMapping("/getVersionList")
     @ResponseBody
     public String getVersionList(){
@@ -57,15 +52,13 @@ public class VersionManageController {
         return JsonUtil.toJson(new LayUiResultVO(list.size(), list));
     }
 
-    @ApiOperation(value = "获取版本", produces = "application/json", notes = "jiacheng yang.")
     @PostMapping("/getVersionById")
     @ResponseBody
-    public String getVersionById(@ApiParam(value = "id",required = true)@RequestParam(value = "id") Integer id){
+    public String getVersionById(@RequestParam(value = "id") Integer id){
         Version version = versionService.getById(id);
         return JsonUtil.toJson(new ResultVO(version));
     }
 
-    @ApiOperation(value = "修改版本", produces = "application/json", notes = "jiacheng yang.")
     @PostMapping("/saveVersion")
     @ResponseBody
     public String saveVersion(String versionJson){

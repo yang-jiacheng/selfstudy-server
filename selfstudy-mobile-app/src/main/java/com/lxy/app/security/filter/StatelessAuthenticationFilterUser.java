@@ -15,6 +15,8 @@ import com.lxy.common.vo.ResultVO;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -52,7 +54,9 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         if (accessToken == null){
             msg = "token未获取到";
             logger.warn(msg);
-            throw new RuntimeException(msg);
+            SecurityContextHolder.clearContext();
+            throw new InsufficientAuthenticationException(msg);
+
         }
 
         //解析token
@@ -61,10 +65,9 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
             Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
             userId = (Integer) claims.get("userId");
         }catch (Exception e){
-            e.printStackTrace();
             msg = "token非法";
             logger.warn(msg);
-            throw new RuntimeException(msg);
+            throw new InsufficientAuthenticationException(msg);
         }
         //一个号在线数
         int onlineNum = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstants.APP_HAS_NUM));
@@ -76,7 +79,7 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         if (loginStatus == null){
             msg = "无法识别的登录状态";
             logger.warn(msg);
-            throw new RuntimeException(msg);
+            throw new BadCredentialsException(msg);
         }
         //存入SecurityContextHolder
         //获取权限信息封装到Authentication中

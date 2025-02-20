@@ -42,8 +42,10 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig  {
 
-    private final static String[] PERMIT_URL = {"/swagger-ui.html","/swagger-resources/**","/webjars/**","/v2/**","/api/**","/csrf",
-            "/static/**","/druid/**","/","/token/**","/upload/**","/userAgreement/**","/personalCenter/updatePassword","/version/**"};
+    private final static String[] PERMIT_URL = {
+            "/webjars/**","/v2/**","/api/**","/csrf", "/static/**", "/druid/**","/","/token/**","/upload/**",
+            "/userAgreement/**","/personalCenter/updatePassword","/version/**"
+    };
 
     private final static String[] AUTH_URL = {
             "/catalog/**","/feedBack/**","/home/**","/personalCenter/getUserInfo","/personalCenter/updateUserInfo",
@@ -109,8 +111,8 @@ public class SecurityConfig  {
                     )
                     .authorizeRequests()
                     // 对于以下接口 鉴权认证
-                    .antMatchers(AUTH_URL).authenticated()
-                    .anyRequest().permitAll();
+                    .antMatchers(AUTH_URL).authenticated();
+//                    .anyRequest().permitAll()
 
 
 
@@ -156,9 +158,8 @@ public class SecurityConfig  {
                     )
                     .authorizeRequests()
                     // 对于以下接口 放行
-                    .antMatchers(PERMIT_URL).permitAll()
-                    // 除上面外的所有请求全部放行
-                    .anyRequest().permitAll();
+                    .antMatchers(PERMIT_URL).permitAll();
+//                    .anyRequest().permitAll();
 
 
             //关闭csrf //允许跨域
@@ -169,105 +170,3 @@ public class SecurityConfig  {
 
 
 }
-
-
-
-//public class SecurityConfig extends WebSecurityConfigurerAdapter {
-//
-//    @Autowired
-//    private UserDetailsServiceImpl userDetailsService;
-//    @Autowired
-//    private BusinessConfigService businessConfigService;
-//    @Autowired
-//    private CommonRedisService commonRedisService;
-//
-//    @Autowired
-//    private AuthenticationEntryPointUserImpl authenticationEntryPoint;
-//
-//    @Autowired
-//    private AccessDeniedHandlerImpl accessDeniedHandler;
-//
-//    private final static String[] PERMIT_URL = {"/swagger-ui.html","/swagger-resources/**","/webjars/**","/v2/**","/api/**","/csrf",
-//            "/static/**","/druid/**","/","/token/**","/upload/**","/userAgreement/**","/personalCenter/updatePassword","/version/**"};
-//
-//    private final static String[] AUTH_URL = {
-//            "/catalog/**","/feedBack/**","/home/**","/personalCenter/getUserInfo","/personalCenter/updateUserInfo",
-//            "/personalCenter/getUserInfoById","/studyRecord/**","/studyStatistics/**",
-//            "/error","/resources/upload","/resources/uploadApp"
-//    };
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){
-//        return new MinePasswordEncoder();
-//    }
-//
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//    }
-//
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                //不通过Session获取SecurityContext
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .requestMatchers()
-//                .antMatchers(AUTH_URL)
-//                .and()
-//                //添加过滤器,
-//                .addFilterBefore(
-//                        new StatelessAuthenticationFilterUser(businessConfigService, commonRedisService),
-//                        UsernamePasswordAuthenticationFilter.class
-//                )
-//                .authorizeRequests()
-//                // 对于以下接口 鉴权认证
-//                .antMatchers(AUTH_URL).authenticated()
-//                // 除上面外的所有请求全部放行
-//                .anyRequest().permitAll();
-//
-//        //配置异常处理器
-//        http.exceptionHandling()
-//                //配置认证失败处理器
-//                .authenticationEntryPoint(authenticationEntryPoint)
-//                .accessDeniedHandler(accessDeniedHandler);
-//
-//        //关闭csrf //允许跨域
-//        http.csrf().disable().cors().configurationSource(configurationSource());
-//    }
-//
-////    @Override
-////    public void configure(WebSecurity web)  {
-////        //以下路径不启用过滤器
-////        web.ignoring()
-////                .antMatchers(
-////                        PERMIT_URL
-////                );
-////    }
-//
-//    /**
-//     * 解决AuthenticationManager无法在其他service注入
-//     */
-//    @Bean
-//    @Override
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
-//
-//    CorsConfigurationSource configurationSource() {
-//        List<String> list = Collections.singletonList("*");
-//        CorsConfiguration corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.setAllowedHeaders(list);
-//        corsConfiguration.setAllowedMethods(list);
-//        //corsConfiguration.setAllowedOrigins(Collections.singletonList("*"));
-//        corsConfiguration.setAllowedOriginPatterns(list);
-//        corsConfiguration.setAllowCredentials(true);
-//        corsConfiguration.setMaxAge(3600L);
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", corsConfiguration);
-//        return source;
-//    }
-//
-//}

@@ -5,8 +5,6 @@ import com.lxy.common.constant.ConfigConstants;
 import com.lxy.common.po.UserAgreement;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.UserAgreementService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,15 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/21 11:30
- * @Version: 1.0
+ * Description: 用户协议与隐私政策
+ * author: jiacheng yang.
+ * Date: 2022/12/21 11:30
+ * Version: 1.0
  */
 
 @RequestMapping("/userAgreement")
 @Controller
-@Api(tags = "用户协议与隐私政策")
 public class UserAgreementController {
 
     private final UserAgreementService userAgreementService;
@@ -39,7 +36,12 @@ public class UserAgreementController {
         this.businessConfigService = businessConfigService;
     }
 
-    @ApiOperation(value = "用户协议或隐私政策",  produces = "application/json", notes = "jiacheng yang.")
+    /**
+     * Description: 用户协议或隐私政策
+     * author: jiacheng yang.
+     * Date: 2025/02/20 10:18
+     * Param: [type, model]
+     */
     @GetMapping("/agreementPolicyInfoPage{type}")
     public String agreementPolicyInfoPage(@PathVariable Integer type, Model model){
         LambdaQueryWrapper<UserAgreement> wrapper = new LambdaQueryWrapper<>();
@@ -49,7 +51,12 @@ public class UserAgreementController {
         return "agreementPolicyInfo/agreementPolicyInfoPage";
     }
 
-    @ApiOperation(value = "关于软件",  produces = "application/json", notes = "jiacheng yang.")
+   /**
+    * Description: 关于软件
+    * author: jiacheng yang.
+    * Date: 2025/02/20 10:18
+    * Param: [model]
+    */
     @GetMapping("/aboutSoftware")
     public String callMe( Model model){
         String content = businessConfigService.getBusinessConfigValue(ConfigConstants.ABOUT_US);

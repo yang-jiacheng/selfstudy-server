@@ -9,8 +9,6 @@ import com.lxy.common.service.ClassifyService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.ResultVO;
 import com.lxy.common.vo.ZtreeVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -31,7 +29,6 @@ import java.util.List;
 
 @RequestMapping("/classifyManage")
 @Controller
-@Api(tags = "自习室管理")
 @PreAuthorize("hasAuthority('/classifyManage/toClassifyTree')")
 public class ClassifyManageController {
 
@@ -45,13 +42,11 @@ public class ClassifyManageController {
         this.classifyService = classifyService;
     }
 
-    @ApiOperation(value = "自习室管理", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/toClassifyTree")
     public String toClassifyTree(){
         return "classifyManage/classifyTree";
     }
 
-    @ApiOperation(value = "获取自习室数据", notes = "jiacheng yang.")
     @PostMapping(value = "/getClassifyTree", produces = "application/json")
     @ResponseBody
     public R<Object> getClassifyTree(){
@@ -62,7 +57,6 @@ public class ClassifyManageController {
         return R.ok(tree);
     }
 
-    @ApiOperation(value = "获取图书馆", notes = "jiacheng yang.")
     @PostMapping(value = "/getClassifyById", produces = "application/json")
     @ResponseBody
     public String getClassifyById(Integer id){
@@ -70,7 +64,6 @@ public class ClassifyManageController {
         return JsonUtil.toJson(new ResultVO(classify));
     }
 
-    @ApiOperation(value = "更新图书馆", notes = "jiacheng yang.")
     @PostMapping(value = "/updateClassify", produces = "application/json")
     @ResponseBody
     public String updateClassify(String mainJson){
@@ -79,7 +72,6 @@ public class ClassifyManageController {
         return JsonUtil.toJson(resultVO);
     }
 
-    @ApiOperation(value = "删除图书馆", notes = "jiacheng yang.")
     @PostMapping(value = "/removeClassify", produces = "application/json")
     @ResponseBody
     public String removeClassify(Integer id){
@@ -89,7 +81,6 @@ public class ClassifyManageController {
         return JsonUtil.toJson(new ResultVO());
     }
 
-    @ApiOperation(value = "删除自习室", notes = "jiacheng yang.")
     @PostMapping(value = "/removeCatalog", produces = "application/json")
     @ResponseBody
     public String removeCatalog(Integer id){
@@ -98,7 +89,6 @@ public class ClassifyManageController {
         return JsonUtil.toJson(new ResultVO());
     }
 
-    @ApiOperation(value = "获取自习室", notes = "jiacheng yang.")
     @PostMapping(value = "/getCatalogById", produces = "application/json")
     @ResponseBody
     public String getCatalogById(Integer id){
@@ -106,7 +96,6 @@ public class ClassifyManageController {
         return JsonUtil.toJson(new ResultVO(catalog));
     }
 
-    @ApiOperation(value = "保存自习室", notes = "jiacheng yang.")
     @PostMapping(value = "/saveCatalog", produces = "application/json")
     @ResponseBody
     public String saveCatalog(Catalog catalog){

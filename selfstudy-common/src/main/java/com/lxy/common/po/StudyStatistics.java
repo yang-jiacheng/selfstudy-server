@@ -1,7 +1,5 @@
 package com.lxy.common.po;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
@@ -9,26 +7,26 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
 /**
-* @author jiacheng yang.
-* @since 2022-12-23
-*/
+ * Description: 学习统计
+ * author: jiacheng yang.
+ * Date: 2025-02-19
+ */
 
-@ApiModel(value ="学习统计")
 public class StudyStatistics implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    
-   	@ApiModelProperty(value = "用户id")
+
+    //用户id
     private Integer userId;
-    
-	@JsonFormat(pattern = "yyyy-MM-dd",locale="zh", timezone="GMT+8")
-   	@ApiModelProperty(value = "学习日期")
+
+    //学习日期
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
     private Date studyDay;
-    
-   	@ApiModelProperty(value = "学习时长")
+
+    //学习时长
     private Integer duration;
 
     public StudyStatistics() {
@@ -43,7 +41,7 @@ public class StudyStatistics implements Serializable {
     public Integer getId() {
     	return id;
     }
-    
+
     public void setId(Integer id) {
     	this.id = id;
     }
@@ -51,7 +49,7 @@ public class StudyStatistics implements Serializable {
     public Integer getUserId() {
     	return userId;
     }
-    
+
     public void setUserId(Integer userId) {
     	this.userId = userId;
     }
@@ -59,7 +57,7 @@ public class StudyStatistics implements Serializable {
     public Date getStudyDay() {
     	return studyDay;
     }
-    
+
     public void setStudyDay(Date studyDay) {
     	this.studyDay = studyDay;
     }
@@ -67,7 +65,7 @@ public class StudyStatistics implements Serializable {
     public Integer getDuration() {
     	return duration;
     }
-    
+
     public void setDuration(Integer duration) {
     	this.duration = duration;
     }

@@ -5,9 +5,6 @@ import com.lxy.common.service.ClassifyService;
 import com.lxy.common.service.StudyRecordService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.ClassifyVO;
-import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,15 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/19 17:35
- * @Version: 1.0
+ * Description: 主页
+ * author: jiacheng yang.
+ * Date: 2022/12/19 17:35
+ * Version: 1.0
  */
 
 @RequestMapping("/home")
 @RestController
-@Api(tags = "主页")
 public class HomeController {
 
     private final ClassifyService classifyService;
@@ -38,7 +34,12 @@ public class HomeController {
         this.studyRecordService = studyRecordService;
     }
 
-    @ApiOperation(value = "获取图书馆", notes = "jiacheng yang.")
+    /**
+     * Description: 获取图书馆
+     * Author: jiacheng yang.
+     * Date: 2025/02/20 10:28
+     * Param: []
+     */
     @PostMapping(value = "/getClassify" , produces = "application/json")
     @ResponseBody
     public R<Object> getClassify(){

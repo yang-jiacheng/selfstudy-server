@@ -8,26 +8,20 @@ import com.lxy.common.service.PhoneCodeService;
 import com.lxy.common.service.UserService;
 import com.lxy.app.security.util.UserIdUtil;
 import com.lxy.common.util.ImgConfigUtil;
-import com.lxy.common.util.JsonUtil;
-import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/19 17:27
- * @Version: 1.0
+ * Description: 个人中心
+ * author: jiacheng yang.
+ * Date: 2022/12/19 17:27
+ * Version: 1.0
  */
 
 @RequestMapping("/personalCenter")
 @RestController
-@Api(tags = "个人中心")
 public class PersonalCenterController {
 
     private final UserService userService;
@@ -40,7 +34,12 @@ public class PersonalCenterController {
         this.phoneCodeService = phoneCodeService;
     }
 
-    @ApiOperation(value = "获取个人信息", notes = "jiacheng yang.")
+    /**
+     * Description: 获取个人信息
+     * Author: jiacheng yang.
+     * Date: 2025/02/20 10:26
+     * Param: []
+     */
     @PostMapping(value = "/getUserInfo" , produces = "application/json")
     public R<Object> getUserInfo(){
         int userId = UserIdUtil.getUserId();
@@ -48,13 +47,18 @@ public class PersonalCenterController {
         return R.ok(user);
     }
 
-    @ApiOperation(value = "修改个人信息", notes = "jiacheng yang.")
+    /**
+     * Description: 修改个人信息
+     * Author: jiacheng yang.
+     * Date: 2025/02/20 10:27
+     * Param: [name 昵称|即姓名, gender 性别, address 地址, profilePath 头像,传相对路径, coverPath 个人资料背景]
+     */
     @PostMapping(value = "/updateUserInfo" , produces = "application/json")
-    public R<Object> updateUserInfo(@ApiParam(value = "昵称|即姓名")@RequestParam(value = "name",required = false) String name,
-                                    @ApiParam(value = "性别")@RequestParam(value = "gender",required = false) String gender,
-                                    @ApiParam(value = "地址")@RequestParam(value = "address",required = false) String address,
-                                    @ApiParam(value = "头像,传相对路径")@RequestParam(value = "profilePath",required = false) String profilePath,
-                                    @ApiParam(value = "个人资料背景")@RequestParam(value = "coverPath",required = false) String coverPath){
+    public R<Object> updateUserInfo(@RequestParam(value = "name",required = false) String name,
+                                    @RequestParam(value = "gender",required = false) String gender,
+                                    @RequestParam(value = "address",required = false) String address,
+                                    @RequestParam(value = "profilePath",required = false) String profilePath,
+                                    @RequestParam(value = "coverPath",required = false) String coverPath){
         int userId = UserIdUtil.getUserId();
         User user = new User(userId,name,profilePath,coverPath,gender,address);
         if(StrUtil.isNotEmpty(gender) || StrUtil.isNotEmpty(address) ||StrUtil.isNotEmpty(profilePath) ||StrUtil.isNotEmpty(coverPath) ||StrUtil.isNotEmpty(name) ){
@@ -65,11 +69,16 @@ public class PersonalCenterController {
         return R.ok();
     }
 
-    @ApiOperation(value = "修改密码", notes = "jiacheng yang.")
+    /**
+     * Description: 修改密码
+     * Author: jiacheng yang.
+     * Date: 2025/02/20 10:27
+     * Param: [phone 手机号, verificationCode 验证码, password 新密码 sha256加密]
+     */
     @PostMapping(value = "/updatePassword" , produces = "application/json")
-    public R<Object> updatePassword(@ApiParam(value = "手机号")@RequestParam(value = "phone") String phone,
-                                 @ApiParam(value = "验证码")@RequestParam(value = "verificationCode") String verificationCode,
-                                 @ApiParam(value = "新密码 sha256加密")@RequestParam(value = "password") String password){
+    public R<Object> updatePassword(@RequestParam(value = "phone") String phone,
+                                 @RequestParam(value = "verificationCode") String verificationCode,
+                                 @RequestParam(value = "password") String password){
         User one = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getPhone, phone));
         if (one == null){
             return R.fail(-1,"请先注册！");
@@ -90,7 +99,12 @@ public class PersonalCenterController {
         return R.ok();
     }
 
-    @ApiOperation(value = "获取用户信息", notes = "jiacheng yang.")
+    /**
+     * Description: 获取用户信息
+     * Author: jiacheng yang.
+     * Date: 2025/02/20 10:28
+     * Param: [userId]
+     */
     @PostMapping(value = "/getUserInfoById" , produces = "application/json")
     public R<Object> getUserInfoById(Integer userId){
         User user = userService.getById(userId);

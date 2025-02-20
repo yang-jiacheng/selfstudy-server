@@ -16,9 +16,6 @@ import com.lxy.common.service.RoleService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.LayUiResultVO;
 import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -35,7 +32,6 @@ import java.util.*;
 
 @RequestMapping("/roleManage")
 @Controller
-@Api(tags = "角色、权限管理")
 @PreAuthorize("hasAnyAuthority('/roleManage/roleList','/roleManage/permissionList')")
 public class RoleManageController {
 
@@ -56,35 +52,30 @@ public class RoleManageController {
         this.adminRoleRelateService = adminRoleRelateService;
     }
 
-    @ApiOperation(value = "角色管理页面", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/roleList")
     public String roleList(){
         return "adminManage/roleList";
     }
 
-    @ApiOperation(value = "编辑角色管理页面", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/updateRole")
     public String updateRole(){
         return "adminManage/updateRole";
     }
 
-    @ApiOperation(value = "权限管理页面", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/permissionList")
     public String permissionList(){
         return "adminManage/permissionList";
     }
 
-    @ApiOperation(value = "编辑权限管理页面", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/updatePermission")
     public String updatePermission(){
         return "adminManage/updatePermission";
     }
 
-    @ApiOperation(value = "获取角色列表", notes = "jiacheng yang.")
     @PostMapping(value = "/getRoleList", produces = "application/json")
     @ResponseBody
-    public String getRoleList(@ApiParam(value = "当前页")@RequestParam(value = "page",required = false) Integer page,
-                              @ApiParam(value = "每页数量")@RequestParam(value = "limit",required = false) Integer limit){
+    public String getRoleList(@RequestParam(value = "page",required = false) Integer page,
+                              @RequestParam(value = "limit",required = false) Integer limit){
         if (page!=null && limit!=null){
             Page<Role> pg = new Page<>(page,limit);
             pg.addOrder(OrderItem.desc("id"));
@@ -95,10 +86,9 @@ public class RoleManageController {
         return JsonUtil.toJson(new ResultVO(roles));
     }
 
-    @ApiOperation(value = "删除角色", notes = "jiacheng yang.")
     @PostMapping(value = "/removeRoleById", produces = "application/json")
     @ResponseBody
-    public String removeRoleById(@ApiParam(value = "id")@RequestParam Integer id){
+    public String removeRoleById(@RequestParam Integer id){
         rolePermissionRelateService.removeCachePermissionInRole(Collections.singletonList(id));
         roleService.removeById(id);
         rolePermissionRelateService.remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId,id));
@@ -106,10 +96,9 @@ public class RoleManageController {
         return JsonUtil.toJson(new ResultVO());
     }
 
-    @ApiOperation(value = "获取角色根据id", notes = "jiacheng yang.")
     @PostMapping(value = "/getRoleById", produces = "application/json")
     @ResponseBody
-    public String getRoleById(@ApiParam(value = "id")@RequestParam Integer id){
+    public String getRoleById(@RequestParam Integer id){
         Role role = roleService.getById(id);
         //角色权限
         List<Permission> rolePermission=permissionService.getRolePermission(id);
@@ -122,11 +111,10 @@ public class RoleManageController {
         return JsonUtil.toJson(new ResultVO(map));
     }
 
-    @ApiOperation(value = "新增或修改角色", notes = "jiacheng yang.")
     @PostMapping(value = "/addOrUpdateRole", produces = "application/json")
     @ResponseBody
-    public String addOrUpdateRole(@ApiParam(value = "role")@RequestParam(value = "roleJson") String roleJson,
-                                  @ApiParam(value = "权限id集合")@RequestParam(value = "idsJson") String idsJson){
+    public String addOrUpdateRole(@RequestParam(value = "roleJson") String roleJson,
+                                 @RequestParam(value = "idsJson") String idsJson){
         Role role = JsonUtil.getTypeObj(roleJson, Role.class);
         List<Integer> ids = JsonUtil.getListType(idsJson, Integer.class);
         if (role == null || CollUtil.isEmpty(ids)){
@@ -156,12 +144,11 @@ public class RoleManageController {
         return JsonUtil.toJson(new ResultVO(role.getId()));
     }
 
-    @ApiOperation(value = "权限列表", notes = "jiacheng yang.")
     @PostMapping(value = "/getPermissionList", produces = "application/json")
     @ResponseBody
-    public String getPermissionList(@ApiParam(value = "当前页")@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                                    @ApiParam(value = "每页数量")@RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
-                                    @ApiParam(value = "权限代码")@RequestParam(value = "urlCode",required = false) String urlCode){
+    public String getPermissionList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                                    @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
+                                    @RequestParam(value = "urlCode",required = false) String urlCode){
         Page<Permission> pg = permissionService.getPermissionList(urlCode, page, limit);
         Map<String ,Object> map = new HashMap<>(4);
         map.put("code",0);
@@ -171,18 +158,16 @@ public class RoleManageController {
         return JsonUtil.toJson(map);
     }
 
-    @ApiOperation(value = "根据id获取权限", notes = "jiacheng yang.")
     @PostMapping(value = "/getPermissionById", produces = "application/json")
     @ResponseBody
-    public String getPermissionById(@ApiParam(value = "id")@RequestParam Integer id){
+    public String getPermissionById(@RequestParam Integer id){
         Permission permission = permissionService.getById(id);
         return JsonUtil.toJson(new ResultVO(permission));
     }
 
-    @ApiOperation(value = "更新权限", notes = "jiacheng yang.")
     @PostMapping(value = "/updatePermission", produces = "application/json")
     @ResponseBody
-    public String updatePermission(@ApiParam(value = "权限,json")@RequestParam(value = "permissionJson") String permissionJson){
+    public String updatePermission(@RequestParam(value = "permissionJson") String permissionJson){
         Permission permission = JsonUtil.getTypeObj(permissionJson, Permission.class);
         if (permission == null){
             return JsonUtil.toJson(new ResultVO(-1,"数据有误！"));
@@ -195,5 +180,5 @@ public class RoleManageController {
         return JsonUtil.toJson(new ResultVO());
     }
 
-    
+
 }

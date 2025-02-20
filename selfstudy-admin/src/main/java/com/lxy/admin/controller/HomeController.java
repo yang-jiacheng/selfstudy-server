@@ -4,8 +4,6 @@ import com.lxy.admin.security.util.AdminIdUtil;
 import com.lxy.common.po.AdminInfo;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.util.ImgConfigUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/home")
 @Controller
-@Api(tags = "主页")
 public class HomeController {
 
     private final AdminInfoService adminInfoService;
@@ -32,7 +29,6 @@ public class HomeController {
         this.adminInfoService = adminInfoService;
     }
 
-    @ApiOperation(value = "首页", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/index")
     public String index(HttpServletRequest request){
         int adminId = AdminIdUtil.getAdminId();
@@ -44,7 +40,6 @@ public class HomeController {
         return "index";
     }
 
-    @ApiOperation(value = "首页iframe", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/main")
     public String main(){
         return "main";

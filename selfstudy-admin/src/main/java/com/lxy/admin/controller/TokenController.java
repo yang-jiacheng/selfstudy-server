@@ -8,9 +8,6 @@ import com.lxy.common.constant.CommonConstants;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -32,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @RequestMapping("/token")
 @Controller
-@Api(tags = "用户登录、登出")
 public class TokenController {
 
     private final CodeUtil codeUtil;
@@ -45,12 +41,11 @@ public class TokenController {
         this.loginService = loginService;
     }
 
-    @ApiOperation(value = "登录", notes = "jiacheng yang.")
     @PostMapping(value = "/login", produces = "application/json")
     @ResponseBody
-    public String login(@ApiParam(value = "用户名", required = true)@RequestParam("username")String username,
-                        @ApiParam(value = "密码", required = true)@RequestParam("password")String password,
-                        @ApiParam(value = "验证码", required = true)@RequestParam("verifyCode")String verifyCode,
+    public String login(@RequestParam("username")String username,
+                        @RequestParam("password")String password,
+                       @RequestParam("verifyCode")String verifyCode,
                         HttpServletResponse response, HttpServletRequest request){
         boolean flag = codeUtil.checkVerifyCode(verifyCode,request);
         if (!flag){
@@ -60,7 +55,6 @@ public class TokenController {
         return JsonUtil.toJson(result);
     }
 
-    @ApiOperation(value = "登出", notes = "jiacheng yang.")
     @PostMapping(value = "/logout", produces = "application/json")
     @ResponseBody
     public String logout(HttpServletRequest request,HttpServletResponse response){

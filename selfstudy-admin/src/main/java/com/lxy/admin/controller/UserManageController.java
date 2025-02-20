@@ -19,16 +19,12 @@ import com.lxy.common.util.OssUtil;
 import com.lxy.common.util.PhoneUtil;
 import com.lxy.common.vo.LayUiResultVO;
 import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +40,6 @@ import java.util.List;
 
 @RequestMapping("/userManage")
 @Controller
-@Api(tags = "学员管理")
 @PreAuthorize("hasAuthority('/userManage/toUserList')")
 public class UserManageController {
 
@@ -65,38 +60,33 @@ public class UserManageController {
         this.poiService = poiService;
     }
 
-    @ApiOperation(value = "用户管理", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/toUserList")
     public String toUserList(){
         return "userManage/userList";
     }
 
-    @ApiOperation(value = "编辑用户", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/toSaveUser")
     public String toSaveUser(){
         return "userManage/saveUser";
     }
 
-    @ApiOperation(value = "错误信息", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/toErrInfo")
     public String toErrInfo(){
         return "errInfo";
     }
 
-    @ApiOperation(value = "获取用户列表", notes = "jiacheng yang.")
     @PostMapping(value = "/getUserPageList", produces = "application/json")
     @ResponseBody
-    public String getUserPageList(@ApiParam(value = "当前页")@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                              @ApiParam(value = "每页数量")@RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
-                              @ApiParam(value = "昵称")@RequestParam(value = "name",required = false) String name,
-                              @ApiParam(value = "手机号")@RequestParam(value = "phone",required = false) String phone,
-                              @ApiParam(value = "开始时间")@RequestParam(value = "startTime",required = false) String startTime,
-                              @ApiParam(value = "结束时间")@RequestParam(value = "endTime",required = false) String endTime){
+    public String getUserPageList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                              @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
+                              @RequestParam(value = "name",required = false) String name,
+                              @RequestParam(value = "phone",required = false) String phone,
+                              @RequestParam(value = "startTime",required = false) String startTime,
+                              @RequestParam(value = "endTime",required = false) String endTime){
         Page<User> pg = userService.getUserPageList(name, phone, startTime, endTime, page, limit);
         return JsonUtil.toJson(new LayUiResultVO((int) pg.getTotal(), pg.getRecords()));
     }
 
-    @ApiOperation(value = "获取用户", notes = "jiacheng yang.")
     @PostMapping(value = "/getUserById", produces = "application/json")
     @ResponseBody
     public String getUserById(Integer userId){
@@ -105,7 +95,6 @@ public class UserManageController {
         return JsonUtil.toJson(new ResultVO(user));
     }
 
-    @ApiOperation(value = "保存用户", notes = "jiacheng yang.")
     @PostMapping(value = "/saveUser", produces = "application/json")
     @ResponseBody
     public String saveUser(String userJson){
@@ -125,7 +114,6 @@ public class UserManageController {
         return JsonUtil.toJson(new ResultVO());
     }
 
-    @ApiOperation(value = "批量删用户", notes = "jiacheng yang.")
     @PostMapping(value = "/removeUserByIds", produces = "application/json")
     @ResponseBody
     public String removeUserByIds(String jsonIds){
@@ -141,7 +129,7 @@ public class UserManageController {
         return JsonUtil.toJson(new ResultVO());
     }
 
-    @ApiIgnore
+
     @GetMapping(value = "/exportUserInExcel",name = "导出用户信息")
     public void exportUserInExcel(HttpServletResponse response){
         String titleName= "团团云自习用户信息";
@@ -151,13 +139,11 @@ public class UserManageController {
         ExcelUtil.exportExcel(response,wb,fileName);
     }
 
-    @ApiIgnore
     @GetMapping(value = "/downloadMaterial" ,name = "下载用户导入模板")
     public void downloadMaterial(HttpServletResponse response,  String fileName){
         OssUtil.downloadOssFile(response,fileName);
     }
 
-    @ApiIgnore
     @PostMapping(value = "/importUsersInExcel",name = "导入用户")
     @ResponseBody
     public String importUsersInExcel(@RequestParam("file") MultipartFile file, HttpServletRequest request){

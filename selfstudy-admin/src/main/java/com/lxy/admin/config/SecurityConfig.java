@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    private final static String[] PERMIT_URL = {"/swagger-ui.html","/swagger-resources/**","/webjars/**","/v2/**","/api/**","/csrf",
+    private final static String[] PERMIT_URL = {"/webjars/**","/v2/**","/api/**","/csrf",
             "/static/**","/druid/**","/css/**","/fonts/**","/images/**","/js/**","/layui_v2.6.8/**","/multipleSel/**","/tinymce/**","/zoomify/**","/zTree/**",
             "/","/token/**","/upload/**","/login","/Kaptcha","/error403","/404"};
 

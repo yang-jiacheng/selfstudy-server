@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /**
- * @Description: 代码生成器，必须先编译出target目录才能运行
+ * @Description: 代码生成器
  * @author: jiacheng yang.
  * @Date: 2022/10/08 20:57
  * @Version: 1.0
@@ -38,7 +38,11 @@ public class GeneratorMybatisPlus {
 
 	public static final String AUTHOR="jiacheng yang.";
 
-	public static final String[] TABS = {"trip_record"};
+	public static final String[] TABS = {
+			"admin_info","admin_role_relate","business_config","catalog","classify","feedback",
+			"object_storage","permission","role","role_permission_relate","study_record",
+			"user_agreement","version","phone_code","user","study_statistics"
+	};
 
 	public static String DRIVER_NAME="";
 	public static String URL="";
@@ -60,7 +64,7 @@ public class GeneratorMybatisPlus {
 		}
 	}
 
-
+	//@TableField(updateStrategy = FieldStrategy.IGNORED)  忽略空值判断，实体对象的字段是什么值就用什么值更新，支持null值更新操作
 
 	public static void main(String[] args) {
 		//实例化生成器对象
@@ -93,11 +97,13 @@ public class GeneratorMybatisPlus {
 		//关闭controller层生成
 		templateConfig.setController(null);
 		// 关闭service层生成
-		//templateConfig.setService(null);
+//		templateConfig.setService(null);
 		// 关闭ServiceImpl层生成
-		//templateConfig.setServiceImpl(null);
+//		templateConfig.setServiceImpl(null);
 		// 设置Mapper层模板
 		templateConfig.setMapper("/templates/mapper.java.vm");
+		//
+//		templateConfig.setMapper(null);
 		//关闭默认Mybatis的Mapper.xml生成 会在Mapper层直接生成xml所以关闭
 		templateConfig.setXml(null);
 		// 设置po层模板
@@ -115,7 +121,7 @@ public class GeneratorMybatisPlus {
 				.setOpen(false)
 				.setEnableCache(false)
 				.setAuthor(AUTHOR)
-				.setSwagger2(true)
+				.setSwagger2(false)
 				.setBaseResultMap(true)
 				.setBaseColumnList(true)
 				.setIdType(IdType.AUTO)

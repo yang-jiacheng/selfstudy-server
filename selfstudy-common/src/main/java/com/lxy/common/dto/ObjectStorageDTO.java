@@ -1,6 +1,5 @@
 package com.lxy.common.dto;
 
-import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

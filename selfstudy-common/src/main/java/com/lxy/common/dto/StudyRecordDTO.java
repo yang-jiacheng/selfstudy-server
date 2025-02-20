@@ -1,8 +1,7 @@
 package com.lxy.common.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -12,23 +11,36 @@ import java.io.Serializable;
  * @Version: 1.0
  */
 
-@ApiModel(value ="学习记录数据传输对象")
 public class StudyRecordDTO implements Serializable {
     private static final long serialVersionUID = 2247994618565339738L;
 
-    @ApiModelProperty(value = "自习室id",required = true)
+    /*
+     * 自习室id
+     */
+    @NotNull
     private Integer catalogId;
 
-    @ApiModelProperty(value = "学习标签",required = true)
+    /*
+     * 标签
+     */
+    @NotNull
     private String tag;
 
-    @ApiModelProperty(value = "座位号",required = true)
+    /*
+     * 座位号
+     */
+    @NotNull
     private Integer seat;
 
-    @ApiModelProperty(value = "计时方式：1正计时 2倒计时",example = "1",required = true)
+    /*
+     * 计时方式：1正计时 2倒计时
+     */
+    @NotNull
     private Integer timingMode;
 
-    @ApiModelProperty(value = "设置的自习时长，单位分钟（仅在倒计时有）")
+    /*
+     * 设置的自习时长，单位分钟（仅在倒计时有）
+     */
     private Integer settingDuration;
 
     public Integer getCatalogId() {

@@ -6,9 +6,6 @@ import com.lxy.common.po.AdminInfo;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.util.*;
 import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/personalManage")
 @Controller
-@Api(tags = "个人信息管理")
 @PreAuthorize("hasAuthority('/personalManage/personalInfo')")
 public class PersonalManageController {
 
@@ -34,13 +30,11 @@ public class PersonalManageController {
         this.adminInfoService = adminInfoService;
     }
 
-    @ApiOperation(value = "个人设置页面", produces = "application/json", notes = "jiacheng yang.")
     @GetMapping("/personalInfo")
     public String personalInfo(){
         return "adminManage/personalInfo";
     }
 
-    @ApiOperation(value = "获取", notes = "jiacheng yang.")
     @PostMapping(value = "/getPersonalById", produces = "application/json")
     @ResponseBody
     public String getPersonalById(){
@@ -53,13 +47,12 @@ public class PersonalManageController {
         return JsonUtil.toJson(new ResultVO(adminInfo));
     }
 
-    @ApiOperation(value = "更新", notes = "jiacheng yang.")
     @PostMapping(value = "/updatePersonal", produces = "application/json")
     @ResponseBody
-    public String updatePersonal(@ApiParam(value = "id")@RequestParam Integer id, @ApiParam(value = "昵称")@RequestParam String name,
-                                 @ApiParam(value = "旧密码")@RequestParam(required = false) String oldPassword,
-                                 @ApiParam(value = "新密码")@RequestParam(required = false) String newPassword,
-                                 @ApiParam(value = "头像地址")@RequestParam String profilePath) {
+    public String updatePersonal(@RequestParam Integer id, @RequestParam String name,
+                                 @RequestParam(required = false) String oldPassword,
+                                 @RequestParam(required = false) String newPassword,
+                                 @RequestParam String profilePath) {
         AdminInfo adminInfo = adminInfoService.getById(id);
 
         String password = adminInfo.getPassword();

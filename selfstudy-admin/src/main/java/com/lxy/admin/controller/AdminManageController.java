@@ -18,9 +18,6 @@ import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.CommonUtil;
 import com.lxy.common.vo.LayUiResultVO;
 import com.lxy.common.vo.ResultVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -38,7 +35,6 @@ import java.util.*;
 
 @RequestMapping("/adminManage")
 @Controller
-@Api(tags = "系统用户管理")
 @PreAuthorize("hasAuthority('/adminManage/adminList')")
 public class AdminManageController {
 
@@ -71,21 +67,19 @@ public class AdminManageController {
         return "adminManage/updateAdmin";
     }
 
-    @ApiOperation(value = "获取系统用户列表", notes = "jiacheng yang.")
     @RequestMapping(value = "/getAdminInfoList", produces = "application/json")
     @ResponseBody
-    public LayUiResultVO getAdminInfoList(@ApiParam(value = "当前页")@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                                   @ApiParam(value = "每页数量")@RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
-                                   @ApiParam(value = "用户名")@RequestParam(value = "username",required = false) String username){
+    public LayUiResultVO getAdminInfoList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                                   @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
+                                   @RequestParam(value = "username",required = false) String username){
         int userId = AdminIdUtil.getAdminId();
         Page<AdminInfo> pg = adminInfoService.getAdminInfoList(username, page, limit,userId);
         return new LayUiResultVO((int) pg.getTotal(), pg.getRecords());
     }
 
-    @ApiOperation(value = "获取系统用户根据id", notes = "jiacheng yang.")
     @PostMapping(value ="/getAdminInfoById", produces = "application/json")
     @ResponseBody
-    public R<Object> getAdminInfoById(@ApiParam(value = "id")@RequestParam Integer id){
+    public R<Object> getAdminInfoById(@RequestParam Integer id){
         AdminInfo adminInfo = adminInfoService.getById(id);
         adminInfo.setPassword(null);
         List<AdminRoleRelate> roleRelates = adminRoleRelateService.list(new LambdaQueryWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId, id));
@@ -99,11 +93,10 @@ public class AdminManageController {
         return R.ok(map);
     }
 
-    @ApiOperation(value = "新增或更新用户", notes = "jiacheng yang.")
     @PostMapping(value ="/addAdminInfo", produces = "application/json")
     @ResponseBody
-    public R<Object> addAdminInfo(@ApiParam(value = "adminInfo")@RequestParam(value = "adminInfoJson") String adminInfoJson,
-                               @ApiParam(value = "角色id集合")@RequestParam(value = "idsJson") String idsJson){
+    public R<Object> addAdminInfo(@RequestParam(value = "adminInfoJson") String adminInfoJson,
+                              @RequestParam(value = "idsJson") String idsJson){
         AdminInfo adminInfo = JsonUtil.getTypeObj(adminInfoJson, AdminInfo.class);
         List<Integer> roleIds = JsonUtil.getListType(idsJson, Integer.class);
         if (adminInfo == null || CollUtil.isEmpty(roleIds)){
@@ -140,20 +133,18 @@ public class AdminManageController {
         return R.ok();
     }
 
-    @ApiOperation(value = "禁用、解除禁用、用户", notes = "jiacheng yang.")
     @PostMapping(value ="/disabledAdminInfo", produces = "application/json")
     @ResponseBody
-    public R<Object> disabledAdminInfo(@ApiParam(value = "id")@RequestParam Integer id,@ApiParam(value = "状态")@RequestParam Integer status){
+    public R<Object> disabledAdminInfo(@RequestParam Integer id,@RequestParam Integer status){
         LambdaUpdateWrapper<AdminInfo> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(AdminInfo::getId,id).set(AdminInfo::getStatus,status);
         adminInfoService.update(wrapper);
         return R.ok();
     }
 
-    @ApiOperation(value = "批量删除用户", notes = "jiacheng yang.")
     @PostMapping(value ="/removeAdminInfoByIds", produces = "application/json")
     @ResponseBody
-    public  R<Object>  removeAdminInfoByIds(@ApiParam(value = "用户id集合")@RequestParam(value = "ids") String ids){
+    public  R<Object>  removeAdminInfoByIds(@RequestParam(value = "ids") String ids){
         List<Integer> userIds = JsonUtil.getListType(ids, Integer.class);
         if (CollUtil.isEmpty(userIds)){
             return R.fail(-1,"请至少选择一个用户！");
