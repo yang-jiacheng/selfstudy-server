@@ -3,7 +3,7 @@ package com.lxy.admin.util;
 import com.google.code.kaptcha.Constants;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @Description: 验证码的工具类

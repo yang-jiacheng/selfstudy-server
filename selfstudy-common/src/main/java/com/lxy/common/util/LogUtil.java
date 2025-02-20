@@ -6,7 +6,7 @@ import cn.hutool.extra.servlet.ServletUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -33,6 +33,7 @@ public class LogUtil {
                 .collect(Collectors.joining("&"));
 
         // 获取客户端IP
+        
         String clientIP = ServletUtil.getClientIP(request);
         String format = StrUtil.format("客户端ip: {} 操作记录: userId={}, 请求地址: {}, 参数: {}",
                 clientIP, userId, requestURI, queryString);

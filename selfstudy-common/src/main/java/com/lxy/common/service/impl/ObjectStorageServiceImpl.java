@@ -15,7 +15,7 @@ import com.lxy.common.util.OssUtil;
 import com.lxy.common.vo.ObjectStorageVO;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Date;
 
 /**
