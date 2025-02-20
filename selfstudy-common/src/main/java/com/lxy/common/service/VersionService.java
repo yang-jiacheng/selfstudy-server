@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- *  服务类
+ * 版本控制 服务类
  * </p>
  *
  * @author jiacheng yang.
- * @since 2023-03-10
+ * @since 2025-02-20
  */
 public interface VersionService extends IService<Version> {
 

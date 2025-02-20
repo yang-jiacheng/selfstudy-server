@@ -6,11 +6,11 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
- *  Mapper 接口
+ * 版本控制 Mapper 接口
  * </p>
  *
  * @author jiacheng yang.
- * @since 2023-03-10
+ * @since 2025-02-20
  */
 @Mapper
 public interface VersionMapper extends BaseMapper<Version> {

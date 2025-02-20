@@ -1,18 +1,16 @@
 package com.lxy.common;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.generator.AutoGenerator;
-import com.baomidou.mybatisplus.generator.InjectionConfig;
-import com.baomidou.mybatisplus.generator.config.*;
-import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.FastAutoGenerator;
+import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.TemplateType;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import org.springframework.util.ResourceUtils;
+import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
@@ -26,6 +24,9 @@ import java.util.*;
  */
 
 public class GeneratorMybatisPlus {
+
+	private static final Logger logger = LoggerFactory.getLogger(GeneratorMybatisPlus.class);
+
 	/**
 	 * 模块名称
 	 */
@@ -39,9 +40,7 @@ public class GeneratorMybatisPlus {
 	public static final String AUTHOR="jiacheng yang.";
 
 	public static final String[] TABS = {
-			"admin_info","admin_role_relate","business_config","catalog","classify","feedback",
-			"object_storage","permission","role","role_permission_relate","study_record",
-			"user_agreement","version","phone_code","user","study_statistics"
+			"version"
 	};
 
 	public static String DRIVER_NAME="";
@@ -59,97 +58,70 @@ public class GeneratorMybatisPlus {
 			USERNAME=properties.getProperty("jdbc.username");
 			PASSWORD=properties.getProperty("jdbc.password");
 		} catch (IOException e) {
-			e.printStackTrace();
-			System.err.println("读取配置文件失败");
+			logger.error("读取配置文件失败", e);
 		}
 	}
 
-	//@TableField(updateStrategy = FieldStrategy.IGNORED)  忽略空值判断，实体对象的字段是什么值就用什么值更新，支持null值更新操作
+	//@TableField(updateStrategy = FieldStrategy.ALWAYS) 忽略空值判断，实体对象的字段是什么值就用什么值更新，支持null值更新操作
 
 	public static void main(String[] args) {
-		//实例化生成器对象
-		AutoGenerator mpg = new AutoGenerator();
-
-		//数据源 dataSourceConfig 配置：数据库类型...
-		DataSourceConfig dataSourceConfig = new DataSourceConfig();
-		dataSourceConfig.setDbType(DbType.MYSQL)
-				.setUrl(URL).setUsername(USERNAME).setPassword(PASSWORD).setDriverName(DRIVER_NAME);
-		mpg.setDataSource(dataSourceConfig);
-
-		//数据库表配置：是否大写命名、【实体】是否为 lombok 模型、需要包含的表名、数据库表字段映射到实体的命名策略, 未指定按照 naming 执行、数据库表映射到实体的命名策略
-		/* -------------------------- 表名写在这里 --------------------------- */
-
-		StrategyConfig strategyConfig = new StrategyConfig();
-		strategyConfig.setCapitalMode(true)
-				.setEntityLombokModel(false)
-				.setInclude(TABS)
-				.setColumnNaming(NamingStrategy.underline_to_camel)
-				.setNaming(NamingStrategy.underline_to_camel);
-		mpg.setStrategy(strategyConfig);
-
-		//包名配置：
-		PackageConfig packageConfig = new PackageConfig();
-		packageConfig.setParent(PARENT_PACKAGE).setController("controller").setService("service").setServiceImpl("service.impl").setEntity("po").setMapper("mapper");
-		mpg.setPackageInfo(packageConfig);
-
-		// 模板设置
-		TemplateConfig templateConfig = new TemplateConfig();
-		//关闭controller层生成
-		templateConfig.setController(null);
-		// 关闭service层生成
-//		templateConfig.setService(null);
-		// 关闭ServiceImpl层生成
-//		templateConfig.setServiceImpl(null);
-		// 设置Mapper层模板
-		templateConfig.setMapper("/templates/mapper.java.vm");
-		//
-//		templateConfig.setMapper(null);
-		//关闭默认Mybatis的Mapper.xml生成 会在Mapper层直接生成xml所以关闭
-		templateConfig.setXml(null);
-		// 设置po层模板
-		templateConfig.setEntity("/templates/entity.vm");
-		mpg.setTemplate(templateConfig);
-
-		//全局策略配置：生成文件的输出目录、自定义service接口的生成名称、是否覆盖已有文件、是否打开输出目录、是否在 xml 中添加二级缓存配置、开发人员、是否开启 swagger2 模式、
-		//是否开启 BaseResultMap、是否开启 baseColumnList、主键自动递增、指定时间类型
-		GlobalConfig globalConfig = new GlobalConfig();
-		/* -------------------------- 生成文件输出路径 --------------------------- */
 		String dir = generatorPath();
-		globalConfig.setOutputDir(dir+"/src/main/java/")
-				.setServiceName("%sService")
-				.setFileOverride(true)
-				.setOpen(false)
-				.setEnableCache(false)
-				.setAuthor(AUTHOR)
-				.setSwagger2(false)
-				.setBaseResultMap(true)
-				.setBaseColumnList(true)
-				.setIdType(IdType.AUTO)
-				.setDateType(DateType.ONLY_DATE);
-		mpg.setGlobalConfig(globalConfig);
+		FastAutoGenerator.create(URL, USERNAME, PASSWORD)
+				// 全局配置
+				.globalConfig(builder -> {
+					//作者、输出路径、是否覆盖、日期类型、注释日期格式
+					builder.author(AUTHOR)
+							.outputDir(dir + "/src/main/java")
+							.disableOpenDir()
+							.dateType(DateType.ONLY_DATE)
+							.commentDate("yyyy-MM-dd");
+				})
+				.packageConfig(builder -> {
+					builder.parent(PARENT_PACKAGE)
+							.entity("po")
+							.service("service")
+							.serviceImpl("service.impl")
+							.mapper("mapper")
+							.pathInfo(Collections.singletonMap(OutputFile.xml, dir + "/src/main/resources/mybatis"));
+				})
+				.strategyConfig(builder -> {
+					builder.addInclude(TABS)
 
-		// 注入自定义配置
-		InjectionConfig injectionConfig = new InjectionConfig() {
-			@Override
-			public void initMap() {
-				Map<String, Object> map = new HashMap<String, Object>();
-				this.setMap(map);
-			}
-		};
-		// 调整 mybatis Mapper.xml 生成目录
-		List<FileOutConfig> fileOutConfigList = new ArrayList<FileOutConfig>();
-		fileOutConfigList.add(new FileOutConfig("/templates/mapper.xml.vm") {
-			@Override
-			public String outputFile(TableInfo tableInfo) {
-				//调整后的路径
-				return dir + "/src/main/resources/mybatis/" + tableInfo.getEntityName() + "Mapper"+ StringPool.DOT_XML;
-			}
-		});
-		injectionConfig.setFileOutConfigList(fileOutConfigList);
-		mpg.setCfg(injectionConfig);
-		//开始生成
-		mpg.execute();
+							.serviceBuilder()
+							.enableFileOverride()
+							.formatServiceFileName("%sService")
+//							.disable() // 禁用 Service 接口生成
 
+							.mapperBuilder()
+							.enableFileOverride()
+							.enableBaseResultMap()
+							.enableBaseColumnList()
+							.formatMapperFileName("%sMapper")
+							.formatXmlFileName("%sMapper")
+							.mapperTemplate("/templates/mapper.java.vm") // 设置 Mapper 模板
+//							.disable() // 禁用 Mapper 接口生成
+
+							.entityBuilder()
+							.enableFileOverride()
+							.naming(NamingStrategy.underline_to_camel)
+							.columnNaming(NamingStrategy.underline_to_camel)
+							.javaTemplate("/templates/entity.vm")
+//							.disable() // 禁用实体类生成
+
+							.controllerBuilder()
+							.disable() // 禁用 Controller 层生成
+					;
+
+
+				})
+
+				.injectionConfig(builder -> {
+					builder.beforeOutputFile((tableInfo, objectMap) -> {
+						System.out.println("生成表: " + tableInfo.getEntityName());
+					});
+				})
+				.templateEngine(new VelocityTemplateEngine())
+				.execute();
 	}
 
 	private static String generatorPath(){

@@ -20,18 +20,18 @@
     <description>自习室服务端</description>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <java.version>1.8</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <junit.version>4.12</junit.version>
         <spring-boot.version>2.5.2</spring-boot.version>
         <druid.version>1.1.10</druid.version>
         <kaptcha.version>2.3.2</kaptcha.version>
-        <mybatis-plus-boot-starter>3.4.2</mybatis-plus-boot-starter>
-        <mybatis-plus-generator>3.4.1</mybatis-plus-generator>
-        <pagehelper.boot.version>1.3.0</pagehelper.boot.version>
+        <mybatis-plus-boot-starter>3.5.7</mybatis-plus-boot-starter>
+        <mybatis-plus-generator>3.5.7</mybatis-plus-generator>
+        <pagehelper.boot.version>2.1.0</pagehelper.boot.version>
         <velocity.version>2.0</velocity.version>
         <mysql-connector-java>8.0.33</mysql-connector-java>
         <fastjson.version>1.2.83</fastjson.version>
