@@ -45,6 +45,7 @@ public class IndexController {
     @RequestMapping("/")
     @ResponseBody
     public String index() {
+        logger.warn("index");
         return "hello selfstudy-admin !";
     }
 

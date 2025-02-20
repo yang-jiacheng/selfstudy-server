@@ -11,7 +11,7 @@
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>
-                %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){cyan} %clr([%thread]){blue} %clr(%-5level) %clr(%logger{25}:%line){magenta} %msg %n
+                %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){cyan} %clr([%thread]){blue} %clr(%-5level) %clr(%logger{50}:%line){magenta} %msg %n
             </pattern>
             <charset>UTF-8</charset>
         </encoder>
