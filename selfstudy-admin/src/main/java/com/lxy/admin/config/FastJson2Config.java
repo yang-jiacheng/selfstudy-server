@@ -41,7 +41,7 @@ public class FastJson2Config implements WebMvcConfigurer {
     private List<MediaType> getSupportedMediaTypes() {
         List<MediaType> mediaTypes = new ArrayList<>(1);
         mediaTypes.add(MediaType.APPLICATION_JSON);
-        // 可以根据需要添加其他 MediaType，例如 TEXT_PLAIN, APPLICATION_JSON_UTF8 等
+        // 可以添加其他 MediaType，例如 TEXT_PLAIN, APPLICATION_JSON_UTF8 等
         return mediaTypes;
     }
 
