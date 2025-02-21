@@ -15,18 +15,23 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import jakarta.annotation.Resource;
+
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,7 +44,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig  {
 
     private final static String[] PERMIT_URL = {
@@ -55,9 +60,15 @@ public class SecurityConfig  {
 
     static CorsConfigurationSource configurationSource() {
         List<String> list = Collections.singletonList("*");
+        List<String> methods = Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS");
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedHeaders(list);
-        corsConfiguration.setAllowedMethods(list);
+        corsConfiguration.setAllowedMethods(methods);
+        /*
+         * 当 setAllowCredentials(true) 设置为 true 时，setAllowedOrigins 不能包含通配符 *
+         * 因为这会导致响应头 Access-Control-Allow-Origin 的值为 *，而这与携带凭证的请求不兼容。
+         * 所以用 setAllowedOriginPatterns 代替 setAllowedOrigins
+         */
         //corsConfiguration.setAllowedOrigins(Collections.singletonList("*"));
         corsConfiguration.setAllowedOriginPatterns(list);
         corsConfiguration.setAllowCredentials(true);
@@ -70,7 +81,7 @@ public class SecurityConfig  {
 
     @Configuration
     @Order(1)
-    static class DefaultWebSecurityConfig extends WebSecurityConfigurerAdapter{
+    static class AuthWebSecurityConfig {
 
         @Resource
         private UserDetailsServiceImpl userDetailsService;
@@ -90,80 +101,73 @@ public class SecurityConfig  {
             return new MinePasswordEncoder();
         }
 
-        @Override
-        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        @Bean
+        public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+            AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+            builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+            return builder.build();
         }
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             http
-                    //不通过Session获取SecurityContext
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                    .requestMatchers()
-                    .antMatchers(AUTH_URL)
-                    .and()
+                    // 会话管理（无状态）
+                    .sessionManagement(session -> session
+                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    )
+                    // securityMatcher 限定此过滤器链仅处理 AUTH_URL 的请求
+                    .securityMatcher(AUTH_URL)
                     //添加过滤器,
                     .addFilterBefore(
                             new StatelessAuthenticationFilterUser(businessConfigService, commonRedisService),
                             UsernamePasswordAuthenticationFilter.class
                     )
-                    .authorizeRequests()
-                    // 对于以下接口 鉴权认证
-                    .antMatchers(AUTH_URL).authenticated();
-//                    .anyRequest().permitAll()
+                    .authorizeHttpRequests(authorize -> authorize
+                            .requestMatchers(AUTH_URL).authenticated()
+                    );
 
-
-
-            //配置异常处理器
-            http
-                    .exceptionHandling()
-                    //配置认证失败处理器
+            // 配置异常处理
+            http.exceptionHandling(exception -> exception
                     .authenticationEntryPoint(authenticationEntryPoint)
-                    .accessDeniedHandler(accessDeniedHandler);
-
+                    .accessDeniedHandler(accessDeniedHandler)
+            );
             //关闭csrf //允许跨域
-            http.csrf().disable().cors().configurationSource(configurationSource());
-        }
+            http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(configurationSource()));
+            //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
+            http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
-        /**
-         * 解决AuthenticationManager无法在其他service注入
-         */
-        @Bean
-        @Override
-        public AuthenticationManager authenticationManagerBean() throws Exception {
-            return super.authenticationManagerBean();
+            return http.build();
         }
 
     }
 
     @Configuration
     @Order(2)
-    static class DefaultWebSecurityConfig2 extends WebSecurityConfigurerAdapter{
+    static class PermitWebSecurityConfig2 {
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             http
-                    //不通过Session获取SecurityContext
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                    .requestMatchers()
-                    .antMatchers(PERMIT_URL)
-                    .and()
+                    // 会话管理（无状态）
+                    .sessionManagement(session -> session
+                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    )
+                    // securityMatcher 限定此过滤器链仅处理 PERMIT_URL 的请求
+                    .securityMatcher(PERMIT_URL)
                     //添加过滤器,
                     .addFilterBefore(
                             new StatelessPermitFilter(),
                             UsernamePasswordAuthenticationFilter.class
                     )
-                    .authorizeRequests()
-                    // 对于以下接口 放行
-                    .antMatchers(PERMIT_URL).permitAll();
-//                    .anyRequest().permitAll();
-
-
+                    .authorizeHttpRequests(authorize -> authorize
+                            .requestMatchers(PERMIT_URL).permitAll()
+                    );
             //关闭csrf //允许跨域
-            http.csrf().disable().cors().configurationSource(configurationSource());
+            http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(configurationSource()));
+            //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
+            http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+
+            return http.build();
         }
 
     }

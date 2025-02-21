@@ -1,6 +1,6 @@
 package com.lxy.admin.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.common.po.User;
 import com.lxy.common.po.Version;

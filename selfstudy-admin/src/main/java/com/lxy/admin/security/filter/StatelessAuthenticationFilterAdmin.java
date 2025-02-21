@@ -1,7 +1,7 @@
 package com.lxy.admin.security.filter;
 
 import cn.hutool.core.collection.CollUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.lxy.common.constant.CommonConstants;
 import com.lxy.common.constant.ConfigConstants;
 import com.lxy.common.domain.StatelessAdmin;

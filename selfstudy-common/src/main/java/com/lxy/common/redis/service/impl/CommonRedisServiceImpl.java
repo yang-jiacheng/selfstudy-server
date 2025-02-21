@@ -3,7 +3,7 @@ package com.lxy.common.redis.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
@@ -205,8 +205,8 @@ public class CommonRedisServiceImpl implements CommonRedisService {
 		 * this.redisTemplate.setHashValueSerializer(stringRedisSerializer);
 		 * HashOperations<String, String, T> hashOperations =
 		 * redisTemplate.opsForHash(); value = hashOperations.get(key, hashKey); }else {
-		 * 
-		 * 
+		 *
+		 *
 		 * }
 		 */
 		Jackson2JsonRedisSerializer<T> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<T>(classType);
@@ -231,7 +231,7 @@ public class CommonRedisServiceImpl implements CommonRedisService {
 		value = hashOperations.get(key, hashKey);
 		return value;
 	}
-	
+
 	@Override
 	public Map<String, String> getHashEntries(String key) {
 		StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
@@ -255,7 +255,7 @@ public class CommonRedisServiceImpl implements CommonRedisService {
 		Map<String, TYPE> map = hashOperations.entries(key);
 		return map;
 	}
-	
+
 	@Override
 	public void deleteHashKey(String key, String... hashKeys) {
 		HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
@@ -263,13 +263,13 @@ public class CommonRedisServiceImpl implements CommonRedisService {
 			hashOperations.delete(key, hashKey);
 		}
 	}
-	
+
 	@Override
 	public void deleteHashKey(String key, String hashKey) {
 		HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
 		hashOperations.delete(key, hashKey);
 	}
-	
+
 	@Override
 	public boolean existHashKey(String key, String hashKey) {
 		HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
@@ -296,23 +296,23 @@ public class CommonRedisServiceImpl implements CommonRedisService {
 		return keySet;
 	}
 
-	
+
 	@Override
 	public void deleteKeys(Set<String> keys) {
 		this.redisTemplate.delete(keys);
 	}
-	
+
 	@Override
 	public Set<String> keys(String pattern) {
 		return this.redisTemplate.keys(pattern);
 	}
-	
+
 	@Override
 	public List<Object> getValues(Collection<String> collections) {
 		ValueOperations<String, Object> operations = this.redisTemplate.opsForValue();
 		return operations.multiGet(collections);
 	}
-	
+
 	@Override
 	public void setValues(Map<String,Object> map) {
 		ValueOperations<String, Object> operations = this.redisTemplate.opsForValue();

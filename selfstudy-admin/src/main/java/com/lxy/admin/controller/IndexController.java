@@ -7,6 +7,7 @@ import com.lxy.common.domain.R;
 import com.lxy.common.util.CommonUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.ResultVO;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +36,30 @@ public class IndexController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final Producer captchaProducer;
+    @Resource
+    private Producer captchaProducer;
 
-    @Autowired
-    public IndexController(Producer captchaProducer) {
-        this.captchaProducer = captchaProducer;
+
+
+
+    @GetMapping("/authNeed")
+    @ResponseBody
+    public String authNeed() {
+//        throw new RuntimeException("RuntimeException");
+        return "authNeed";
     }
+
+    @GetMapping("/permitNeed")
+    @ResponseBody
+    public String permitNeed() {
+        return "permitNeed";
+    }
+
 
     @RequestMapping("/")
     @ResponseBody
     public String index() {
-        logger.warn("index");
+
         return "hello selfstudy-admin !";
     }
 
