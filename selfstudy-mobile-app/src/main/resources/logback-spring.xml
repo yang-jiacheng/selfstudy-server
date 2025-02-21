@@ -45,6 +45,7 @@
 
     <!-- MyBatis log configure -->
     <!-- 日志 打印sql   -->
+    <logger name="org.springframework.security" level="DEBUG"/>
     <logger name="com.lxy.common.mapper" level="DEBUG"/>
     <logger name="com.apache.ibatis" level="INFO"/>
     <logger name="org.mybatis.spring" level="INFO"/>

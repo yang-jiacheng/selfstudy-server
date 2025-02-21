@@ -49,7 +49,7 @@ public class SecurityConfig  {
 
     private final static String[] PERMIT_URL = {
             "/webjars/**","/v2/**","/api/**","/csrf", "/static/**", "/druid/**","/","/token/**","/upload/**",
-            "/userAgreement/**","/personalCenter/updatePassword","/version/**","/permitNeed"
+            "/userAgreement/**","/personalCenter/updatePassword","/version/**","/permitNeed","/error"
     };
 
     private final static String[] AUTH_URL = {
@@ -124,6 +124,7 @@ public class SecurityConfig  {
                     )
                     .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers(AUTH_URL).authenticated()
+                            .anyRequest().permitAll()
                     );
 
             // 配置异常处理

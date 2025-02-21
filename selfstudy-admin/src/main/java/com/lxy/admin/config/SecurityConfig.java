@@ -66,7 +66,8 @@ public class SecurityConfig {
 
     private final static String[] PERMIT_URL = {"/webjars/**","/v2/**","/api/**","/csrf",
             "/static/**","/druid/**","/css/**","/fonts/**","/images/**","/js/**","/layui_v2.6.8/**","/multipleSel/**","/tinymce/**","/zoomify/**","/zTree/**",
-            "/","/token/**","/upload/**","/login","/Kaptcha","/error403","/404"};
+            "/","/token/**","/upload/**","/login","/Kaptcha","/error403","/404","/permitNeed","/error/**"
+    };
 
     private final static String[] AUTH_URL = {
             "/home/**","/adminManage/**","/businessConfigManage/**","/classifyManage/**","/feedBackManage/**","/home/**",
