@@ -102,7 +102,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
 
     @Override
     public void insertClassifyCache(List<ClassifyVO> list) {
-        commonRedisService.insertString(RedisKeyUtil.getClassify(),JsonUtil.toJson(list),60 * 5, TimeUnit.SECONDS);
+        commonRedisService.insertString(RedisKeyUtil.getClassify(),JsonUtil.toJson(list),60L * 5L, TimeUnit.SECONDS);
     }
 
     @Override

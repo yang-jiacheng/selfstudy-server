@@ -184,7 +184,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void insertUserInfoCache(User user) {
         String key = RedisKeyUtil.getUserInfo(user.getId());
         //缓存 7天
-        commonRedisService.insertString(key, JsonUtil.toJson(user),604800, TimeUnit.SECONDS);
+        commonRedisService.insertString(key, JsonUtil.toJson(user),604800L, TimeUnit.SECONDS);
     }
 
     @Override

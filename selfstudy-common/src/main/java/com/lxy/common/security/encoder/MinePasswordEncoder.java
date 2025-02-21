@@ -1,5 +1,6 @@
 package com.lxy.common.security.encoder;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MinePasswordEncoder implements PasswordEncoder {
+
+    public final static String sha256 = "{sha256}";
+
     @Override
     public String encode(CharSequence charSequence) {
         return charSequence.toString();
@@ -20,6 +24,12 @@ public class MinePasswordEncoder implements PasswordEncoder {
     @Override
     public boolean matches(CharSequence charSequence, String s) {
         String sequenceStr = charSequence.toString();
+        if (s.startsWith(sha256)) {
+            s = s.substring(sha256.length());
+        }
         return sequenceStr.equals(s);
     }
+
+
+
 }

@@ -14,14 +14,13 @@ import java.util.concurrent.TimeUnit;
  * 用户使用的JWT凭据的操作Service
  * */
 public interface CommonRedisService {
-	
-	/**
-	 * 新增一个String类型的Value
-	 * @param timeout 有效时长,
-	 * @param timeUnit 有效时长的单位，请用秒
-	 * */
-	boolean insertString(String key,String Value,int timeout,TimeUnit timeUnit);
 
+	/**
+	 * Description: 新增一个String类型的Value
+	 * Author: jiacheng yang.
+	 * Date: 2025/02/21 14:35
+	 * Param: [key, value, timeout, timeUnit]
+	 */
 	boolean insertString(String key, String value, long timeout, TimeUnit timeUnit);
 
 
@@ -36,63 +35,63 @@ public interface CommonRedisService {
 	 * @param map key为redis的key ， value为对应数据
 	 * @param seconds -1为永久，单位秒
 	 */
-	void insertBatchString(final Map<String,String> map,Integer seconds);
+	void insertBatchString(Map<String,String> map,Integer seconds);
 
 	/**
 	 * 用key获取String值
 	 * */
 	String getString(String key);
-	
-	
+
+
 	/**
 	 * 获取key的过期时间
 	 * */
 	long getKeyExpired(String key,TimeUnit timeUnit);
-	
+
 	/**
 	 * 根据表达式搜索所有key
 	 * */
 	Set<String> search(String pattern);
-	
+
 	/**
 	 * key是否存在
 	 * */
 	boolean existKey(String key);
-	
+
 	/**
 	 * 删除Redis中的key和值
 	 * */
 	void deleteKey(String key);
-	
+
 	/**
 	 *	批量删除键和值
 	 */
 	void deleteKeys(Set<String> keys);
-	
+
 	/**
 	 * 更新key的过期时间
 	 * @param key redis的key
 	 * @param second 新的有效时间长度，单位秒
 	 * */
 	void updateKeyExpired(String key,long second);
-	
+
 	/**
 	 * 插入Hash数据,将POJO对象数据直接插入
 	 * */
-	void insertHash(String key,Object data);
-	
+	void insertHash(String key,Map<String, Object> data);
+
 	/**
 	 * 根据key和hashKey删除hash中的特定键，可批量删除
 	 * */
 	void deleteHashKey(String key, String... hashKeys);
 
 	void deleteHashKey(String key, String hashKey);
-	
+
 	/**
 	 * 根据key和hashKey取值(特殊情况)
 	 * */
 	<T> T getHashValue(String key, String hashKey);
-	
+
 	/**
 	 * 根据key和hashKey取值
 	 * */
@@ -104,7 +103,7 @@ public interface CommonRedisService {
 	Map<String, String> getHashEntries(String key);
 
 	<TYPE> Map<String, TYPE> getHashEntries(String key,Class<TYPE> type);
-	
+
 	/**
 	 * 判断某个hash中对应的hashKey是否存在
 	 * */
@@ -120,19 +119,19 @@ public interface CommonRedisService {
 	 * 根据搜索表达式检索出符合要求的所有key
 	 * */
 	Set<String> scanKey(String patern);
-	
-	
+
+
 	/**
 	 * 批量获取key  正式服禁用
 	 */
 	@Deprecated
 	Set<String> keys(String pattern);
-	
+
 	/**
 	 * 批量获取值
 	 */
 	List<Object> getValues(Collection<String> collections);
-	
+
 	/**
 	 * 插入map
 	 */

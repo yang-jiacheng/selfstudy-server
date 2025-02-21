@@ -2,6 +2,7 @@ package com.lxy.admin.security.filter;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSON;
 import com.lxy.common.constant.CommonConstants;
 import com.lxy.common.constant.ConfigConstants;
 import com.lxy.common.domain.StatelessAdmin;
@@ -94,11 +95,11 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
             List<String> permissions = adminInfoService.getPermissionsById(userId);
             loginStatus.setPermissions(permissions);
             //修改缓存里的权限
-            List<StatelessAdmin> loginList = JSONObject.parseArray(commonRedisService.getString(key), StatelessAdmin.class);
+            List<StatelessAdmin> loginList = JSON.parseArray(commonRedisService.getString(key), StatelessAdmin.class);
             for (StatelessAdmin statelessAdmin : loginList) {
                 statelessAdmin.setPermissions(permissions);
             }
-            commonRedisService.insertString(key, JsonUtil.toJson(loginList),-1, TimeUnit.SECONDS);
+            commonRedisService.insertString(key, JsonUtil.toJson(loginList),-1L, TimeUnit.SECONDS);
         }
 
         //存入SecurityContextHolder

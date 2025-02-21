@@ -86,6 +86,6 @@ public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper,
             return ;
         }
         String cacheKey = RedisKeyUtil.getBusinessConfig(key);
-        commonRedisService.insertString(cacheKey,value, -1, TimeUnit.SECONDS);
+        commonRedisService.insertString(cacheKey,value, -1L, TimeUnit.SECONDS);
     }
 }

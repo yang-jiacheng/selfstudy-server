@@ -18,6 +18,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,20 +48,24 @@ public class RedisConfig {
 
     @Bean
     public RedisSerializer<Object> jackson2JsonRedisSerializer() {
-        // 使用JSON格式序列化对象，对缓存数据key和value进行转换
-        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<Object>(
-                Object.class);
+
         // 解决查询缓存转换异常的问题
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        //objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE);//2.10后弃用
-        objectMapper.activateDefaultTyping(// 在序列化后的数据里保存对象的类信息
+        // 在序列化后的数据里保存对象的类信息
+        objectMapper.activateDefaultTyping(
                 LaissezFaireSubTypeValidator.instance ,
                 ObjectMapper.DefaultTyping.NON_FINAL,
                 JsonTypeInfo.As.PROPERTY);
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false); // 序列化空值失败时不抛异常
-       objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // 反序列化不存在的字段失败时不抛异常
-        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        // 序列化空值失败时不抛异常
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        // 反序列化不存在的字段失败时不抛异常
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // 使用JSON格式序列化对象，对缓存数据key和value进行转换
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(objectMapper,Object.class);
+
         return jackson2JsonRedisSerializer;
     }
 

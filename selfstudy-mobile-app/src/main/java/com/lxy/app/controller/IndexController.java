@@ -40,25 +40,28 @@ public class IndexController {
         return "hello selfstudy-mobile-app !";
     }
 
-//    @GetMapping("/authNeed")
-//    public String authNeed() {
-//        List<Integer> list = Arrays.asList(1, 2, 3);
-//        list.get(3);
+    @GetMapping("/authNeed")
+    @ResponseBody
+    public String authNeed() {
+        throw new RuntimeException("RuntimeException");
 //        return "authNeed";
-//    }
+    }
+
+    @GetMapping("/permitNeed")
+    @ResponseBody
+    public String permitNeed() {
+        throw new IndexOutOfBoundsException("IndexOutOfBoundsException");
+
 //
-//    @GetMapping("/permitNeed")
-//    public String permitNeed() {
-//        List<Integer> list = Arrays.asList(1, 2, 3);
-//        list.get(3);
+//
 //        return "permitNeed";
-//    }
-//
-//    @GetMapping("/helloWorld")
-//    public String helloWorld() {
-//        List<Integer> list = Arrays.asList(1, 2, 3);
-//        list.get(3);
-//        return "helloWorld";
-//    }
+    }
+
+    @GetMapping("/helloWorld")
+    public String helloWorld() {
+        List<Integer> list = Arrays.asList(1, 2, 3);
+        list.get(3);
+        return "helloWorld";
+    }
 
 }

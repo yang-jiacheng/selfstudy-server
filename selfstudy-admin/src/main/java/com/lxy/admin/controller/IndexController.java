@@ -4,6 +4,8 @@ import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import com.lxy.admin.util.WordUtil;
 import com.lxy.common.domain.R;
+import com.lxy.common.po.Feedback;
+import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.util.CommonUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.ResultVO;
@@ -22,7 +24,11 @@ import jakarta.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Description: TODO
@@ -39,20 +45,24 @@ public class IndexController {
     @Resource
     private Producer captchaProducer;
 
-
-
+    @Resource
+    private CommonRedisService commonRedisService;
 
     @GetMapping("/authNeed")
     @ResponseBody
     public String authNeed() {
-//        throw new RuntimeException("RuntimeException");
-        return "authNeed";
+        throw new RuntimeException("RuntimeException");
+//        return "authNeed";
     }
 
     @GetMapping("/permitNeed")
     @ResponseBody
     public String permitNeed() {
-        return "permitNeed";
+        throw new IndexOutOfBoundsException("IndexOutOfBoundsException");
+
+//
+//
+//        return "permitNeed";
     }
 
 

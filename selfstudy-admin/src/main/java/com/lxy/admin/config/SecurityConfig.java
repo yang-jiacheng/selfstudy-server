@@ -8,6 +8,7 @@ import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.service.BusinessConfigService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,19 +48,19 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    @Autowired
+    @Resource
     private AdminDetailsServiceImpl adminDetailsService;
-    @Autowired
+    @Resource
     private BusinessConfigService businessConfigService;
-    @Autowired
+    @Resource
     private CommonRedisService commonRedisService;
-    @Autowired
+    @Resource
     private AdminInfoService adminInfoService;
 
-    @Autowired
+    @Resource
     private AuthenticationEntryPointAdminImpl authenticationEntryPoint;
 
-    @Autowired
+    @Resource
     private AccessDeniedHandlerImpl accessDeniedHandler;
 
 
@@ -72,18 +73,6 @@ public class SecurityConfig {
             "/personalManage/**","/roleManage/**","/studyRecord/**","/userAgreementManage/**","/userManage/**","/versionManage/**",
             "/error","/resources/upload","/resources/uploadApp","/resources/generateImage","/objectStorageManage/**","/authNeed"
     };
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new MinePasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        builder.userDetailsService(adminDetailsService).passwordEncoder(passwordEncoder());
-        return builder.build();
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -99,8 +88,8 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(AUTH_URL).authenticated()
-                .anyRequest().permitAll());
+                        .requestMatchers(AUTH_URL).authenticated()
+                        .anyRequest().permitAll());
         // 配置异常处理
         http.exceptionHandling(exception -> exception
                 .authenticationEntryPoint(authenticationEntryPoint)
@@ -113,6 +102,20 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new MinePasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(adminDetailsService).passwordEncoder(passwordEncoder());
+        return builder.build();
+    }
+
+
 
     // 配置 CORS
     @Bean

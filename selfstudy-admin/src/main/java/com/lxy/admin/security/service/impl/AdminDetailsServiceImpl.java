@@ -3,6 +3,7 @@ package com.lxy.admin.security.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lxy.common.domain.StatelessAdmin;
 import com.lxy.common.po.AdminInfo;
+import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.service.AdminInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,6 +43,8 @@ public class AdminDetailsServiceImpl implements UserDetailsService {
         //根据用户查询权限信息 添加到StatelessAdmin中
         List<String> permissions = adminInfoService.getPermissionsById(adminInfo.getId());
         //封装成StatelessAdmin对象返回
+        //密码必须加个前缀，新版的spring security要求，难崩
+        adminInfo.setPassword(MinePasswordEncoder.sha256 + adminInfo.getPassword());
         StatelessAdmin statelessAdmin = new StatelessAdmin(adminInfo);
         statelessAdmin.setPermissions(permissions);
         return statelessAdmin;

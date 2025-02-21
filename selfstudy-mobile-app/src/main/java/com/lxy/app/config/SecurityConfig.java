@@ -49,13 +49,13 @@ public class SecurityConfig  {
 
     private final static String[] PERMIT_URL = {
             "/webjars/**","/v2/**","/api/**","/csrf", "/static/**", "/druid/**","/","/token/**","/upload/**",
-            "/userAgreement/**","/personalCenter/updatePassword","/version/**"
+            "/userAgreement/**","/personalCenter/updatePassword","/version/**","/permitNeed"
     };
 
     private final static String[] AUTH_URL = {
             "/catalog/**","/feedBack/**","/home/**","/personalCenter/getUserInfo","/personalCenter/updateUserInfo",
             "/personalCenter/getUserInfoById","/studyRecord/**","/studyStatistics/**",
-            "/error","/resources/upload","/resources/uploadApp","/resources/generateImage"
+            "/error","/resources/upload","/resources/uploadApp","/resources/generateImage","/authNeed"
     };
 
     static CorsConfigurationSource configurationSource() {
@@ -109,7 +109,7 @@ public class SecurityConfig  {
         }
 
         @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        public SecurityFilterChain authSecurityFilterChain(HttpSecurity http) throws Exception {
             http
                     // 会话管理（无状态）
                     .sessionManagement(session -> session
@@ -146,7 +146,7 @@ public class SecurityConfig  {
     static class PermitWebSecurityConfig2 {
 
         @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        public SecurityFilterChain permitSecurityFilterChain(HttpSecurity http) throws Exception {
             http
                     // 会话管理（无状态）
                     .sessionManagement(session -> session
