@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author jiacheng yang.
- * @since 2022-10-22
+ * @since 2025-02-24
  */
 public interface UserAgreementService extends IService<UserAgreement> {
 

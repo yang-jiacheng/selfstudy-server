@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author jiacheng yang.
- * @since 2022-10-22
+ * @since 2025-02-24
  */
 @Mapper
 public interface UserAgreementMapper extends BaseMapper<UserAgreement> {

@@ -8,12 +8,11 @@
         <result column="type" property="type" />
         <result column="title" property="title" />
         <result column="content" property="content" />
-        <result column="device" property="device" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, type, title, content, device
+        id, type, title, content
     </sql>
 
 </mapper>

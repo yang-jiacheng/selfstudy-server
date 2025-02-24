@@ -2,6 +2,7 @@ package com.lxy.admin.controller;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
+import com.lxy.admin.security.util.AdminIdUtil;
 import com.lxy.admin.util.WordUtil;
 import com.lxy.common.domain.R;
 import com.lxy.common.po.Feedback;
@@ -51,6 +52,7 @@ public class IndexController {
     @GetMapping("/authNeed")
     @ResponseBody
     public String authNeed() {
+        int adminId = AdminIdUtil.getAdminId();
         throw new RuntimeException("RuntimeException");
 //        return "authNeed";
     }
@@ -58,6 +60,7 @@ public class IndexController {
     @GetMapping("/permitNeed")
     @ResponseBody
     public String permitNeed() {
+
         throw new IndexOutOfBoundsException("IndexOutOfBoundsException");
 
 //

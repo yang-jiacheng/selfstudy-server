@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author jiacheng yang.
- * @since 2025-02-20
+ * @since 2025-02-24
  */
 @Mapper
 public interface VersionMapper extends BaseMapper<Version> {

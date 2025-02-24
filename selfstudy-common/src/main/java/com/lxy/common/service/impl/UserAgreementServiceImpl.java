@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author jiacheng yang.
- * @since 2022-10-22
+ * @since 2025-02-24
  */
 @Service
 public class UserAgreementServiceImpl extends ServiceImpl<UserAgreementMapper, UserAgreement> implements UserAgreementService {

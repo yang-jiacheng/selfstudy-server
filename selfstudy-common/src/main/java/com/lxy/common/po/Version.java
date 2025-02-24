@@ -1,7 +1,5 @@
 package com.lxy.common.po;
 
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -11,7 +9,7 @@ import java.util.Date;
 /**
  * Description: 版本控制
  * author: jiacheng yang.
- * Date: 2025-02-20
+ * Date: 2025-02-24
  */
 
 public class Version implements Serializable {
@@ -35,7 +33,6 @@ public class Version implements Serializable {
 
     //是否检测更新 1是 0 否
     private Integer checkUpdate;
-
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
     private Date updateTime;

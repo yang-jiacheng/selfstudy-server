@@ -40,7 +40,7 @@ public class GeneratorMybatisPlus {
 	public static final String AUTHOR="jiacheng yang.";
 
 	public static final String[] TABS = {
-			"version"
+			"version","user_agreement"
 	};
 
 	public static String DRIVER_NAME="";
@@ -106,7 +106,7 @@ public class GeneratorMybatisPlus {
 							.naming(NamingStrategy.underline_to_camel)
 							.columnNaming(NamingStrategy.underline_to_camel)
 							.javaTemplate("/templates/entity.vm")
-//							.disable() // 禁用实体类生成
+							.disable() // 禁用实体类生成
 
 							.controllerBuilder()
 							.disable() // 禁用 Controller 层生成
