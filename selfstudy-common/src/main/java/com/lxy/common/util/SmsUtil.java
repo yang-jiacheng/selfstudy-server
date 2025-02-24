@@ -104,8 +104,8 @@ public class SmsUtil {
     }
 
     public static void main(String[] args) {
-        String code = SmsUtil.getRandomCode();
-        boolean flag = SmsUtil.sendMessage("15607150562", code);
+        logger.error("error");
+        logger.debug("debug");
     }
 
 }

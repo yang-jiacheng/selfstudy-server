@@ -57,17 +57,6 @@ public class IndexController {
 //        return "authNeed";
     }
 
-    @GetMapping("/permitNeed")
-    @ResponseBody
-    public String permitNeed() {
-
-        throw new IndexOutOfBoundsException("IndexOutOfBoundsException");
-
-//
-//
-//        return "permitNeed";
-    }
-
 
     @RequestMapping("/")
     @ResponseBody
