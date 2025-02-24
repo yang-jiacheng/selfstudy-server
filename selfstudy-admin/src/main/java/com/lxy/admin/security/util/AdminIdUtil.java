@@ -2,6 +2,7 @@ package com.lxy.admin.security.util;
 
 import com.lxy.common.domain.StatelessAdmin;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Objects;
@@ -17,10 +18,14 @@ public class AdminIdUtil {
     public static int getAdminId(){
         int userId = -1;
         //获取SecurityContextHolder中的用户id
-        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        if (!Objects.isNull(authentication)){
-            StatelessAdmin principal = (StatelessAdmin)authentication.getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null ) {
+            return userId;
+        }
+        if (authentication instanceof UsernamePasswordAuthenticationToken authenticationToken) {
+            StatelessAdmin principal = (StatelessAdmin)authenticationToken.getPrincipal();
             userId = principal.getAdminInfo().getId();
+
         }
         return userId;
     }

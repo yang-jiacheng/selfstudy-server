@@ -4,6 +4,7 @@ import com.lxy.app.security.filter.StatelessAuthenticationFilterUser;
 import com.lxy.app.security.handle.AccessDeniedHandlerImpl;
 import com.lxy.app.security.handle.AuthenticationEntryPointUserImpl;
 import com.lxy.app.security.service.impl.UserDetailsServiceImpl;
+import com.lxy.common.constant.CommonConstants;
 import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.security.filter.StatelessPermitFilter;
@@ -157,7 +158,7 @@ public class SecurityConfig  {
                     .securityMatcher(PERMIT_URL)
                     //添加过滤器,
                     .addFilterBefore(
-                            new StatelessPermitFilter(),
+                            new StatelessPermitFilter(CommonConstants.COOKIE_NAME_APP),
                             UsernamePasswordAuthenticationFilter.class
                     )
                     .authorizeHttpRequests(authorize -> authorize

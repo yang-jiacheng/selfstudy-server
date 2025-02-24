@@ -4,6 +4,7 @@ import com.lxy.admin.security.filter.StatelessAuthenticationFilterAdmin;
 import com.lxy.admin.security.handle.AccessDeniedHandlerImpl;
 import com.lxy.admin.security.handle.AuthenticationEntryPointAdminImpl;
 import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
+import com.lxy.common.constant.CommonConstants;
 import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.security.filter.StatelessPermitFilter;
@@ -31,6 +32,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.HttpRequestResponseHolder;
@@ -65,20 +67,14 @@ public class SecurityConfig {
     @Resource
     private AdminInfoService adminInfoService;
 
-    @Resource
-    private AuthenticationEntryPointAdminImpl authenticationEntryPoint;
-
-    @Resource
-    private AccessDeniedHandlerImpl accessDeniedHandler;
-
-
-    private final static String[] PERMIT_URL = {"/druid/**","/token/**","/upload/**","/permitNeed"
-    };
-
     private final static String[] AUTH_URL = {
             "/home/**","/adminManage/**","/businessConfigManage/**","/classifyManage/**","/feedBackManage/**",
             "/personalManage/**","/roleManage/**","/studyRecord/**","/userAgreementManage/**","/userManage/**","/versionManage/**",
-            "/resources/upload","/resources/uploadApp","/resources/generateImage","/objectStorageManage/**","/authNeed"
+            "/resources/upload","/resources/uploadApp","/resources/generateImage","/objectStorageManage/**"
+    };
+
+    private final static String[] PERMIT_URL = {
+            "/druid/**","/token/**","/upload/**","/permitNeed"
     };
 
     @Bean
@@ -89,18 +85,20 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
                 // securityMatcher 限定此过滤器链仅处理 AUTH_URL 的请求
                 .securityMatcher(AUTH_URL)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(AUTH_URL).authenticated())
+                        .anyRequest().authenticated())
                 .addFilterBefore(
-                        new StatelessAuthenticationFilterAdmin(businessConfigService, commonRedisService, adminInfoService),
+                        new StatelessAuthenticationFilterAdmin(businessConfigService, commonRedisService,adminInfoService),
                         UsernamePasswordAuthenticationFilter.class
                 )
+
                 // 配置异常处理
                 .exceptionHandling(exception -> exception
-                    .authenticationEntryPoint(authenticationEntryPoint)
-                    .accessDeniedHandler(accessDeniedHandler))
+                    //.authenticationEntryPoint(new AuthenticationEntryPointAdminImpl())
+                    .accessDeniedHandler(new AccessDeniedHandlerImpl()))
                 //关闭csrf //允许跨域
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(configurationSource()))
@@ -118,12 +116,14 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
                 // securityMatcher 限定此过滤器链仅处理 PERMIT_URL 的请求
                 .securityMatcher(PERMIT_URL)
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(PERMIT_URL).permitAll())
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .anyRequest().permitAll())
+                //添加过滤器
                 .addFilterBefore(
-                        new StatelessPermitFilter(),
+                        new StatelessPermitFilter(CommonConstants.COOKIE_NAME_ADMIN),
                         UsernamePasswordAuthenticationFilter.class
                 )
                 //关闭csrf //允许跨域
@@ -134,7 +134,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder(){

@@ -3,6 +3,7 @@ package com.lxy.admin.security.filter;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSON;
+import com.lxy.admin.security.handle.AuthenticationEntryPointAdminImpl;
 import com.lxy.common.constant.CommonConstants;
 import com.lxy.common.constant.ConfigConstants;
 import com.lxy.common.domain.StatelessAdmin;
@@ -14,6 +15,7 @@ import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.util.LogUtil;
+import com.lxy.common.util.WebUtil;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
@@ -59,10 +62,12 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         //获取token
         String msg = "";
         String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstants.COOKIE_NAME_ADMIN);
+
         if (accessToken == null){
             msg = "token未获取到";
             logger.error("token未获取到");
-            throw new InsufficientAuthenticationException(msg);
+            WebUtil.renderRedirect(response,"/login");
+            return;
         }
         //解析token
         Integer userId = null;
@@ -72,7 +77,8 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         }catch (Exception e){
             msg = "token解析失败";
             logger.error("token解析失败",e);
-            throw new InsufficientAuthenticationException(msg);
+            WebUtil.renderRedirect(response,"/login");
+            return;
         }
         //一个号在线数
         int onlineNum = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstants.ADMIN_HAS_NUM));
@@ -84,7 +90,8 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         if (loginStatus == null){
             msg = "无法识别的登录状态";
             logger.error(msg);
-            throw new BadCredentialsException(msg);
+            WebUtil.renderRedirect(response,"/login");
+            return;
         }
 
          //权限
@@ -114,6 +121,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         msg = LogUtil.logOperation(userId, request,requestBody);
         logger.warn(msg);
         //放行
+
         filterChain.doFilter(wrappedRequest, response);
 
     }

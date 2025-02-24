@@ -32,10 +32,16 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(StatelessPermitFilter.class);
 
+    private final String LOGIN_STATUS_KEY ;
+
+    public StatelessPermitFilter(String LOGIN_STATUS_KEY) {
+        this.LOGIN_STATUS_KEY = LOGIN_STATUS_KEY;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 访问的地址
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstants.COOKIE_NAME_APP);
+        String accessToken = JsonWebTokenUtil.getAccessToken(request, LOGIN_STATUS_KEY);
         if (accessToken == null){
             //放行
             filterChain.doFilter(request, response);

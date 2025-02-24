@@ -49,9 +49,10 @@ public class IndexController {
     @Resource
     private CommonRedisService commonRedisService;
 
-    @GetMapping("/authNeed")
+
+    @GetMapping("/permitNeed")
     @ResponseBody
-    public String authNeed() {
+    public String permitNeed() {
         int adminId = AdminIdUtil.getAdminId();
         throw new RuntimeException("RuntimeException");
 //        return "authNeed";
