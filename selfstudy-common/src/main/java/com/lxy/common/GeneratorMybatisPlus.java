@@ -40,7 +40,7 @@ public class GeneratorMybatisPlus {
 	public static final String AUTHOR="jiacheng yang.";
 
 	public static final String[] TABS = {
-			"version","user_agreement"
+			"version"
 	};
 
 	public static String DRIVER_NAME="";
@@ -99,13 +99,14 @@ public class GeneratorMybatisPlus {
 							.formatMapperFileName("%sMapper")
 							.formatXmlFileName("%sMapper")
 							.mapperTemplate("/templates/mapper.java.vm") // 设置 Mapper 模板
+							.mapperXmlTemplate("/templates/mapper.xml.vm")
 //							.disable() // 禁用 Mapper 接口生成
 
 							.entityBuilder()
 							.enableFileOverride()
 							.naming(NamingStrategy.underline_to_camel)
 							.columnNaming(NamingStrategy.underline_to_camel)
-							.javaTemplate("/templates/entity.vm")
+							.javaTemplate("/templates/entity.java.vm")
 							.disable() // 禁用实体类生成
 
 							.controllerBuilder()
