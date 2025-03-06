@@ -1,4 +1,4 @@
-package com.lxy.common.domain;
+package com.lxy.common.security.bo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lxy.common.po.User;

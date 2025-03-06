@@ -1,13 +1,9 @@
 package com.lxy.common.controller;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.io.IoUtil;
 import com.aliyuncs.auth.sts.AssumeRoleResponse;
 import com.lxy.common.config.properties.CustomProperties;
-import com.lxy.common.constant.ConfigConstants;
-import com.lxy.common.domain.R;
+import com.lxy.common.bo.R;
 import com.lxy.common.dto.GenerateImageDTO;
-import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.ResourcesService;
 import com.lxy.common.util.FileUtil;
 import com.lxy.common.util.ImgConfigUtil;
@@ -24,10 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.io.*;
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

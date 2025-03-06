@@ -1,19 +1,10 @@
 package com.lxy.common.security.filter;
 
-import com.lxy.common.constant.CommonConstants;
-import com.lxy.common.constant.ConfigConstants;
-import com.lxy.common.domain.StatelessUser;
-import com.lxy.common.redis.service.CommonRedisService;
-import com.lxy.common.redis.util.RedisKeyUtil;
-import com.lxy.common.service.BusinessConfigService;
-import com.lxy.common.util.IpUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.util.LogUtil;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;

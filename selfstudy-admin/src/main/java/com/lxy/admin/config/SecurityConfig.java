@@ -2,14 +2,13 @@ package com.lxy.admin.config;
 
 import com.lxy.admin.security.filter.StatelessAuthenticationFilterAdmin;
 import com.lxy.admin.security.handle.AccessDeniedHandlerImpl;
-import com.lxy.admin.security.handle.AuthenticationEntryPointAdminImpl;
 import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
 import com.lxy.common.constant.CommonConstants;
-import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.security.filter.StatelessPermitFilter;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.service.BusinessConfigService;
+import com.lxy.common.service.RedisService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,18 +62,18 @@ public class SecurityConfig {
     @Resource
     private BusinessConfigService businessConfigService;
     @Resource
-    private CommonRedisService commonRedisService;
+    private RedisService redisService;
     @Resource
     private AdminInfoService adminInfoService;
 
     private final static String[] AUTH_URL = {
             "/home/**","/adminManage/**","/businessConfigManage/**","/classifyManage/**","/feedBackManage/**",
             "/personalManage/**","/roleManage/**","/studyRecord/**","/userAgreementManage/**","/userManage/**","/versionManage/**",
-            "/resources/upload","/resources/uploadApp","/resources/generateImage","/objectStorageManage/**"
+            "/resources/upload","/resources/uploadApp","/resources/generateImage","/objectStorageManage/**","/permitNeed"
     };
 
     private final static String[] PERMIT_URL = {
-            "/druid/**","/token/**","/upload/**","/permitNeed"
+            "/druid/**","/token/**","/upload/**"
     };
 
     @Bean
@@ -91,7 +90,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .addFilterBefore(
-                        new StatelessAuthenticationFilterAdmin(businessConfigService, commonRedisService,adminInfoService),
+                        new StatelessAuthenticationFilterAdmin(businessConfigService, redisService,adminInfoService),
                         UsernamePasswordAuthenticationFilter.class
                 )
 
@@ -119,8 +118,8 @@ public class SecurityConfig {
 
                 // securityMatcher 限定此过滤器链仅处理 PERMIT_URL 的请求
                 .securityMatcher(PERMIT_URL)
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .anyRequest().permitAll())
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll())
                 //添加过滤器
                 .addFilterBefore(
                         new StatelessPermitFilter(CommonConstants.COOKIE_NAME_ADMIN),

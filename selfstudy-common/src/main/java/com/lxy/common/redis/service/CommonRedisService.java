@@ -1,8 +1,7 @@
 package com.lxy.common.redis.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.lxy.common.domain.StatelessAdmin;
-import com.lxy.common.domain.StatelessUser;
+import com.lxy.common.security.bo.StatelessAdmin;
+import com.lxy.common.security.bo.StatelessUser;
 
 import java.util.Collection;
 import java.util.List;

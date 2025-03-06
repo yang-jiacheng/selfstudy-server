@@ -2,14 +2,12 @@ package com.lxy.app.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lxy.app.security.service.LoginService;
-import com.lxy.common.config.properties.CustomProperties;
 import com.lxy.common.constant.CommonConstants;
-import com.lxy.common.domain.R;
+import com.lxy.common.bo.R;
 import com.lxy.common.po.User;
 import com.lxy.common.service.PhoneCodeService;
 import com.lxy.common.service.UserService;
 import com.lxy.common.util.EncryptUtil;
-import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

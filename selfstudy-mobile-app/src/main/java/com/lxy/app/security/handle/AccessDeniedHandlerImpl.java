@@ -1,10 +1,9 @@
 package com.lxy.app.security.handle;
 
 import cn.hutool.http.HttpStatus;
-import com.lxy.common.domain.R;
+import com.lxy.common.bo.R;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.WebUtil;
-import com.lxy.common.vo.ResultVO;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;

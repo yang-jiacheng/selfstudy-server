@@ -1,8 +1,7 @@
 package com.lxy.admin.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.lxy.common.domain.R;
+import com.lxy.common.bo.R;
 import com.lxy.common.po.BusinessConfig;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.util.JsonUtil;

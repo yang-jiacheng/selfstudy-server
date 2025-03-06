@@ -1,15 +1,13 @@
 package com.lxy.app.security.service.impl;
 
 import com.lxy.app.security.service.LoginService;
-import com.lxy.common.constant.CommonConstants;
 import com.lxy.common.constant.ConfigConstants;
-import com.lxy.common.domain.R;
-import com.lxy.common.domain.StatelessUser;
+import com.lxy.common.bo.R;
+import com.lxy.common.security.bo.StatelessUser;
 import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.redis.util.RedisKeyUtil;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.util.JsonWebTokenUtil;
-import com.lxy.common.vo.ResultVO;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,8 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 /**
  * @Description: TODO

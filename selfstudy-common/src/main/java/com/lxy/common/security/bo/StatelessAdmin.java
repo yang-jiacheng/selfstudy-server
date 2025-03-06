@@ -1,12 +1,14 @@
-package com.lxy.common.domain;
+package com.lxy.common.security.bo;
 
 import cn.hutool.core.collection.CollUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lxy.common.po.AdminInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -20,10 +22,18 @@ import java.util.stream.Collectors;
  */
 public class StatelessAdmin implements UserDetails {
 
-    private AdminInfo adminInfo;
+    @Serial
+    private static final long serialVersionUID = -9222242204258246652L;
+
+    private Integer adminId;
+
+    private String password;
+
+    private String username;
 
     private List<String> permissions;
 
+    @JsonIgnore
     private List<SimpleGrantedAuthority> authorities;
 
     private String token;
@@ -33,14 +43,6 @@ public class StatelessAdmin implements UserDetails {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
     private Date endTime;
-
-    public AdminInfo getAdminInfo() {
-        return adminInfo;
-    }
-
-    public void setAdminInfo(AdminInfo adminInfo) {
-        this.adminInfo = adminInfo;
-    }
 
     public List<String> getPermissions() {
         return permissions;
@@ -60,8 +62,10 @@ public class StatelessAdmin implements UserDetails {
     public StatelessAdmin() {
     }
 
-    public StatelessAdmin(AdminInfo adminInfo) {
-        this.adminInfo = adminInfo;
+    public StatelessAdmin(Integer adminId, String password, String username) {
+        this.adminId = adminId;
+        this.password = password;
+        this.username = username;
     }
 
     @Override
@@ -105,14 +109,30 @@ public class StatelessAdmin implements UserDetails {
         this.endTime = endTime;
     }
 
+    public void setAdminId(Integer adminId) {
+        this.adminId = adminId;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Integer getAdminId() {
+        return adminId;
+    }
+
     @Override
     public String getPassword() {
-        return this.adminInfo.getPassword();
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return this.adminInfo.getUsername();
+        return this.username;
     }
 
     @Override

@@ -1,9 +1,8 @@
 package com.lxy.app.security.handle;
 
-import com.lxy.common.domain.R;
+import com.lxy.common.bo.R;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.WebUtil;
-import com.lxy.common.vo.ResultVO;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

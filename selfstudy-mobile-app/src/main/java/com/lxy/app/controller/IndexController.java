@@ -1,16 +1,9 @@
 package com.lxy.app.controller;
 
-import cn.hutool.core.util.StrUtil;
-import com.lxy.common.domain.R;
-import com.lxy.common.po.Role;
-import com.lxy.common.po.User;
 import com.lxy.common.service.UserService;
-import com.lxy.common.util.SmsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.annotation.Resource;

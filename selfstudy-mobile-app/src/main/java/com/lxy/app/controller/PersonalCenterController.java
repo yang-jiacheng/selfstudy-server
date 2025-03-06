@@ -2,7 +2,7 @@ package com.lxy.app.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lxy.common.domain.R;
+import com.lxy.common.bo.R;
 import com.lxy.common.po.User;
 import com.lxy.common.service.PhoneCodeService;
 import com.lxy.common.service.UserService;

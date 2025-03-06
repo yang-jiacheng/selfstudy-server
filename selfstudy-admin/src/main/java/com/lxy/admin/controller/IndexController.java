@@ -3,17 +3,14 @@ package com.lxy.admin.controller;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import com.lxy.admin.security.util.AdminIdUtil;
-import com.lxy.admin.util.WordUtil;
-import com.lxy.common.domain.R;
 import com.lxy.common.po.Feedback;
+import com.lxy.common.po.User;
 import com.lxy.common.redis.service.CommonRedisService;
-import com.lxy.common.util.CommonUtil;
+import com.lxy.common.service.RedisService;
 import com.lxy.common.util.JsonUtil;
-import com.lxy.common.vo.ResultVO;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +21,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,25 +40,46 @@ public class IndexController {
 
     @Resource
     private Producer captchaProducer;
-
     @Resource
-    private CommonRedisService commonRedisService;
-
-
-    @GetMapping("/permitNeed")
-    @ResponseBody
-    public String permitNeed() {
-        int adminId = AdminIdUtil.getAdminId();
-        throw new RuntimeException("RuntimeException");
-//        return "authNeed";
-    }
-
+    private RedisService redisService;
 
     @RequestMapping("/")
     @ResponseBody
     public String index() {
 
         return "hello selfstudy-admin !";
+    }
+
+    @GetMapping("/permitNeed")
+    @ResponseBody
+    public String permitNeed() {
+        Feedback feedback = new Feedback();
+        feedback.setId(123);
+        feedback.setContent("zfdsafdsafdsa你好啊");
+        feedback.setPic("测试");
+        feedback.setCreateTime(new Date());
+
+
+        List<Feedback> feedbackList = new ArrayList<>();
+        feedbackList.add(feedback);
+
+        redisService.setObject("feedback", feedback, 120L, TimeUnit.SECONDS);
+        redisService.setObject("feedbackList", JsonUtil.toJson(feedbackList), -1L, TimeUnit.SECONDS);
+        redisService.setList("feedbackList222", feedbackList);
+        redisService.setHashValue("feedbackHash", "测试1", feedback);
+
+        redisService.setObject("feedback33", feedbackList, 120L, TimeUnit.SECONDS);
+
+        Feedback feedback1 = redisService.getObject("feedback", Feedback.class);
+        List<Feedback> feedbackList2 = redisService.getList("feedbackList222");
+        List<Feedback> feedbackList1 = JsonUtil.getListType(redisService.getObject("feedbackList", String.class), Feedback.class);
+        Feedback hashValue = redisService.getHashValue("feedbackHash", "测试1", Feedback.class);
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("测试1");
+        List<Feedback> hashValueBatch = redisService.getHashValueBatch("feedbackHash", strings, Feedback.class);
+
+        List<Feedback> feedback33 = redisService.getObject("feedback33", ArrayList.class);
+        throw new RuntimeException("permitNeed");
     }
 
     @RequestMapping("/login")

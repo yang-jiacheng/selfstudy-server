@@ -1,8 +1,7 @@
 package com.lxy.app.security.service;
 
 
-import com.lxy.common.domain.R;
-import com.lxy.common.vo.ResultVO;
+import com.lxy.common.bo.R;
 
 /**
  * @Description: TODO

@@ -1,6 +1,7 @@
 package com.lxy.admin.security.service;
 
 
+import com.lxy.common.bo.R;
 import com.lxy.common.vo.ResultVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public interface LoginService {
 
-    ResultVO login(String username, String password, String device, HttpServletResponse response);
+    R<Object> login(String username, String password, String device, HttpServletResponse response);
 
     void logout(String token, HttpServletRequest request,HttpServletResponse response);
 

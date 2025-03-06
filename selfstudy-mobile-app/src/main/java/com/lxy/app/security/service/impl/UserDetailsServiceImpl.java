@@ -1,7 +1,7 @@
 package com.lxy.app.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lxy.common.domain.StatelessUser;
+import com.lxy.common.security.bo.StatelessUser;
 import com.lxy.common.po.User;
 import com.lxy.common.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

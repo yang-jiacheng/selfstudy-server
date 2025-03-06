@@ -2,8 +2,7 @@ package com.lxy.common.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
-import com.lxy.common.domain.StatelessAdmin;
+import com.lxy.common.security.bo.StatelessAdmin;
 import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.redis.util.RedisKeyUtil;
 import com.lxy.common.service.RolePermissionRelateService;
@@ -64,7 +63,7 @@ public class RolePermissionRelateServiceImpl extends ServiceImpl<RolePermissionR
             List<StatelessAdmin> loginList = JSON.parseArray(value, StatelessAdmin.class);
             if (CollUtil.isNotEmpty(loginList)){
                 loginList.forEach(lis -> lis.setPermissions(null));
-                Integer id = loginList.get(0).getAdminInfo().getId();
+                Integer id = loginList.get(0).getAdminId();
                 map.put(RedisKeyUtil.getAdminLoginStatus(id), JsonUtil.toJson(loginList));
             }
         }

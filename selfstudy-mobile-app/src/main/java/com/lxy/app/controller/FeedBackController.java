@@ -1,7 +1,7 @@
 package com.lxy.app.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.lxy.common.domain.R;
+import com.lxy.common.bo.R;
 import com.lxy.common.po.Feedback;
 import com.lxy.common.vo.FeedbackVO;
 import com.lxy.common.service.FeedbackService;

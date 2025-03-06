@@ -1,11 +1,9 @@
 package com.lxy.admin.security.util;
 
-import com.lxy.common.domain.StatelessAdmin;
+import com.lxy.common.security.bo.StatelessAdmin;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.util.Objects;
 
 /**
  * @Description: TODO
@@ -24,7 +22,7 @@ public class AdminIdUtil {
         }
         if (authentication instanceof UsernamePasswordAuthenticationToken authenticationToken) {
             StatelessAdmin principal = (StatelessAdmin)authenticationToken.getPrincipal();
-            userId = principal.getAdminInfo().getId();
+            userId = principal.getAdminId();
 
         }
         return userId;

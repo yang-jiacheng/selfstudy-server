@@ -2,16 +2,13 @@ package com.lxy.app.security.filter;
 
 import com.lxy.common.constant.CommonConstants;
 import com.lxy.common.constant.ConfigConstants;
-import com.lxy.common.domain.StatelessUser;
+import com.lxy.common.security.bo.StatelessUser;
 import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.redis.util.RedisKeyUtil;
 import com.lxy.common.security.CustomHttpServletRequestWrapper;
 import com.lxy.common.service.BusinessConfigService;
-import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.util.LogUtil;
-import com.lxy.common.util.WebUtil;
-import com.lxy.common.vo.ResultVO;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,11 +2,9 @@ package com.lxy.admin.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.lxy.admin.security.util.AdminIdUtil;
-import com.lxy.common.domain.R;
+import com.lxy.common.bo.R;
 import com.lxy.common.dto.ObjectStorageDTO;
 import com.lxy.common.dto.PageDTO;
-import com.lxy.common.po.ObjectStorage;
-import com.lxy.common.service.FeedbackService;
 import com.lxy.common.service.ObjectStorageService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.LayUiResultVO;

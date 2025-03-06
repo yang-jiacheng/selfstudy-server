@@ -1,20 +1,13 @@
 package com.lxy.app.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lxy.common.constant.ConfigConstants;
-import com.lxy.common.domain.R;
-import com.lxy.common.po.User;
+import com.lxy.common.bo.R;
 import com.lxy.common.po.Version;
 import com.lxy.common.service.VersionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Description: 版本控制

@@ -1,6 +1,6 @@
 package com.lxy.app.security.util;
 
-import com.lxy.common.domain.StatelessUser;
+import com.lxy.common.security.bo.StatelessUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
