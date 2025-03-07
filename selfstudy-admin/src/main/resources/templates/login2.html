@@ -198,19 +198,19 @@
         switch (messageType) {
             case 'success':
                 messageText = '成功消息';
-                message.success(messageText);
+                $message.success(messageText,5000);
                 break;
             case 'info':
                 messageText = '普通消息';
-                message.info(messageText);
+                $message.info(messageText,5000);
                 break;
             case 'warning':
                 messageText = '警告消息';
-                message.warning(messageText);
+                $message.warning(messageText,5000);
                 break;
             case 'error':
                 messageText = '错误消息';
-                message.error(messageText);
+                $message.error(messageText,5000);
                 break;
             default:
                 break;

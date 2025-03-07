@@ -24,11 +24,13 @@
     transform: translateX(-50%) translateY(10px);
 }
 
-/* 图标通用样式 */
+/* 图标通用基础样式 */
 .el-message__icon {
-    width: 20px;
-    height: 20px;
+    /* 图标容器大小 */
+    width: 15px;
+    height: 15px;
     margin-right: 10px;
+
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -44,14 +46,15 @@
 .el-message--success .el-message__icon {
     background: #67c23a;
 }
+/* 成功图标（勾号） */
 .el-message--success .el-message__icon::after {
     content: "";
-    width: 9px;
-    height: 5px;
+    width: 7px;
+    height: 4px;
     border: 2px solid #fff;
     border-top: none;
     border-right: none;
-    transform: rotate(-45deg);
+    transform: rotate(-45deg) translate(1px, -1px);
 }
 
 /* 警告类型 */

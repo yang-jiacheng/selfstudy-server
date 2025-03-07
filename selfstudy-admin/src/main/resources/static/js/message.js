@@ -2,7 +2,8 @@ class MessageSystem {
     static queue = [];
     static offset = 20;
 
-    constructor({ type, message }) {
+    constructor({ type, message, duration }) {
+        this.duration = duration || 3000
         this.el  = this.createMsgElement(type,  message);
         this.show();
         this.autoClose();
@@ -45,16 +46,14 @@ class MessageSystem {
     autoClose() {
         this.timer  = setTimeout(() => {
             this.el.style.opacity  = '0';
-            setTimeout(() => {
-                this.destroy();
-            }, 300);
-        }, 3000);
+            setTimeout(() => this.destroy(), 300)
+        }, this.duration);
 
-        // 悬停暂停
-        this.el.addEventListener('mouseenter',  () =>
-            clearTimeout(this.timer));
-        this.el.addEventListener('mouseleave',  () =>
-            this.timer  = setTimeout(() => this.destroy(),  1500));
+        // 悬停逻辑优化
+        this.el.addEventListener('mouseenter',  () => clearTimeout(this.timer));
+        this.el.addEventListener('mouseleave',  () => {
+            this.timer  = setTimeout(() => this.destroy(),  this.duration  * 0.5)  // 剩余时间改为总时长一半
+        });
     }
 
     destroy() {
@@ -73,10 +72,10 @@ class MessageSystem {
     }
 }
 
-// 对外暴露API
-const message = {
-    success: (msg) => new MessageSystem({ type: 'success', message: msg }),
-    warning: (msg) => new MessageSystem({ type: 'warning', message: msg }),
-    error: (msg) => new MessageSystem({ type: 'error', message: msg }),
-    info: (msg) => new MessageSystem({ type: 'info', message: msg })
+// API调用示例
+const $message = {
+    success: (msg, duration) => new MessageSystem({ type: 'success', message: msg, duration }),
+    warning: (msg, duration) => new MessageSystem({ type: 'warning', message: msg, duration }),
+    error: (msg, duration) => new MessageSystem({ type: 'error', message: msg, duration }),
+    info: (msg, duration) => new MessageSystem({ type: 'info', message: msg, duration })
 };
