@@ -26,15 +26,13 @@
 
 /* 图标通用基础样式 */
 .el-message__icon {
-    /* 图标容器大小 */
-    width: 15px;
-    height: 15px;
-    margin-right: 10px;
-
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 20px;  /* 根据实际图标尺寸调整 */
+    height: 20px;
+    margin-right: 12px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 0;  /* 移除圆形效果 */
 }
 
 /* 成功类型 */
@@ -44,18 +42,10 @@
     color: #67c23a;
 }
 .el-message--success .el-message__icon {
-    background: #67c23a;
+    background-image: url(../images/svg/success.svg);
+
 }
-/* 成功图标（勾号） */
-.el-message--success .el-message__icon::after {
-    content: "";
-    width: 7px;
-    height: 4px;
-    border: 2px solid #fff;
-    border-top: none;
-    border-right: none;
-    transform: rotate(-45deg) translate(1px, -1px);
-}
+
 
 /* 警告类型 */
 .el-message--warning {
@@ -64,13 +54,9 @@
     color: #e6a23c;
 }
 .el-message--warning .el-message__icon {
-    background: #e6a23c;
+    background-image: url(../images/svg/warning.svg);
 }
-.el-message--warning .el-message__icon::after {
-    content: "!";
-    color: #fff;
-    font-weight: 700;
-}
+
 
 /* 错误类型 */
 .el-message--error {
@@ -79,18 +65,9 @@
     color: #f56c6c;
 }
 .el-message--error .el-message__icon {
-    background: #f56c6c;
+    background-image: url(../images/svg/error.svg);
 }
-.el-message--error .el-message__icon::before,
-.el-message--error .el-message__icon::after {
-    content: "";
-    width: 12px;
-    height: 2px;
-    background: #fff;
-    position: absolute;
-}
-.el-message--error .el-message__icon::before { transform: rotate(45deg); }
-.el-message--error .el-message__icon::after { transform: rotate(-45deg); }
+
 
 /* 普通消息 */
 .el-message--info {
@@ -99,11 +76,6 @@
     color: #909399;
 }
 .el-message--info .el-message__icon {
-    background: #909399;
+    background-image: url(../images/svg/info.svg);
 }
-.el-message--info .el-message__icon::after {
-    content: "i";
-    color: #fff;
-    font-style: italic;
-    font-weight: 700;
-}
+
