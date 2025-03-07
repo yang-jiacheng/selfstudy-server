@@ -1,0 +1,106 @@
+/* 消息容器基础样式 */
+.el-message {
+    position: fixed;
+    left: 50%;
+    top: 20px;
+    transform: translateX(-50%);
+    min-width: 380px;
+    max-width: 400px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    border: 1px solid;
+    background-color: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    transition: all .3s;
+    opacity: 0;
+    z-index: 9999;
+}
+
+/* 动画效果 */
+.el-message.fade-in  {
+    opacity: 1;
+    transform: translateX(-50%) translateY(10px);
+}
+
+/* 图标通用样式 */
+.el-message__icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 成功类型 */
+.el-message--success {
+    background-color: #f0f9eb;
+    border-color: #e1f3d8;
+    color: #67c23a;
+}
+.el-message--success .el-message__icon {
+    background: #67c23a;
+}
+.el-message--success .el-message__icon::after {
+    content: "";
+    width: 9px;
+    height: 5px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-right: none;
+    transform: rotate(-45deg);
+}
+
+/* 警告类型 */
+.el-message--warning {
+    background-color: #fdf6ec;
+    border-color: #faecd8;
+    color: #e6a23c;
+}
+.el-message--warning .el-message__icon {
+    background: #e6a23c;
+}
+.el-message--warning .el-message__icon::after {
+    content: "!";
+    color: #fff;
+    font-weight: 700;
+}
+
+/* 错误类型 */
+.el-message--error {
+    background-color: #fef0f0;
+    border-color: #fde2e2;
+    color: #f56c6c;
+}
+.el-message--error .el-message__icon {
+    background: #f56c6c;
+}
+.el-message--error .el-message__icon::before,
+.el-message--error .el-message__icon::after {
+    content: "";
+    width: 12px;
+    height: 2px;
+    background: #fff;
+    position: absolute;
+}
+.el-message--error .el-message__icon::before { transform: rotate(45deg); }
+.el-message--error .el-message__icon::after { transform: rotate(-45deg); }
+
+/* 普通消息 */
+.el-message--info {
+    background-color: #edf2fc;
+    border-color: #f4f4f5;
+    color: #909399;
+}
+.el-message--info .el-message__icon {
+    background: #909399;
+}
+.el-message--info .el-message__icon::after {
+    content: "i";
+    color: #fff;
+    font-style: italic;
+    font-weight: 700;
+}

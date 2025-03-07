@@ -84,7 +84,7 @@ public class IndexController {
 
     @RequestMapping("/login")
     public String login() {
-        return "login";
+        return "login2";
     }
 
     @RequestMapping("/error403")
