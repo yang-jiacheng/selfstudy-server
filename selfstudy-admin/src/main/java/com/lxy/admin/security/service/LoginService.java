@@ -1,6 +1,7 @@
 package com.lxy.admin.security.service;
 
 
+import com.lxy.admin.dto.LoginVerifyCodeDTO;
 import com.lxy.common.bo.R;
 import com.lxy.common.vo.ResultVO;
 
@@ -15,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public interface LoginService {
 
-    R<Object> login(String username, String password, String device, HttpServletResponse response);
+    R<Object> login(LoginVerifyCodeDTO dto, HttpServletResponse response);
 
     void logout(String token, HttpServletRequest request,HttpServletResponse response);
 

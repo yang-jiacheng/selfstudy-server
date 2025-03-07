@@ -6,7 +6,7 @@ package com.lxy.common.constant;
  * @Date: 2022/12/19 15:44
  * @Version: 1.0
  */
-public class ConfigConstants {
+public class ConfigConstant {
 
     /**
      * 管理员一个号在线数

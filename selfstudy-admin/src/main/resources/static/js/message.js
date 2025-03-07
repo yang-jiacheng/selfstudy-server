@@ -73,7 +73,7 @@ class MessageSystem {
 }
 
 // API调用示例
-const $message = {
+const $msg = {
     success: (msg, duration) => new MessageSystem({ type: 'success', message: msg, duration }),
     warning: (msg, duration) => new MessageSystem({ type: 'warning', message: msg, duration }),
     error: (msg, duration) => new MessageSystem({ type: 'error', message: msg, duration }),

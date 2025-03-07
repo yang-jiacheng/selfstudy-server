@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
 import com.lxy.common.security.bo.StatelessAdmin;
 import com.lxy.common.redis.service.CommonRedisService;
-import com.lxy.common.redis.util.RedisKeyUtil;
+import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.service.RolePermissionRelateService;
 import com.lxy.common.po.RolePermissionRelate;
 import com.lxy.common.mapper.RolePermissionRelateMapper;
@@ -51,7 +51,7 @@ public class RolePermissionRelateServiceImpl extends ServiceImpl<RolePermissionR
             return;
         }
         List<String> keys = adminIds.stream()
-                .map(RedisKeyUtil::getAdminLoginStatus)
+                .map(RedisKeyConstant::getAdminLoginStatus)
                 .collect(Collectors.toList());
 
         List<String > values = redisTemplate.opsForValue().multiGet(keys);
@@ -64,7 +64,7 @@ public class RolePermissionRelateServiceImpl extends ServiceImpl<RolePermissionR
             if (CollUtil.isNotEmpty(loginList)){
                 loginList.forEach(lis -> lis.setPermissions(null));
                 Integer id = loginList.get(0).getAdminId();
-                map.put(RedisKeyUtil.getAdminLoginStatus(id), JsonUtil.toJson(loginList));
+                map.put(RedisKeyConstant.getAdminLoginStatus(id), JsonUtil.toJson(loginList));
             }
         }
 

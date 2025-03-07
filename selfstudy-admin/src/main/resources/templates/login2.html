@@ -152,10 +152,9 @@
   </div>
 
   <div class="form-group captcha-group">
-      <!-- 新增一层容器 -->
       <div class="captcha-inline">
           <input type="text" id="captcha" autocomplete="off" class="form-control" placeholder="请输入验证码">
-          <img src="images/kaptcha.jpg" class="captcha-image"></img>
+          <img id="captchaImg" onclick="changeVerifyCode()" class="captcha-image"></img>
       </div>
   </div>
 
@@ -166,12 +165,16 @@
   </div>
 </div>
 <script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="js/message.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/encode-word.js"></script>
 <script>
 
+    var uuid = "";
+
     $(function () {
+        changeVerifyCode()
         getNowYear();
         $(document).keyup(function(event){
             if(event.keyCode ===13){
@@ -188,35 +191,38 @@
             document.getElementById("nowYear").innerText = " - "+year
         }
     }
-    let messageTypes = ['success', 'info', 'warning', 'error'];
-    let messageIndex = 0;
+
     function login() {
+        var loginName=$('#userName').val();
+        var password=$('#password').val();
+        var verifyCode=$("#captcha").val()
+        if (loginName==="" || password==="" ||verifyCode===""){
+            $msg.warning("输入不完整,登录失败");
+        }else {
+            var reqPam = {"username":loginName,"password":sha256_digest(password),"verifyCode":verifyCode,"uuid":uuid}
+            ajaxPostJson('token/login',reqPam,function (data) {
+                if (data.code===0){
+                    $msg.success("登录成功~");
+                    setTimeout(() =>{
+                        window.location.href = "home/index";
+                    },500)
+                    return;
+                }
+                $msg.error(data.msg);
+            })
 
-        let messageType = messageTypes[messageIndex];
-        let messageText = '';
-
-        switch (messageType) {
-            case 'success':
-                messageText = '成功消息';
-                $message.success(messageText,3000);
-                break;
-            case 'info':
-                messageText = '普通消息';
-                $message.info(messageText,3000);
-                break;
-            case 'warning':
-                messageText = '警告消息';
-                $message.warning(messageText,3000);
-                break;
-            case 'error':
-                messageText = '错误消息';
-                $message.error(messageText,3000);
-                break;
-            default:
-                break;
         }
+    }
 
-        messageIndex = (messageIndex + 1) % messageTypes.length; // 轮询索引
+    function changeVerifyCode() {
+        ajaxPost('./Kaptcha',{},(data) =>{
+            if (data.code !== 0){
+                $msg.error(data.msg);
+                return
+            }
+            $("#captchaImg").attr("src",`data:image/jpg;base64,${data.result.img}`);
+            uuid = data.result.uuid;
+        })
     }
 </script>
 </body>

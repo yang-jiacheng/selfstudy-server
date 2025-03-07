@@ -1,7 +1,7 @@
 package com.lxy.app.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lxy.common.constant.ConfigConstants;
+import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.po.UserAgreement;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.UserAgreementService;
@@ -59,7 +59,7 @@ public class UserAgreementController {
     */
     @GetMapping("/aboutSoftware")
     public String callMe( Model model){
-        String content = businessConfigService.getBusinessConfigValue(ConfigConstants.ABOUT_US);
+        String content = businessConfigService.getBusinessConfigValue(ConfigConstant.ABOUT_US);
         String title = "关于软件";
         Map<String ,Object> map = new HashMap<>(2);
         map.put("title",title);

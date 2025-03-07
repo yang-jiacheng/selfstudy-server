@@ -1,9 +1,8 @@
 package com.lxy.app.task;
 
 import cn.hutool.core.date.DateUtil;
-import com.lxy.common.constant.CronConstants;
+import com.lxy.common.constant.CronConstant;
 import com.lxy.common.service.UserService;
-import com.lxy.common.util.LogUtil;
 import com.lxy.common.vo.UserRankVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class ScheduleTask {
     /**
      * 每天0点执行，刷新总排行榜缓存
      */
-    @Scheduled(cron = CronConstants.DAY)
+    @Scheduled(cron = CronConstant.DAY)
     private void getRankingsTotalDuration() {
         String msg = "执行了定时任务 getRankingsTotalDuration 时间："+ DateUtil.now();
         LOG.error(msg);

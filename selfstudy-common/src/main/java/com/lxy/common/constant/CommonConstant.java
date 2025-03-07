@@ -3,7 +3,7 @@ package com.lxy.common.constant;
 /**
  * 基本不会改动的 系统自定义的常量类
  */
-public class CommonConstants {
+public class CommonConstant {
 
 	/**
 	 * JWT中的device(设备名称：android、ios、web)
@@ -26,5 +26,5 @@ public class CommonConstants {
 	 */
 	public static final String COOKIE_NAME_APP = "studyRoomToken";
 
-	
+
 }

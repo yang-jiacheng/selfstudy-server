@@ -1,16 +1,15 @@
 package com.lxy.admin.controller;
 
+import com.lxy.admin.dto.LoginVerifyCodeDTO;
 import com.lxy.admin.security.service.LoginService;
-import com.lxy.admin.util.CodeUtil;
 import com.lxy.common.bo.R;
-import com.lxy.common.constant.CommonConstants;
+import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.util.JsonWebTokenUtil;
+import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,34 +25,25 @@ import jakarta.servlet.http.HttpServletResponse;
 @Controller
 public class TokenController {
 
-    private final CodeUtil codeUtil;
+    @Resource
+    private LoginService loginService;
 
-    private final LoginService loginService;
-
-    @Autowired
-    public TokenController(CodeUtil codeUtil,LoginService loginService) {
-        this.codeUtil = codeUtil;
-        this.loginService = loginService;
-    }
-
+    /**
+     * 登录
+     * @author jiacheng yang.
+     * @since 2025/03/07 14:53
+     */
     @PostMapping(value = "/login", produces = "application/json")
     @ResponseBody
-    public R<Object> login(@RequestParam("username")String username,
-                   @RequestParam("password")String password,
-                   @RequestParam("verifyCode")String verifyCode,
-                   HttpServletResponse response, HttpServletRequest request){
-        boolean flag = codeUtil.checkVerifyCode(verifyCode,request);
-        if (!flag){
-            return R.fail("验证码错误，请重新输入!");
-        }
-        R<Object> result = loginService.login(username, password, "web",response);
+    public R<Object> login(@RequestBody @Valid LoginVerifyCodeDTO dto, HttpServletResponse response){
+        R<Object> result = loginService.login(dto,response);
         return result;
     }
 
     @PostMapping(value = "/logout", produces = "application/json")
     @ResponseBody
     public R<Object> logout(HttpServletRequest request,HttpServletResponse response){
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstants.COOKIE_NAME_ADMIN);
+        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstant.COOKIE_NAME_ADMIN);
         loginService.logout(accessToken,request,response);
         return R.ok();
     }

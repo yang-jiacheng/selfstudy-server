@@ -6,7 +6,7 @@ package com.lxy.common.constant;
  * @Date: 2022/12/23 18:04
  * @Version: 1.0
  */
-public class CronConstants {
+public class CronConstant {
 
     /**
      * 每分钟第1秒

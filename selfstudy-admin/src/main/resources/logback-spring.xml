@@ -49,9 +49,9 @@
         <appender-ref ref="stdout"/>
     </logger>
 
-    <logger name="org.springframework.security" level="DEBUG" additivity="false">
-        <appender-ref ref="stdout"/>
-    </logger>
+<!--    <logger name="org.springframework.security" level="DEBUG" additivity="false">-->
+<!--        <appender-ref ref="stdout"/>-->
+<!--    </logger>-->
 
     <logger name="com.apache.ibatis" level="INFO"/>
     <logger name="org.mybatis.spring" level="INFO"/>

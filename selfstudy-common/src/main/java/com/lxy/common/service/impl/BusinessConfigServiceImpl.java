@@ -7,7 +7,7 @@ import com.lxy.common.po.BusinessConfig;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.redis.service.CommonRedisService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lxy.common.redis.util.RedisKeyUtil;
+import com.lxy.common.constant.RedisKeyConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +77,7 @@ public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper,
     }
 
     private String getBusinessConfigCacheByKey(String key){
-        String cacheKey = RedisKeyUtil.getBusinessConfig(key);
+        String cacheKey = RedisKeyConstant.getBusinessConfig(key);
         return commonRedisService.getString(cacheKey);
     }
 
@@ -85,7 +85,7 @@ public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper,
         if(StrUtil.isEmpty(key) || StrUtil.isEmpty(value)){
             return ;
         }
-        String cacheKey = RedisKeyUtil.getBusinessConfig(key);
+        String cacheKey = RedisKeyConstant.getBusinessConfig(key);
         commonRedisService.insertString(cacheKey,value, -1L, TimeUnit.SECONDS);
     }
 }

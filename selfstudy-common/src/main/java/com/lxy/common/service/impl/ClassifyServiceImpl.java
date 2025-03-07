@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.service.StudyRecordService;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.JsonUtil;
-import com.lxy.common.redis.util.RedisKeyUtil;
+import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.vo.ClassifyVO;
 import com.lxy.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,18 +102,18 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
 
     @Override
     public void insertClassifyCache(List<ClassifyVO> list) {
-        commonRedisService.insertString(RedisKeyUtil.getClassify(),JsonUtil.toJson(list),60L * 5L, TimeUnit.SECONDS);
+        commonRedisService.insertString(RedisKeyConstant.getClassify(),JsonUtil.toJson(list),60L * 5L, TimeUnit.SECONDS);
     }
 
     @Override
     public void removeClassifyCache() {
-        commonRedisService.deleteKey(RedisKeyUtil.getClassify());
+        commonRedisService.deleteKey(RedisKeyConstant.getClassify());
     }
 
     @Override
     public List<ClassifyVO> getClassifyListCache(){
         List<ClassifyVO> list = null;
-        String value = commonRedisService.getString(RedisKeyUtil.getClassify());
+        String value = commonRedisService.getString(RedisKeyConstant.getClassify());
         if (value != null){
             list = JsonUtil.getListType(value,ClassifyVO.class);
         }

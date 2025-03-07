@@ -3,7 +3,7 @@ package com.lxy.common.util;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lxy.common.constant.CommonConstants;
+import com.lxy.common.constant.CommonConstant;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.lang.Strings;
 import org.slf4j.Logger;
@@ -55,9 +55,9 @@ public class JsonWebTokenUtil {
 //        Date expiredTime = calendar.getTime();
         //自定义载荷属性
         Map<String, Object> claimsMap = new HashMap<String, Object>();
-        claimsMap.put(CommonConstants.PARAM_NAME_DEVICE, device);
-        claimsMap.put(CommonConstants.PARAM_NAME_USER_ID, userId);
-        claimsMap.put(CommonConstants.PARAM_NAME_USER_TYPE, userType);
+        claimsMap.put(CommonConstant.PARAM_NAME_DEVICE, device);
+        claimsMap.put(CommonConstant.PARAM_NAME_USER_ID, userId);
+        claimsMap.put(CommonConstant.PARAM_NAME_USER_TYPE, userType);
         //产生JWT
         JwtBuilder jwtBuilder = Jwts.builder();
         jwtBuilder.setClaims(claimsMap)
@@ -92,7 +92,7 @@ public class JsonWebTokenUtil {
         }
 
         int userId = 0;
-        Object value = claimsUnSign.get(CommonConstants.PARAM_NAME_USER_ID);
+        Object value = claimsUnSign.get(CommonConstant.PARAM_NAME_USER_ID);
         if (value != null) {
             if (value instanceof Integer) {
                 userId = (int) value;

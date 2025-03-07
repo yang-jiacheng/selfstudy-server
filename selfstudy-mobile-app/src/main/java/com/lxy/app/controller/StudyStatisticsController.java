@@ -1,6 +1,6 @@
 package com.lxy.app.controller;
 
-import com.lxy.common.constant.ConfigConstants;
+import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.bo.R;
 import com.lxy.common.po.StudyRecord;
 import com.lxy.common.service.BusinessConfigService;
@@ -82,7 +82,7 @@ public class StudyStatisticsController {
      */
     @PostMapping(value = "/getRankingsRules" , produces = "application/json")
     public R<Object> getRankingsRules(){
-        String value = businessConfigService.getBusinessConfigValue(ConfigConstants.GENERAL_RULES);
+        String value = businessConfigService.getBusinessConfigValue(ConfigConstant.GENERAL_RULES);
         return R.ok(value);
     }
 

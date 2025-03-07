@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.poi.excel.ExcelUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -17,11 +16,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.util.DateCusUtil;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.JsonUtil;
-import com.lxy.common.redis.util.RedisKeyUtil;
+import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.vo.UserImportVO;
 import com.lxy.common.vo.UserRankVO;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -149,7 +146,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User getUserInfoCache(Integer userId) {
-        String key = RedisKeyUtil.getUserInfo(userId);
+        String key = RedisKeyConstant.getUserInfo(userId);
         String value = commonRedisService.getString(key);
         User user = null;
         if (StrUtil.isNotEmpty(value)){
@@ -160,7 +157,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void removeUserInfoCache(Integer userId) {
-        String key = RedisKeyUtil.getUserInfo(userId);
+        String key = RedisKeyConstant.getUserInfo(userId);
 
         commonRedisService.deleteKey(key);
 
@@ -172,7 +169,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             Set<String> keys = new HashSet<>(ids.size());
 
             ids.forEach(id -> {
-                keys.add(RedisKeyUtil.getUserInfo(id));
+                keys.add(RedisKeyConstant.getUserInfo(id));
 
             });
             commonRedisService.deleteKeys(keys);
@@ -182,7 +179,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void insertUserInfoCache(User user) {
-        String key = RedisKeyUtil.getUserInfo(user.getId());
+        String key = RedisKeyConstant.getUserInfo(user.getId());
         //缓存 7天
         commonRedisService.insertString(key, JsonUtil.toJson(user),604800L, TimeUnit.SECONDS);
     }
@@ -221,7 +218,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void insertRankingsCache(List<UserRankVO> users){
         //缓存到今天结束
         long endByDay = DateCusUtil.getEndByDay();
-        String key = RedisKeyUtil.getRankings();
+        String key = RedisKeyConstant.getRankings();
         commonRedisService.insertString(key,JsonUtil.toJson(users),endByDay,TimeUnit.SECONDS);
     }
 
@@ -240,7 +237,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private List<UserRankVO> getRankingsTotalDurationCache(){
         List<UserRankVO> list = null;
-        String key = RedisKeyUtil.getRankings();
+        String key = RedisKeyConstant.getRankings();
         String value = commonRedisService.getString(key);
         if (StrUtil.isNotEmpty(value)){
             list = JsonUtil.getListType(value, UserRankVO.class);

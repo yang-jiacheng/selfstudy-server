@@ -3,40 +3,28 @@ package com.lxy.admin.config;
 import com.lxy.admin.security.filter.StatelessAuthenticationFilterAdmin;
 import com.lxy.admin.security.handle.AccessDeniedHandlerImpl;
 import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
-import com.lxy.common.constant.CommonConstants;
+import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.security.filter.StatelessPermitFilter;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.RedisService;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.HttpRequestResponseHolder;
-import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -122,7 +110,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll())
                 //添加过滤器
                 .addFilterBefore(
-                        new StatelessPermitFilter(CommonConstants.COOKIE_NAME_ADMIN),
+                        new StatelessPermitFilter(CommonConstant.COOKIE_NAME_ADMIN),
                         UsernamePasswordAuthenticationFilter.class
                 )
                 //关闭csrf //允许跨域

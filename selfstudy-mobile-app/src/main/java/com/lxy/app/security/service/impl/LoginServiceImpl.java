@@ -1,11 +1,11 @@
 package com.lxy.app.security.service.impl;
 
 import com.lxy.app.security.service.LoginService;
-import com.lxy.common.constant.ConfigConstants;
+import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.bo.R;
 import com.lxy.common.security.bo.StatelessUser;
 import com.lxy.common.redis.service.CommonRedisService;
-import com.lxy.common.redis.util.RedisKeyUtil;
+import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.util.JsonWebTokenUtil;
 import io.jsonwebtoken.Claims;
@@ -59,10 +59,10 @@ public class LoginServiceImpl implements LoginService {
         String token = JsonWebTokenUtil.getJwtStr(userId, device, userType);
         principal.setToken(token);
         //一个号在线数
-        int onlineNum = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstants.APP_HAS_NUM));
+        int onlineNum = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.APP_HAS_NUM));
         //在线时长
-        int endDay = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstants.APP_LOGIN_TIME));
-        String key = RedisKeyUtil.getLoginStatus(userId);
+        int endDay = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.APP_LOGIN_TIME));
+        String key = RedisKeyConstant.getLoginStatus(userId);
         // 登录状态持久化
         commonRedisService.loginStatusToRedisUser(key,principal, endDay);
         //控制一个账号在线数
@@ -80,7 +80,7 @@ public class LoginServiceImpl implements LoginService {
             e.printStackTrace();
         }
         if (userId != -1){
-            String key = RedisKeyUtil.getLoginStatus(userId);
+            String key = RedisKeyConstant.getLoginStatus(userId);
             //移除登录状态
             commonRedisService.removeInRedisUser(key,token);
             SecurityContextHolder.clearContext();

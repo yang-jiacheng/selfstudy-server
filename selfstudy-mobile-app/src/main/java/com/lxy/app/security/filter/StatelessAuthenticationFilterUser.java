@@ -1,10 +1,10 @@
 package com.lxy.app.security.filter;
 
-import com.lxy.common.constant.CommonConstants;
-import com.lxy.common.constant.ConfigConstants;
+import com.lxy.common.constant.CommonConstant;
+import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.security.bo.StatelessUser;
 import com.lxy.common.redis.service.CommonRedisService;
-import com.lxy.common.redis.util.RedisKeyUtil;
+import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.security.CustomHttpServletRequestWrapper;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.util.JsonWebTokenUtil;
@@ -47,7 +47,7 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
         String msg = "";
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstants.COOKIE_NAME_APP);
+        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstant.COOKIE_NAME_APP);
         if (accessToken == null){
             msg = "token未获取到";
             logger.warn(msg);
@@ -67,10 +67,10 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
             throw new InsufficientAuthenticationException(msg);
         }
         //一个号在线数
-        int onlineNum = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstants.APP_HAS_NUM));
+        int onlineNum = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.APP_HAS_NUM));
         //在线时长
-        int endDay = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstants.APP_LOGIN_TIME));
-        String key = RedisKeyUtil.getLoginStatus(userId);
+        int endDay = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.APP_LOGIN_TIME));
+        String key = RedisKeyConstant.getLoginStatus(userId);
         //控制一个账号在线数
         StatelessUser loginStatus = commonRedisService.controlLoginNumUser(key,  onlineNum, endDay,accessToken);
         if (loginStatus == null){

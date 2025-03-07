@@ -3,7 +3,7 @@ package com.lxy.common.service;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import com.lxy.common.config.properties.CustomProperties;
-import com.lxy.common.constant.ConfigConstants;
+import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.bo.R;
 import com.lxy.common.util.FileUtil;
 import com.lxy.common.util.ImgConfigUtil;
@@ -55,7 +55,7 @@ public class ResourcesService {
 
                 in = multipartFile.getInputStream();
                 if (ImgConfigUtil.isImage(fileName)){
-                    int size = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstants.COMPRESSION_SIZE));
+                    int size = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.COMPRESSION_SIZE));
                     if (multipartFile.getSize() >= 1024L * size){
                         //压缩图片
                         in = ImgConfigUtil.uploadImageReStream(in);

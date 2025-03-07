@@ -2,7 +2,7 @@ package com.lxy.app.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lxy.app.security.service.LoginService;
-import com.lxy.common.constant.CommonConstants;
+import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.bo.R;
 import com.lxy.common.po.User;
 import com.lxy.common.service.PhoneCodeService;
@@ -105,7 +105,7 @@ public class TokenController {
      */
     @PostMapping("/logout")
     public R<Object> logout(HttpServletRequest request){
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstants.COOKIE_NAME_APP);
+        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstant.COOKIE_NAME_APP);
         loginService.logout(accessToken);
         return R.ok();
     }

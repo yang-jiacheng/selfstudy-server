@@ -2,17 +2,14 @@ package com.lxy.admin.security.filter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson2.JSON;
-import com.lxy.common.constant.CommonConstants;
-import com.lxy.common.constant.ConfigConstants;
-import com.lxy.common.security.OnlineStatusService;
+import com.lxy.common.constant.CommonConstant;
+import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.security.bo.StatelessAdmin;
-import com.lxy.common.redis.util.RedisKeyUtil;
+import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.security.CustomHttpServletRequestWrapper;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.RedisService;
-import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.util.LogUtil;
 import com.lxy.common.util.WebUtil;
@@ -32,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Description: TODO
@@ -62,7 +58,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
         String msg = "";
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstants.COOKIE_NAME_ADMIN);
+        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstant.COOKIE_NAME_ADMIN);
 
         if (accessToken == null){
             logger.error("token未获取到");
@@ -80,10 +76,10 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
             return;
         }
         //一个号在线数
-        int onlineNum = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstants.ADMIN_HAS_NUM));
+        int onlineNum = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.ADMIN_HAS_NUM));
         //在线时长
-        int endDay = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstants.ADMIN_LOGIN_TIME));
-        String key = RedisKeyUtil.getAdminLoginStatus(userId);
+        int endDay = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.ADMIN_LOGIN_TIME));
+        String key = RedisKeyConstant.getAdminLoginStatus(userId);
         //控制一个账号在线数
         StatelessAdmin loginStatus = controlLoginNum(key,  onlineNum, endDay,accessToken);
         if (loginStatus == null){

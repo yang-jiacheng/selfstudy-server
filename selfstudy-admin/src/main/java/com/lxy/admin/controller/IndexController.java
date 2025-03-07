@@ -1,8 +1,12 @@
 package com.lxy.admin.controller;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import com.lxy.admin.security.util.AdminIdUtil;
+import com.lxy.common.bo.R;
+import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.po.Feedback;
 import com.lxy.common.po.User;
 import com.lxy.common.redis.service.CommonRedisService;
@@ -12,6 +16,7 @@ import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -21,9 +26,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,8 +41,10 @@ public class IndexController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Resource
-    private Producer captchaProducer;
+    @Resource(name = "captchaProducerMath")
+    private Producer captchaProducerMath;
+
+
     @Resource
     private RedisService redisService;
 
@@ -97,31 +102,29 @@ public class IndexController {
         return "error/404";
     }
 
-    @GetMapping("/Kaptcha")
-    public void getKaptchaImage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setDateHeader("Expires", 0);
-        // Set standard HTTP/1.1 no-cache headers.
-        resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
-        // Set IE extended HTTP/1.1 no-cache headers (use addHeader).
-        resp.addHeader("Cache-Control", "post-check=0, pre-check=0");
-        // Set standard HTTP/1.0 no-cache header.
-        resp.setHeader("Pragma", "no-cache");
-        // return a jpeg
-        resp.setContentType("image/jpeg");
-        // create the text for the image
-        String capText = captchaProducer.createText();
-        HttpSession session = req.getSession();
-        session.setAttribute(Constants.KAPTCHA_SESSION_KEY,capText);
-        // create the image with the text
-        BufferedImage bi = captchaProducer.createImage(capText);
-        ServletOutputStream out = resp.getOutputStream();
-        // write the data out
-        ImageIO.write(bi, "jpg", out);
-        try {
-            out.flush();
-        } finally {
-            out.close();
+    @PostMapping("/Kaptcha")
+    @ResponseBody
+    public R<Map<String, Object>> getKaptchaImage()  {
+        Map<String, Object> map = new HashMap<>(2);
+        String uuid = IdUtil.simpleUUID();
+        String verifyKey = RedisKeyConstant.getMathCodeKey(uuid);
+
+        String capText = captchaProducerMath.createText();
+        String capStr = capText.substring(0, capText.lastIndexOf("@"));
+        String code = capText.substring(capText.lastIndexOf("@") + 1);
+        BufferedImage image = captchaProducerMath.createImage(capStr);
+        //验证码存到redis
+        redisService.setObject(verifyKey, code, 120L, TimeUnit.SECONDS);
+        // 转换流信息写出
+        try (FastByteArrayOutputStream os = new FastByteArrayOutputStream()) {
+            ImageIO.write(image, "jpg", os);
+            map.put("uuid", uuid);
+            map.put("img", Base64.encode(os.toByteArray()));
+            return R.ok(map);
+        } catch (IOException e) {
+            return R.fail("验证码生成失败");
         }
+
     }
 
 }

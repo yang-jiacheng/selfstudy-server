@@ -16,6 +16,7 @@
     transition: all .3s;
     opacity: 0;
     z-index: 9999;
+    font-size: 13px;
 }
 
 /* 动画效果 */

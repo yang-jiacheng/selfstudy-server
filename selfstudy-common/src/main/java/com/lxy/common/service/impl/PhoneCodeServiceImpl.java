@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.lxy.common.constant.ConfigConstants;
+import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.po.PhoneCode;
 import com.lxy.common.mapper.PhoneCodeMapper;
 import com.lxy.common.redis.service.CommonRedisService;
@@ -12,7 +12,7 @@ import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.PhoneCodeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.util.DateCusUtil;
-import com.lxy.common.redis.util.RedisKeyUtil;
+import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.util.SmsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,8 +45,8 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
     public boolean checkPhone(String phone) {
         boolean flag = false;
 
-        int maxCount = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstants.PHONE_CODE_NUM));
-        String key = RedisKeyUtil.getPhoneSms(phone);
+        int maxCount = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.PHONE_CODE_NUM));
+        String key = RedisKeyConstant.getPhoneSms(phone);
         String value = commonRedisService.getString(key);
         int num = 0 ;
         if (value != null){
@@ -68,7 +68,7 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
             PhoneCode phoneCode = new PhoneCode(phone, code,0, now, offsetMinute);
             this.save(phoneCode);
             //添加发送次数
-            String key = RedisKeyUtil.getPhoneSms(phone);
+            String key = RedisKeyConstant.getPhoneSms(phone);
             String value = commonRedisService.getString(key);
             int num = 0 ;
             if (value != null){
