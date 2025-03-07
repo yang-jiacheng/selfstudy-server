@@ -1,12 +1,15 @@
 package com.lxy.common.service;
 
 
+import cn.hutool.core.collection.CollUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.StringRedisConnection;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -82,33 +85,31 @@ public class RedisService {
         logger.info("缓存Hash类型数据成功, key:{}, hKey:{}", key, hKey);
     }
 
-    /**
-     * 批量缓存
-     * @author jiacheng yang.
-     * @since 2025/03/06 15:22
-     * @param timeout 超时时间 -1表示永久
-     */
-    public void setStringBatch(final Map<String, String> map, final Long timeout) {
+    public <T> void setObjectBatch(final Map<String, T> map, final Long timeout, final TimeUnit timeUnit) {
         int batchSize = 1000; // 每批次处理 1000 个 Key
         List<String> keys = new ArrayList<>(map.keySet());
+        RedisSerializer keySerializer = redisTemplate.getKeySerializer();
+        RedisSerializer valueSerializer = redisTemplate.getValueSerializer();
 
-        for (int i = 0; i < keys.size(); i += batchSize) {
-            List<String> batchKeys = keys.subList(i, Math.min(i + batchSize, keys.size()));
-            Map<String, String> batchMap = batchKeys.stream()
-                    .collect(Collectors.toMap(k -> k, map::get));
+        for (int i = 0; i < keys.size();  i += batchSize) {
+            List<String> batchKeys = keys.subList(i,  Math.min(i  + batchSize, keys.size()));
+            Map<String, T> batchMap = batchKeys.stream()
+                    .collect(Collectors.toMap(k  -> k, map::get));
 
-            stringRedisTemplate.executePipelined((RedisCallback<String>) connection -> {
-                StringRedisConnection stringConn = (StringRedisConnection) connection;
-                batchMap.forEach((key, value) -> {
-                    stringConn.set(key, value);
+            redisTemplate.executePipelined((RedisCallback<Object>)  connection -> {
+                for (Map.Entry<String, T> entry : batchMap.entrySet())  {
+                    byte[] keyBytes = keySerializer.serialize(entry.getKey());
+                    byte[] valueBytes = valueSerializer.serialize(entry.getValue());
+                    connection.set(keyBytes,  valueBytes);
                     if (timeout != null && timeout > 0) {
-                        stringConn.expire(key, timeout);
+                        long timeoutSeconds = timeUnit.toSeconds(timeout);
+                        connection.expire(keyBytes,  timeoutSeconds);
                     }
-                });
+                }
                 return null;
             });
         }
-        logger.info("批量缓存成功");
+        logger.info(" 批量缓存对象成功");
     }
 
     /**
@@ -129,6 +130,7 @@ public class RedisService {
         Object value = operation.get(key);
         return clazz.cast(value);
     }
+
 
     /**
      * 获得缓存的list对象

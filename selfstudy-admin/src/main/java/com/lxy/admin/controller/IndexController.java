@@ -58,33 +58,12 @@ public class IndexController {
     @GetMapping("/permitNeed")
     @ResponseBody
     public String permitNeed() {
-        Feedback feedback = new Feedback();
-        feedback.setId(123);
-        feedback.setContent("zfdsafdsafdsa你好啊");
-        feedback.setPic("测试");
-        feedback.setCreateTime(new Date());
+        int userId = AdminIdUtil.getAdminId();
+        throw new IndexOutOfBoundsException("permitNeed");
 
-
-        List<Feedback> feedbackList = new ArrayList<>();
-        feedbackList.add(feedback);
-
-        redisService.setObject("feedback", feedback, 120L, TimeUnit.SECONDS);
-        redisService.setObject("feedbackList", JsonUtil.toJson(feedbackList), -1L, TimeUnit.SECONDS);
-        redisService.setList("feedbackList222", feedbackList);
-        redisService.setHashValue("feedbackHash", "测试1", feedback);
-
-        redisService.setObject("feedback33", feedbackList, 120L, TimeUnit.SECONDS);
-
-        Feedback feedback1 = redisService.getObject("feedback", Feedback.class);
-        List<Feedback> feedbackList2 = redisService.getList("feedbackList222");
-        List<Feedback> feedbackList1 = JsonUtil.getListType(redisService.getObject("feedbackList", String.class), Feedback.class);
-        Feedback hashValue = redisService.getHashValue("feedbackHash", "测试1", Feedback.class);
-        ArrayList<String> strings = new ArrayList<>();
-        strings.add("测试1");
-        List<Feedback> hashValueBatch = redisService.getHashValueBatch("feedbackHash", strings, Feedback.class);
-
-        List<Feedback> feedback33 = redisService.getObject("feedback33", ArrayList.class);
-        throw new RuntimeException("permitNeed");
+//
+//
+//        return "permitNeed";
     }
 
     @RequestMapping("/login")
@@ -102,6 +81,11 @@ public class IndexController {
         return "error/404";
     }
 
+    /**
+     * 验证码生成
+     * @author jiacheng yang.
+     * @since 2025/03/07 15:14
+     */
     @PostMapping("/Kaptcha")
     @ResponseBody
     public R<Map<String, Object>> getKaptchaImage()  {

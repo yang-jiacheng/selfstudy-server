@@ -5,6 +5,7 @@ import com.lxy.common.po.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.Date;
 
@@ -16,7 +17,14 @@ import java.util.Date;
  */
 public class StatelessUser implements UserDetails {
 
-    private User userInfo;
+    @Serial
+    private static final long serialVersionUID = 6565570798263006714L;
+
+    private Integer userId;
+
+    private String password;
+
+    private String username;
 
     private String token;
 
@@ -29,16 +37,26 @@ public class StatelessUser implements UserDetails {
     public StatelessUser() {
     }
 
-    public StatelessUser(User userInfo) {
-        this.userInfo = userInfo;
+    public StatelessUser(Integer userId, String password, String username) {
+        this.userId = userId;
+        this.password = password;
+        this.username = username;
     }
 
-    public User getUserInfo() {
-        return userInfo;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUserInfo(User userInfo) {
-        this.userInfo = userInfo;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getToken() {
@@ -72,12 +90,12 @@ public class StatelessUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.userInfo.getPassword();
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return this.userInfo.getPhone();
+        return this.username;
     }
 
     @Override

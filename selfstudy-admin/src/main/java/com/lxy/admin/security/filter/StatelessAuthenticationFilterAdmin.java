@@ -62,7 +62,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
 
         if (accessToken == null){
             logger.error("token未获取到");
-            WebUtil.renderRedirect(response,"/login");
+            needLogin(response);
             return;
         }
         //解析token
@@ -72,7 +72,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
             userId = (Integer) claims.get("userId");
         }catch (Exception e){
             logger.error("token解析失败",e);
-            WebUtil.renderRedirect(response,"/login");
+            needLogin(response);
             return;
         }
         //一个号在线数
@@ -84,7 +84,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         StatelessAdmin loginStatus = controlLoginNum(key,  onlineNum, endDay,accessToken);
         if (loginStatus == null){
             logger.error("无法识别的登录状态");
-            WebUtil.renderRedirect(response,"/login");
+            needLogin(response);
             return;
         }
 
@@ -106,6 +106,11 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
 
         filterChain.doFilter(wrappedRequest, response);
 
+    }
+
+    private void needLogin(HttpServletResponse response) {
+        SecurityContextHolder.clearContext();
+        WebUtil.renderRedirect(response,"/login");
     }
 
     /**

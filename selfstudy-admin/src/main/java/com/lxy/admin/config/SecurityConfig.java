@@ -57,11 +57,11 @@ public class SecurityConfig {
     private final static String[] AUTH_URL = {
             "/home/**","/adminManage/**","/businessConfigManage/**","/classifyManage/**","/feedBackManage/**",
             "/personalManage/**","/roleManage/**","/studyRecord/**","/userAgreementManage/**","/userManage/**","/versionManage/**",
-            "/resources/upload","/resources/uploadApp","/resources/generateImage","/objectStorageManage/**","/permitNeed"
+            "/resources/upload","/resources/uploadApp","/resources/generateImage","/objectStorageManage/**"
     };
 
     private final static String[] PERMIT_URL = {
-            "/druid/**","/token/**","/upload/**"
+            "/druid/**","/token/**","/upload/**","/permitNeed"
     };
 
     @Bean

@@ -49,9 +49,10 @@
         <appender-ref ref="stdout"/> <!-- 只绑定控制台 -->
     </logger>
 
-    <logger name="org.springframework.security" level="DEBUG" additivity="false">
-        <appender-ref ref="stdout"/>
-    </logger>
+<!--    <logger name="org.springframework.security" level="DEBUG" additivity="false">-->
+<!--        <appender-ref ref="stdout"/>-->
+<!--    </logger>-->
+
     <logger name="com.baomidou.mybatisplus.generator" level="INFO"/>
     <logger name="com.apache.ibatis" level="INFO"/>
     <logger name="org.mybatis.spring" level="INFO"/>

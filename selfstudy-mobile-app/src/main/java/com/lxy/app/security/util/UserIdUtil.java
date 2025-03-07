@@ -2,9 +2,9 @@ package com.lxy.app.security.util;
 
 import com.lxy.common.security.bo.StatelessUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Objects;
 
 /**
  * @Description: TODO
@@ -17,10 +17,14 @@ public class UserIdUtil {
     public static int getUserId(){
         int userId = -1;
         //获取SecurityContextHolder中的用户id
-        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        if (!Objects.isNull(authentication)){
-            StatelessUser principal = (StatelessUser)authentication.getPrincipal();
-            userId = principal.getUserInfo().getId();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null ) {
+            return userId;
+        }
+        if (authentication instanceof UsernamePasswordAuthenticationToken authenticationToken) {
+            StatelessUser principal = (StatelessUser) authenticationToken.getPrincipal();
+            userId = principal.getUserId();
+
         }
         return userId;
     }

@@ -3,6 +3,7 @@ package com.lxy.app.security.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lxy.common.security.bo.StatelessUser;
 import com.lxy.common.po.User;
+import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,7 +40,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (Objects.isNull(user)){
             throw new RuntimeException("Wrong username ！");
         }
+        //不用他的编码器 密码就必须加个前缀，新版的spring security要求，难崩
+        String password = MinePasswordEncoder.sha256 + user.getPassword();
         //封装成StatelessUser对象返回
-        return new StatelessUser(user);
+        return new StatelessUser(user.getId(),password,user.getPhone());
     }
 }

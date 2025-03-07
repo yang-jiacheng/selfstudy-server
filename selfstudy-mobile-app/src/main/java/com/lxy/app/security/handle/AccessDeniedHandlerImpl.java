@@ -17,6 +17,7 @@ import java.io.IOException;
  * 授权过程的异常会进这里处理
  */
 
+@Deprecated
 @Component
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 

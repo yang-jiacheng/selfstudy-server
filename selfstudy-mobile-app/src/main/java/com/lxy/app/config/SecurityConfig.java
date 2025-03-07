@@ -9,6 +9,7 @@ import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.security.filter.StatelessPermitFilter;
 import com.lxy.common.service.BusinessConfigService;
+import com.lxy.common.service.RedisService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -45,18 +46,99 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig  {
 
+    @Resource
+    private UserDetailsServiceImpl userDetailsService;
+    @Resource
+    private BusinessConfigService businessConfigService;
+    @Resource
+    private RedisService redisService;
+
+
     private final static String[] PERMIT_URL = {
-            "/webjars/**","/v2/**","/api/**","/csrf", "/static/**", "/druid/**","/","/token/**","/upload/**",
-            "/userAgreement/**","/personalCenter/updatePassword","/version/**","/permitNeed","/error"
+            "/druid/**","/","/token/**","/upload/**",
+            "/userAgreement/**","/personalCenter/updatePassword","/version/**","/permitNeed"
     };
 
     private final static String[] AUTH_URL = {
             "/catalog/**","/feedBack/**","/home/**","/personalCenter/getUserInfo","/personalCenter/updateUserInfo",
             "/personalCenter/getUserInfoById","/studyRecord/**","/studyStatistics/**",
-            "/error","/resources/upload","/resources/uploadApp","/resources/generateImage","/authNeed"
+            "/resources/upload","/resources/uploadApp","/resources/generateImage","/authNeed"
     };
 
-    static CorsConfigurationSource configurationSource() {
+    @Bean
+    @Order(1)
+    public SecurityFilterChain securityFilterChainAuth(HttpSecurity http) throws Exception {
+        http
+                // 会话管理（无状态）
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // securityMatcher 限定此过滤器链仅处理 AUTH_URL 的请求
+                .securityMatcher(AUTH_URL)
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().authenticated())
+                .addFilterBefore(
+                        new StatelessAuthenticationFilterUser(businessConfigService, redisService),
+                        UsernamePasswordAuthenticationFilter.class
+                )
+
+//                // 配置异常处理
+//                .exceptionHandling(exception -> exception
+//                        .authenticationEntryPoint(new AuthenticationEntryPointUserImpl())
+//                        .accessDeniedHandler(new AccessDeniedHandlerImpl()))
+                //关闭csrf //允许跨域
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(configurationSource()))
+                //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain securityFilterChainPermit(HttpSecurity http) throws Exception {
+        http
+                // 会话管理（无状态）
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // securityMatcher 限定此过滤器链仅处理 PERMIT_URL 的请求
+                .securityMatcher(PERMIT_URL)
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll())
+                //添加过滤器
+                .addFilterBefore(
+                        new StatelessPermitFilter(CommonConstant.COOKIE_NAME_APP),
+                        UsernamePasswordAuthenticationFilter.class
+                )
+                //关闭csrf //允许跨域
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(configurationSource()))
+                //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+
+        return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new MinePasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        return builder.build();
+    }
+
+
+    // 配置 CORS
+    @Bean
+    CorsConfigurationSource configurationSource() {
         List<String> list = Collections.singletonList("*");
         List<String> methods = Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS");
         CorsConfiguration corsConfiguration = new CorsConfiguration();
@@ -76,100 +158,5 @@ public class SecurityConfig  {
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
-
-    @Configuration
-    @Order(1)
-    static class AuthWebSecurityConfig {
-
-        @Resource
-        private UserDetailsServiceImpl userDetailsService;
-        @Resource
-        private BusinessConfigService businessConfigService;
-        @Resource
-        private CommonRedisService commonRedisService;
-
-        @Resource
-        private AuthenticationEntryPointUserImpl authenticationEntryPoint;
-
-        @Resource
-        private AccessDeniedHandlerImpl accessDeniedHandler;
-
-        @Bean
-        public PasswordEncoder passwordEncoder(){
-            return new MinePasswordEncoder();
-        }
-
-        @Bean
-        public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-            AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-            builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-            return builder.build();
-        }
-
-        @Bean
-        public SecurityFilterChain authSecurityFilterChain(HttpSecurity http) throws Exception {
-            http
-                    // 会话管理（无状态）
-                    .sessionManagement(session -> session
-                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    )
-                    // securityMatcher 限定此过滤器链仅处理 AUTH_URL 的请求
-                    .securityMatcher(AUTH_URL)
-                    //添加过滤器,
-                    .addFilterBefore(
-                            new StatelessAuthenticationFilterUser(businessConfigService, commonRedisService),
-                            UsernamePasswordAuthenticationFilter.class
-                    )
-                    .authorizeHttpRequests(authorize -> authorize
-                            .requestMatchers(AUTH_URL).authenticated()
-                            .anyRequest().permitAll()
-                    );
-
-            // 配置异常处理
-            http.exceptionHandling(exception -> exception
-                    .authenticationEntryPoint(authenticationEntryPoint)
-                    .accessDeniedHandler(accessDeniedHandler)
-            );
-            //关闭csrf //允许跨域
-            http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(configurationSource()));
-            //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
-            http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
-
-            return http.build();
-        }
-
-    }
-
-    @Configuration
-    @Order(2)
-    static class PermitWebSecurityConfig2 {
-
-        @Bean
-        public SecurityFilterChain permitSecurityFilterChain(HttpSecurity http) throws Exception {
-            http
-                    // 会话管理（无状态）
-                    .sessionManagement(session -> session
-                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    )
-                    // securityMatcher 限定此过滤器链仅处理 PERMIT_URL 的请求
-                    .securityMatcher(PERMIT_URL)
-                    //添加过滤器,
-                    .addFilterBefore(
-                            new StatelessPermitFilter(CommonConstant.COOKIE_NAME_APP),
-                            UsernamePasswordAuthenticationFilter.class
-                    )
-                    .authorizeHttpRequests(authorize -> authorize
-                            .requestMatchers(PERMIT_URL).permitAll()
-                    );
-            //关闭csrf //允许跨域
-            http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(configurationSource()));
-            //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
-            http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
-
-            return http.build();
-        }
-
-    }
-
 
 }

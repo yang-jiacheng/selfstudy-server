@@ -34,13 +34,13 @@ import java.util.Set;
 @Configuration
 public class RedisConfig {
     @Bean
-    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<Object, Object> template = new RedisTemplate();
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
         // 设置RedisTemplate模板的序列化方式
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         template.setKeySerializer(stringRedisSerializer);
-        template.setValueSerializer(stringRedisSerializer);
+        template.setValueSerializer(jackson2JsonRedisSerializer());
         template.setHashKeySerializer(stringRedisSerializer);
         template.setHashValueSerializer(jackson2JsonRedisSerializer());
         return template;
@@ -51,21 +51,24 @@ public class RedisConfig {
 
         // 解决查询缓存转换异常的问题
         ObjectMapper objectMapper = new ObjectMapper();
+        //所有属性可见 允许任何可见性的属性被序列化和反序列化
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        // 在序列化后的数据里保存对象的类信息
+        // 启用默认类型处理，使得在序列化和反序列化时能够处理多态类型。
         objectMapper.activateDefaultTyping(
+                //允许任意子类型
                 LaissezFaireSubTypeValidator.instance ,
+                //对非 final 类型的属性进行类型信息处理
                 ObjectMapper.DefaultTyping.NON_FINAL,
+                //将类型信息作为属性添加到 JSON 中
                 JsonTypeInfo.As.PROPERTY);
 
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-        // 序列化空值失败时不抛异常
+        // 序列化空 Bean时不抛异常
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        // 反序列化不存在的字段失败时不抛异常
+        // 反序列化时忽略未知属性
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 使用JSON格式序列化对象，对缓存数据key和value进行转换
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(objectMapper,Object.class);
-
         return jackson2JsonRedisSerializer;
     }
 
@@ -73,8 +76,8 @@ public class RedisConfig {
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         // 定制缓存数据序列化方式及时效
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                //设置缓存有效期为1小时
-                .entryTtl(Duration.ofHours(1))
+                //设置缓存有效期为永不过期
+                .entryTtl(Duration.ofSeconds(-1L))
                 // 设置 key为string序列化
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 // 设置value为json序列化

@@ -16,6 +16,7 @@ import java.io.IOException;
  * 认证过程的异常会进这里处理
  */
 
+@Deprecated
 @Component
 public class AuthenticationEntryPointUserImpl implements AuthenticationEntryPoint {
     @Override

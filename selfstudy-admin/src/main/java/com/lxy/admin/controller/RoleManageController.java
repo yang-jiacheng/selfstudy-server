@@ -98,7 +98,7 @@ public class RoleManageController {
 
     @PostMapping(value = "/getRoleById", produces = "application/json")
     @ResponseBody
-    public String getRoleById(@RequestParam Integer id){
+    public String getRoleById(@RequestParam("id") Integer id){
         Role role = roleService.getById(id);
         //角色权限
         List<Permission> rolePermission=permissionService.getRolePermission(id);
