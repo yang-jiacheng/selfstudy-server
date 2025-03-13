@@ -19,12 +19,11 @@
     font-size: 13px;
 }
 
-/* 动画效果 */
+/* 消息弹出动画 */
 .el-message.fade-in  {
     opacity: 1;
     transform: translateX(-50%) translateY(10px);
 }
-
 /* 图标通用基础样式 */
 .el-message__icon {
     width: 20px;  /* 根据实际图标尺寸调整 */
@@ -43,7 +42,7 @@
     color: #67c23a;
 }
 .el-message--success .el-message__icon {
-    background-image: url(../images/svg/success.svg);
+    background-image: url(./svg/success.svg);
 
 }
 
@@ -55,7 +54,7 @@
     color: #e6a23c;
 }
 .el-message--warning .el-message__icon {
-    background-image: url(../images/svg/warning.svg);
+    background-image: url(./svg/warning.svg);
 }
 
 
@@ -66,7 +65,7 @@
     color: #f56c6c;
 }
 .el-message--error .el-message__icon {
-    background-image: url(../images/svg/error.svg);
+    background-image: url(./svg/error.svg);
 }
 
 
@@ -77,6 +76,6 @@
     color: #909399;
 }
 .el-message--info .el-message__icon {
-    background-image: url(../images/svg/info.svg);
+    background-image: url(./svg/info.svg);
 }
 

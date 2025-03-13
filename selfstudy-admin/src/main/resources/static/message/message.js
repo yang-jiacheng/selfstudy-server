@@ -30,9 +30,18 @@ class MessageSystem {
     show() {
         document.body.appendChild(this.el);
         this.calcPosition();
+        // setTimeout(() => {
+        //     this.el.classList.add('fade-in');
+        //     MessageSystem.queue.push(this);
+        // }, 50);
         setTimeout(() => {
             this.el.classList.add('fade-in');
             MessageSystem.queue.push(this);
+
+            // **如果消息超出 3 个，移除最早的**
+            if (MessageSystem.queue.length > 3) {
+                MessageSystem.queue[0].destroy();
+            }
         }, 50);
     }
 
