@@ -11,11 +11,11 @@ The platform offers a variety of study modes. Students can create or join public
 
 ### 2. Technology Stack
 
-jdk 1.8+
+jdk 17+
 
-- Core Framework：[Spring Boot 2.5.2](https://github.com/spring-projects/spring-boot)
+- Core Framework：[Spring Boot 3.4.2](https://github.com/spring-projects/spring-boot)
 - Security Framework：[Spring Security](https://github.com/spring-projects/spring-security)
-- ORM Framework：[Mybatis Plus 3.4.2](https://github.com/baomidou/mybatis-plus)
+- ORM Framework：[Mybatis Plus 3.5.7](https://github.com/baomidou/mybatis-plus)
 - Database：[MySQL 8.0](https://github.com/mysql/mysql-server)
 - NoSQL Cache：[Redis 6.2](https://github.com/redis/redis)
 - Message Queue：[RabbitMQ 3.10](https://github.com/rabbitmq/rabbitmq-server)
@@ -34,7 +34,7 @@ jdk 1.8+
 
 | Platform   | selfstudy-server（Backend）                          | StudyRoom（Android）              |
 | ------ | ------------------------------------------------- | ----------------------------------- |
-| github | https://github.com/yang-jiacheng/selfstudy-server | https://gitee.com/oswuhan/StudyRoom |
+| github | https://github.com/yang-jiacheng/selfstudy-server | https://github.com/yang-jiacheng/StudyRoom |
 
 ### 5. Demo Link
 

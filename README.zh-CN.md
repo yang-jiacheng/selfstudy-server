@@ -12,11 +12,11 @@
 
 ### 2. 技术选型
 
-jdk 1.8+
+jdk 17+
 
-- 核心框架：[Spring Boot 2.5.2](https://github.com/spring-projects/spring-boot)
+- 核心框架：[Spring Boot 3.4.2](https://github.com/spring-projects/spring-boot)
 - 安全框架：[Spring Security](https://github.com/spring-projects/spring-security)
-- ORM 框架：[Mybatis Plus 3.4.2](https://github.com/baomidou/mybatis-plus)
+- ORM 框架：[Mybatis Plus 3.5.7](https://github.com/baomidou/mybatis-plus)
 - 数据库：[MySQL 8.0](https://github.com/mysql/mysql-server)
 - NoSQL 缓存：[Redis 6.2](https://github.com/redis/redis)
 - 消息队列：[RabbitMQ 3.10](https://github.com/rabbitmq/rabbitmq-server)
@@ -35,7 +35,7 @@ jdk 1.8+
 
 | 平台   | selfstudy-server（后端）                          | StudyRoom（Android端）              |
 | ------ | ------------------------------------------------- | ----------------------------------- |
-| github | https://github.com/yang-jiacheng/selfstudy-server | https://gitee.com/oswuhan/StudyRoom |
+| github | https://github.com/yang-jiacheng/selfstudy-server | https://github.com/yang-jiacheng/StudyRoom |
 
 ### 5. 演示地址
 
