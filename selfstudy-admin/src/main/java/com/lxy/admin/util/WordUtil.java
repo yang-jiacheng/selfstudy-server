@@ -26,6 +26,8 @@ import javax.xml.transform.stream.StreamSource;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,9 +42,9 @@ public class WordUtil {
 
     private final static Logger LOG = LoggerFactory.getLogger(WordUtil.class);
 
-    private static final String CONVERT_PATH = "/convert/OMML2MML.XSL";
-    private static final String MML2TEX_PATH = "/convert/mml2tex/";
-    private static final String MMLTEX_PATH = "/convert/mml2tex/mmltex.xsl";
+    private static final String CONVERT_PATH = "/opt/convert/OMML2MML.XSL";
+    private static final String MML2TEX_PATH = "/opt/convert/mml2tex/";
+    private static final String MMLTEX_PATH = "/opt/convert/mml2tex/mmltex.xsl";
 
     /**
      * Description: 解析word：文本、图片、表格、数学公式内容
@@ -162,7 +164,7 @@ public class WordUtil {
     /**
      * Description: 上传图片到oss
      * author: jiacheng yang.
-     * Date: 2024/11/16 17:35 
+     * Date: 2024/11/16 17:35
      * Param: [data]
      */
     private static String readImageToOSS(byte[] data) {
@@ -238,23 +240,28 @@ public class WordUtil {
      * Param: [mathml]
      */
     public static String mathMLConvertLatex(String mathml) {
-        //去掉xml的头节点
-        mathml = mathml.substring(mathml.indexOf("?>")+2);
-        //设置依赖文件的路径
+        // 去掉 XML 头节点
+        mathml = mathml.substring(mathml.indexOf("?>") + 2);
+
+        // 设置服务器上的 XSLT 依赖文件路径（MML2TEX_PATH 为服务器的绝对路径）
         URIResolver r = (href, base) -> {
-            InputStream inputStream = WordUtil.class.getResourceAsStream(MML2TEX_PATH + href);
-            return new StreamSource(inputStream);
+            try (InputStream inputStream =Files.newInputStream(Paths.get(MML2TEX_PATH, href))){
+                return new StreamSource(inputStream);
+            } catch (Exception e) {
+                LOG.error("设置服务器上的 XSLT 依赖文件路径失败", e);
+                throw new RuntimeException(e);
+            }
         };
+
+        // 调用转换方法
         String latex = xslConvert(mathml, MMLTEX_PATH, r);
-        if(latex.length() > 1){
+
+        // 清理 LaTeX 输出
+        if (latex.length() > 1) {
             latex = latex.substring(1, latex.length() - 1);
-            if (latex.contains("\n")){
-                latex = latex.replace("\n", "");
-            }
-            if (latex.contains("\r")){
-                latex=latex.replace("\r","");
-            }
+            latex = latex.replace("\n", "").replace("\r", "");
         }
+
         return latex;
     }
 
@@ -281,19 +288,20 @@ public class WordUtil {
         if(uriResolver != null) {
             tFac.setURIResolver(uriResolver);
         }
-        InputStream asStream = WordUtil.class.getResourceAsStream(xslpath);
-        StreamSource xslSource = new StreamSource(asStream);
-        StringWriter writer = new StringWriter();
-        try {
+        try (InputStream asStream = Files.newInputStream(Paths.get(xslpath))){
+            StreamSource xslSource = new StreamSource(asStream);
+            StringWriter writer = new StringWriter();
             Transformer t = tFac.newTransformer(xslSource);
             Source source = new StreamSource(new StringReader(xml));
             Result result = new StreamResult(writer);
             t.transform(source, result);
+            return writer.getBuffer().toString();
         }catch (Exception e){
             e.printStackTrace();
             LOG.error("xsl转换失败", e);
+            return "";
         }
-        return writer.getBuffer().toString();
+
     }
 
 
