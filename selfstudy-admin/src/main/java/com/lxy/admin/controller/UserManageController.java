@@ -89,7 +89,7 @@ public class UserManageController {
 
     @PostMapping(value = "/getUserById", produces = "application/json")
     @ResponseBody
-    public String getUserById(Integer userId){
+    public String getUserById(@RequestParam(value = "userId") Integer userId){
         User user = userService.getById(userId);
         user.setProfilePath(ImgConfigUtil.joinUploadUrl(user.getProfilePath()));
         return JsonUtil.toJson(new ResultVO(user));
@@ -97,7 +97,7 @@ public class UserManageController {
 
     @PostMapping(value = "/saveUser", produces = "application/json")
     @ResponseBody
-    public String saveUser(String userJson){
+    public String saveUser(@RequestParam(value = "userJson")String userJson){
         User user = JSON.parseObject(userJson, User.class);
         if (user == null){
             return JsonUtil.toJson(new ResultVO(-1,"数据有误！"));
@@ -116,7 +116,7 @@ public class UserManageController {
 
     @PostMapping(value = "/removeUserByIds", produces = "application/json")
     @ResponseBody
-    public String removeUserByIds(String jsonIds){
+    public String removeUserByIds(@RequestParam(value = "jsonIds")String jsonIds){
         List<Integer> ids = JsonUtil.getListType(jsonIds, Integer.class);
         if (CollUtil.isEmpty(ids)){
             return JsonUtil.toJson(new ResultVO(-1,"数据有误！"));
@@ -140,7 +140,7 @@ public class UserManageController {
     }
 
     @GetMapping(value = "/downloadMaterial" ,name = "下载用户导入模板")
-    public void downloadMaterial(HttpServletResponse response,  String fileName){
+    public void downloadMaterial(HttpServletResponse response,@RequestParam(value = "fileName") String fileName){
         OssUtil.downloadOssFile(response,fileName);
     }
 
@@ -154,22 +154,5 @@ public class UserManageController {
         return JsonUtil.toJson(new ResultVO(errorList));
     }
 
-    @GetMapping("/hello")
-    @ResponseBody
-    public String hello(){
-        List<User> list = new ArrayList<>(100);
-        User user = null;
-        for (int i = 0; i < 100; i++) {
-            user = new User();
-            user.setPassword("8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92");
-            user.setName("测试学员" + i+1);
-            user.setPhone(PhoneUtil.createMobile(1));
-            user.setRegistType(2);
-            user.setAddress("测试地址"+ i+1);
-            list.add(user);
-        }
-        userService.saveBatch(list);
-        return "ok";
-    }
 
 }

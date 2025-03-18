@@ -46,7 +46,7 @@ public class BusinessConfigManageController {
 
     @PostMapping(value = "/updateBusiness" , produces = "application/json")
     @ResponseBody
-    public R<Object> updateBusiness(@RequestParam Integer id, @RequestParam String value){
+    public R<Object> updateBusiness(@RequestParam("id") Integer id, @RequestParam("value") String value){
         businessConfigService.updateBusinessConfigById(id,value);
         return R.ok();
     }

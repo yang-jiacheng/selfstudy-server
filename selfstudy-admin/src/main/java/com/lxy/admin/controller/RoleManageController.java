@@ -88,7 +88,7 @@ public class RoleManageController {
 
     @PostMapping(value = "/removeRoleById", produces = "application/json")
     @ResponseBody
-    public String removeRoleById(@RequestParam Integer id){
+    public String removeRoleById(@RequestParam("id") Integer id){
         rolePermissionRelateService.removeCachePermissionInRole(Collections.singletonList(id));
         roleService.removeById(id);
         rolePermissionRelateService.remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId,id));
@@ -160,7 +160,7 @@ public class RoleManageController {
 
     @PostMapping(value = "/getPermissionById", produces = "application/json")
     @ResponseBody
-    public String getPermissionById(@RequestParam Integer id){
+    public String getPermissionById(@RequestParam("id") Integer id){
         Permission permission = permissionService.getById(id);
         return JsonUtil.toJson(new ResultVO(permission));
     }

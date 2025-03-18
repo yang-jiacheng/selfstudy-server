@@ -57,14 +57,14 @@ public class FeedBackManageController {
 
     @PostMapping(value = "/removeFeedBackById" , produces = "application/json")
     @ResponseBody
-    public String removeFeedBackById(@RequestParam Integer id){
+    public String removeFeedBackById(@RequestParam("id") Integer id){
         feedbackService.removeById(id);
         return JsonUtil.toJson(new ResultVO());
     }
 
     @PostMapping(value = "/replyFeedBackById" , produces = "application/json")
     @ResponseBody
-    public String replyFeedBackById(@RequestParam Integer id,@RequestParam String reply){
+    public String replyFeedBackById(@RequestParam("id") Integer id,@RequestParam("reply") String reply){
         int userId = AdminIdUtil.getAdminId();
         Feedback feedback = new Feedback();
         feedback.setId(id);

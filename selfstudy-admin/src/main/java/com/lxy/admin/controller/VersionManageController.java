@@ -61,7 +61,7 @@ public class VersionManageController {
 
     @PostMapping("/saveVersion")
     @ResponseBody
-    public String saveVersion(String versionJson){
+    public String saveVersion(@RequestParam("versionJson") String versionJson){
         Version version = JSON.parseObject(versionJson, Version.class);
         if (version == null){
             return JsonUtil.toJson(new ResultVO(-1,"数据有误！"));

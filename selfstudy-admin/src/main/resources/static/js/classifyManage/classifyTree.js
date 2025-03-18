@@ -239,9 +239,10 @@ function getCatalogById(id,level){
         var buttonStr = "";
         buttonStr += getCatalogBtn()
         str += getCourseEditArea(buttonStr);
+        $("#catalogArea").html(str);
+        form.render();
     })
-    $("#catalogArea").html(str);
-    form.render();
+
 }
 
 //获取图书馆根据id
@@ -261,12 +262,13 @@ function getClassifyById(id){
         var buttonStr = "";
         buttonStr += getBtn()
         str += getCourseEditArea(buttonStr);
+        $("#catalogArea").html(str);
+        initLayUpload("iconPathBtn","iconPath","iconPathHid",upload)
+        initLayUpload("coverPathBtn","coverPathPath","coverPathHid",upload)
+        form.render();
     })
 
-    $("#catalogArea").html(str);
-    initLayUpload("iconPathBtn","iconPath","iconPathHid",upload)
-    initLayUpload("coverPathBtn","coverPathPath","coverPathHid",upload)
-    form.render();
+
 }
 
 function addClassify() {
@@ -348,14 +350,16 @@ function updateCatalog(){
     var parentId = $("#parentId").val();
     var personCount = $("#personCount").val();
 
-    var obj = {"name": name,"id": id,"sort": sort,"level": level,"classifyId": classifyId,"parentId": parentId,"personCount": personCount}
+    var obj = {
+        "name": name,"id": id,"sort": sort,"level": level,"classifyId": classifyId,"parentId": parentId,"personCount": personCount
+    }
 
     ajaxPost('./saveCatalog',obj,function (result) {
-        if (result.code === -1) {
-            layer.msg(result.msg, {icon: 2});
-        } else {
+        if (result.code === 0) {
             layer.msg("修改成功！", {icon: 1})
             getTree(null)
+        } else {
+            layer.msg(result.msg, {icon: 2});
         }
     })
 

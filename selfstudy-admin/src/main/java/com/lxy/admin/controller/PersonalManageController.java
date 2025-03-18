@@ -49,10 +49,10 @@ public class PersonalManageController {
 
     @PostMapping(value = "/updatePersonal", produces = "application/json")
     @ResponseBody
-    public String updatePersonal(@RequestParam Integer id, @RequestParam String name,
-                                 @RequestParam(required = false) String oldPassword,
-                                 @RequestParam(required = false) String newPassword,
-                                 @RequestParam String profilePath) {
+    public String updatePersonal(@RequestParam("id") Integer id, @RequestParam("name") String name,
+                                 @RequestParam(value = "oldPassword", required = false) String oldPassword,
+                                 @RequestParam(value = "newPassword", required = false) String newPassword,
+                                 @RequestParam("profilePath") String profilePath) {
         AdminInfo adminInfo = adminInfoService.getById(id);
 
         String password = adminInfo.getPassword();

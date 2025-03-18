@@ -58,7 +58,7 @@ public class ObjectStorageManageController {
 
     @PostMapping(value = "/deleteObjectStorage" , produces = "application/json")
     @ResponseBody
-    public R<Object> deleteObjectStorage(Integer id){
+    public R<Object> deleteObjectStorage(@RequestParam("id") Integer id){
         objectStorageService.deleteObjectStorage(id);
         return R.ok();
     }

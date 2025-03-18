@@ -12,10 +12,7 @@ import com.lxy.common.vo.ZtreeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
@@ -59,14 +56,14 @@ public class ClassifyManageController {
 
     @PostMapping(value = "/getClassifyById", produces = "application/json")
     @ResponseBody
-    public String getClassifyById(Integer id){
+    public String getClassifyById(@RequestParam("id") Integer id){
         Classify classify = classifyService.getClassifyById(id);
         return JsonUtil.toJson(new ResultVO(classify));
     }
 
     @PostMapping(value = "/updateClassify", produces = "application/json")
     @ResponseBody
-    public String updateClassify(String mainJson){
+    public String updateClassify(@RequestParam("mainJson")String mainJson){
         ResultVO resultVO = classifyService.updateClassify(mainJson);
         classifyService.removeClassifyCache();
         return JsonUtil.toJson(resultVO);
@@ -74,7 +71,7 @@ public class ClassifyManageController {
 
     @PostMapping(value = "/removeClassify", produces = "application/json")
     @ResponseBody
-    public String removeClassify(Integer id){
+    public String removeClassify(@RequestParam("id")Integer id){
         classifyService.removeById(id);
         catalogService.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getClassifyId,id));
         classifyService.removeClassifyCache();
@@ -83,7 +80,7 @@ public class ClassifyManageController {
 
     @PostMapping(value = "/removeCatalog", produces = "application/json")
     @ResponseBody
-    public String removeCatalog(Integer id){
+    public String removeCatalog(@RequestParam("id")Integer id){
         catalogService.removeById(id);
         catalogService.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getParentId,id));
         return JsonUtil.toJson(new ResultVO());
@@ -91,7 +88,7 @@ public class ClassifyManageController {
 
     @PostMapping(value = "/getCatalogById", produces = "application/json")
     @ResponseBody
-    public String getCatalogById(Integer id){
+    public String getCatalogById(@RequestParam("id")Integer id){
         Catalog catalog = catalogService.getById(id);
         return JsonUtil.toJson(new ResultVO(catalog));
     }

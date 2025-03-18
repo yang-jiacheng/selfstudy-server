@@ -55,16 +55,6 @@ public class IndexController {
         return "hello selfstudy-admin !";
     }
 
-    @GetMapping("/permitNeed")
-    @ResponseBody
-    public String permitNeed() {
-        int userId = AdminIdUtil.getAdminId();
-        throw new IndexOutOfBoundsException("permitNeed");
-
-//
-//
-//        return "permitNeed";
-    }
 
     @RequestMapping("/login")
     public String login() {

@@ -4,8 +4,8 @@
     <property name="LOG_HOME" value="/java/logs/${APP_NAME}"/>
 
     <!-- 启用 ANSI 颜色输出（兼容终端） -->
-    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
-    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="clr" class="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" class="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
 
     <!-- 控制台输出 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">

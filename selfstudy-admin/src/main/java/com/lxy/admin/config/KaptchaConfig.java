@@ -3,16 +3,22 @@ package com.lxy.admin.config;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
+import com.lxy.common.util.FontUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.awt.*;
 import java.util.Properties;
 
 import static com.google.code.kaptcha.Constants.*;
 
 @Configuration
 public class KaptchaConfig {
-
+    /**
+     * java.lang.RuntimeException: Fontconfig head is null, check your fonts or fonts configuration
+     * 报错解决方案：
+     * yum install -y fontconfig
+     */
 
     @Bean(name = "defaultProducer")
     public DefaultKaptcha defaultKaptcha(){

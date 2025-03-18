@@ -76,7 +76,7 @@ public class AdminManageController {
 
     @PostMapping(value ="/getAdminInfoById", produces = "application/json")
     @ResponseBody
-    public R<Object> getAdminInfoById(@RequestParam Integer id){
+    public R<Object> getAdminInfoById(@RequestParam("id") Integer id){
         AdminInfo adminInfo = adminInfoService.getById(id);
         adminInfo.setPassword(null);
         List<AdminRoleRelate> roleRelates = adminRoleRelateService.list(new LambdaQueryWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId, id));
@@ -132,7 +132,7 @@ public class AdminManageController {
 
     @PostMapping(value ="/disabledAdminInfo", produces = "application/json")
     @ResponseBody
-    public R<Object> disabledAdminInfo(@RequestParam Integer id,@RequestParam Integer status){
+    public R<Object> disabledAdminInfo(@RequestParam("id") Integer id,@RequestParam("status") Integer status){
         LambdaUpdateWrapper<AdminInfo> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(AdminInfo::getId,id).set(AdminInfo::getStatus,status);
         adminInfoService.update(wrapper);
