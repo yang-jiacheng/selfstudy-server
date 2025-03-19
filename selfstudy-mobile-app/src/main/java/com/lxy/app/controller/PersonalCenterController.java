@@ -106,7 +106,7 @@ public class PersonalCenterController {
      * Param: [userId]
      */
     @PostMapping(value = "/getUserInfoById" , produces = "application/json")
-    public R<Object> getUserInfoById(Integer userId){
+    public R<Object> getUserInfoById(@RequestParam(value = "userId") Integer userId){
         User user = userService.getById(userId);
         user.setPassword("");
         user.setProfilePath(ImgConfigUtil.joinUploadUrl(user.getProfilePath()));

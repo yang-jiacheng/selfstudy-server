@@ -59,7 +59,7 @@ public class FeedBackController {
      * Param: [id]
      */
     @PostMapping(value = "/getFeedBackDetail" , produces = "application/json")
-    public R<Object> getFeedBackDetail(Integer id){
+    public R<Object> getFeedBackDetail(@RequestParam(value = "id") Integer id){
         FeedbackVO feedback = feedbackService.getFeedBackDetail(id);
         return R.ok(feedback);
     }
