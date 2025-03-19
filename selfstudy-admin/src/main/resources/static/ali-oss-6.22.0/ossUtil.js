@@ -81,9 +81,8 @@ async function multipartUploadFile(file,type) {
         }
     };
     try {
-        const client = await initOssClient(); // 获取OSS客户端
-
         showProgressOverlay(); // 显示进度条
+        const client = await initOssClient(); // 获取OSS客户端
         // 执行MultipartUpload
         const result = await client.multipartUpload(filePath, file, options);
         // 上传成功后移除进度条
