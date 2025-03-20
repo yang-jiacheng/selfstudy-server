@@ -19,12 +19,17 @@ public class PageDTO implements java.io.Serializable {
 
     private String name;
 
+    private Integer current;
+
     public Integer getPage() {
         return page;
     }
 
     public void setPage(Integer page) {
         this.page = page;
+        if (page != null && limit != null) {
+            current = (page - 1) * limit;
+        }
     }
 
     public Integer getLimit() {
@@ -41,5 +46,9 @@ public class PageDTO implements java.io.Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getCurrent() {
+        return current;
     }
 }
