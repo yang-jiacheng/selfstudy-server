@@ -2,15 +2,13 @@ package com.lxy.common.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
-import com.lxy.common.security.bo.StatelessAdmin;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.security.bo.StatelessUser;
 import com.lxy.common.service.RedisService;
 import com.lxy.common.service.RolePermissionRelateService;
 import com.lxy.common.po.RolePermissionRelate;
 import com.lxy.common.mapper.RolePermissionRelateMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lxy.common.util.JsonUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -56,15 +54,15 @@ public class RolePermissionRelateServiceImpl extends ServiceImpl<RolePermissionR
                 .collect(Collectors.toList());
 
         List<Object> values = redisTemplate.opsForValue().multiGet(keys);
-        if (CollUtil.isEmpty(values)){
+        if (values == null || values.stream().allMatch(Objects::isNull)){
             return;
         }
-        Map<String,List<StatelessAdmin>> map = new HashMap<>(values.size());
+        Map<String,List<StatelessUser>> map = new HashMap<>(values.size());
         for (Object value : values) {
-            List<StatelessAdmin> loginList = (List<StatelessAdmin>)value.getClass().cast(value);
+            List<StatelessUser> loginList = (List<StatelessUser>)value.getClass().cast(value);
             if (CollUtil.isNotEmpty(loginList)){
                 loginList.forEach(lis -> lis.setPermissions(new ArrayList<>()));
-                Integer id = loginList.get(0).getAdminId();
+                Integer id = loginList.get(0).getUserId();
                 map.put(RedisKeyConstant.getAdminLoginStatus(id), loginList);
             }
         }

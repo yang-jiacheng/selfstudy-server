@@ -1,4 +1,4 @@
-package com.lxy.app.config;
+package com.lxy.common.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

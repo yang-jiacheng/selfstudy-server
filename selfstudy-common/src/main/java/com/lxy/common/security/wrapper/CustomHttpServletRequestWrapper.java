@@ -1,8 +1,7 @@
-package com.lxy.common.security;
+package com.lxy.common.security.wrapper;
 
 
 import cn.hutool.core.io.IoUtil;
-import com.lxy.common.security.filter.StatelessPermitFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,12 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
 
-/**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2024/12/28 15:32
- * @Version: 1.0
- */
 public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomHttpServletRequestWrapper.class);

@@ -8,6 +8,7 @@ import com.lxy.common.service.BusinessConfigService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.service.RedisService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper, BusinessConfig> implements BusinessConfigService {
 
+    @Resource
     private RedisService redisService;
 
     @Override

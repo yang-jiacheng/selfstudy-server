@@ -5,7 +5,7 @@ import com.lxy.common.bo.R;
 import com.lxy.common.enums.StudyStatus;
 import com.lxy.common.po.StudyRecord;
 import com.lxy.common.service.StudyRecordService;
-import com.lxy.app.security.util.UserIdUtil;
+import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.vo.StudyRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;

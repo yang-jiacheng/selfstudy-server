@@ -1,8 +1,8 @@
 package com.lxy.admin.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.lxy.admin.security.util.AdminIdUtil;
 import com.lxy.common.po.Feedback;
+import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.vo.FeedbackVO;
 import com.lxy.common.service.FeedbackService;
 import com.lxy.common.util.CommonUtil;
@@ -65,7 +65,7 @@ public class FeedBackManageController {
     @PostMapping(value = "/replyFeedBackById" , produces = "application/json")
     @ResponseBody
     public String replyFeedBackById(@RequestParam("id") Integer id,@RequestParam("reply") String reply){
-        int userId = AdminIdUtil.getAdminId();
+        int userId = UserIdUtil.getUserId();
         Feedback feedback = new Feedback();
         feedback.setId(id);
         feedback.setAdminId(userId);

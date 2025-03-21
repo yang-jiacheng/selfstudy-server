@@ -6,7 +6,7 @@ import com.lxy.common.bo.R;
 import com.lxy.common.po.User;
 import com.lxy.common.service.PhoneCodeService;
 import com.lxy.common.service.UserService;
-import com.lxy.app.security.util.UserIdUtil;
+import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.util.ImgConfigUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

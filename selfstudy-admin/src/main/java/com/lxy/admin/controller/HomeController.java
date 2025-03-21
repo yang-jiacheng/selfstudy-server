@@ -1,7 +1,7 @@
 package com.lxy.admin.controller;
 
-import com.lxy.admin.security.util.AdminIdUtil;
 import com.lxy.common.po.AdminInfo;
+import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.util.ImgConfigUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class HomeController {
 
     @GetMapping("/index")
     public String index(HttpServletRequest request){
-        int adminId = AdminIdUtil.getAdminId();
+        int adminId = UserIdUtil.getUserId();
         AdminInfo adminInfo = adminInfoService.getById(adminId);
         adminInfo.setProfilePath(ImgConfigUtil.joinUploadUrl(adminInfo.getProfilePath()));
         request.setAttribute("username", adminInfo.getUsername());

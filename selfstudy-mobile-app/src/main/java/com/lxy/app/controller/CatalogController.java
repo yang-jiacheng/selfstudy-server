@@ -6,7 +6,7 @@ import com.lxy.common.po.Catalog;
 import com.lxy.common.po.StudyRecord;
 import com.lxy.common.service.CatalogService;
 import com.lxy.common.service.StudyRecordService;
-import com.lxy.app.security.util.UserIdUtil;
+import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.vo.ClassifyDetailVO;
 import com.lxy.common.vo.RoomVO;
 import com.lxy.common.vo.StudyRecordVO;

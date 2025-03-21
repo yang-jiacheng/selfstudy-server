@@ -5,7 +5,7 @@ import com.lxy.common.bo.R;
 import com.lxy.common.po.Feedback;
 import com.lxy.common.vo.FeedbackVO;
 import com.lxy.common.service.FeedbackService;
-import com.lxy.app.security.util.UserIdUtil;
+import com.lxy.common.security.util.UserIdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

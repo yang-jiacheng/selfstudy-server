@@ -1,4 +1,4 @@
-package com.lxy.app.security.util;
+package com.lxy.common.security.util;
 
 import com.lxy.common.security.bo.StatelessUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -7,10 +7,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/02/13 12:27
- * @Version: 1.0
+ * 获取用户id工具类
+ * @author  jiacheng yang.
+ * @since  2023/02/13 12:27
+ * @version  1.0
  */
 public class UserIdUtil {
 

@@ -85,9 +85,9 @@ public class OperationLogAspect {
                 status = 1;
             }
             //操作日志对象
-
+            logger.info("记录操作日志");
         } catch (Exception ex) {
-            logger.error("记录补卡申请日志异常", ex);
+            logger.error("记录操作日志异常", ex);
         }
 
     }

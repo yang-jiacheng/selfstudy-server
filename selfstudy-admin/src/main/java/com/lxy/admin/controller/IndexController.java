@@ -4,13 +4,14 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
-import com.lxy.admin.security.util.AdminIdUtil;
 import com.lxy.common.bo.R;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.po.Feedback;
 import com.lxy.common.po.User;
 import com.lxy.common.service.RedisService;
+import com.lxy.common.service.UserService;
 import com.lxy.common.util.JsonUtil;
+import com.lxy.common.vo.UserRankVO;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,15 +43,12 @@ public class IndexController {
 
     @Resource(name = "captchaProducerMath")
     private Producer captchaProducerMath;
-
-
     @Resource
     private RedisService redisService;
 
     @RequestMapping("/")
     @ResponseBody
     public String index() {
-
         return "hello selfstudy-admin !";
     }
 

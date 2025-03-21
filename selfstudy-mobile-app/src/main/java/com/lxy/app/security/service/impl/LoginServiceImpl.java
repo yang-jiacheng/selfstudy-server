@@ -6,9 +6,9 @@ import com.alibaba.fastjson2.JSON;
 import com.lxy.app.security.service.LoginService;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.bo.R;
-import com.lxy.common.security.bo.StatelessAdmin;
 import com.lxy.common.security.bo.StatelessUser;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.security.serviice.LoginStatusService;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.RedisService;
 import com.lxy.common.util.JsonUtil;
@@ -45,7 +45,7 @@ public class LoginServiceImpl implements LoginService {
     @Resource
     private  AuthenticationManager authenticationManager;
     @Resource
-    private  RedisService redisService;
+    private LoginStatusService loginStatusService;
     @Resource
     private  BusinessConfigService businessConfigService;
 
@@ -73,7 +73,7 @@ public class LoginServiceImpl implements LoginService {
         int endDay = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.APP_LOGIN_TIME));
         String key = RedisKeyConstant.getLoginStatus(userId);
         // 登录状态持久化
-        loginStatusToRedisUser(key,principal, endDay);
+        loginStatusService.loginStatusToRedis(key,principal, endDay);
         return R.ok(token);
     }
 
@@ -89,42 +89,10 @@ public class LoginServiceImpl implements LoginService {
         if (userId != -1){
             String key = RedisKeyConstant.getLoginStatus(userId);
             //移除登录状态
-            removeInRedisUser(key,token);
+            loginStatusService.removeInRedis(key,token);
             SecurityContextHolder.clearContext();
         }
     }
 
-    /**
-     * 登录状态持久化到redis
-     * @param statelessUser 用户信息
-     * @param endDay 过期时长单位天
-     */
-    private void loginStatusToRedisUser(String key, StatelessUser statelessUser, int endDay){
-        Date now = new Date();
-        statelessUser.setLoginTime(now);
-
-        Date end = DateUtil.offsetDay(now, endDay);
-        //设置过期时间
-        statelessUser.setEndTime(end);
-
-        List<StatelessUser> loginList = redisService.getObject(key, ArrayList.class);
-        if (CollUtil.isEmpty(loginList)){
-            loginList = new ArrayList<>(1);
-        }
-        loginList.add(statelessUser);
-        redisService.setObject(key, loginList, -1L, null);
-    }
-
-    private void removeInRedisUser(String key, String token) {
-        List<StatelessUser> loginList = redisService.getObject(key, ArrayList.class);
-        if (CollUtil.isNotEmpty(loginList)){
-            loginList.removeIf(o -> o.getToken().equals(token));
-            if (loginList.isEmpty()){
-                redisService.deleteKey(key);
-            }else {
-                redisService.setObject(key, loginList, -1L, null);
-            }
-        }
-    }
 
 }

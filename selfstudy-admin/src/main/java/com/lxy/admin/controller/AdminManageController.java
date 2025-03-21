@@ -4,11 +4,11 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lxy.admin.security.util.AdminIdUtil;
 import com.lxy.common.bo.R;
 import com.lxy.common.po.AdminInfo;
 import com.lxy.common.po.AdminRoleRelate;
 import com.lxy.common.po.Role;
+import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.service.AdminRoleRelateService;
 import com.lxy.common.service.RolePermissionRelateService;
@@ -69,7 +69,7 @@ public class AdminManageController {
     public LayUiResultVO getAdminInfoList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
                                    @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
                                    @RequestParam(value = "username",required = false) String username){
-        int userId = AdminIdUtil.getAdminId();
+        int userId = UserIdUtil.getUserId();
         Page<AdminInfo> pg = adminInfoService.getAdminInfoList(username, page, limit,userId);
         return new LayUiResultVO((int) pg.getTotal(), pg.getRecords());
     }

@@ -5,6 +5,7 @@ import com.lxy.app.security.service.impl.UserDetailsServiceImpl;
 import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.security.filter.StatelessPermitFilter;
+import com.lxy.common.security.serviice.LoginStatusService;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.RedisService;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +49,7 @@ public class SecurityConfig  {
     @Resource
     private BusinessConfigService businessConfigService;
     @Resource
-    private RedisService redisService;
+    private LoginStatusService loginStatusService;
 
 
     private final static String[] PERMIT_URL = {
@@ -76,14 +77,10 @@ public class SecurityConfig  {
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .addFilterBefore(
-                        new StatelessAuthenticationFilterUser(businessConfigService, redisService),
+                        new StatelessAuthenticationFilterUser(businessConfigService, loginStatusService),
                         UsernamePasswordAuthenticationFilter.class
                 )
 
-//                // 配置异常处理
-//                .exceptionHandling(exception -> exception
-//                        .authenticationEntryPoint(new AuthenticationEntryPointUserImpl())
-//                        .accessDeniedHandler(new AccessDeniedHandlerImpl()))
                 //关闭csrf //允许跨域
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(configurationSource()))

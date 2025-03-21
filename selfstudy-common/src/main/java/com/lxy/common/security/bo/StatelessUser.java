@@ -1,13 +1,18 @@
 package com.lxy.common.security.bo;
 
+import cn.hutool.core.collection.CollUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lxy.common.po.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Description: TODO
@@ -26,6 +31,11 @@ public class StatelessUser implements UserDetails {
 
     private String username;
 
+    private List<String> permissions;
+
+    @JsonIgnore
+    private List<SimpleGrantedAuthority> authorities;
+
     private String token;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
@@ -41,6 +51,21 @@ public class StatelessUser implements UserDetails {
         this.userId = userId;
         this.password = password;
         this.username = username;
+    }
+
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
+        if (CollUtil.isNotEmpty(this.permissions)){
+            this.authorities = this.permissions.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        }else {
+            this.authorities = null;
+        }
     }
 
     public Integer getUserId() {
@@ -85,7 +110,19 @@ public class StatelessUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        if(this.authorities!=null){
+            return this.authorities;
+        }
+        if (CollUtil.isNotEmpty(this.permissions)){
+            this.authorities = this.permissions.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        }
+        return this.authorities;
+    }
+
+    public void setAuthorities(List<SimpleGrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 
     @Override

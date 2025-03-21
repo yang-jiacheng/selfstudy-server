@@ -1,8 +1,8 @@
 package com.lxy.admin.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.lxy.admin.security.util.AdminIdUtil;
 import com.lxy.common.po.AdminInfo;
+import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.util.*;
 import com.lxy.common.vo.ResultVO;
@@ -38,7 +38,7 @@ public class PersonalManageController {
     @PostMapping(value = "/getPersonalById", produces = "application/json")
     @ResponseBody
     public String getPersonalById(){
-        int adminId = AdminIdUtil.getAdminId();
+        int adminId = UserIdUtil.getUserId();
         AdminInfo adminInfo = adminInfoService.getById(adminId);
         if (adminInfo!=null){
             adminInfo.setProfilePath(ImgConfigUtil.joinUploadUrl(adminInfo.getProfilePath()));

@@ -1,4 +1,4 @@
-package com.lxy.admin.config;
+package com.lxy.common.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @Version: 1.0
  */
 @Configuration
-@MapperScan("com.lxy.common.mapper") //设置mapper接口的扫描包
+@MapperScan("com.lxy.**.mapper") //设置mapper接口的扫描包
 public class MybatisPlusConfig {
 
     @Bean

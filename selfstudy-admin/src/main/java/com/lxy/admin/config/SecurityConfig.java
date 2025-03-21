@@ -6,6 +6,7 @@ import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
 import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.security.filter.StatelessPermitFilter;
+import com.lxy.common.security.serviice.LoginStatusService;
 import com.lxy.common.service.AdminInfoService;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.RedisService;
@@ -34,10 +35,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/02/23 21:05
- * @Version: 1.0
+ * Security配置
+ * @author jiacheng yang.
+ * @since 2025/3/21 15:51
+ * @version 2.0.0
  */
 
 @Configuration
@@ -50,9 +51,7 @@ public class SecurityConfig {
     @Resource
     private BusinessConfigService businessConfigService;
     @Resource
-    private RedisService redisService;
-    @Resource
-    private AdminInfoService adminInfoService;
+    private LoginStatusService loginStatusService;
 
     private final static String[] AUTH_URL = {
             "/home/**","/adminManage/**","/businessConfigManage/**","/classifyManage/**","/feedBackManage/**",
@@ -78,7 +77,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .addFilterBefore(
-                        new StatelessAuthenticationFilterAdmin(businessConfigService, redisService,adminInfoService),
+                        new StatelessAuthenticationFilterAdmin(businessConfigService, loginStatusService),
                         UsernamePasswordAuthenticationFilter.class
                 )
 
