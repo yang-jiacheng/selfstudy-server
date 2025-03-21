@@ -7,13 +7,14 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.po.PhoneCode;
 import com.lxy.common.mapper.PhoneCodeMapper;
-import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.PhoneCodeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lxy.common.service.RedisService;
 import com.lxy.common.util.DateCusUtil;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.util.SmsUtil;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,15 +32,11 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode> implements PhoneCodeService {
 
-    private final CommonRedisService commonRedisService;
+    @Resource
+    private RedisService redisService;
+    @Resource
+    private BusinessConfigService businessConfigService;
 
-    private final BusinessConfigService businessConfigService;
-
-    @Autowired
-    public PhoneCodeServiceImpl(CommonRedisService commonRedisService,BusinessConfigService businessConfigService) {
-        this.commonRedisService = commonRedisService;
-        this.businessConfigService = businessConfigService;
-    }
 
     @Override
     public boolean checkPhone(String phone) {
@@ -47,7 +44,7 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
 
         int maxCount = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.PHONE_CODE_NUM));
         String key = RedisKeyConstant.getPhoneSms(phone);
-        String value = commonRedisService.getString(key);
+        String value = redisService.getObject(key, String.class);
         int num = 0 ;
         if (value != null){
             num = Integer.parseInt(value);
@@ -69,13 +66,13 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
             this.save(phoneCode);
             //添加发送次数
             String key = RedisKeyConstant.getPhoneSms(phone);
-            String value = commonRedisService.getString(key);
+            String value = redisService.getObject(key, String.class);
             int num = 0 ;
             if (value != null){
                 num = Integer.parseInt(value);
             }
             num += 1;
-            commonRedisService.insertString(key,String.valueOf(num), DateCusUtil.getEndByDay(),TimeUnit.SECONDS);
+            redisService.setObject(key,String.valueOf(num), DateCusUtil.getEndByDay(),TimeUnit.SECONDS);
         }
         return flag;
     }

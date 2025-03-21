@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @Description: 阿里云对象存储 OSS
@@ -146,12 +147,14 @@ public class OssUtil {
             response.reset();
             response.setCharacterEncoding("UTF-8");
             //告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
-            response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(fileName,"UTF-8"));
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+            response.setContentType("application/octet-stream");
             out = response.getOutputStream();
             OSSObject ossObject = ossClient.getObject(BUCKET_NAME, path);
             in = ossObject.getObjectContent();
             //将输入流中的数据循环写入到响应输出流中，而不是一次性读取到内存，通过响应输出流输出到前端
-            byte[] data = new byte[1024];
+            byte[] data = new byte[8192];
             int len = 0;
             while ((len = in.read(data)) != -1) {
                 out.write(data, 0, len);

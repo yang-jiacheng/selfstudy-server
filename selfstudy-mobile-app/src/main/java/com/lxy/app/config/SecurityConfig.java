@@ -1,11 +1,8 @@
 package com.lxy.app.config;
 
 import com.lxy.app.security.filter.StatelessAuthenticationFilterUser;
-import com.lxy.app.security.handle.AccessDeniedHandlerImpl;
-import com.lxy.app.security.handle.AuthenticationEntryPointUserImpl;
 import com.lxy.app.security.service.impl.UserDetailsServiceImpl;
 import com.lxy.common.constant.CommonConstant;
-import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
 import com.lxy.common.security.filter.StatelessPermitFilter;
 import com.lxy.common.service.BusinessConfigService;

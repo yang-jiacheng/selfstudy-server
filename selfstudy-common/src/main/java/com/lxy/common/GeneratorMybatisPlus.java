@@ -30,17 +30,17 @@ public class GeneratorMybatisPlus {
 	/**
 	 * 模块名称
 	 */
-	public static final String MODULE_NAME="selfstudy-common";
+	public static final String MODULE_NAME="selfstudy-admin";
 
 	/**
 	 * 包名配置
 	 */
-	public static final String PARENT_PACKAGE="com.lxy.common";
+	public static final String PARENT_PACKAGE="com.lxy.admin";
 
 	public static final String AUTHOR="jiacheng yang.";
 
 	public static final String[] TABS = {
-			"version"
+			"operation_log"
 	};
 
 	public static String DRIVER_NAME="";
@@ -107,7 +107,7 @@ public class GeneratorMybatisPlus {
 							.naming(NamingStrategy.underline_to_camel)
 							.columnNaming(NamingStrategy.underline_to_camel)
 							.javaTemplate("/templates/entity.java.vm")
-							.disable() // 禁用实体类生成
+//							.disable() // 禁用实体类生成
 
 							.controllerBuilder()
 							.disable() // 禁用 Controller 层生成

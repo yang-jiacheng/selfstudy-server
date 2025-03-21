@@ -8,7 +8,6 @@ import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.bo.R;
 import com.lxy.common.security.bo.StatelessAdmin;
 import com.lxy.common.security.bo.StatelessUser;
-import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.RedisService;

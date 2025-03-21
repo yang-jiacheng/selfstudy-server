@@ -8,7 +8,6 @@ import com.lxy.common.po.AdminRoleRelate;
 import com.lxy.common.po.Permission;
 import com.lxy.common.po.Role;
 import com.lxy.common.po.RolePermissionRelate;
-import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.service.AdminRoleRelateService;
 import com.lxy.common.service.PermissionService;
 import com.lxy.common.service.RolePermissionRelateService;

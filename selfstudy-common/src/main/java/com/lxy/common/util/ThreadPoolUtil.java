@@ -50,7 +50,7 @@ public class ThreadPoolUtil {
                 if (threadPool == null) {
                     threadPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
                             KEEP_ALIVE_TIME, TimeUnit.SECONDS,
-                            new LinkedBlockingQueue<>(QUEUE_CAPACITY),
+                            new ArrayBlockingQueue<>(QUEUE_CAPACITY),
                             Executors.defaultThreadFactory(),
                             new ThreadPoolExecutor.CallerRunsPolicy());
                 }

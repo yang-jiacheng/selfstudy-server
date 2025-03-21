@@ -13,6 +13,7 @@
         <module>selfstudy-common</module>
         <module>selfstudy-admin</module>
         <module>selfstudy-mobile-app</module>
+        <module>selfstudy-cloud</module>
     </modules>
 
     <name>selfstudy-server</name>
@@ -20,6 +21,7 @@
     <description>自习室服务端</description>
 
     <properties>
+        <selfstudy-server.version>2.0.0-RELEASE</selfstudy-server.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
@@ -60,6 +62,18 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.lxy</groupId>
+                <artifactId>selfstudy-common</artifactId>
+                <version>${selfstudy-server.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.lxy</groupId>
+                <artifactId>selfstudy-cloud</artifactId>
+                <version>${selfstudy-server.version}</version>
+            </dependency>
+
             <!-- Spring Boot -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>

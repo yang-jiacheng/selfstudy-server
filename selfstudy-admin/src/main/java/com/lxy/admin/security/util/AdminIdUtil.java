@@ -23,7 +23,6 @@ public class AdminIdUtil {
         if (authentication instanceof UsernamePasswordAuthenticationToken authenticationToken) {
             StatelessAdmin principal = (StatelessAdmin)authenticationToken.getPrincipal();
             userId = principal.getAdminId();
-
         }
         return userId;
     }

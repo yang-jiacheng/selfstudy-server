@@ -6,18 +6,20 @@ import com.lxy.common.enums.StudyStatus;
 import com.lxy.common.po.Classify;
 import com.lxy.common.mapper.ClassifyMapper;
 import com.lxy.common.po.StudyRecord;
-import com.lxy.common.redis.service.CommonRedisService;
 import com.lxy.common.service.ClassifyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lxy.common.service.RedisService;
 import com.lxy.common.service.StudyRecordService;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.vo.ClassifyVO;
 import com.lxy.common.vo.ResultVO;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,18 +35,12 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> implements ClassifyService {
 
-    private final StudyRecordService studyRecordService;
-
-    private final ClassifyMapper classifyMapper;
-
-    private final CommonRedisService commonRedisService;
-
-    @Autowired
-    public ClassifyServiceImpl(StudyRecordService studyRecordService,ClassifyMapper classifyMapper,CommonRedisService commonRedisService) {
-        this.studyRecordService = studyRecordService;
-        this.classifyMapper = classifyMapper;
-        this.commonRedisService = commonRedisService;
-    }
+    @Resource
+    private StudyRecordService studyRecordService;
+    @Resource
+    private ClassifyMapper classifyMapper;
+    @Resource
+    private RedisService redisService;
 
     @Override
     public Classify getClassifyById(Integer id) {
@@ -102,21 +98,17 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
 
     @Override
     public void insertClassifyCache(List<ClassifyVO> list) {
-        commonRedisService.insertString(RedisKeyConstant.getClassify(),JsonUtil.toJson(list),60L * 5L, TimeUnit.SECONDS);
+        redisService.setObject(RedisKeyConstant.getClassify(),list,60L * 5L, TimeUnit.SECONDS);
     }
 
     @Override
     public void removeClassifyCache() {
-        commonRedisService.deleteKey(RedisKeyConstant.getClassify());
+        redisService.deleteKey(RedisKeyConstant.getClassify());
     }
 
     @Override
     public List<ClassifyVO> getClassifyListCache(){
-        List<ClassifyVO> list = null;
-        String value = commonRedisService.getString(RedisKeyConstant.getClassify());
-        if (value != null){
-            list = JsonUtil.getListType(value,ClassifyVO.class);
-        }
+        List<ClassifyVO> list = redisService.getObject(RedisKeyConstant.getClassify(), ArrayList.class);
         return list;
     }
 

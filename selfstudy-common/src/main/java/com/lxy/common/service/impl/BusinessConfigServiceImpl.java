@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lxy.common.mapper.BusinessConfigMapper;
 import com.lxy.common.po.BusinessConfig;
 import com.lxy.common.service.BusinessConfigService;
-import com.lxy.common.redis.service.CommonRedisService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper, BusinessConfig> implements BusinessConfigService {
 
-    private final CommonRedisService commonRedisService;
-
-    @Autowired
-    public BusinessConfigServiceImpl(CommonRedisService commonRedisService) {
-        this.commonRedisService = commonRedisService;
-    }
+    private RedisService redisService;
 
     @Override
     public String getBusinessConfigValue(String key) {
@@ -78,7 +73,7 @@ public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper,
 
     private String getBusinessConfigCacheByKey(String key){
         String cacheKey = RedisKeyConstant.getBusinessConfig(key);
-        return commonRedisService.getString(cacheKey);
+        return redisService.getObject(cacheKey,String.class);
     }
 
     private void updateBusinessConfigCacheByKey(String key,String value){
@@ -86,6 +81,6 @@ public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper,
             return ;
         }
         String cacheKey = RedisKeyConstant.getBusinessConfig(key);
-        commonRedisService.insertString(cacheKey,value, -1L, TimeUnit.SECONDS);
+        redisService.setObject(cacheKey,value, 7L, TimeUnit.DAYS);
     }
 }
