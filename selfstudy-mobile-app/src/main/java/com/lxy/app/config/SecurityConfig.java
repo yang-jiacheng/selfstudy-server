@@ -60,7 +60,7 @@ public class SecurityConfig  {
     private final static String[] AUTH_URL = {
             "/catalog/**","/feedBack/**","/home/**","/personalCenter/getUserInfo","/personalCenter/updateUserInfo",
             "/personalCenter/getUserInfoById","/studyRecord/**","/studyStatistics/**",
-            "/resources/upload","/resources/uploadApp","/resources/generateImage","/authNeed"
+            "/resources/upload","/resources/uploadApp","/resources/generateImage"
     };
 
     @Bean

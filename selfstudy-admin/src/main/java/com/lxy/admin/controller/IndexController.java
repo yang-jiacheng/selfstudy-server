@@ -8,6 +8,7 @@ import com.lxy.common.bo.R;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.po.Feedback;
 import com.lxy.common.po.User;
+import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.service.RedisService;
 import com.lxy.common.service.UserService;
 import com.lxy.common.util.JsonUtil;
@@ -51,7 +52,6 @@ public class IndexController {
     public String index() {
         return "hello selfstudy-admin !";
     }
-
 
     @RequestMapping("/login")
     public String login() {
