@@ -14,6 +14,7 @@
         <module>selfstudy-admin</module>
         <module>selfstudy-mobile-app</module>
         <module>selfstudy-pay</module>
+        <module>selfstudy-system</module>
     </modules>
 
     <name>selfstudy-server</name>

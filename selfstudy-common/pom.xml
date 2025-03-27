@@ -15,7 +15,7 @@
     <artifactId>selfstudy-common</artifactId>
 
     <description>
-        common业务
+        定义基础 枚举、工具类、常量、注解、配置等等
     </description>
 
 
