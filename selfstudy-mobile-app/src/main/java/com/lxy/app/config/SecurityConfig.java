@@ -1,6 +1,7 @@
 package com.lxy.app.config;
 
 import com.lxy.app.security.filter.StatelessAuthenticationFilterUser;
+import com.lxy.app.security.handle.AuthenticationEntryPointUserImpl;
 import com.lxy.app.security.service.impl.UserDetailsServiceImpl;
 import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
@@ -54,7 +55,7 @@ public class SecurityConfig  {
 
     private final static String[] PERMIT_URL = {
             "/druid/**","/","/token/**","/upload/**",
-            "/userAgreement/**","/personalCenter/updatePassword","/version/**","/permitNeed"
+            "/userAgreement/**","/personalCenter/updatePassword","/version/**"
     };
 
     private final static String[] AUTH_URL = {
@@ -80,7 +81,9 @@ public class SecurityConfig  {
                         new StatelessAuthenticationFilterUser(businessConfigService, loginStatusService),
                         UsernamePasswordAuthenticationFilter.class
                 )
-
+                // 配置异常处理
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(new AuthenticationEntryPointUserImpl()))
                 //关闭csrf //允许跨域
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(configurationSource()))

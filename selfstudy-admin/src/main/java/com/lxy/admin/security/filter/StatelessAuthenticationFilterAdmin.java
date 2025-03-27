@@ -13,6 +13,7 @@ import com.lxy.common.util.WebUtil;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -58,7 +59,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
 
         if (accessToken == null){
             logger.error("token未获取到");
-            needLogin(response);
+            filterChain.doFilter(request, response);
             return;
         }
         //解析token
@@ -68,7 +69,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
             userId = (Integer) claims.get("userId");
         }catch (Exception e){
             logger.error("token解析失败",e);
-            needLogin(response);
+            filterChain.doFilter(request, response);
             return;
         }
         //一个号在线数
@@ -80,10 +81,9 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         StatelessUser loginStatus = loginStatusService.controlLoginNum(key,  onlineNum, endDay,accessToken);
         if (loginStatus == null){
             logger.error("无法识别的登录状态");
-            needLogin(response);
+            filterChain.doFilter(request, response);
             return;
         }
-
         //更新权限
         loginStatusService.updatePermissions(key,userId,loginStatus);
 
@@ -99,15 +99,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         msg = LogUtil.logOperation(userId, request,requestBody);
         logger.warn(msg);
         //放行
-
         filterChain.doFilter(wrappedRequest, response);
 
     }
-
-    private void needLogin(HttpServletResponse response) {
-        SecurityContextHolder.clearContext();
-        WebUtil.renderRedirect(response,"/login");
-    }
-
-
 }

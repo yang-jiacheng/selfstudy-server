@@ -13,7 +13,7 @@
         <module>selfstudy-common</module>
         <module>selfstudy-admin</module>
         <module>selfstudy-mobile-app</module>
-        <module>selfstudy-cloud</module>
+        <module>selfstudy-pay</module>
     </modules>
 
     <name>selfstudy-server</name>
@@ -67,7 +67,7 @@
 
             <dependency>
                 <groupId>com.lxy</groupId>
-                <artifactId>selfstudy-cloud</artifactId>
+                <artifactId>selfstudy-pay</artifactId>
                 <version>${selfstudy-server.version}</version>
             </dependency>
 

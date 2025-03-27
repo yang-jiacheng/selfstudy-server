@@ -25,11 +25,7 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-//        ResultVO result = new ResultVO(HttpStatus.FORBIDDEN.value(),"您的权限不足");
-//        String json = JsonUtil.toJson(result);
-//        //处理异常
-//        WebUtil.renderString(response,json);
-        logger.error("权限不足：{}",request.getRequestURI());
+        logger.error("权限不足异常：{}",request.getRequestURI(),accessDeniedException);
         WebUtil.renderRedirect(response,"/error403");
     }
 

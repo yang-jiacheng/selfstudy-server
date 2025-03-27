@@ -56,7 +56,7 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstant.COOKIE_NAME_APP);
         if (accessToken == null){
             logger.error("token未获取到");
-            needLogin(response);
+            filterChain.doFilter(request, response);
             return;
         }
         //解析token
@@ -66,7 +66,7 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
             userId = (Integer) claims.get("userId");
         }catch (Exception e){
             logger.error("token解析失败",e);
-            needLogin(response);
+            filterChain.doFilter(request, response);
             return;
         }
         //一个号在线数
@@ -78,7 +78,7 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         StatelessUser loginStatus  = loginStatusService.controlLoginNum(key,  onlineNum, endDay,accessToken);
         if (loginStatus == null){
             logger.error("无法识别的登录状态");
-            needLogin(response);
+            filterChain.doFilter(request, response);
             return;
         }
         //存入SecurityContextHolder
@@ -91,13 +91,8 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         msg = LogUtil.logOperation(userId, request,requestBody);
         logger.info(msg);
         //放行
-        filterChain.doFilter(request, response);
-
+        filterChain.doFilter(wrappedRequest, response);
     }
 
-    private void needLogin(HttpServletResponse response) {
-        SecurityContextHolder.clearContext();
-        WebUtil.renderString(response, MSG);
-    }
 
 }

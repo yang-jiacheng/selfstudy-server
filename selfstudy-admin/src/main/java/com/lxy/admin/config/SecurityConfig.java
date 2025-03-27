@@ -2,6 +2,7 @@ package com.lxy.admin.config;
 
 import com.lxy.admin.security.filter.StatelessAuthenticationFilterAdmin;
 import com.lxy.admin.security.handle.AccessDeniedHandlerImpl;
+import com.lxy.admin.security.handle.AuthenticationEntryPointAdminImpl;
 import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
 import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.security.encoder.MinePasswordEncoder;
@@ -24,6 +25,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -60,7 +62,7 @@ public class SecurityConfig {
     };
 
     private final static String[] PERMIT_URL = {
-            "/druid/**","/token/**","/upload/**","/permitNeed"
+            "/druid/**","/token/**","/upload/**"
     };
 
     @Bean
@@ -83,7 +85,7 @@ public class SecurityConfig {
 
                 // 配置异常处理
                 .exceptionHandling(exception -> exception
-                    //.authenticationEntryPoint(new AuthenticationEntryPointAdminImpl())
+                    .authenticationEntryPoint(new AuthenticationEntryPointAdminImpl())
                     .accessDeniedHandler(new AccessDeniedHandlerImpl()))
                 //关闭csrf //允许跨域
                 .csrf(AbstractHttpConfigurer::disable)

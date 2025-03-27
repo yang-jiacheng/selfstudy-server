@@ -11,10 +11,10 @@
         <version>2.0.0-RELEASE</version>
     </parent>
 
-    <artifactId>selfstudy-cloud</artifactId>
+    <artifactId>selfstudy-pay</artifactId>
 
     <description>
-        云服务业务
+        支付业务
     </description>
 
     <build>

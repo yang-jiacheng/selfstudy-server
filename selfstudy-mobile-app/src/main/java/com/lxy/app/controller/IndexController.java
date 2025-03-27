@@ -40,4 +40,16 @@ public class IndexController {
         return "hello selfstudy-mobile-app !";
     }
 
+    @RequestMapping("/hello")
+    @ResponseBody
+    public void hello() {
+        throw new RuntimeException("hello error");
+    }
+
+    @RequestMapping("/world")
+    @ResponseBody
+    public void world() {
+        throw new RuntimeException("world error");
+    }
+
 }
