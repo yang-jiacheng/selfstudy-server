@@ -56,7 +56,7 @@ public class LoginServiceImpl implements LoginService {
     public R<Object> login(LoginVerifyCodeDTO dto, HttpServletResponse response) {
         boolean flag = checkVerifyCode(dto.getVerifyCode(), dto.getUuid());
         if (!flag){
-            return R.fail("验证码错误或已失效，请重新获取！");
+            return R.fail("验证码错误或已失效！");
         }
         //AuthenticationManager authenticate进行用户认证
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
