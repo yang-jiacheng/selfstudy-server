@@ -1,9 +1,9 @@
 package com.lxy.admin.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.lxy.common.po.Classify;
-import com.lxy.common.service.ClassifyService;
-import com.lxy.common.service.StudyRecordService;
+import com.lxy.system.po.Classify;
+import com.lxy.system.service.ClassifyService;
+import com.lxy.system.service.StudyRecordService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.LayUiResultVO;
 import com.lxy.common.vo.ResultVO;

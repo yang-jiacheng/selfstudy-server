@@ -1,10 +1,8 @@
 package com.lxy.admin.controller;
 
 import com.alibaba.fastjson2.JSON;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lxy.common.po.User;
-import com.lxy.common.po.Version;
-import com.lxy.common.service.VersionService;
+import com.lxy.system.po.Version;
+import com.lxy.system.service.VersionService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.LayUiResultVO;
 import com.lxy.common.vo.ResultVO;

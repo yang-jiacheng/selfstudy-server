@@ -8,8 +8,8 @@ import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.constant.ConfigConstant;
 
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.security.bo.StatelessUser;
-import com.lxy.common.security.serviice.LoginStatusService;
+import com.lxy.system.security.bo.StatelessUser;
+import com.lxy.system.security.serviice.LoginStatusService;
 import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.RedisService;
 import com.lxy.common.util.JsonWebTokenUtil;
@@ -26,10 +26,6 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @Description: TODO

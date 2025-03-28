@@ -1,34 +1,22 @@
 package com.lxy.app.security.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson2.JSON;
 import com.lxy.app.security.service.LoginService;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.bo.R;
-import com.lxy.common.security.bo.StatelessUser;
+import com.lxy.system.security.bo.StatelessUser;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.security.serviice.LoginStatusService;
+import com.lxy.system.security.serviice.LoginStatusService;
 import com.lxy.common.service.BusinessConfigService;
-import com.lxy.common.service.RedisService;
-import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Description: TODO

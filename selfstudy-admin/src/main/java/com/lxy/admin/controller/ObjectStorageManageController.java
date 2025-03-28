@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lxy.common.bo.R;
 import com.lxy.common.dto.ObjectStorageDTO;
 import com.lxy.common.dto.PageDTO;
-import com.lxy.common.security.util.UserIdUtil;
+import com.lxy.system.security.util.UserIdUtil;
 import com.lxy.common.service.ObjectStorageService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.LayUiResultVO;

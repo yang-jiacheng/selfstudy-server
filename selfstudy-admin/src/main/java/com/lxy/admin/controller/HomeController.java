@@ -1,8 +1,8 @@
 package com.lxy.admin.controller;
 
-import com.lxy.common.po.AdminInfo;
-import com.lxy.common.security.util.UserIdUtil;
-import com.lxy.common.service.AdminInfoService;
+import com.lxy.admin.po.AdminInfo;
+import com.lxy.system.security.util.UserIdUtil;
+import com.lxy.admin.service.AdminInfoService;
 import com.lxy.common.util.ImgConfigUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

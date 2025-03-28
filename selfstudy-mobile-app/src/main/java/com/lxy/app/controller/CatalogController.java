@@ -2,11 +2,11 @@ package com.lxy.app.controller;
 
 import com.lxy.common.bo.R;
 import com.lxy.common.dto.StudyRecordDTO;
-import com.lxy.common.po.Catalog;
-import com.lxy.common.po.StudyRecord;
-import com.lxy.common.service.CatalogService;
-import com.lxy.common.service.StudyRecordService;
-import com.lxy.common.security.util.UserIdUtil;
+import com.lxy.system.po.Catalog;
+import com.lxy.system.po.StudyRecord;
+import com.lxy.system.service.CatalogService;
+import com.lxy.system.service.StudyRecordService;
+import com.lxy.system.security.util.UserIdUtil;
 import com.lxy.common.vo.ClassifyDetailVO;
 import com.lxy.common.vo.RoomVO;
 import com.lxy.common.vo.StudyRecordVO;

@@ -2,12 +2,12 @@ package com.lxy.app.controller;
 
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.bo.R;
-import com.lxy.common.po.StudyRecord;
+import com.lxy.system.po.StudyRecord;
 import com.lxy.common.service.BusinessConfigService;
-import com.lxy.common.service.StudyRecordService;
-import com.lxy.common.service.StudyStatisticsService;
-import com.lxy.common.service.UserService;
-import com.lxy.common.security.util.UserIdUtil;
+import com.lxy.system.service.StudyRecordService;
+import com.lxy.system.service.StudyStatisticsService;
+import com.lxy.system.service.UserService;
+import com.lxy.system.security.util.UserIdUtil;
 import com.lxy.common.vo.UserRankVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

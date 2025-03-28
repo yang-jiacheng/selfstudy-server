@@ -13,8 +13,8 @@
         <module>selfstudy-common</module>
         <module>selfstudy-admin</module>
         <module>selfstudy-mobile-app</module>
-        <module>selfstudy-pay</module>
         <module>selfstudy-system</module>
+        <module>selfstudy-cloud-api</module>
     </modules>
 
     <name>selfstudy-server</name>
@@ -22,7 +22,11 @@
     <description>自习室服务端</description>
 
     <properties>
-        <selfstudy-server.version>2.0.0-RELEASE</selfstudy-server.version>
+        <selfstudy-common.version>2.0.0-RELEASE</selfstudy-common.version>
+        <selfstudy-admin.version>2.0.0-RELEASE</selfstudy-admin.version>
+        <selfstudy-mobile.version>2.0.0-RELEASE</selfstudy-mobile.version>
+        <selfstudy-system.version>2.0.0-RELEASE</selfstudy-system.version>
+        <selfstudy-cloud-api.version>2.0.0-RELEASE</selfstudy-cloud-api.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
@@ -60,16 +64,31 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- 子模块-->
+            <dependency>
+                <groupId>com.lxy</groupId>
+                <artifactId>selfstudy-admin</artifactId>
+                <version>${selfstudy-admin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lxy</groupId>
+                <artifactId>selfstudy-cloud-api</artifactId>
+                <version>${selfstudy-cloud-api.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.lxy</groupId>
                 <artifactId>selfstudy-common</artifactId>
-                <version>${selfstudy-server.version}</version>
+                <version>${selfstudy-common.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.lxy</groupId>
-                <artifactId>selfstudy-pay</artifactId>
-                <version>${selfstudy-server.version}</version>
+                <artifactId>selfstudy-mobile-app</artifactId>
+                <version>${selfstudy-mobile.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lxy</groupId>
+                <artifactId>selfstudy-system</artifactId>
+                <version>${selfstudy-system.version}</version>
             </dependency>
 
             <!-- Spring Boot -->

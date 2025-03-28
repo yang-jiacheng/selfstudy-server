@@ -1,12 +1,7 @@
 package com.lxy.app.controller;
 
-import com.lxy.common.annotation.OperationLog;
-import com.lxy.common.bo.R;
-import com.lxy.common.enums.LogBusinessType;
-import com.lxy.common.enums.LogUserType;
-import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.service.RedisService;
-import com.lxy.common.service.UserService;
+import com.lxy.system.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;

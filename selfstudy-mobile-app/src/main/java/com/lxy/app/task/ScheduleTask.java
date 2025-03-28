@@ -2,7 +2,7 @@ package com.lxy.app.task;
 
 import cn.hutool.core.date.DateUtil;
 import com.lxy.common.constant.CronConstant;
-import com.lxy.common.service.UserService;
+import com.lxy.system.service.UserService;
 import com.lxy.common.vo.UserRankVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

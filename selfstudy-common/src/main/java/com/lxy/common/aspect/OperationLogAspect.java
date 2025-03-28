@@ -1,7 +1,6 @@
 package com.lxy.common.aspect;
 
 import cn.hutool.extra.servlet.JakartaServletUtil;
-import cn.hutool.extra.servlet.ServletUtil;
 import com.lxy.common.annotation.OperationLog;
 import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.util.JsonUtil;

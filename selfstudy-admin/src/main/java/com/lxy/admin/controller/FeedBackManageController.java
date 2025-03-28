@@ -1,11 +1,10 @@
 package com.lxy.admin.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.lxy.common.po.Feedback;
-import com.lxy.common.security.util.UserIdUtil;
+import com.lxy.system.po.Feedback;
+import com.lxy.system.security.util.UserIdUtil;
 import com.lxy.common.vo.FeedbackVO;
-import com.lxy.common.service.FeedbackService;
-import com.lxy.common.util.CommonUtil;
+import com.lxy.system.service.FeedbackService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.LayUiResultVO;
 import com.lxy.common.vo.ResultVO;

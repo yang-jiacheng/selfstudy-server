@@ -2,17 +2,10 @@ package com.lxy.admin.controller;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
-import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import com.lxy.common.bo.R;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.po.Feedback;
-import com.lxy.common.po.User;
-import com.lxy.common.security.util.UserIdUtil;
 import com.lxy.common.service.RedisService;
-import com.lxy.common.service.UserService;
-import com.lxy.common.util.JsonUtil;
-import com.lxy.common.vo.UserRankVO;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +14,6 @@ import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.*;

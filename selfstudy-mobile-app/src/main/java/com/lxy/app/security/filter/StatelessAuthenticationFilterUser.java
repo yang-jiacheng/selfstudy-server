@@ -1,20 +1,16 @@
 package com.lxy.app.security.filter;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.date.DateUtil;
 import com.lxy.common.bo.R;
 import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.constant.ConfigConstant;
-import com.lxy.common.security.bo.StatelessUser;
+import com.lxy.system.security.bo.StatelessUser;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.security.serviice.LoginStatusService;
-import com.lxy.common.security.wrapper.CustomHttpServletRequestWrapper;
+import com.lxy.system.security.serviice.LoginStatusService;
+import com.lxy.system.security.wrapper.CustomHttpServletRequestWrapper;
 import com.lxy.common.service.BusinessConfigService;
-import com.lxy.common.service.RedisService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.util.LogUtil;
-import com.lxy.common.util.WebUtil;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

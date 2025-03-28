@@ -2,10 +2,10 @@ package com.lxy.admin.controller;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.common.bo.R;
-import com.lxy.common.po.Catalog;
-import com.lxy.common.po.Classify;
-import com.lxy.common.service.CatalogService;
-import com.lxy.common.service.ClassifyService;
+import com.lxy.system.po.Catalog;
+import com.lxy.system.po.Classify;
+import com.lxy.system.service.CatalogService;
+import com.lxy.system.service.ClassifyService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.ResultVO;
 import com.lxy.common.vo.ZtreeVO;

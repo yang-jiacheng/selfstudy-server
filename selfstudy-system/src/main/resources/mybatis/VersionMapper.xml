@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxy.system.mapper.VersionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lxy.system.po.Version">
+            <id column="id" property="id" />
+            <result column="version_code" property="versionCode" />
+            <result column="version_name" property="versionName" />
+            <result column="download_url" property="downloadUrl" />
+            <result column="status" property="status" />
+            <result column="check_update" property="checkUpdate" />
+            <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        version_code,
+        version_name,
+        download_url,
+        status,
+        check_update,
+        update_time
+    </sql>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO version (
+            id,
+            version_code,
+            version_name,
+            download_url,
+            status,
+            check_update,
+            update_time
+        ) VALUES
+        <foreach collection="entities" item="entity" separator=",">
+            (
+                #{entity.id},
+                #{entity.versionCode},
+                #{entity.versionName},
+                #{entity.downloadUrl},
+                #{entity.status},
+                #{entity.checkUpdate},
+                #{entity.updateTime}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 批量插入或更新 (MySQL语法) -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO version (
+            id,
+            version_code,
+            version_name,
+            download_url,
+            status,
+            check_update,
+            update_time
+        ) VALUES
+        <foreach collection="entities" item="entity" separator=",">
+            (
+                #{entity.id},
+                #{entity.versionCode},
+                #{entity.versionName},
+                #{entity.downloadUrl},
+                #{entity.status},
+                #{entity.checkUpdate},
+                #{entity.updateTime}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+                version_code = VALUES(version_code),
+                version_name = VALUES(version_name),
+                download_url = VALUES(download_url),
+                status = VALUES(status),
+                check_update = VALUES(check_update),
+                update_time = VALUES(update_time)
+    </insert>
+
+
+</mapper>

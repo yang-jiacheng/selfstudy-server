@@ -2,9 +2,9 @@ package com.lxy.app.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lxy.common.constant.ConfigConstant;
-import com.lxy.common.po.UserAgreement;
+import com.lxy.system.po.UserAgreement;
 import com.lxy.common.service.BusinessConfigService;
-import com.lxy.common.service.UserAgreementService;
+import com.lxy.system.service.UserAgreementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

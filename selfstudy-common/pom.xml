@@ -13,7 +13,7 @@
 
 
     <artifactId>selfstudy-common</artifactId>
-
+    <version>${selfstudy-common.version}</version>
     <description>
         定义基础 枚举、工具类、常量、注解、配置等等
     </description>

@@ -3,7 +3,6 @@ package com.lxy.common.vo;
 import com.lxy.common.po.StudyRecord;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Description: TODO

@@ -1,9 +1,8 @@
 package com.lxy.admin.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.lxy.common.po.UserAgreement;
-import com.lxy.common.service.UserAgreementService;
+import com.lxy.system.po.UserAgreement;
+import com.lxy.system.service.UserAgreementService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;

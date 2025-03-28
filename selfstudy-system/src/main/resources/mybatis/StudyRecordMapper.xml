@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxy.system.mapper.StudyRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lxy.system.po.StudyRecord">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="classify_id" property="classifyId" />
+        <result column="catalog_id" property="catalogId" />
+        <result column="tag" property="tag" />
+        <result column="seat" property="seat" />
+        <result column="timing_mode" property="timingMode" />
+        <result column="setting_duration" property="settingDuration" />
+        <result column="actual_duration" property="actualDuration" />
+        <result column="status" property="status" />
+        <result column="note_content" property="noteContent" />
+        <result column="note_path" property="notePath" />
+        <result column="note_status" property="noteStatus" />
+        <result column="start_time" property="startTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, classify_id, catalog_id, tag, seat, timing_mode, setting_duration, actual_duration, status, note_content, note_path, note_status, start_time, update_time
+    </sql>
+
+    <select id="getStudyNoteList" resultType="com.lxy.system.po.StudyRecord">
+        SELECT
+            sr.id,
+            user_id,
+            tag,
+            actual_duration,
+            note_content,
+            note_path,
+            note_status,
+            start_time
+        FROM
+            study_record sr
+        WHERE
+            sr.status = 3 and sr.note_status = 1
+          AND sr.user_id = #{userId}
+    </select>
+    <select id="getStudyNoteList_COUNT" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            study_record sr
+        WHERE
+            sr.status = 3 and sr.note_status = 1
+          AND sr.user_id = #{userId}
+    </select>
+
+    <select id="getLearningRecords" resultType="com.lxy.common.vo.StudyRecordVO">
+        select
+            sr.id,
+            sr.user_id,
+            sr.classify_id,
+            sr.catalog_id,
+            sr.tag,
+            sr.seat,
+            sr.status,
+            sr.timing_mode,
+            sr.setting_duration,
+            sr.start_time,
+            u.name,
+            u.profile_path
+        from study_record sr
+        INNER JOIN user u on sr.user_id = u.id
+        where sr.catalog_id = #{catalogId} and sr.status != 3
+    </select>
+
+    <select id="getLearningRecordDetail" resultType="com.lxy.common.vo.StudyRecordVO">
+        select
+            sr.id,
+            sr.user_id,
+            sr.classify_id,
+            sr.catalog_id,
+            sr.tag,
+            sr.seat,
+            sr.status,
+            sr.timing_mode,
+            sr.setting_duration,
+            sr.start_time,
+            u.name,
+            u.profile_path,
+            c.name as catalogName,
+            c2.name as classifyName
+        from study_record sr
+        INNER JOIN user u on sr.user_id = u.id
+        INNER JOIN catalog c on sr.catalog_id = c.id
+        INNER JOIN classify c2 on c.classify_id = c2.id
+        where sr.id = #{recordId}
+    </select>
+
+    <select id="getStudyRecordList" resultType="com.lxy.common.vo.StudyRecordVO">
+        SELECT
+            sr.id,
+            sr.start_time,
+            sr.user_id,
+            sr.actual_duration,
+            sr.classify_id,
+            sr.note_status,
+            sr.status,
+            c.name as classifyName
+        from study_record sr
+        INNER JOIN classify c on c.id = sr.classify_id
+        <where>
+            <if test="userId != null">
+                sr.user_id = #{userId}
+            </if>
+            <if test="classifyId != null">
+                and sr.classify_id = #{classifyId}
+            </if>
+            <if test="status != null">
+                and sr.status = #{status}
+            </if>
+        </where>
+    </select>
+    <select id="getStudyRecordList_COUNT" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        from study_record sr
+        INNER JOIN classify c on c.id = sr.classify_id
+        <where>
+            <if test="userId != null">
+                sr.user_id = #{userId}
+            </if>
+            <if test="classifyId != null">
+                and sr.classify_id = #{classifyId}
+            </if>
+            <if test="status != null">
+                and sr.status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="getStudyRecordByAdmin" resultType="com.lxy.common.vo.StudyRecordVO">
+        select
+            sr.id,
+            sr.user_id,
+            u.name,
+            u.phone,
+            sr.classify_id,
+            cl.`name` as classifyName,
+            sr.catalog_id,
+            ca.`name` as catalogName,
+            (select cat.name from catalog cat where cat.id = ca.parent_id) as parentCatalogName,
+            sr.tag,
+            sr.seat,
+            sr.timing_mode,
+            sr.setting_duration,
+            sr.actual_duration,
+            sr.`status`,
+            sr.start_time
+        from study_record sr
+             INNER JOIN user u on sr.user_id = u.id
+             INNER JOIN classify cl on sr.classify_id = cl.id
+             INNER JOIN catalog ca on sr.catalog_id = ca.id
+        <where>
+            <if test="classifyId != null">
+                and sr.classify_id = #{classifyId}
+            </if>
+            <if test="status != null">
+                and sr.status = #{status}
+            </if>
+            <if test="phone != null and phone !=''">
+                and u.phone like concat ('%',#{phone},'%')
+            </if>
+        </where>
+
+    </select>
+
+    <select id="getStudyRecordByAdmin_COUNT" resultType="java.lang.Integer">
+        select
+            COUNT(1)
+        from study_record sr
+        INNER JOIN user u on sr.user_id = u.id
+        INNER JOIN classify cl on sr.classify_id = cl.id
+        INNER JOIN catalog ca on sr.catalog_id = ca.id
+        <where>
+            <if test="classifyId != null">
+                and sr.classify_id = #{classifyId}
+            </if>
+            <if test="status != null">
+                and sr.status = #{status}
+            </if>
+            <if test="phone != null and phone !=''">
+                and u.phone like concat ('%',#{phone},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

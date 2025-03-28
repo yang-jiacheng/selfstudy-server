@@ -4,13 +4,13 @@ import com.lxy.admin.security.filter.StatelessAuthenticationFilterAdmin;
 import com.lxy.admin.security.handle.AccessDeniedHandlerImpl;
 import com.lxy.admin.security.handle.AuthenticationEntryPointAdminImpl;
 import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
+import com.lxy.admin.service.AdminInfoService;
 import com.lxy.common.constant.CommonConstant;
-import com.lxy.common.security.encoder.MinePasswordEncoder;
-import com.lxy.common.security.filter.StatelessPermitFilter;
-import com.lxy.common.security.serviice.LoginStatusService;
-import com.lxy.common.service.AdminInfoService;
-import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.RedisService;
+import com.lxy.system.security.encoder.MinePasswordEncoder;
+import com.lxy.system.security.filter.StatelessPermitFilter;
+import com.lxy.system.security.serviice.LoginStatusService;
+import com.lxy.common.service.BusinessConfigService;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +25,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -54,6 +53,10 @@ public class SecurityConfig {
     private BusinessConfigService businessConfigService;
     @Resource
     private LoginStatusService loginStatusService;
+    @Resource
+    private RedisService redisService;
+    @Resource
+    private AdminInfoService  adminInfoService;
 
     private final static String[] AUTH_URL = {
             "/home/**","/adminManage/**","/businessConfigManage/**","/classifyManage/**","/feedBackManage/**",
@@ -79,7 +82,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .addFilterBefore(
-                        new StatelessAuthenticationFilterAdmin(businessConfigService, loginStatusService),
+                        new StatelessAuthenticationFilterAdmin(businessConfigService, loginStatusService,adminInfoService,redisService),
                         UsernamePasswordAuthenticationFilter.class
                 )
 

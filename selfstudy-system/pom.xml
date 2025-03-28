@@ -12,10 +12,17 @@
     </parent>
 
     <artifactId>selfstudy-system</artifactId>
-
+    <version>${selfstudy-system.version}</version>
     <description>
         通用业务，支撑上层的核心业务。 例如：用户
     </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.lxy</groupId>
+            <artifactId>selfstudy-common</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>

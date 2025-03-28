@@ -1,8 +1,8 @@
 package com.lxy.app.controller;
 
 import com.lxy.common.bo.R;
-import com.lxy.common.service.ClassifyService;
-import com.lxy.common.service.StudyRecordService;
+import com.lxy.system.service.ClassifyService;
+import com.lxy.system.service.StudyRecordService;
 import com.lxy.common.vo.ClassifyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

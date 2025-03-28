@@ -1,19 +1,18 @@
 package com.lxy.admin.security.filter;
 
+import cn.hutool.core.collection.CollUtil;
+import com.lxy.admin.service.AdminInfoService;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.security.bo.StatelessUser;
-import com.lxy.common.security.serviice.LoginStatusService;
-import com.lxy.common.security.wrapper.CustomHttpServletRequestWrapper;
-import com.lxy.common.service.AdminInfoService;
-import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.service.RedisService;
+import com.lxy.system.security.bo.StatelessUser;
+import com.lxy.system.security.serviice.LoginStatusService;
+import com.lxy.system.security.wrapper.CustomHttpServletRequestWrapper;
+import com.lxy.common.service.BusinessConfigService;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.util.LogUtil;
-import com.lxy.common.util.WebUtil;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,8 +23,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import static com.lxy.common.constant.ConfigConstant.*;
@@ -46,9 +43,16 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
 
     private final LoginStatusService loginStatusService;
 
-    public StatelessAuthenticationFilterAdmin(BusinessConfigService businessConfigService, LoginStatusService loginStatusService) {
+    private final AdminInfoService adminInfoService;
+
+    private final RedisService redisService;
+
+    public StatelessAuthenticationFilterAdmin(BusinessConfigService businessConfigService, LoginStatusService loginStatusService,
+                                              AdminInfoService adminInfoService, RedisService redisService) {
         this.businessConfigService = businessConfigService;
         this.loginStatusService = loginStatusService;
+        this.adminInfoService = adminInfoService;
+        this.redisService = redisService;
     }
 
     @Override
@@ -85,7 +89,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
             return;
         }
         //更新权限
-        loginStatusService.updatePermissions(key,userId,loginStatus);
+        updatePermissions(key,userId,loginStatus);
 
         //存入SecurityContextHolder
         //获取权限信息封装到Authentication中
@@ -102,4 +106,26 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         filterChain.doFilter(wrappedRequest, response);
 
     }
+
+    /**
+     * 更新权限信息
+     * 从缓存中获取权限，若缓存中没有则才正常从数据库中获取
+     * 注意：如果用户权限发生改变时，需要将缓存中的数据删除
+     * @author jiacheng yang.
+     * @since 2025/03/06 18:57
+     */
+    public void updatePermissions(String key,Integer userId, StatelessUser loginStatus){
+        if (CollUtil.isEmpty(loginStatus.getPermissions())){
+            //根据用户查询权限信息 添加到StatelessUser中
+            List<String> permissions = adminInfoService.getPermissionsById(userId);
+            loginStatus.setPermissions(permissions);
+            //修改缓存里的权限
+            List<StatelessUser> loginList = redisService.getObject(key, ArrayList.class);
+            for (StatelessUser statelessUser : loginList) {
+                statelessUser.setPermissions(permissions);
+            }
+            redisService.setObject(key, loginList, -1L, null);
+        }
+    }
+
 }

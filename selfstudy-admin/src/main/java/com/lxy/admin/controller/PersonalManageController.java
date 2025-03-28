@@ -1,9 +1,9 @@
 package com.lxy.admin.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.lxy.common.po.AdminInfo;
-import com.lxy.common.security.util.UserIdUtil;
-import com.lxy.common.service.AdminInfoService;
+import com.lxy.admin.po.AdminInfo;
+import com.lxy.system.security.util.UserIdUtil;
+import com.lxy.admin.service.AdminInfoService;
 import com.lxy.common.util.*;
 import com.lxy.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
