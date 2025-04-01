@@ -2,7 +2,7 @@ package com.lxy.framework.security.serviice;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
-import com.lxy.framework.security.bo.StatelessUser;
+import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.system.service.RedisService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;

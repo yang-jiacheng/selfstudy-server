@@ -2,7 +2,7 @@ package com.lxy.admin.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.framework.security.bo.StatelessUser;
+import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.system.service.RedisService;
 import com.lxy.admin.service.RolePermissionRelateService;
 import com.lxy.admin.po.RolePermissionRelate;
