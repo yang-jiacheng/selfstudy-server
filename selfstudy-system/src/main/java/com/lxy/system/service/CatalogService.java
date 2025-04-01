@@ -2,9 +2,9 @@ package com.lxy.system.service;
 
 import com.lxy.system.po.Catalog;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lxy.common.vo.ClassifyDetailVO;
-import com.lxy.common.vo.RoomVO;
-import com.lxy.common.vo.ZtreeVO;
+import com.lxy.system.vo.ClassifyDetailVO;
+import com.lxy.system.vo.RoomVO;
+import com.lxy.system.vo.ZtreeVO;
 
 import java.util.List;
 

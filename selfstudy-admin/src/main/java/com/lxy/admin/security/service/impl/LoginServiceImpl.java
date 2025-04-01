@@ -1,17 +1,17 @@
 package com.lxy.admin.security.service.impl;
 
-import com.lxy.admin.dto.LoginVerifyCodeDTO;
+import com.lxy.system.dto.LoginVerifyCodeDTO;
 import com.lxy.admin.security.service.LoginService;
-import com.lxy.common.bo.R;
-import com.lxy.common.config.properties.CustomProperties;
+import com.lxy.common.domain.R;
+import com.lxy.common.properties.CustomProperties;
 import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.constant.ConfigConstant;
 
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.system.security.bo.StatelessUser;
-import com.lxy.system.security.serviice.LoginStatusService;
-import com.lxy.common.service.BusinessConfigService;
-import com.lxy.common.service.RedisService;
+import com.lxy.framework.security.bo.StatelessUser;
+import com.lxy.framework.security.serviice.LoginStatusService;
+import com.lxy.system.service.BusinessConfigService;
+import com.lxy.system.service.RedisService;
 import com.lxy.common.util.JsonWebTokenUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;

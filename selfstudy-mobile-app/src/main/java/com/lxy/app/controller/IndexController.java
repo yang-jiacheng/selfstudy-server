@@ -1,6 +1,6 @@
 package com.lxy.app.controller;
 
-import com.lxy.common.service.RedisService;
+import com.lxy.system.service.RedisService;
 import com.lxy.system.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

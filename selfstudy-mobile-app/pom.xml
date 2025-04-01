@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>selfstudy-mobile-app</artifactId>
-    <version>${selfstudy-mobile.version}</version>
+    <version>2.0.0-RELEASE</version>
 
     <description>
         APP服务端
@@ -22,12 +22,7 @@
 
         <dependency>
             <groupId>com.lxy</groupId>
-            <artifactId>selfstudy-system</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.lxy</groupId>
-            <artifactId>selfstudy-cloud-api</artifactId>
+            <artifactId>selfstudy-framework</artifactId>
         </dependency>
 
         <!-- spring-boot-starter-thymeleaf -->

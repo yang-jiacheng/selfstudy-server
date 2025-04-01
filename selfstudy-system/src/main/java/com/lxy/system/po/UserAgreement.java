@@ -2,6 +2,8 @@ package com.lxy.system.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +12,7 @@ import java.io.Serializable;
  * Date: 2025-02-19
  */
 
+@TableName(value = "user_agreement", autoResultMap = true)
 public class UserAgreement implements Serializable {
 
 	private static final long serialVersionUID = 1L;

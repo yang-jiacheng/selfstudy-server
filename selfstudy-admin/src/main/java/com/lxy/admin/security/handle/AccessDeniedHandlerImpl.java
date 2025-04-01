@@ -1,14 +1,10 @@
 package com.lxy.admin.security.handle;
 
-import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.WebUtil;
-import com.lxy.common.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.stereotype.Component;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

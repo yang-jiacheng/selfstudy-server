@@ -3,8 +3,8 @@ package com.lxy.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.system.po.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lxy.common.vo.UserImportVO;
-import com.lxy.common.vo.UserRankVO;
+import com.lxy.system.vo.UserImportVO;
+import com.lxy.system.vo.UserRankVO;
 
 import java.util.List;
 

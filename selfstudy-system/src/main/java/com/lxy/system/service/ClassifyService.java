@@ -2,8 +2,8 @@ package com.lxy.system.service;
 
 import com.lxy.system.po.Classify;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lxy.common.vo.ClassifyVO;
-import com.lxy.common.vo.ResultVO;
+import com.lxy.system.vo.ClassifyVO;
+import com.lxy.system.vo.ResultVO;
 
 import java.util.List;
 

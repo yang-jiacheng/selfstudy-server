@@ -8,12 +8,12 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.lxy.common.config.properties.CustomProperties;
-import com.lxy.common.vo.GraphicsTextParameter;
+import com.lxy.common.properties.AliYunProperties;
+import com.lxy.common.properties.CustomProperties;
+import com.lxy.common.domain.GraphicsTextParameter;
 import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -22,7 +22,6 @@ import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -127,8 +126,8 @@ public class ImgConfigUtil {
      */
     public static String getPrefix(){
         //开启了OSS
-        if (CustomProperties.ossEnabled){
-            return CustomProperties.ossPath;
+        if (AliYunProperties.ossEnabled){
+            return AliYunProperties.ossPath;
         }
         if ("prod".equals(CustomProperties.activeProfile)){
             return "http://" + CustomProperties.hostName +   CustomProperties.contentPath;
@@ -206,7 +205,7 @@ public class ImgConfigUtil {
             try (InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())) {
                 // 随机文件名
                 String path = StrUtil.format("/upload/{}/{}_{}.jpg", DateUtil.today(), DateUtil.current(), RandomUtil.randomInt(1000000, 10000000));
-                String realPath = CustomProperties.ossPath + path;
+                String realPath = AliYunProperties.ossPath + path;
                 // 上传到OSS
                 OssUtil.uploadFileToOss(path.substring(1), inputStream);
                 // 返回图片绝对路径

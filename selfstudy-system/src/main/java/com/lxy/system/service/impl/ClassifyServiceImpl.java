@@ -8,12 +8,12 @@ import com.lxy.system.mapper.ClassifyMapper;
 import com.lxy.system.po.StudyRecord;
 import com.lxy.system.service.ClassifyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lxy.common.service.RedisService;
+import com.lxy.system.service.RedisService;
 import com.lxy.system.service.StudyRecordService;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.vo.ClassifyVO;
-import com.lxy.common.vo.ResultVO;
+import com.lxy.system.vo.ClassifyVO;
+import com.lxy.system.vo.ResultVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

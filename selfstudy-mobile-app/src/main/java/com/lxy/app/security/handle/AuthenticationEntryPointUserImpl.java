@@ -1,13 +1,12 @@
 package com.lxy.app.security.handle;
 
-import com.lxy.common.bo.R;
+import com.lxy.common.domain.R;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.stereotype.Component;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

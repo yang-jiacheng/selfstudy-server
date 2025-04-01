@@ -2,9 +2,9 @@ package com.lxy.system.mapper;
 
 import com.lxy.system.po.Catalog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lxy.common.vo.ClassifyDetailVO;
-import com.lxy.common.vo.RoomVO;
-import com.lxy.common.vo.ZtreeVO;
+import com.lxy.system.vo.ClassifyDetailVO;
+import com.lxy.system.vo.RoomVO;
+import com.lxy.system.vo.ZtreeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

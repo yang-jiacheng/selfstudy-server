@@ -6,7 +6,7 @@ import cn.hutool.core.util.PhoneUtil;
 import cn.hutool.core.util.StrUtil;
 import com.lxy.admin.util.ExcelUtil;
 import com.lxy.admin.vo.ExcelErrorInfoVO;
-import com.lxy.common.vo.UserImportVO;
+import com.lxy.system.vo.UserImportVO;
 import com.lxy.system.po.User;
 import com.lxy.system.service.UserService;
 import com.lxy.common.util.EncryptUtil;

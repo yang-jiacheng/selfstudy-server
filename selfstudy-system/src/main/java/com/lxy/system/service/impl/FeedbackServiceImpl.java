@@ -5,7 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lxy.system.po.Feedback;
 import com.lxy.system.mapper.FeedbackMapper;
-import com.lxy.common.vo.FeedbackVO;
+import com.lxy.system.vo.FeedbackVO;
 import com.lxy.system.service.FeedbackService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.util.ImgConfigUtil;

@@ -45,7 +45,7 @@
 
 
     <!-- 禁止日志事件向上传递additivity="false" 控制台输出appender）-->
-    <logger name="com.lxy.common.mapper" level="DEBUG" additivity="false">
+    <logger name="com.lxy.**.mapper" level="DEBUG" additivity="false">
         <appender-ref ref="stdout"/>
     </logger>
 

@@ -12,9 +12,9 @@
     </parent>
 
     <artifactId>selfstudy-system</artifactId>
-    <version>${selfstudy-system.version}</version>
+    <version>2.0.0-RELEASE</version>
     <description>
-        通用业务，支撑上层的核心业务。 例如：用户
+        通用业务，支撑上层的核心业务。
     </description>
 
     <dependencies>

@@ -20,7 +20,7 @@
     <sql id="Base_Column_List">
         id, name, description, icon_path, cover_path, person_count, use_type, sort, create_time, update_time
     </sql>
-    <select id="queryList" resultType="com.lxy.common.vo.ClassifyVO">
+    <select id="queryList" resultType="com.lxy.system.vo.ClassifyVO">
         select id,name,description,icon_path,cover_path,sort,create_time
         from classify
         ORDER BY sort

@@ -1,7 +1,7 @@
 package com.lxy.app.security.service;
 
 
-import com.lxy.common.bo.R;
+import com.lxy.common.domain.R;
 
 /**
  * @Description: TODO

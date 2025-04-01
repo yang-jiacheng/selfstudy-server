@@ -3,7 +3,6 @@ package com.lxy.common.util;
 import cn.hutool.core.util.StrUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.*;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.auth.sts.AssumeRoleRequest;
@@ -12,7 +11,6 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.http.ProtocolType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.lxy.common.config.properties.CustomProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+
+import static com.lxy.common.properties.AliYunProperties.*;
 
 /**
  * @Description: 阿里云对象存储 OSS
@@ -31,7 +31,7 @@ public class OssUtil {
 
     private final static Logger LOG = LoggerFactory.getLogger(OssUtil.class);
 
-    public static final String BUCKET_NAME = CustomProperties.ossBucket;
+    public static final String BUCKET_NAME = ossBucket;
 
     public static final String UPLOAD_FOLDER = "upload/";
 
@@ -40,10 +40,7 @@ public class OssUtil {
      * 初始化oss客户端
      */
     public static OSS initOssClient(){
-        String endpoint = CustomProperties.ossEndpoint;
-        String accessKeyId = CustomProperties.accessKeyId;
-        String accessKeySecret = CustomProperties.accessKeySecret;
-        return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        return new OSSClientBuilder().build(ossEndpoint, accessKeyId, accessKeySecret);
     }
 
     /**
@@ -99,11 +96,9 @@ public class OssUtil {
 
     public static AssumeRoleResponse getStsCredentials() {
         String endpoint = "sts.cn-hangzhou.aliyuncs.com";
-        String accessKeyId = CustomProperties.accessKeyId;
-        String accessKeySecret = CustomProperties.accessKeySecret;
         String roleArn = "acs:ram::1942543017597927:role/ram-sts";
         String roleSessionName = "Ram-Sts";
-        LOG.error("accessKeyId: {},accessKeySecret: {}",CustomProperties.accessKeyId,CustomProperties.accessKeySecret);
+        LOG.error("accessKeyId: {},accessKeySecret: {}",accessKeyId,accessKeySecret);
         try {
             // 构造profile
             DefaultProfile.addEndpoint("cn-hangzhou", "Sts", endpoint);

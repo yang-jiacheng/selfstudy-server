@@ -1,5 +1,6 @@
 package com.lxy.system.po;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * Date: 2025-02-19
  */
 
+@TableName(value = "phone_code", autoResultMap = true)
 public class PhoneCode implements Serializable {
 
 	private static final long serialVersionUID = 1L;

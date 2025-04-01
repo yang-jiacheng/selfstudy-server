@@ -2,8 +2,8 @@ package com.lxy.admin.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lxy.admin.po.AdminInfo;
-import com.lxy.system.security.bo.StatelessUser;
-import com.lxy.system.security.encoder.MinePasswordEncoder;
+import com.lxy.framework.security.bo.StatelessUser;
+import com.lxy.framework.security.encoder.MinePasswordEncoder;
 import com.lxy.admin.service.AdminInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

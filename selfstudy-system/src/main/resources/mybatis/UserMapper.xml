@@ -33,7 +33,7 @@
 
     </insert>
 
-    <select id="getRankingsTotalDuration" resultType="com.lxy.common.vo.UserRankVO">
+    <select id="getRankingsTotalDuration" resultType="com.lxy.system.vo.UserRankVO">
         SELECT
             u.id,
             name,
@@ -46,7 +46,7 @@
         LIMIT 0,100
     </select>
 
-    <select id="getUserRankingById" resultType="com.lxy.common.vo.UserRankVO">
+    <select id="getUserRankingById" resultType="com.lxy.system.vo.UserRankVO">
         SELECT
             u.id,
             u.profile_path,

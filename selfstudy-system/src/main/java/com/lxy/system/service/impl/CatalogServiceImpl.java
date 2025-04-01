@@ -8,10 +8,10 @@ import com.lxy.system.service.CatalogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.system.service.StudyRecordService;
 import com.lxy.common.util.ImgConfigUtil;
-import com.lxy.common.vo.CatalogVO;
-import com.lxy.common.vo.ClassifyDetailVO;
-import com.lxy.common.vo.RoomVO;
-import com.lxy.common.vo.ZtreeVO;
+import com.lxy.system.vo.CatalogVO;
+import com.lxy.system.vo.ClassifyDetailVO;
+import com.lxy.system.vo.RoomVO;
+import com.lxy.system.vo.ZtreeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

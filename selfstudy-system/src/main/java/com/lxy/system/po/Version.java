@@ -1,5 +1,6 @@
 package com.lxy.system.po;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -12,6 +13,7 @@ import java.util.Date;
  * Date: 2025-02-24
  */
 
+@TableName(value = "version", autoResultMap = true)
 public class Version implements Serializable {
 
 	private static final long serialVersionUID = 1L;

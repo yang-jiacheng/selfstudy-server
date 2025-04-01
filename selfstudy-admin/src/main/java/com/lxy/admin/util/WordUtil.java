@@ -4,8 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import com.aliyun.oss.OSS;
-import com.lxy.common.config.properties.CustomProperties;
+import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.util.OssUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
@@ -176,7 +175,7 @@ public class WordUtil {
         try (InputStream inputStream = new ByteArrayInputStream(data)) {
             // 随机文件名
             String path = StrUtil.format("/upload/{}/{}_{}img.jpg", DateUtil.today(), DateUtil.current(), RandomUtil.randomInt(1000000, 10000000));
-            String realPath = CustomProperties.ossPath + path;
+            String realPath = AliYunProperties.ossPath + path;
 
             // 上传到OSS
             OssUtil.uploadFileToOss(path.substring(1), inputStream);
@@ -220,7 +219,7 @@ public class WordUtil {
             try (InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())) {
                 // 随机文件名
                 String path = StrUtil.format("/latex/{}/{}_{}latex.jpg", DateUtil.today(), DateUtil.current(), RandomUtil.randomInt(1000000, 10000000));
-                String realPath = CustomProperties.ossPath + path;
+                String realPath = AliYunProperties.ossPath + path;
                 // 上传到OSS
                 OssUtil.uploadFileToOss(path.substring(1), inputStream);
                 // 返回HTML标签

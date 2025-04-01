@@ -1,9 +1,8 @@
 package com.lxy.admin.security.service;
 
 
-import com.lxy.admin.dto.LoginVerifyCodeDTO;
-import com.lxy.common.bo.R;
-import com.lxy.common.vo.ResultVO;
+import com.lxy.system.dto.LoginVerifyCodeDTO;
+import com.lxy.common.domain.R;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

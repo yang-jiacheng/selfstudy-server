@@ -1,19 +1,16 @@
 package com.lxy.common.util;
 
 import com.aliyun.dysmsapi20170525.Client;
-import com.aliyun.dysmsapi20170525.models.QuerySmsTemplateListRequest;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
 import com.aliyun.teaopenapi.models.Config;
 import com.aliyun.teautil.models.RuntimeOptions;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.profile.DefaultProfile;
-import com.lxy.common.config.properties.CustomProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Random;
+
+import static com.lxy.common.properties.AliYunProperties.*;
 
 /**
  * @Description: 阿里云短信
@@ -36,14 +33,11 @@ public class SmsUtil {
     private final static String SIGN_NAME = "团团云自习";
 
     public static Client getClient(){
-        //旧sdk已废弃
-//        DefaultProfile profile = DefaultProfile.getProfile(REGION, CustomProperties.accessKeyId, CustomProperties.accessKeySecret);
-//        IAcsClient client = new DefaultAcsClient(profile);
         //新sdk
         if (clientInstance == null) {
             Config config = new Config();
-            config.setAccessKeyId(CustomProperties.accessKeyId);
-            config.setAccessKeySecret(CustomProperties.accessKeySecret);
+            config.setAccessKeyId(accessKeyId);
+            config.setAccessKeySecret(accessKeySecret);
             config.setRegionId(REGION);
             config.setEndpoint(ENDPOINT);
             try {

@@ -2,8 +2,8 @@ package com.lxy.system.mapper;
 
 import com.lxy.system.po.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lxy.common.vo.UserImportVO;
-import com.lxy.common.vo.UserRankVO;
+import com.lxy.system.vo.UserImportVO;
+import com.lxy.system.vo.UserRankVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

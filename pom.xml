@@ -14,7 +14,7 @@
         <module>selfstudy-admin</module>
         <module>selfstudy-mobile-app</module>
         <module>selfstudy-system</module>
-        <module>selfstudy-cloud-api</module>
+        <module>selfstudy-framework</module>
     </modules>
 
     <name>selfstudy-server</name>
@@ -26,7 +26,7 @@
         <selfstudy-admin.version>2.0.0-RELEASE</selfstudy-admin.version>
         <selfstudy-mobile.version>2.0.0-RELEASE</selfstudy-mobile.version>
         <selfstudy-system.version>2.0.0-RELEASE</selfstudy-system.version>
-        <selfstudy-cloud-api.version>2.0.0-RELEASE</selfstudy-cloud-api.version>
+        <selfstudy-framework.version>2.0.0-RELEASE</selfstudy-framework.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
@@ -72,8 +72,8 @@
             </dependency>
             <dependency>
                 <groupId>com.lxy</groupId>
-                <artifactId>selfstudy-cloud-api</artifactId>
-                <version>${selfstudy-cloud-api.version}</version>
+                <artifactId>selfstudy-framework</artifactId>
+                <version>${selfstudy-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.lxy</groupId>

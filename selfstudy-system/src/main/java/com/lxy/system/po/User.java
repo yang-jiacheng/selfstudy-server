@@ -1,5 +1,6 @@
 package com.lxy.system.po;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -13,6 +14,7 @@ import java.io.Serializable;
  * Date: 2025-02-19
  */
 
+@TableName(value = "user", autoResultMap = true)
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;

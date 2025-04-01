@@ -2,7 +2,7 @@ package com.lxy.system.mapper;
 
 import com.lxy.system.po.Classify;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lxy.common.vo.ClassifyVO;
+import com.lxy.system.vo.ClassifyVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

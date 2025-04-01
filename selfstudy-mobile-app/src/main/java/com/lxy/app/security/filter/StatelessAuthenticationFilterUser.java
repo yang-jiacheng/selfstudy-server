@@ -1,13 +1,13 @@
 package com.lxy.app.security.filter;
 
-import com.lxy.common.bo.R;
+import com.lxy.common.domain.R;
 import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.constant.ConfigConstant;
-import com.lxy.system.security.bo.StatelessUser;
+import com.lxy.framework.security.bo.StatelessUser;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.system.security.serviice.LoginStatusService;
-import com.lxy.system.security.wrapper.CustomHttpServletRequestWrapper;
-import com.lxy.common.service.BusinessConfigService;
+import com.lxy.framework.security.serviice.LoginStatusService;
+import com.lxy.framework.security.wrapper.CustomHttpServletRequestWrapper;
+import com.lxy.system.service.BusinessConfigService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.util.LogUtil;
