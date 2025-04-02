@@ -1,4 +1,4 @@
-package com.lxy.framework.security.bo;
+package com.lxy.framework.security.domain;
 
 import cn.hutool.core.collection.CollUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;

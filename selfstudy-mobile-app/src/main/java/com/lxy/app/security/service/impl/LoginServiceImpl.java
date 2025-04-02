@@ -3,7 +3,7 @@ package com.lxy.app.security.service.impl;
 import com.lxy.app.security.service.LoginService;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.domain.R;
-import com.lxy.framework.security.bo.StatelessUser;
+import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.framework.security.serviice.LoginStatusService;
 import com.lxy.system.service.BusinessConfigService;

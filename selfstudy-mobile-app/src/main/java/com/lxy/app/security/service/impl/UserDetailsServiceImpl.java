@@ -1,7 +1,7 @@
 package com.lxy.app.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lxy.framework.security.bo.StatelessUser;
+import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.system.po.User;
 import com.lxy.framework.security.encoder.MinePasswordEncoder;
 import com.lxy.system.service.UserService;
