@@ -51,21 +51,7 @@ public class RolePermissionRelateServiceImpl extends ServiceImpl<RolePermissionR
                 .map(RedisKeyConstant::getAdminLoginStatus)
                 .collect(Collectors.toList());
 
-        List<Object> values = redisTemplate.opsForValue().multiGet(keys);
-        if (values == null || values.stream().allMatch(Objects::isNull)){
-            return;
-        }
-        Map<String,List<StatelessUser>> map = new HashMap<>(values.size());
-        for (Object value : values) {
-            List<StatelessUser> loginList = (List<StatelessUser>)value.getClass().cast(value);
-            if (CollUtil.isNotEmpty(loginList)){
-                loginList.forEach(lis -> lis.setPermissions(new ArrayList<>()));
-                Integer id = loginList.get(0).getUserId();
-                map.put(RedisKeyConstant.getAdminLoginStatus(id), loginList);
-            }
-        }
-
-        redisService.setObjectBatch(map, -1L, null);
+        redisService.deleteKeys(keys);
 
     }
 }

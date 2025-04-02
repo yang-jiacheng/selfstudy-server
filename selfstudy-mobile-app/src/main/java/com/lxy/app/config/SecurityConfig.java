@@ -4,6 +4,7 @@ import com.lxy.app.security.filter.StatelessAuthenticationFilterUser;
 import com.lxy.app.security.handle.AuthenticationEntryPointUserImpl;
 import com.lxy.app.security.service.impl.UserDetailsServiceImpl;
 import com.lxy.common.constant.CommonConstant;
+import com.lxy.common.enums.LogUserType;
 import com.lxy.framework.security.encoder.MinePasswordEncoder;
 import com.lxy.framework.security.filter.StatelessPermitFilter;
 import com.lxy.framework.security.serviice.LoginStatusService;
@@ -107,7 +108,7 @@ public class SecurityConfig  {
                         .anyRequest().permitAll())
                 //添加过滤器
                 .addFilterBefore(
-                        new StatelessPermitFilter(CommonConstant.COOKIE_NAME_APP),
+                        new StatelessPermitFilter(LogUserType.USER.type,loginStatusService),
                         UsernamePasswordAuthenticationFilter.class
                 )
                 //关闭csrf //允许跨域

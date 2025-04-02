@@ -6,6 +6,7 @@ import com.lxy.admin.security.handle.AuthenticationEntryPointAdminImpl;
 import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
 import com.lxy.admin.service.AdminInfoService;
 import com.lxy.common.constant.CommonConstant;
+import com.lxy.common.enums.LogUserType;
 import com.lxy.system.service.RedisService;
 import com.lxy.framework.security.encoder.MinePasswordEncoder;
 import com.lxy.framework.security.filter.StatelessPermitFilter;
@@ -65,7 +66,7 @@ public class SecurityConfig {
     };
 
     private final static String[] PERMIT_URL = {
-            "/druid/**","/token/**","/upload/**"
+            "/druid/**","/token/**","/upload/**","/hello"
     };
 
     @Bean
@@ -114,7 +115,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll())
                 //添加过滤器
                 .addFilterBefore(
-                        new StatelessPermitFilter(CommonConstant.COOKIE_NAME_ADMIN),
+                        new StatelessPermitFilter(LogUserType.ADMIN.type,loginStatusService),
                         UsernamePasswordAuthenticationFilter.class
                 )
                 //关闭csrf //允许跨域

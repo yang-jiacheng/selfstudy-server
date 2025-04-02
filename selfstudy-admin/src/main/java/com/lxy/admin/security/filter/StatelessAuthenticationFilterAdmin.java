@@ -58,7 +58,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
-        String msg = "";
+
         String accessToken = JsonWebTokenUtil.getAccessToken(request, COOKIE_NAME_ADMIN);
 
         if (accessToken == null){
@@ -88,11 +88,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        //更新权限
-        updatePermissions(key,userId,loginStatus);
-
         //存入SecurityContextHolder
-        //获取权限信息封装到Authentication中
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginStatus,null,loginStatus.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -100,7 +96,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
         // 创建 CustomHttpServletRequestWrapper，包装原始的 HttpServletRequest
         CustomHttpServletRequestWrapper wrappedRequest = new CustomHttpServletRequestWrapper(request);
         String requestBody = wrappedRequest.getBody();
-        msg = LogUtil.logOperation(userId, request,requestBody);
+        String msg  = LogUtil.logOperation(userId, request,requestBody);
         logger.warn(msg);
         //放行
         filterChain.doFilter(wrappedRequest, response);

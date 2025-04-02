@@ -10,7 +10,7 @@ public class CommonConstant {
 	 */
 	public static String PARAM_NAME_DEVICE = "device";
 	/**
-	 * JWT中userType参数的key名称(学生2，管理员1)
+	 * JWT中userType参数的key名称  LogUserType
 	 */
 	public static String PARAM_NAME_USER_TYPE = "userType";
 	/**

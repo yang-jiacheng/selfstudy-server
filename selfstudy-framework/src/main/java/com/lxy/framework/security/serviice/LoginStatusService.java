@@ -97,6 +97,25 @@ public class LoginStatusService {
         return loginStatus;
     }
 
+    /**
+     * 获取登录状态
+     * @author jiacheng yang.
+     * @since 2025/4/2 16:36
+     */
+    public StatelessUser getLoginStatus(String key,String token){
+        StatelessUser loginStatus = null;
+        if (redisService.hasKey(key)) {
+            List<StatelessUser> loginList = redisService.getObject(key, ArrayList.class);
+            if (CollUtil.isEmpty(loginList)) {
+                return null;
+            }
 
+            loginStatus = loginList.stream()
+                    .filter(status -> token.equals(status.getToken()))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return loginStatus;
+    }
 
 }

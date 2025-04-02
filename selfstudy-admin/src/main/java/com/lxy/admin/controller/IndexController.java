@@ -6,6 +6,7 @@ import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Producer;
 import com.lxy.common.domain.R;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.service.RedisService;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ public class IndexController {
     @RequestMapping("/hello")
     @ResponseBody
     public void hello() {
+        int userId = UserIdUtil.getUserId();
         throw new RuntimeException("hello error");
     }
 
