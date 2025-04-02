@@ -33,7 +33,7 @@
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             background-color: rgba(255,255,255,.075);
-            backdrop-filter: blur(10px); /* 毛玻璃模糊效果 */
+            backdrop-filter: blur(5px); /* 毛玻璃模糊效果 */
             /*border: 1px solid rgba(255, 255, 255, 0.1);*/
         }
 
@@ -41,15 +41,19 @@
             font-family: PangMenZhengDao !important;
             text-align: center;
             font-size: 23px;
-            margin: 5px auto 25px auto;
+            margin: 5px auto 10px auto;
             font-weight: bold;
             color: #eee6e6;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            /*margin-bottom: 15px;*/
         }
-
+        .icon-img{
+            position: relative;
+            top: 32px;
+            left: 10px;
+        }
         .form-group label {
             display: block;
             font-size: 13px;
@@ -93,7 +97,7 @@
             font-size: 14px;
             color: #fff;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 20px;
             transition: 0.2s linear;
         }
 
@@ -124,6 +128,7 @@
         .form-control {
             transition: 0.2s linear;
             box-shadow: none;
+            padding-left: 36px !important
         }
         .form-control:focus {
             border-color: #33cabb;
@@ -139,6 +144,7 @@
             flex: 1;                 /* 输入框自适应宽度 */
             margin-right: 10px;      /* 右边留点间距给验证码图片 */
         }
+
     </style>
 </head>
 <body>
@@ -146,14 +152,17 @@
   <div class="login-title ">云自习后台</div>
 
   <div class="form-group">
+    <img class="icon-img" style="height: 17px;" src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/images/user.png" />
     <input type="text" id="userName" autocomplete="off" class="form-control" placeholder="请输入帐号">
   </div>
 
   <div class="form-group">
+      <img class="icon-img"  style="height: 20px;" src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/images/password.png" />
     <input type="password" id="password" autocomplete="off" class="form-control" placeholder="请输入密码">
   </div>
 
   <div class="form-group captcha-group">
+      <img style="height: 17px;position: relative;top: 32px;left: 12px;" src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/images/captcha.png" />
       <div class="captcha-inline">
           <input type="text" id="captcha" autocomplete="off" class="form-control" placeholder="请输入验证码">
           <img id="captchaImg" onclick="changeVerifyCode()" class="captcha-image" />

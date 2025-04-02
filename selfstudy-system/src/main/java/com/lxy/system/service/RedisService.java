@@ -81,6 +81,7 @@ public class RedisService {
         logger.info("缓存Hash类型数据成功, key:{}, hKey:{}", key, hKey);
     }
 
+    @SuppressWarnings("all")
     public <T> void setObjectBatch(final Map<String, T> map, final Long timeout, final TimeUnit timeUnit) {
         int batchSize = 1000; // 每批次处理 1000 个 Key
         List<String> keys = new ArrayList<>(map.keySet());

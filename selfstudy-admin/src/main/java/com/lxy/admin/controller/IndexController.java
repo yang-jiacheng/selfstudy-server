@@ -1,6 +1,7 @@
 package com.lxy.admin.controller;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Producer;
 import com.lxy.common.domain.R;
