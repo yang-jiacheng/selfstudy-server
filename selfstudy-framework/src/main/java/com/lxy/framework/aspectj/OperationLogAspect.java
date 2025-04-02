@@ -67,15 +67,9 @@ public class OperationLogAspect {
     protected void handleOperationLog(final JoinPoint joinPoint,final Exception e, OperationLog log, Object jsonResult) {
         try {
             Object[] args = joinPoint.getArgs();
+            String params = JsonUtil.toJson(args);
             //返回结果
-            String resultJson;
-            if (jsonResult == null) {
-                resultJson = e.getMessage();
-            } else if (jsonResult instanceof String){
-                resultJson = (String) jsonResult;
-            }else {
-                resultJson = JsonUtil.toJson(jsonResult);
-            }
+            String  resultJson = JsonUtil.toJson(jsonResult);
             HttpServletRequest request = getRequest();
             /*
              * 客户端ip、请求uri、请求方法、模块标题、业务类型
