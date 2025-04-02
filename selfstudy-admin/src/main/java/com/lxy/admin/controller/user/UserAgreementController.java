@@ -1,6 +1,10 @@
 package com.lxy.admin.controller.user;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.lxy.common.annotation.OperationLog;
+import com.lxy.common.domain.R;
+import com.lxy.common.enums.LogBusinessType;
+import com.lxy.common.enums.LogUserType;
 import com.lxy.system.po.UserAgreement;
 import com.lxy.system.service.UserAgreementService;
 import com.lxy.common.util.JsonUtil;
@@ -40,7 +44,7 @@ public class UserAgreementController {
 
     @PostMapping(value = "/getAgreement", produces = "application/json")
     @ResponseBody
-    public String getAgreement(){
+    public R<Map<String,Object>> getAgreement(){
         List<UserAgreement> list = agreementService.list();
         Map<String ,Object> map = new HashMap<>(2);
         for (UserAgreement agreement : list) {
@@ -51,17 +55,18 @@ public class UserAgreementController {
                 map.put("agreement",agreement.getContent());
             }
         }
-        return JsonUtil.toJson(new ResultVO(map));
+        return R.ok(map);
     }
 
+    @OperationLog(title = "修改隐私政策与用户协议", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/saveAgreement", produces = "application/json")
     @ResponseBody
-    public String saveAgreement(@RequestParam(value = "type") Integer type,
+    public R<Object> saveAgreement(@RequestParam(value = "type") Integer type,
                                 @RequestParam(value = "content") String content){
         LambdaUpdateWrapper<UserAgreement> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(UserAgreement::getType,type).set(UserAgreement::getContent,content);
         agreementService.update(wrapper);
-        return JsonUtil.toJson(new ResultVO());
+        return R.ok();
     }
 
 }

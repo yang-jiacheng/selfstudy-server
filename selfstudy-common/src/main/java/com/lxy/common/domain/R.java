@@ -4,15 +4,15 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2024/01/24 11:23
- * @Version: 1.0
+ * 返回结果对象
+ * @author  jiacheng yang.
+ * @since  2024/01/24 11:23
+ * @version 1.0
  */
 public class R<T> implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -7393525156672911665L;
 
     /**
      * 成功
@@ -23,6 +23,7 @@ public class R<T> implements Serializable {
      * 失败
      */
     public static final int FAIL = -1;
+
 
     private int code;
 

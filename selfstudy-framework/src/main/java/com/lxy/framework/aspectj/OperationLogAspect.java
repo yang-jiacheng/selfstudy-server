@@ -48,7 +48,7 @@ public class OperationLogAspect {
      * 后置通知：记录方法执行完后的日志
      * @param joinPoint 切点，获取目标方法的执行结果等信息
      */
-    @AfterReturning( pointcut = "logPointCut(log)", returning = "result", argNames = "joinPoint,log,result")
+    @AfterReturning(pointcut = "logPointCut(log)", returning = "result", argNames = "joinPoint,log,result")
     public void afterMethod(JoinPoint joinPoint, OperationLog log, Object result) {
         handleOperationLog(joinPoint, null,log, result);
     }
