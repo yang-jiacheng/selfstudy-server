@@ -4,10 +4,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/01/03 14:17
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2023/01/03 14:17
+ * @version 1.0
  */
 public class WebUtil {
 

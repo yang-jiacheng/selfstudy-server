@@ -13,10 +13,10 @@ import java.util.Random;
 import static com.lxy.common.properties.AliYunProperties.*;
 
 /**
- * @Description: 阿里云短信
- * @author: jiacheng yang.
- * @Date: 2022/12/19 11:41
- * @Version: 1.0
+ * 阿里云短信
+ * @author jiacheng yang.
+ * @since 2022/12/19 11:41
+ * @version 1.0
  */
 public class SmsUtil {
 

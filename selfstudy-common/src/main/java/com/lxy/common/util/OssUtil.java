@@ -22,10 +22,10 @@ import java.nio.charset.StandardCharsets;
 import static com.lxy.common.properties.AliYunProperties.*;
 
 /**
- * @Description: 阿里云对象存储 OSS
- * @author: jiacheng yang.
- * @Date: 2022/12/20 15:10
- * @Version: 1.0
+ * 阿里云对象存储 OSS
+ * @author jiacheng yang.
+ * @since 2022/12/20 15:10
+ * @version 1.0
  */
 public class OssUtil {
 

@@ -15,10 +15,10 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 
 /**
- * @Description: Excel工具类
- * @author: jiacheng yang.
- * @Date: 2022/09/06 17:37
- * @Version: 1.0
+ * Excel工具类
+ * @author jiacheng yang.
+ * @since 2022/09/06 17:37
+ * @version 1.0
  */
 public class ExcelUtil {
 

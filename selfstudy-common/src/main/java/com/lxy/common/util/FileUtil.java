@@ -16,10 +16,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/11/10 15:25
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/11/10 15:25
+ * @version 1.0
  */
 
 @Component

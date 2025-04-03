@@ -19,10 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/02/22 17:54
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2023/02/22 17:54
+ * @version 1.0
  */
 
 @Service

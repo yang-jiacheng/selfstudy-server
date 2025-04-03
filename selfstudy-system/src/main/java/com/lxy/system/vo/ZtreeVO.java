@@ -3,10 +3,10 @@ package com.lxy.system.vo;
 import java.io.Serializable;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/11/09 15:33
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/11/09 15:33
+ * @version 1.0
  */
 public class ZtreeVO implements Serializable {
     private static final long serialVersionUID = 2118864229823679797L;

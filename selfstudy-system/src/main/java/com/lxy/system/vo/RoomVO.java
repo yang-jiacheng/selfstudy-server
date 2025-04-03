@@ -3,10 +3,10 @@ package com.lxy.system.vo;
 import java.io.Serializable;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/01/13 10:37
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2023/01/13 10:37
+ * @version 1.0
  */
 public class RoomVO implements Serializable {
     private static final long serialVersionUID = -9081562248724816519L;

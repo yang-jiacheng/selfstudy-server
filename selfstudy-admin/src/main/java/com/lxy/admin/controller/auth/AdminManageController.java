@@ -24,10 +24,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/10/08 20:11
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/10/08 20:11
+ * @version 1.0
  */
 
 @RequestMapping("/adminManage")
@@ -76,7 +76,7 @@ public class AdminManageController {
 
     @PostMapping(value ="/getAdminInfoById", produces = "application/json")
     @ResponseBody
-    public R<Object> getAdminInfoById(@RequestParam("id") Integer id){
+    public R<Map<String ,Object>> getAdminInfoById(@RequestParam("id") Integer id){
         AdminInfo adminInfo = adminInfoService.getById(id);
         adminInfo.setPassword(null);
         List<AdminRoleRelate> roleRelates = adminRoleRelateService.list(new LambdaQueryWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId, id));

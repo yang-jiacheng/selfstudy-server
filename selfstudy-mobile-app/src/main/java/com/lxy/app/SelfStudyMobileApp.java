@@ -8,10 +8,10 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * @Description: 程序入口
- * @author: jiacheng yang.
- * @Date: 2022/10/08 20:55
- * @Version: 1.0
+ * 程序入口
+ * @author jiacheng yang.
+ * @since 2022/10/08 20:55
+ * @version 1.0
  * nohup java -jar -Xms500m -Xmx500m selfstudy-app.jar --spring.profiles.active=prod > /dev/null 2>&1 &
  */
 

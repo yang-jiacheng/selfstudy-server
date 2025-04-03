@@ -9,10 +9,10 @@ import javax.crypto.spec.IvParameterSpec;
 import java.security.Key;
 
 /**
- * @Description: 3DES对称加密工具
- * @author: jiacheng yang.
- * @Date: 2021/5/16 14:08
- * @Version: 1.0
+ * 3DES对称加密工具
+ * @author jiacheng yang.
+ * @since 2021/5/16 14:08
+ * @version 1.0
  */
 public class DESUtil {
     //算法

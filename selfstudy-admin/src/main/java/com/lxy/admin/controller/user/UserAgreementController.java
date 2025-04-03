@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/19 10:25
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/19 10:25
+ * @version 1.0
  */
 
 @RequestMapping("/userAgreementManage")

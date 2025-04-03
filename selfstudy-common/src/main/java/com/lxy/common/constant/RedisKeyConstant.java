@@ -1,10 +1,10 @@
 package com.lxy.common.constant;
 
 /**
- * @Description: redis的所有key
- * @author: jiacheng yang.
- * @Date: 2022/04/25 16:45
- * @Version: 1.0
+ * redis的所有key
+ * @author jiacheng yang.
+ * @since 2022/04/25 16:45
+ * @version 1.0
  */
 public class RedisKeyConstant {
 

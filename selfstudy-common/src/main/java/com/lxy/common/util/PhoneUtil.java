@@ -3,10 +3,10 @@ package com.lxy.common.util;
 import java.util.Random;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/04/22 16:09
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/04/22 16:09
+ * @version 1.0
  */
 public class PhoneUtil {
 

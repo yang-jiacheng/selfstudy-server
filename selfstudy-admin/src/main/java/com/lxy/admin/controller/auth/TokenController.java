@@ -14,10 +14,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/10/08 19:57
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/10/08 19:57
+ * @version 1.0
  */
 
 @RequestMapping("/token")

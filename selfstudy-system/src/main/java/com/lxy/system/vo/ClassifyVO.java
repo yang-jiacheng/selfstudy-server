@@ -3,10 +3,10 @@ package com.lxy.system.vo;
 import com.lxy.system.po.Classify;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/19 17:59
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/19 17:59
+ * @version 1.0
  */
 public class ClassifyVO extends Classify {
 

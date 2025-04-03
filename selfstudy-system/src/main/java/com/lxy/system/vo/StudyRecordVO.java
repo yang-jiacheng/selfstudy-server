@@ -5,10 +5,10 @@ import com.lxy.system.po.StudyRecord;
 import java.io.Serializable;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/24 16:10
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/24 16:10
+ * @version 1.0
  */
 public class StudyRecordVO extends StudyRecord implements Serializable {
     private static final long serialVersionUID = -559230604195324125L;

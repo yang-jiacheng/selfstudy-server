@@ -1,10 +1,10 @@
 package com.lxy.admin.vo;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/02/20 17:48
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2023/02/20 17:48
+ * @version 1.0
  */
 public class ExcelErrorInfoVO {
 

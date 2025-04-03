@@ -15,10 +15,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/19 16:11
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/19 16:11
+ * @version 1.0
  */
 public class DateCusUtil {
 

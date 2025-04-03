@@ -25,10 +25,10 @@ import java.io.IOException;
 import static com.lxy.common.constant.CommonConstant.*;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2024/08/30 16:52
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2024/08/30 16:52
+ * @version 1.0
  */
 public class StatelessPermitFilter extends OncePerRequestFilter {
 

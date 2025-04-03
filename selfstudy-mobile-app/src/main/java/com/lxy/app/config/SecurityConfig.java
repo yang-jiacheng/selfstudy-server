@@ -34,10 +34,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/02/13 9:34
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2023/02/13 9:34
+ * @version 1.0
  */
 
 @Configuration

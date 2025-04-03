@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/20 11:15
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/20 11:15
+ * @version 1.0
  */
 
 @RestController

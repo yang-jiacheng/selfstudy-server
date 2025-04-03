@@ -27,10 +27,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/02 9:38
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/02 9:38
+ * @version 1.0
  */
 public class ImgConfigUtil {
 

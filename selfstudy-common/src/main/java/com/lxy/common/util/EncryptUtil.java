@@ -6,10 +6,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * @Description: 加密工具类(不可逆)
- * @author: jiacheng yang.
- * @Date: 2021/5/19 0:24
- * @Version: 1.0
+ * 加密工具类(不可逆)
+ * @author jiacheng yang.
+ * @since 2021/5/19 0:24
+ * @version 1.0
  */
 public class EncryptUtil {
     /**

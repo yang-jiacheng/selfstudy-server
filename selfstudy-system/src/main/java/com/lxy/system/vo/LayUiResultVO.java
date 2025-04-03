@@ -1,10 +1,10 @@
 package com.lxy.system.vo;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/11/12 14:48
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/11/12 14:48
+ * @version 1.0
  */
 public class LayUiResultVO {
 

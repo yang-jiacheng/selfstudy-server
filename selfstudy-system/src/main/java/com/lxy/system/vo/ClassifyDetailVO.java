@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/24 11:08
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/24 11:08
+ * @version 1.0
  */
 public class ClassifyDetailVO implements Serializable {
 

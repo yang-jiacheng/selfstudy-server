@@ -2,14 +2,22 @@ package com.lxy.system.dto;
 
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+import java.io.Serial;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2024/12/14 15:59
- * @Version: 1.0
+ * 分页查询基础对象
+ * @author jiacheng yang.
+ * @since 2024/12/14 15:59
+ * @version 1.0
  */
+
+@Data
 public class PageDTO implements java.io.Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -2335352111793861831L;
 
     @NotNull
     private Integer page;
@@ -21,10 +29,6 @@ public class PageDTO implements java.io.Serializable {
 
     private Integer current;
 
-    public Integer getPage() {
-        return page;
-    }
-
     public void setPage(Integer page) {
         this.page = page;
         if (page != null && limit != null) {
@@ -32,23 +36,5 @@ public class PageDTO implements java.io.Serializable {
         }
     }
 
-    public Integer getLimit() {
-        return limit;
-    }
 
-    public void setLimit(Integer limit) {
-        this.limit = limit;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getCurrent() {
-        return current;
-    }
 }

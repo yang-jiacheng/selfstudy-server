@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/02/22 17:33
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2023/02/22 17:33
+ * @version 1.0
  */
 public class StatelessUser implements UserDetails {
 

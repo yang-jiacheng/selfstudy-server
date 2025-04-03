@@ -29,10 +29,10 @@ import java.security.cert.X509Certificate;
 import java.util.*;
 
 /**
- * @Description: https请求工具
- * @author: jiacheng yang.
- * @Date: 2022/7/19 14:46
- * @Version: 1.0
+ * https请求工具
+ * @author jiacheng yang.
+ * @since 2022/7/19 14:46
+ * @version 1.0
  */
 public class HttpsRequest {
 

@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/02/22 16:28
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2023/02/22 16:28
+ * @version 1.0
  */
 public class LogUtil {
 

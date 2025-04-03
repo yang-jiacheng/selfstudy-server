@@ -25,10 +25,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description: 统一上传服务器接口
- * @author: jiacheng yang.
- * @Date: 2022/10/08 20:57
- * @Version: 1.0
+ * 统一上传服务器接口
+ * @author jiacheng yang.
+ * @since 2022/10/08 20:57
+ * @version 1.0
  */
 
 @Controller

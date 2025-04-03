@@ -3,10 +3,10 @@ package com.lxy.system.vo;
 import java.io.Serializable;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/24 9:19
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/24 9:19
+ * @version 1.0
  */
 public class UserRankVO implements Serializable {
 

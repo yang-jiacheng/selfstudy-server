@@ -6,10 +6,10 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/11/10 14:24
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/11/10 14:24
+ * @version 1.0
  */
 
 @Configuration

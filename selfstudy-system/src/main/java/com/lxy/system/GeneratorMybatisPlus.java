@@ -15,10 +15,10 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /**
- * @Description: 代码生成器
- * @author: jiacheng yang.
- * @Date: 2022/10/08 20:57
- * @Version: 1.0
+ * 代码生成器
+ * @author jiacheng yang.
+ * @since 2022/10/08 20:57
+ * @version 1.0
  */
 
 public class GeneratorMybatisPlus {

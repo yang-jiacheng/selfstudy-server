@@ -8,10 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/02/13 10:27
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2023/02/13 10:27
+ * @version 1.0
  */
 public interface LoginService {
 

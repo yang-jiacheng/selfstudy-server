@@ -6,10 +6,10 @@ import cn.hutool.core.date.DateUtil;
 import java.util.Date;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/05 19:55
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/05 19:55
+ * @version 1.0
  */
 public class CommonUtil {
 

@@ -3,10 +3,10 @@ package com.lxy.system.vo;
 import com.lxy.system.po.User;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/02/20 17:50
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2023/02/20 17:50
+ * @version 1.0
  */
 public class UserImportVO extends User {
 

@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/11/10 17:20
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/11/10 17:20
+ * @version 1.0
  */
 @Component
 public class CustomProperties {

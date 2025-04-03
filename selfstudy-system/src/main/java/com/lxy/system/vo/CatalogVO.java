@@ -3,10 +3,10 @@ package com.lxy.system.vo;
 import java.io.Serializable;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/24 11:12
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/24 11:12
+ * @version 1.0
  */
 public class CatalogVO implements Serializable {
     private static final long serialVersionUID = 162687177993801603L;

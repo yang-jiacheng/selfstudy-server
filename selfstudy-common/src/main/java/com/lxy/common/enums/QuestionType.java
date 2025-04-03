@@ -1,10 +1,10 @@
 package com.lxy.common.enums;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/11/30 17:58
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/11/30 17:58
+ * @version 1.0
  */
 public enum QuestionType {
 

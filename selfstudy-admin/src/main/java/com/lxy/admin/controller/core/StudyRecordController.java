@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/19 10:17
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/19 10:17
+ * @version 1.0
  */
 
 @RequestMapping("/studyRecord")

@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/23 17:39
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/23 17:39
+ * @version 1.0
  */
 
 @Component

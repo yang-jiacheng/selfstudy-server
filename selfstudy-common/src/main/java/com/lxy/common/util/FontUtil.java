@@ -10,10 +10,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2025/01/03 16:04
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2025/01/03 16:04
+ * @version 1.0
  */
 public class FontUtil {
 

@@ -6,10 +6,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2024/12/14 16:19
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2024/12/14 16:19
+ * @version 1.0
  */
 public class ObjectStorageDTO implements Serializable {
     private static final long serialVersionUID = -6584352603005168007L;

@@ -5,10 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/12/24 16:36
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/12/24 16:36
+ * @version 1.0
  */
 
 public class StudyRecordDTO implements Serializable {

@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2021/09/13 13:23
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2021/09/13 13:23
+ * @version 1.0
  */
 @Configuration
 @MapperScan("com.lxy.**.mapper") //设置mapper接口的扫描包

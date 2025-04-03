@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEvent;
 import java.io.Serial;
 
 /**
- * TODO
+ * 操作日志事件
  * @author jiacheng yang.
  * @since  2022/12/20 10:49
  * @version  1.0

@@ -1,10 +1,10 @@
 package com.lxy.common.domain;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2024/12/17 10:27
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2024/12/17 10:27
+ * @version 1.0
  */
 public class GraphicsTextParameter implements java.io.Serializable {
     private static final long serialVersionUID = -9095058999894233263L;

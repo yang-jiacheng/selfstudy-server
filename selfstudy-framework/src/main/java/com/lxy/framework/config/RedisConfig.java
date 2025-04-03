@@ -26,10 +26,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @Description: redis配置
- * @author: jiacheng yang.
- * @Date: 2021/8/4 0:22
- * @Version: 1.0
+ * redis配置
+ * @author jiacheng yang.
+ * @since 2021/8/4 0:22
+ * @version 1.0
  */
 @Configuration
 public class RedisConfig {

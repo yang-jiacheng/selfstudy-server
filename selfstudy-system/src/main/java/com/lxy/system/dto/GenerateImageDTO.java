@@ -7,10 +7,10 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2024/12/17 10:52
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2024/12/17 10:52
+ * @version 1.0
  */
 public class GenerateImageDTO implements java.io.Serializable {
     private static final long serialVersionUID = 2435298421128860208L;

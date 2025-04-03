@@ -29,10 +29,10 @@ import static com.lxy.common.constant.ConfigConstant.*;
 import static com.lxy.common.constant.CommonConstant.*;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2023/02/23 21:17
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2023/02/23 21:17
+ * @version 1.0
  */
 
 public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {

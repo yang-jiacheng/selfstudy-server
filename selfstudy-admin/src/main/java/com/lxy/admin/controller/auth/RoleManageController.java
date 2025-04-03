@@ -12,6 +12,7 @@ import com.lxy.admin.service.AdminRoleRelateService;
 import com.lxy.admin.service.PermissionService;
 import com.lxy.admin.service.RolePermissionRelateService;
 import com.lxy.admin.service.RoleService;
+import com.lxy.common.domain.R;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.system.vo.LayUiResultVO;
 import com.lxy.system.vo.ResultVO;
@@ -23,10 +24,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/10/08 20:15
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/10/08 20:15
+ * @version 1.0
  */
 
 @RequestMapping("/roleManage")
@@ -82,22 +83,22 @@ public class RoleManageController {
             return JsonUtil.toJson(new LayUiResultVO((int) pg.getTotal(), pg.getRecords()));
         }
         List<Role> roles = roleService.list();
-        return JsonUtil.toJson(new ResultVO(roles));
+        return JsonUtil.toJson(R.ok(roles));
     }
 
     @PostMapping(value = "/removeRoleById", produces = "application/json")
     @ResponseBody
-    public String removeRoleById(@RequestParam("id") Integer id){
+    public R<Object> removeRoleById(@RequestParam("id") Integer id){
         rolePermissionRelateService.removeCachePermissionInRole(Collections.singletonList(id));
         roleService.removeById(id);
         rolePermissionRelateService.remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId,id));
         adminRoleRelateService.remove(new LambdaUpdateWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getRoleId,id));
-        return JsonUtil.toJson(new ResultVO());
+        return R.ok();
     }
 
     @PostMapping(value = "/getRoleById", produces = "application/json")
     @ResponseBody
-    public String getRoleById(@RequestParam("id") Integer id){
+    public R<Map<String ,Object>> getRoleById(@RequestParam("id") Integer id){
         Role role = roleService.getById(id);
         //角色权限
         List<Permission> rolePermission=permissionService.getRolePermission(id);
@@ -107,17 +108,17 @@ public class RoleManageController {
         map.put("role",role);
         map.put("allPermission",permissions);
         map.put("rolePermission",rolePermission);
-        return JsonUtil.toJson(new ResultVO(map));
+        return R.ok(map);
     }
 
     @PostMapping(value = "/addOrUpdateRole", produces = "application/json")
     @ResponseBody
-    public String addOrUpdateRole(@RequestParam(value = "roleJson") String roleJson,
+    public R<Integer> addOrUpdateRole(@RequestParam(value = "roleJson") String roleJson,
                                  @RequestParam(value = "idsJson") String idsJson){
         Role role = JsonUtil.getTypeObj(roleJson, Role.class);
         List<Integer> ids = JsonUtil.getListType(idsJson, Integer.class);
         if (role == null || CollUtil.isEmpty(ids)){
-            return JsonUtil.toJson(new ResultVO(-1,"数据有误！"));
+            return R.fail(-1,"数据有误！");
         }
         if (role.getId()!=null){
             role.setUpdateTime(new Date());
@@ -140,12 +141,12 @@ public class RoleManageController {
             }
             rolePermissionRelateService.saveBatch(list);
         }
-        return JsonUtil.toJson(new ResultVO(role.getId()));
+        return R.ok(role.getId());
     }
 
     @PostMapping(value = "/getPermissionList", produces = "application/json")
     @ResponseBody
-    public String getPermissionList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+    public Map<String ,Object> getPermissionList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
                                     @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
                                     @RequestParam(value = "urlCode",required = false) String urlCode){
         Page<Permission> pg = permissionService.getPermissionList(urlCode, page, limit);
@@ -154,7 +155,7 @@ public class RoleManageController {
         map.put("msg","调用成功");
         map.put("count",pg.getTotal());
         map.put("data",pg.getRecords());
-        return JsonUtil.toJson(map);
+        return map;
     }
 
     @PostMapping(value = "/getPermissionById", produces = "application/json")

@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2022/11/18 9:54
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2022/11/18 9:54
+ * @version 1.0
  */
 
 @RestControllerAdvice

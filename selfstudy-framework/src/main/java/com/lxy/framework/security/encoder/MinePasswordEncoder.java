@@ -5,10 +5,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
- * @Description: 前端传过来的就是加密后的，无需再编码
- * @author: jiacheng yang.
- * @Date: 2023/02/22 17:46
- * @Version: 1.0
+ * 前端传过来的就是加密后的，无需再编码
+ * @author jiacheng yang.
+ * @since 2023/02/22 17:46
+ * @version 1.0
  */
 
 @Component

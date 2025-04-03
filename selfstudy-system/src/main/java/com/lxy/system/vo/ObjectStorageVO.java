@@ -3,10 +3,10 @@ package com.lxy.system.vo;
 import com.lxy.system.po.ObjectStorage;
 
 /**
- * @Description: TODO
- * @author: jiacheng yang.
- * @Date: 2024/12/14 15:47
- * @Version: 1.0
+ * TODO
+ * @author jiacheng yang.
+ * @since 2024/12/14 15:47
+ * @version 1.0
  */
 
 public class ObjectStorageVO extends ObjectStorage {
