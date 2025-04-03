@@ -74,6 +74,7 @@ selfstudy-server
 ### 6. 演示地址
 
 后台管理系统：http://115.29.185.30/selfStudyAdmin/login
+
 App 服务端：http://115.29.185.30/selfStudyApp/
 
 ### 7. 打包

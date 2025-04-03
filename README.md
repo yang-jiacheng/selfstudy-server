@@ -73,6 +73,7 @@ selfstudy-server
 ### 6. Demo Link
 
 Admin Backend：http://115.29.185.30/selfStudyAdmin/login
+
 App Server：http://115.29.185.30/selfStudyApp/
 
 ### 7. Deployment
