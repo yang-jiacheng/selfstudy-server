@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Description: 意见反馈
@@ -39,9 +40,9 @@ public class FeedBackController {
      * Param: [page, limit, mine 是否我的反馈 1是]
      */
     @PostMapping(value = "/getFeedBackList" , produces = "application/json")
-    public R<Object> getFeedBackList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                                     @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
-                                     @RequestParam(value = "mine",required = false) Integer mine){
+    public R<List<FeedbackVO>> getFeedBackList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                                   @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
+                                   @RequestParam(value = "mine",required = false) Integer mine){
         Integer userId = UserIdUtil.getUserId();
         if (mine == null || mine != 1){
             userId = null;
@@ -59,7 +60,7 @@ public class FeedBackController {
      * Param: [id]
      */
     @PostMapping(value = "/getFeedBackDetail" , produces = "application/json")
-    public R<Object> getFeedBackDetail(@RequestParam(value = "id") Integer id){
+    public R<FeedbackVO> getFeedBackDetail(@RequestParam(value = "id") Integer id){
         FeedbackVO feedback = feedbackService.getFeedBackDetail(id);
         return R.ok(feedback);
     }

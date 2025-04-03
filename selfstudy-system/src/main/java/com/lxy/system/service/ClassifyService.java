@@ -1,9 +1,10 @@
 package com.lxy.system.service;
 
+import com.lxy.common.domain.R;
 import com.lxy.system.po.Classify;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lxy.system.vo.ClassifyVO;
-import com.lxy.system.vo.ResultVO;
+
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface ClassifyService extends IService<Classify> {
     /**
      * 更新图书馆信息
      */
-    ResultVO updateClassify(String mainJson);
+    R<Object> updateClassify(String mainJson);
 
     /**
      * 获取图书馆

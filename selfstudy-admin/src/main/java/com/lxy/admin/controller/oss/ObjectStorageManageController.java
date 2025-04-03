@@ -43,9 +43,9 @@ public class ObjectStorageManageController {
 
     @PostMapping(value = "/getObjectStoragePageList" , produces = "application/json")
     @ResponseBody
-    public String  getObjectStoragePageList(PageDTO pageDTO){
+    public LayUiResultVO getObjectStoragePageList(PageDTO pageDTO){
         PageInfo<ObjectStorageVO> pg = objectStorageService.getObjectStoragePageList(pageDTO);
-        return JsonUtil.toJson(new LayUiResultVO((int) pg.getTotal(),pg.getList()));
+        return new LayUiResultVO((int) pg.getTotal(),pg.getList());
     }
 
     @PostMapping(value = "/saveObjectStorage" , produces = "application/json")

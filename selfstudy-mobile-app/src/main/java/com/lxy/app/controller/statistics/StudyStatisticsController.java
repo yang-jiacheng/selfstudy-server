@@ -69,7 +69,7 @@ public class StudyStatisticsController {
      * Param: []
      */
     @PostMapping(value = "/getRankings" , produces = "application/json")
-    public R<Object> getRankings(){
+    public R<List<UserRankVO>> getRankings(){
         List<UserRankVO> records = userService.getRankingsTotalDuration();
         return R.ok(records);
     }
@@ -81,7 +81,7 @@ public class StudyStatisticsController {
      * Param: []
      */
     @PostMapping(value = "/getRankingsRules" , produces = "application/json")
-    public R<Object> getRankingsRules(){
+    public R<String> getRankingsRules(){
         String value = businessConfigService.getBusinessConfigValue(ConfigConstant.GENERAL_RULES);
         return R.ok(value);
     }
@@ -93,7 +93,7 @@ public class StudyStatisticsController {
      * Param: []
      */
     @GetMapping(value = "/getSelfRankings" , produces = "application/json")
-    public R<Object> getSelfRankings(){
+    public R<UserRankVO> getSelfRankings(){
         int userId = UserIdUtil.getUserId();
         UserRankVO user = userService.getUserRankingById(userId);
         return R.ok(user);

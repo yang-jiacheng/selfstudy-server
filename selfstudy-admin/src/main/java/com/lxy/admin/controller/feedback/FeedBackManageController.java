@@ -1,13 +1,14 @@
 package com.lxy.admin.controller.feedback;
 
 import com.github.pagehelper.PageInfo;
+import com.lxy.common.domain.R;
 import com.lxy.system.po.Feedback;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.vo.FeedbackVO;
 import com.lxy.system.service.FeedbackService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.system.vo.LayUiResultVO;
-import com.lxy.system.vo.ResultVO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -46,24 +47,24 @@ public class FeedBackManageController {
 
     @PostMapping(value = "/getFeedBackPageList" , produces = "application/json")
     @ResponseBody
-    public String getFeedBackPageList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+    public LayUiResultVO getFeedBackPageList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
                                   @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
                                   @RequestParam(value = "content",required = false) String content,
                                   @RequestParam(value = "replyStatus",required = false) Integer replyStatus){
         PageInfo<FeedbackVO> pg = feedbackService.getFeedBackList(content, replyStatus, null,null, page, limit);
-        return JsonUtil.toJson(new LayUiResultVO((int) pg.getTotal(),pg.getList()));
+        return new LayUiResultVO((int) pg.getTotal(),pg.getList());
     }
 
     @PostMapping(value = "/removeFeedBackById" , produces = "application/json")
     @ResponseBody
-    public String removeFeedBackById(@RequestParam("id") Integer id){
+    public R<Object> removeFeedBackById(@RequestParam("id") Integer id){
         feedbackService.removeById(id);
-        return JsonUtil.toJson(new ResultVO());
+        return R.ok();
     }
 
     @PostMapping(value = "/replyFeedBackById" , produces = "application/json")
     @ResponseBody
-    public String replyFeedBackById(@RequestParam("id") Integer id,@RequestParam("reply") String reply){
+    public R<Object> replyFeedBackById(@RequestParam("id") Integer id,@RequestParam("reply") String reply){
         int userId = UserIdUtil.getUserId();
         Feedback feedback = new Feedback();
         feedback.setId(id);
@@ -72,7 +73,7 @@ public class FeedBackManageController {
         feedback.setReplyStatus(1);
         feedback.setReplyTime(new Date());
         feedbackService.updateById(feedback);
-        return JsonUtil.toJson(new ResultVO());
+        return R.ok();
     }
 
 

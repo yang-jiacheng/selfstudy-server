@@ -41,7 +41,7 @@ public class PersonalCenterController {
      * Param: []
      */
     @PostMapping(value = "/getUserInfo" , produces = "application/json")
-    public R<Object> getUserInfo(){
+    public R<User> getUserInfo(){
         int userId = UserIdUtil.getUserId();
         User user = userService.getUserInfo(userId);
         return R.ok(user);
@@ -106,7 +106,7 @@ public class PersonalCenterController {
      * Param: [userId]
      */
     @PostMapping(value = "/getUserInfoById" , produces = "application/json")
-    public R<Object> getUserInfoById(@RequestParam(value = "userId") Integer userId){
+    public R<User> getUserInfoById(@RequestParam(value = "userId") Integer userId){
         User user = userService.getById(userId);
         user.setPassword("");
         user.setProfilePath(ImgConfigUtil.joinUploadUrl(user.getProfilePath()));

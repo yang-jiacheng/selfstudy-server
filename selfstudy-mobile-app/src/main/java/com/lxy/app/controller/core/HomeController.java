@@ -41,7 +41,7 @@ public class HomeController {
      */
     @PostMapping(value = "/getClassify" , produces = "application/json")
     @ResponseBody
-    public R<Object> getClassify(){
+    public R<List<ClassifyVO>> getClassify(){
         List<ClassifyVO> list = classifyService.getClassifyList();
         return R.ok(list);
     }

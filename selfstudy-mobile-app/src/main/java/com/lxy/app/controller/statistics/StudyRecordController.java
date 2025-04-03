@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * Description: 自习记录
  * author: jiacheng yang.
@@ -39,8 +41,8 @@ public class StudyRecordController {
      * Param: [page, limit]
      */
     @PostMapping(value = "/getStudyNotes" , produces = "application/json")
-    public R<Object> getStudyNotes(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                                   @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit){
+    public R<List<StudyRecord>> getStudyNotes(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                                 @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit){
         int userId = UserIdUtil.getUserId();
         PageInfo<StudyRecord> pg = studyRecordService.getStudyNotePageList(userId, page, limit);
         return R.ok(pg.getList());
@@ -53,7 +55,7 @@ public class StudyRecordController {
      * Param: [recordId]
      */
     @PostMapping(value = "/getStudyNoteDetail" , produces = "application/json")
-    public R<Object> getStudyNoteDetail(@RequestParam(value = "recordId") Integer recordId){
+    public R<StudyRecord> getStudyNoteDetail(@RequestParam(value = "recordId") Integer recordId){
         StudyRecord record = studyRecordService.getById(recordId);
         record.setNotePath(ImgConfigUtil.joinUploadUrl(record.getNotePath()));
         return R.ok(record);
@@ -92,7 +94,7 @@ public class StudyRecordController {
      * Param: [page, limit]
      */
     @PostMapping(value = "/getStudyRecord" , produces = "application/json")
-    public R<Object> getStudyRecord(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+    public R<List<StudyRecordVO>> getStudyRecord(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
                                  @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit){
         int userId = UserIdUtil.getUserId();
         //已完成的记录

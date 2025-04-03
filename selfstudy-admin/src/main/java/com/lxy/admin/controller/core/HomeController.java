@@ -45,13 +45,5 @@ public class HomeController {
         return "main";
     }
 
-    @GetMapping("/testError")
-    public String testError(){
-        int i =1;
-
-        int j = i/0;
-
-        return "ok";
-    }
 
 }

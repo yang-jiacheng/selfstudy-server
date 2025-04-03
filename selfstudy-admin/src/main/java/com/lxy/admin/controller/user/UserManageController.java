@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.admin.service.PoiService;
+import com.lxy.common.domain.R;
 import com.lxy.common.util.ExcelUtil;
 import com.lxy.admin.vo.ExcelErrorInfoVO;
 import com.lxy.system.po.StudyRecord;
@@ -17,7 +18,7 @@ import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.OssUtil;
 import com.lxy.system.vo.LayUiResultVO;
-import com.lxy.system.vo.ResultVO;
+
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -76,56 +77,56 @@ public class UserManageController {
 
     @PostMapping(value = "/getUserPageList", produces = "application/json")
     @ResponseBody
-    public String getUserPageList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+    public LayUiResultVO getUserPageList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
                               @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
                               @RequestParam(value = "name",required = false) String name,
                               @RequestParam(value = "phone",required = false) String phone,
                               @RequestParam(value = "startTime",required = false) String startTime,
                               @RequestParam(value = "endTime",required = false) String endTime){
         Page<User> pg = userService.getUserPageList(name, phone, startTime, endTime, page, limit);
-        return JsonUtil.toJson(new LayUiResultVO((int) pg.getTotal(), pg.getRecords()));
+        return new LayUiResultVO((int) pg.getTotal(), pg.getRecords());
     }
 
     @PostMapping(value = "/getUserById", produces = "application/json")
     @ResponseBody
-    public String getUserById(@RequestParam(value = "userId") Integer userId){
+    public R<Object> getUserById(@RequestParam(value = "userId") Integer userId){
         User user = userService.getById(userId);
         user.setProfilePath(ImgConfigUtil.joinUploadUrl(user.getProfilePath()));
-        return JsonUtil.toJson(new ResultVO(user));
+        return R.ok(user);
     }
 
     @PostMapping(value = "/saveUser", produces = "application/json")
     @ResponseBody
-    public String saveUser(@RequestParam(value = "userJson")String userJson){
+    public R<Object> saveUser(@RequestParam(value = "userJson")String userJson){
         User user = JSON.parseObject(userJson, User.class);
         if (user == null){
-            return JsonUtil.toJson(new ResultVO(-1,"数据有误！"));
+            return R.fail("数据有误！");
         }
         String phone = user.getPhone();
         if (! cn.hutool.core.util.PhoneUtil.isMobile(phone)) {
-            return JsonUtil.toJson(new ResultVO(-1,"手机号格式不正确！"));
+            return R.fail("手机号格式有误！");
         }
 
         boolean flag = userService.saveUser(user);
         if (!flag){
-            return JsonUtil.toJson(new ResultVO(-1,"手机号已被使用！"));
+            return R.fail("手机号已被使用！");
         }
-        return JsonUtil.toJson(new ResultVO());
+        return R.ok();
     }
 
     @PostMapping(value = "/removeUserByIds", produces = "application/json")
     @ResponseBody
-    public String removeUserByIds(@RequestParam(value = "jsonIds")String jsonIds){
+    public R<Object> removeUserByIds(@RequestParam(value = "jsonIds")String jsonIds){
         List<Integer> ids = JsonUtil.getListType(jsonIds, Integer.class);
         if (CollUtil.isEmpty(ids)){
-            return JsonUtil.toJson(new ResultVO(-1,"数据有误！"));
+            return R.fail("请至少选择一条数据！");
         }
         userService.removeByIds(ids);
         userService.removeUserInfoCacheByIds(ids);
         //删用户其他关联数据...
         statisticsService.remove(new LambdaQueryWrapper<StudyStatistics>().in(StudyStatistics::getUserId,ids));
         studyRecordService.remove(new LambdaQueryWrapper<StudyRecord>().in(StudyRecord::getUserId,ids));
-        return JsonUtil.toJson(new ResultVO());
+        return R.ok();
     }
 
 
@@ -145,12 +146,12 @@ public class UserManageController {
 
     @PostMapping(value = "/importUsersInExcel",name = "导入用户")
     @ResponseBody
-    public String importUsersInExcel(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+    public R<Object> importUsersInExcel(@RequestParam("file") MultipartFile file, HttpServletRequest request){
         if (file.isEmpty()){
-            return JsonUtil.toJson(new ResultVO(-1, "上传失败"));
+            return R.fail("上传文件为空！");
         }
         List<ExcelErrorInfoVO> errorList = poiService.importUsersInExcel(file);
-        return JsonUtil.toJson(new ResultVO(errorList));
+        return R.ok(errorList);
     }
 
 

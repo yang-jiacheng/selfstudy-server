@@ -9,7 +9,7 @@ import com.lxy.common.util.FileUtil;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.OssUtil;
-import com.lxy.system.vo.ResultVO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

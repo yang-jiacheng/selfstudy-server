@@ -39,9 +39,9 @@ public class BusinessConfigManageController {
 
     @PostMapping(value = "/getBusinessList" , produces = "application/json")
     @ResponseBody
-    public String  getBusinessList(){
+    public LayUiResultVO getBusinessList(){
         List<BusinessConfig> list = businessConfigService.list(new LambdaQueryWrapper<BusinessConfig>().eq(BusinessConfig::getShowStatus, 1));
-        return JsonUtil.toJson(new LayUiResultVO(list.size(),list));
+        return new LayUiResultVO(list.size(),list);
     }
 
     @PostMapping(value = "/updateBusiness" , produces = "application/json")

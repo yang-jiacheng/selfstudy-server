@@ -15,7 +15,7 @@ import com.lxy.admin.service.RoleService;
 import com.lxy.common.domain.R;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.system.vo.LayUiResultVO;
-import com.lxy.system.vo.ResultVO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -160,24 +160,23 @@ public class RoleManageController {
 
     @PostMapping(value = "/getPermissionById", produces = "application/json")
     @ResponseBody
-    public String getPermissionById(@RequestParam("id") Integer id){
+    public R<Permission> getPermissionById(@RequestParam("id") Integer id){
         Permission permission = permissionService.getById(id);
-        return JsonUtil.toJson(new ResultVO(permission));
+        return R.ok(permission);
     }
 
     @PostMapping(value = "/updatePermission", produces = "application/json")
     @ResponseBody
-    public String updatePermission(@RequestParam(value = "permissionJson") String permissionJson){
+    public R<Object> updatePermission(@RequestParam(value = "permissionJson") String permissionJson){
         Permission permission = JsonUtil.getTypeObj(permissionJson, Permission.class);
         if (permission == null){
-            return JsonUtil.toJson(new ResultVO(-1,"数据有误！"));
+            return R.fail(-1,"数据有误！");
         }
         if (permission.getId()!=null){
             permission.setUpdateTime(new Date());
         }
         permissionService.saveOrUpdate(permission);
-
-        return JsonUtil.toJson(new ResultVO());
+        return R.ok();
     }
 
 

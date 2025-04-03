@@ -34,7 +34,7 @@ public class VersionController {
      * Param: []
      */
     @PostMapping("/checkVersion")
-    public R<Object> checkVersion(){
+    public R<Version> checkVersion(){
         List<Version> list = versionService.list();
         return R.ok(list.get(0));
     }

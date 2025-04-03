@@ -7,7 +7,7 @@ import com.lxy.system.po.Classify;
 import com.lxy.system.service.CatalogService;
 import com.lxy.system.service.ClassifyService;
 import com.lxy.common.util.JsonUtil;
-import com.lxy.system.vo.ResultVO;
+
 import com.lxy.system.vo.ZtreeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +46,7 @@ public class ClassifyManageController {
 
     @PostMapping(value = "/getClassifyTree", produces = "application/json")
     @ResponseBody
-    public R<Object> getClassifyTree(){
+    public R<List<ZtreeVO>> getClassifyTree(){
         List<ZtreeVO> tree = catalogService.getCatalogTree();
         //按时间倒序
         //details.sort((t1,t2) -> t2.getUpdateTime().compareTo(t1.getUpdateTime()));
@@ -56,48 +56,48 @@ public class ClassifyManageController {
 
     @PostMapping(value = "/getClassifyById", produces = "application/json")
     @ResponseBody
-    public String getClassifyById(@RequestParam("id") Integer id){
+    public R<Classify> getClassifyById(@RequestParam("id") Integer id){
         Classify classify = classifyService.getClassifyById(id);
-        return JsonUtil.toJson(new ResultVO(classify));
+        return R.ok(classify);
     }
 
     @PostMapping(value = "/updateClassify", produces = "application/json")
     @ResponseBody
-    public String updateClassify(@RequestParam("mainJson")String mainJson){
-        ResultVO resultVO = classifyService.updateClassify(mainJson);
+    public R<Object> updateClassify(@RequestParam("mainJson")String mainJson){
+        R<Object> resultVO = classifyService.updateClassify(mainJson);
         classifyService.removeClassifyCache();
-        return JsonUtil.toJson(resultVO);
+        return resultVO;
     }
 
     @PostMapping(value = "/removeClassify", produces = "application/json")
     @ResponseBody
-    public String removeClassify(@RequestParam("id")Integer id){
+    public R<Object> removeClassify(@RequestParam("id")Integer id){
         classifyService.removeById(id);
         catalogService.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getClassifyId,id));
         classifyService.removeClassifyCache();
-        return JsonUtil.toJson(new ResultVO());
+        return R.ok();
     }
 
     @PostMapping(value = "/removeCatalog", produces = "application/json")
     @ResponseBody
-    public String removeCatalog(@RequestParam("id")Integer id){
+    public R<Object> removeCatalog(@RequestParam("id")Integer id){
         catalogService.removeById(id);
         catalogService.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getParentId,id));
-        return JsonUtil.toJson(new ResultVO());
+        return R.ok();
     }
 
     @PostMapping(value = "/getCatalogById", produces = "application/json")
     @ResponseBody
-    public String getCatalogById(@RequestParam("id")Integer id){
+    public R<Catalog> getCatalogById(@RequestParam("id")Integer id){
         Catalog catalog = catalogService.getById(id);
-        return JsonUtil.toJson(new ResultVO(catalog));
+        return R.ok(catalog);
     }
 
     @PostMapping(value = "/saveCatalog", produces = "application/json")
     @ResponseBody
-    public String saveCatalog(Catalog catalog){
+    public R<Object> saveCatalog(Catalog catalog){
         catalogService.saveCatalog(catalog);
-        return JsonUtil.toJson(new ResultVO());
+        return R.ok();
     }
 
 }

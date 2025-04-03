@@ -43,7 +43,7 @@ public class CatalogController {
      * Param: [classifyId 图书馆id]
      */
     @PostMapping(value = "/getClassifyDetail" , produces = "application/json")
-    public R<Object> getClassifyDetail(@RequestParam(value = "classifyId") Integer classifyId){
+    public R<ClassifyDetailVO> getClassifyDetail(@RequestParam(value = "classifyId") Integer classifyId){
         ClassifyDetailVO detail = catalogService.getCatalogByClassify(classifyId);
         return R.ok(detail);
     }
@@ -55,7 +55,7 @@ public class CatalogController {
      * Param: [roomId 自习室id]
      */
     @PostMapping(value = "/getRoomDetail" , produces = "application/json")
-    public R<Object> getRoomDetail(@RequestParam(value = "roomId") Integer roomId){
+    public R<RoomVO> getRoomDetail(@RequestParam(value = "roomId") Integer roomId){
         RoomVO detail = catalogService.getRoomDetail(roomId);
         return R.ok(detail);
     }
@@ -67,7 +67,7 @@ public class CatalogController {
      * Param: [catalogId 自习室id]
      */
     @PostMapping(value = "/getLearningRecords" , produces = "application/json")
-    public R<Object> getLearningRecords(@RequestParam(value = "catalogId") Integer catalogId){
+    public R<List<StudyRecordVO>> getLearningRecords(@RequestParam(value = "catalogId") Integer catalogId){
         List<StudyRecordVO> records = studyRecordService.getLearningRecords(catalogId);
         return R.ok(records);
     }
@@ -79,7 +79,7 @@ public class CatalogController {
      * Param: [recordId]
      */
     @PostMapping(value = "/getLearningRecordDetail" , produces = "application/json")
-    public R<Object> getLearningRecordDetail(@RequestParam(value = "recordId") Integer recordId){
+    public R<StudyRecordVO> getLearningRecordDetail(@RequestParam(value = "recordId") Integer recordId){
         StudyRecordVO detail = studyRecordService.getLearningRecordDetail(recordId);
         return R.ok(detail);
     }
@@ -91,7 +91,7 @@ public class CatalogController {
      * Param: [studyRecordDTO]
      */
     @PostMapping(value = "/startStudy" , produces = "application/json")
-    public R<Object> startStudy(@RequestBody StudyRecordDTO studyRecordDTO){
+    public R<Integer> startStudy(@RequestBody StudyRecordDTO studyRecordDTO){
         int userId = UserIdUtil.getUserId();
         Catalog catalog = catalogService.getById(studyRecordDTO.getCatalogId());
         Integer recordId = null;
@@ -108,7 +108,7 @@ public class CatalogController {
      * Param: [recordId]
      */
     @PostMapping(value = "/stopStudy" , produces = "application/json")
-    public R<Object> stopStudy(@RequestParam(value = "recordId") Integer recordId){
+    public R<Integer> stopStudy(@RequestParam(value = "recordId") Integer recordId){
         int userId = UserIdUtil.getUserId();
         StudyRecord studyRecord = studyRecordService.stopStudy(recordId, userId);
         return R.ok(studyRecord.getActualDuration());

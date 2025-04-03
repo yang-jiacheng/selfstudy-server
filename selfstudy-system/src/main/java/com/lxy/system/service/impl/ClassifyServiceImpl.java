@@ -2,6 +2,7 @@ package com.lxy.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
+import com.lxy.common.domain.R;
 import com.lxy.common.enums.StudyStatus;
 import com.lxy.system.po.Classify;
 import com.lxy.system.mapper.ClassifyMapper;
@@ -13,7 +14,7 @@ import com.lxy.system.service.StudyRecordService;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.system.vo.ClassifyVO;
-import com.lxy.system.vo.ResultVO;
+
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +50,10 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
     }
 
     @Override
-    public ResultVO updateClassify(String mainJson) {
+    public R<Object> updateClassify(String mainJson) {
         Classify classify = JSON.parseObject(mainJson, Classify.class);
         if (classify == null){
-            return new ResultVO(-1,"数据有误！");
+            return R.fail("数据有误！");
         }
         Integer id = classify.getId();
         classify.setUpdateTime(new Date());
@@ -60,7 +61,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
             classify.setCreateTime(new Date());
         }
         this.saveOrUpdate(classify);
-        return new ResultVO();
+        return R.ok();
     }
 
     @Override
