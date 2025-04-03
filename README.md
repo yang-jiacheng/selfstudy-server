@@ -91,10 +91,10 @@ The suggested structure is as follows, with the startup script in the project ro
 ```txt
 /java     
 ├── /selfstudy-admin/           
-│       └── selfstudy-admin.jar           // 后管jar包
+│       └── selfstudy-admin.jar           // Background management system jar package
 ├── /selfstudy-mobile-app/
-│       └── selfstudy-mobile-app.jar      // APP jar包
-├── /start-server.sh                      // 启动脚本
+│       └── selfstudy-mobile-app.jar      // APP jar package
+├── /start-server.sh                      // Startup script
 ```
 
 - Deployment command
