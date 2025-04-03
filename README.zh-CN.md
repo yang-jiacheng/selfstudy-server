@@ -29,17 +29,81 @@ jdk 17+
 - 阿里云内容分发网络（CDN）
 - 阿里云ECS服务器
 
+### 4. 结构
 
+```txt
+selfstudy-server    
+├── selfstudy-common                     // 定义基础 枚举、工具类、常量、注解、配置
+│    └── com.lxy.common
+│         └── annotation                    // 自定义注解
+│         └── constant                      // 通用常量
+│         └── domain                        // 领域模型
+│         └── enums                         // 通用枚举
+│         └── properties                    // application中的自定义属性
+│         └── util                          // 工具类
+│         └── vo                            // 领域模型封装
+├── selfstudy-framework                  // 框架核心
+│    └── com.lxy.framework
+│         └── aspectj                       // AOP
+│         └── config                        // 系统配置
+│         └── controller                    // 通用控制器
+│         └── exception                     // 异常处理
+│         └── manager                       // 异步处理
+│         └── security                      // 登录认证，权限控制
+├── selfstudy-system                     // 系统业务
+│    └── com.lxy.system
+│         └── dto                           // 数据传输对象
+│         └── engine                        // 模板引擎
+│         └── event                         // spring事件
+│         └── po                            // 实体类
+│         └── mapper                        // 持久化映射
+│         └── service                       // 业务
+│         └── vo                            // 值对象
+│    └── GeneratorMybatisPlus.java          // MybatisPlus代码生成器
+├── selfstudy-admin                     // 后管服务端
+├── selfstudy-mobile-app                // APP服务端
+├── start-server.sh                     // 启动脚本
+```
 
-### 4. 项目地址
+### 5. 项目地址
 
 | 平台   | selfstudy-server（后端）                          | StudyRoom（Android端）              |
 | ------ | ------------------------------------------------- | ----------------------------------- |
 | github | https://github.com/yang-jiacheng/selfstudy-server | https://github.com/yang-jiacheng/StudyRoom |
 
-### 5. 演示地址
+### 6. 演示地址
 
 后台管理系统：http://115.29.185.30/selfStudyAdmin/login
+App 服务端：http://115.29.185.30/selfStudyApp/
+
+### 7. 打包
+
+- 项目根目录执行打包命令
+
+```shell
+mvn clean package
+```
+
+- 服务器部署
+
+建议结构如下，启动脚本在项目根目录：
+
+```txt
+/java     
+├── /selfstudy-admin/           
+│       └── selfstudy-admin.jar           // 后管jar包
+├── /selfstudy-mobile-app/
+│       └── selfstudy-mobile-app.jar      // APP jar包
+├── /start-server.sh                      // 启动脚本
+```
+
+- 部署命令
+
+```shell
+# start | restart | stop
+# `selfstudy-admin`为jar包不带后缀的名称，也可写为`all`，就是对所有jar执行
+./start-server.sh start selfstudy-admin
+```
 
 ### License
 

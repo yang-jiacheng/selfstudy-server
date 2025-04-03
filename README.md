@@ -22,23 +22,87 @@ jdk 17+
 
 ### 3. Cloud Services
 
-- Alibaba Cloud SMS Service 
+- Alibaba Cloud SMS Service
 - Alibaba Cloud RDS MySQL 8
 - Alibaba Cloud Object Storage Service (OSS)
 - Alibaba Cloud Content Delivery Network (CDN)
 - Alibaba Cloud ECS Servers
 
+### 4. Structure
 
+```txt
+selfstudy-server    
+├── selfstudy-common                     // Define base enumerations, utility classes, constants, annotations, configurations
+│    └── com.lxy.common
+│         └── annotation                    // Custom annotations
+│         └── constant                      // Universal constant
+│         └── domain                        // Domain model
+│         └── enums                         // Generic enumeration
+│         └── properties                    // Custom properties in 'application'
+│         └── util                          // Tool class
+│         └── vo                            // Domain model encapsulation
+├── selfstudy-framework                  // Framework core 
+│    └── com.lxy.framework
+│         └── aspectj                       // AOP
+│         └── config                        // System configuration
+│         └── controller                    // Universal controller
+│         └── exception                     // Exception handling
+│         └── manager                       // Asynchronous processing
+│         └── security                      // Login authentication, permission control
+├── selfstudy-system                     // System business
+│    └── com.lxy.system
+│         └── dto                           // Data transfer object
+│         └── engine                        // Template engine
+│         └── event                         // Spring event
+│         └── po                            // Entity Class
+│         └── mapper                        // Persistence mapping
+│         └── service                       // Business
+│         └── vo                            // Value object
+│    └── GeneratorMybatisPlus.java          // MybatisPlus code generator
+├── selfstudy-admin                     // Background management system server
+├── selfstudy-mobile-app                // APP server
+├── start-server.sh                     // Startup script
+```
 
-### 4. Project Links
+### 5. Project Link
 
 | Platform   | selfstudy-server（Backend）                          | StudyRoom（Android）              |
 | ------ | ------------------------------------------------- | ----------------------------------- |
 | github | https://github.com/yang-jiacheng/selfstudy-server | https://github.com/yang-jiacheng/StudyRoom |
 
-### 5. Demo Link
+### 6. Demo Link
 
 Admin Backend：http://115.29.185.30/selfStudyAdmin/login
+App Server：http://115.29.185.30/selfStudyApp/
+
+### 7. Deployment
+
+- Project Root Execute Packaging Commands
+
+```shell
+mvn clean package
+```
+
+- Server Deployment
+
+The suggested structure is as follows, with the startup script in the project root directory：
+
+```txt
+/java     
+├── /selfstudy-admin/           
+│       └── selfstudy-admin.jar           // 后管jar包
+├── /selfstudy-mobile-app/
+│       └── selfstudy-mobile-app.jar      // APP jar包
+├── /start-server.sh                      // 启动脚本
+```
+
+- Deployment command
+
+```shell
+# start | restart | stop
+# The `selfstudy-admin` is the name of the jar package without suffix, or it can be written as `all`, that is, it is executed on all jar packages.
+./start-server.sh start selfstudy-admin
+```
 
 ### License
 
