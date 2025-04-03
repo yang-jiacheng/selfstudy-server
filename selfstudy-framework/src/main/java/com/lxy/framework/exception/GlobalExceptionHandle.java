@@ -1,4 +1,4 @@
-package com.lxy.common.exception;
+package com.lxy.framework.exception;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpStatus;

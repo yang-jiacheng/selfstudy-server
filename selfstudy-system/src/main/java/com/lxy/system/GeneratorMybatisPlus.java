@@ -1,13 +1,11 @@
-package com.lxy.common;
+package com.lxy.system;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
-import com.baomidou.mybatisplus.generator.config.TemplateType;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
+import com.lxy.system.engine.VelocityTemplateEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +38,7 @@ public class GeneratorMybatisPlus {
 	public static final String AUTHOR="jiacheng yang.";
 
 	public static final String[] TABS = {
-			"user","user_agreement","version"
+			"version"
 	};
 
 	public static String DRIVER_NAME="";
@@ -107,6 +105,7 @@ public class GeneratorMybatisPlus {
 							.naming(NamingStrategy.underline_to_camel)
 							.columnNaming(NamingStrategy.underline_to_camel)
 							.javaTemplate("/templates/entity.java.vm")
+							.enableLombok()
 //							.disable() // 禁用实体类生成
 
 							.controllerBuilder()

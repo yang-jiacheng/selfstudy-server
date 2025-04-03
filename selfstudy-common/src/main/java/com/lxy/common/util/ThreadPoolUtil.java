@@ -1,5 +1,6 @@
 package com.lxy.common.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,11 +14,11 @@ import java.util.concurrent.*;
  * @Date: 2022/12/10 18:17
  * @Version: 1.0
  */
+
+@Slf4j
 public class ThreadPoolUtil {
 
     private static volatile ThreadPoolExecutor threadPool;
-
-    private final static Logger LOG = LoggerFactory.getLogger(ThreadPoolUtil.class);
 
     private static final int CORE_POOL_SIZE;
     private static final int MAXIMUM_POOL_SIZE;
@@ -27,7 +28,7 @@ public class ThreadPoolUtil {
     // 静态代码块初始化线程池的核心线程数和最大线程数
     static {
         int availableProcessors = Runtime.getRuntime().availableProcessors();
-        LOG.info("CPU核心数: {}", availableProcessors);
+        log.info("CPU核心数: {}", availableProcessors);
         // 根据系统的 CPU 核心数来设置线程池大小
         // 至少4个线程
         CORE_POOL_SIZE = Math.max(4, availableProcessors);
@@ -71,6 +72,7 @@ public class ThreadPoolUtil {
 
     //关闭线程池
     public static void shutdown(){
+        log.info("关闭线程池");
         if (threadPool != null) {
             threadPool.shutdown();
             try {
@@ -86,9 +88,9 @@ public class ThreadPoolUtil {
 
     public static void logStatus() {
         ThreadPoolExecutor executor = getInstance();
-        LOG.error("正在主动执行任务的线程数: " + executor.getActiveCount());
-        LOG.error("已完成执行的任务的大致总数: " + executor.getCompletedTaskCount());
-        LOG.error("队列数量: " + executor.getQueue().size());
+        log.info("正在主动执行任务的线程数: {}", executor.getActiveCount());
+        log.info("已完成执行的任务的大致总数: {}", executor.getCompletedTaskCount());
+        log.info("队列数量: {}", executor.getQueue().size());
     }
 
 

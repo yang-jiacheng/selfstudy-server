@@ -57,22 +57,7 @@
             <artifactId>kaptcha</artifactId>
         </dependency>
 
-        <!-- dom4j -->
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-        </dependency>
-
-        <!-- 解析latex表达式 -->
-        <dependency>
-            <groupId>org.scilab.forge</groupId>
-            <artifactId>jlatexmath</artifactId>
-        </dependency>
 
     </dependencies>
 

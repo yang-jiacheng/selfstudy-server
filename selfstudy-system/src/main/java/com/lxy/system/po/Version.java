@@ -2,20 +2,24 @@ package com.lxy.system.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.util.Date;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
- * Description: 版本控制
- * author: jiacheng yang.
- * Date: 2025-02-24
+ * 版本控制
+ * @author jiacheng yang.
+ * @since 2025-04-03
  */
 
+@Data
 @TableName(value = "version", autoResultMap = true)
 public class Version implements Serializable {
-
+    @Serial
 	private static final long serialVersionUID = 1L;
 
 	@TableId(value = "id", type = IdType.AUTO)
@@ -39,74 +43,6 @@ public class Version implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
     private Date updateTime;
 
-    public Integer getId() {
-    	return id;
-    }
 
-    public void setId(Integer id) {
-    	this.id = id;
-    }
-
-    public Integer getVersionCode() {
-    	return versionCode;
-    }
-
-    public void setVersionCode(Integer versionCode) {
-    	this.versionCode = versionCode;
-    }
-
-    public String getVersionName() {
-    	return versionName;
-    }
-
-    public void setVersionName(String versionName) {
-    	this.versionName = versionName;
-    }
-
-    public String getDownloadUrl() {
-    	return downloadUrl;
-    }
-
-    public void setDownloadUrl(String downloadUrl) {
-    	this.downloadUrl = downloadUrl;
-    }
-
-    public Integer getStatus() {
-    	return status;
-    }
-
-    public void setStatus(Integer status) {
-    	this.status = status;
-    }
-
-    public Integer getCheckUpdate() {
-    	return checkUpdate;
-    }
-
-    public void setCheckUpdate(Integer checkUpdate) {
-    	this.checkUpdate = checkUpdate;
-    }
-
-    public Date getUpdateTime() {
-    	return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-    	this.updateTime = updateTime;
-    }
-
-
-    @Override
-    public String toString() {
-	    return "Version{" +
-	            ", id=" + id +
-	            ", versionCode=" + versionCode +
-	            ", versionName=" + versionName +
-	            ", downloadUrl=" + downloadUrl +
-	            ", status=" + status +
-	            ", checkUpdate=" + checkUpdate +
-	            ", updateTime=" + updateTime +
-	    "}";
-    }
 
 }

@@ -1,5 +1,6 @@
 package ${package.Entity};
 
+import com.baomidou.mybatisplus.annotation.TableName;
 #if(${swagger})
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,17 +8,17 @@ import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 #if(${entityLombokModel})
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 #end
 #foreach($pkg in ${table.importPackages})
 import ${pkg};
 #end
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
- * Description: $!{table.comment}
- * author: ${author}
- * Date: ${date}
+ * $!{table.comment}
+ * @author ${author}
+ * @since ${date}
  */
 
 #if(${swagger})
@@ -25,16 +26,8 @@ import ${pkg};
 #end
 #if(${entityLombokModel})
 @Data
-#if(${superEntityClass})
-@EqualsAndHashCode(callSuper = true)
-#else
-@EqualsAndHashCode(callSuper = false)
 #end
-@Accessors(chain = true)
-#end
-#if(${table.convert})
 @TableName(value = "${table.name}", autoResultMap = true)
-#end
 #if(${superEntityClass})
 public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
 #elseif(${activeRecord})
@@ -42,7 +35,7 @@ public class ${entity} extends Model<${entity}> {
 #else
 public class ${entity} implements Serializable {
 #end
-
+    @Serial
 	private static final long serialVersionUID = 1L;
 
 ## ----------  BEGIN 字段循环遍历  ----------

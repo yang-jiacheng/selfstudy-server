@@ -1,4 +1,4 @@
-package com.lxy.admin.util;
+package com.lxy.common.util;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;

@@ -1,6 +1,6 @@
-package com.lxy.admin.mapper;
+package com.lxy.system.mapper;
 
-import com.lxy.admin.po.OperationLog;
+import com.lxy.system.po.OperationLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

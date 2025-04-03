@@ -1,12 +1,10 @@
-package com.lxy.admin.util;
+package com.lxy.common.util;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.lxy.common.properties.AliYunProperties;
-import com.lxy.common.util.OssUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -61,7 +59,7 @@ public class WordUtil {
                 //每一个段落的图片
                 List<XWPFPicture> sortedPictures = geSortPictures(paragraph);
                 String paragraphStr = parseParagraph(paragraph,sortedPictures);
-                if (StringUtils.isNotBlank(paragraphStr)){
+                if (StrUtil.isNotBlank(paragraphStr)){
                     paragraphs.add(paragraphStr);
                 }
             }else if (ibodyelement.getElementType().equals(BodyElementType.TABLE)) {   //表格
@@ -73,7 +71,7 @@ public class WordUtil {
                             //每一个段落的图片
                             List<XWPFPicture> sortedPictures = geSortPictures(paragraph);
                             String paragraphStr = parseParagraph(paragraph, sortedPictures);
-                            if (StringUtils.isNotBlank(paragraphStr)){
+                            if (StrUtil.isNotBlank(paragraphStr)){
                                 paragraphs.add(paragraphStr);
                             }
                         }

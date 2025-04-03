@@ -1,4 +1,4 @@
-package com.lxy.framework.manager;
+package com.lxy.framework.config.manage;
 
 
 import com.lxy.common.util.ThreadPoolUtil;

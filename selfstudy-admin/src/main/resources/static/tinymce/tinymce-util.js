@@ -30,14 +30,14 @@ function getTinyText(tinyId){
     return str
 }
 
-function initTiny(tinyId,content) {
+async function initTiny(tinyId,content) {
     var edit = tinyMCE.get(tinyId)
     if (edit) {
         tinyMCE.editors[tinyId].setContent(content);
         return
     }
 
-    tinymce.init({
+    await tinymce.init({
         selector: '#' + tinyId,
         branding: false,
         height: 300,

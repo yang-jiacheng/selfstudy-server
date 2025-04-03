@@ -1,14 +1,12 @@
 package com.lxy.admin.controller.user;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.lxy.common.annotation.OperationLog;
+import com.lxy.common.annotation.Log;
 import com.lxy.common.domain.R;
 import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
 import com.lxy.system.po.UserAgreement;
 import com.lxy.system.service.UserAgreementService;
-import com.lxy.common.util.JsonUtil;
-import com.lxy.system.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -58,7 +56,7 @@ public class UserAgreementController {
         return R.ok(map);
     }
 
-    @OperationLog(title = "修改隐私政策与用户协议", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "修改隐私政策与用户协议", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/saveAgreement", produces = "application/json")
     @ResponseBody
     public R<Object> saveAgreement(@RequestParam(value = "type") Integer type,

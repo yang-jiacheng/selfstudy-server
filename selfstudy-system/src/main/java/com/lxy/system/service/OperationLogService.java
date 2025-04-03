@@ -1,6 +1,7 @@
-package com.lxy.admin.service;
+package com.lxy.system.service;
 
-import com.lxy.admin.po.OperationLog;
+import com.lxy.system.event.OperationLogEvent;
+import com.lxy.system.po.OperationLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,6 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface OperationLogService extends IService<OperationLog> {
 
-    void saveOperationLog(OperationLog operationLog);
+    void saveOperationLog(OperationLogEvent event);
 
 }
