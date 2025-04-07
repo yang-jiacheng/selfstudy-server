@@ -57,7 +57,7 @@ public class ResourcesController {
 
     @PostMapping(value = "/getStsToken", produces = "application/json")
     @ResponseBody
-    public R<Object> getStsToken(){
+    public R<Map<String, Object>> getStsToken(){
         AssumeRoleResponse assumeRoleResponse = OssUtil.getStsCredentials();
         if (assumeRoleResponse == null){
             return R.fail(-1,"获取凭证失败");
@@ -70,14 +70,14 @@ public class ResourcesController {
 
     @PostMapping(value = "/getUploadPrefix", produces = "application/json")
     @ResponseBody
-    public String getUploadPrefix(){
-        return JsonUtil.toJson(new ResultVO(ImgConfigUtil.getPrefix()));
+    public R<Object> getUploadPrefix(){
+        return R.ok(ImgConfigUtil.getPrefix());
     }
 
     @PostMapping(value = "/getAccessUrl", produces = "application/json")
     @ResponseBody
-    public String getAccessUrl(){
-        return JsonUtil.toJson(new ResultVO(ImgConfigUtil.getAccessUrl()));
+    public R<Object> getAccessUrl(){
+        return R.ok(ImgConfigUtil.getAccessUrl());
     }
 
     @GetMapping("/downloadFile")
