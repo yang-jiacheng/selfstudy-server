@@ -4,7 +4,7 @@ PORTS=(8071 8072)
 # 模块
 MODULES=('selfstudy-admin' 'selfstudy-mobile-app')
 # 模块名称
-MODULE_NAMES=(后台管理系统 APP服务端)
+MODULE_NAMES=('后台管理系统' 'APP服务端')
 # jar包数组
 JARS=('selfstudy-admin.jar' 'selfstudy-mobile-app.jar')
 # jar包路径数组
@@ -30,7 +30,7 @@ start() {
         PORT=${PORTS[$i]}
         JAR_PATH=${JAR_PATHS[$i]}
         JAVA_OPTION=${JAVA_OPTIONS[$i]}
-        
+
         if [ "$command" == "all" ] || [ "$command" == "$MODULE" ]; then
             commandOk=1
             count=0
@@ -73,7 +73,7 @@ stop() {
         MODULE=${MODULES[$i]}
         MODULE_NAME=${MODULE_NAMES[$i]}
         JAR_NAME=${JARS[$i]}
-        
+
         if [ "$command" = "all" ] || [ "$command" = "$MODULE" ]; then
             commandOk=1
             PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
