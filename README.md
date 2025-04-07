@@ -46,6 +46,7 @@ selfstudy-server
 │         └── aspectj                       // AOP
 │         └── config                        // System configuration
 │         └── controller                    // Universal controller
+│         └── event                         // Spring event
 │         └── exception                     // Exception handling
 │         └── manager                       // Asynchronous processing
 │         └── security                      // Login authentication, permission control
@@ -53,7 +54,6 @@ selfstudy-server
 │    └── com.lxy.system
 │         └── dto                           // Data transfer object
 │         └── engine                        // Template engine
-│         └── event                         // Spring event
 │         └── po                            // Entity Class
 │         └── mapper                        // Persistence mapping
 │         └── service                       // Business

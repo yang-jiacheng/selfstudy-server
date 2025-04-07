@@ -4,7 +4,7 @@ import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.lxy.common.annotation.Log;
-import com.lxy.system.event.OperationLogEvent;
+import com.lxy.framework.event.OperationLogEvent;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.system.po.OperationLog;

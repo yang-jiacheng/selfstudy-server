@@ -1,4 +1,4 @@
-package com.lxy.system.event;
+package com.lxy.framework.event;
 
 import com.lxy.system.po.OperationLog;
 import lombok.Getter;

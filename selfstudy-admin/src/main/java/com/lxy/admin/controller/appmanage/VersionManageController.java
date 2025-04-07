@@ -1,7 +1,10 @@
 package com.lxy.admin.controller.appmanage;
 
 import com.alibaba.fastjson2.JSON;
+import com.lxy.common.annotation.Log;
 import com.lxy.common.domain.R;
+import com.lxy.common.enums.LogBusinessType;
+import com.lxy.common.enums.LogUserType;
 import com.lxy.system.po.Version;
 import com.lxy.system.service.VersionService;
 import com.lxy.common.util.JsonUtil;
@@ -57,6 +60,7 @@ public class VersionManageController {
         return R.ok(version);
     }
 
+    @Log(title = "修改APP版本", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping("/saveVersion")
     @ResponseBody
     public R<Object> saveVersion(@RequestParam("versionJson") String versionJson){

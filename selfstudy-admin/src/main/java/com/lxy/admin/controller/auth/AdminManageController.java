@@ -4,10 +4,13 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lxy.common.annotation.Log;
 import com.lxy.common.domain.R;
 import com.lxy.admin.po.AdminInfo;
 import com.lxy.admin.po.AdminRoleRelate;
 import com.lxy.admin.po.Role;
+import com.lxy.common.enums.LogBusinessType;
+import com.lxy.common.enums.LogUserType;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.admin.service.AdminInfoService;
 import com.lxy.admin.service.AdminRoleRelateService;
@@ -90,6 +93,7 @@ public class AdminManageController {
         return R.ok(map);
     }
 
+    @Log(title = "修改后管用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value ="/addAdminInfo", produces = "application/json")
     @ResponseBody
     public R<Object> addAdminInfo(@RequestParam(value = "adminInfoJson") String adminInfoJson,

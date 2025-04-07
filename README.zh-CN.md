@@ -47,6 +47,7 @@ selfstudy-server
 │         └── aspectj                       // AOP
 │         └── config                        // 系统配置
 │         └── controller                    // 通用控制器
+│         └── event                         // spring事件
 │         └── exception                     // 异常处理
 │         └── manager                       // 异步处理
 │         └── security                      // 登录认证，权限控制
@@ -54,7 +55,6 @@ selfstudy-server
 │    └── com.lxy.system
 │         └── dto                           // 数据传输对象
 │         └── engine                        // 模板引擎
-│         └── event                         // spring事件
 │         └── po                            // 实体类
 │         └── mapper                        // 持久化映射
 │         └── service                       // 业务
