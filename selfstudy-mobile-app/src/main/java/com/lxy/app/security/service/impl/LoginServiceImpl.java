@@ -41,6 +41,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public R<Object> login(String username, String password, String device) {
         //AuthenticationManager authenticate进行用户认证
+        // 会去调用UserDetailsService.loadUserByUsername方法。UserDetailsServiceImpl 实现了 UserDetailsService接口的 loadUserByUsername方法
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authenticate = null;
         try {

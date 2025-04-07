@@ -55,6 +55,7 @@ public class LoginServiceImpl implements LoginService {
             return R.fail("验证码错误或已失效！");
         }
         //AuthenticationManager authenticate进行用户认证
+        // 会去调用UserDetailsService.loadUserByUsername方法。AdminDetailsServiceImpl 实现了 UserDetailsService接口的 loadUserByUsername方法
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
         Authentication authenticate = null;
         try {
