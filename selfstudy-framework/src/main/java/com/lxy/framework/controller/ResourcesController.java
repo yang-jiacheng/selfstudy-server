@@ -22,6 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,8 +51,8 @@ public class ResourcesController {
 
     @PostMapping(value = "/upload", produces = "application/json")
     @ResponseBody
-    public R<Object> upload(@RequestParam("file") MultipartFile[] file, HttpServletRequest request){
-        R<Object> r = resourcesService.uploadFile(file);
+    public R<List<String>> upload(@RequestParam("file") MultipartFile[] file, HttpServletRequest request){
+        R<List<String>> r = resourcesService.uploadFile(file);
         return r;
     }
 

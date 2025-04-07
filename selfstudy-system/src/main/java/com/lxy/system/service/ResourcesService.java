@@ -2,6 +2,7 @@ package com.lxy.system.service;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.domain.R;
 import com.lxy.common.properties.AliYunProperties;
@@ -9,6 +10,7 @@ import com.lxy.common.properties.CustomProperties;
 import com.lxy.common.util.FileUtil;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.OssUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * TODO
  * @author jiacheng yang.
@@ -28,10 +31,9 @@ import java.util.List;
  * @version 1.0
  */
 
+@Slf4j
 @Service
 public class ResourcesService {
-
-    private final Logger logger = LoggerFactory.getLogger(ResourcesService.class);
 
     private final BusinessConfigService businessConfigService;
 
@@ -40,59 +42,49 @@ public class ResourcesService {
         this.businessConfigService = businessConfigService;
     }
 
-    public R<Object> uploadFile(MultipartFile[]  file){
-        List<String> paths = new ArrayList<>(file.length);
-        InputStream in = null;
-        FileOutputStream fos = null;
-        try {
+    public R<List<String>> uploadFile(MultipartFile[] files) {
+        List<String> paths = new ArrayList<>(files.length);
 
+        for (MultipartFile multipartFile : files) {
+            String fileName = multipartFile.getOriginalFilename();
+            fileName = FileUtil.getRandomFileName(fileName);
+            // 日期路径
+            String datePath = DateUtil.today();
+            // 上传相对路径
+            String relativePath = "/upload/" + datePath + "/" + fileName;
+            int size = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.COMPRESSION_SIZE));
+            try (
+                    InputStream in0 = multipartFile.getInputStream();
+                    // 图片压缩
+                    InputStream in1 = (ImgConfigUtil.isImage(fileName)
+                            && multipartFile.getSize() >= 1024L  * size)
+                            ? ImgConfigUtil.uploadImageReStream(in0)
+                            : in0
+            ) {
 
-            String fileName = "";
-            for (MultipartFile multipartFile : file) {
-                //原始文件名
-                fileName = multipartFile.getOriginalFilename();
-                //随机文件名
-                fileName = FileUtil.getRandomFileName(fileName);
-
-                in = multipartFile.getInputStream();
-                if (ImgConfigUtil.isImage(fileName)){
-                    int size = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.COMPRESSION_SIZE));
-                    if (multipartFile.getSize() >= 1024L * size){
-                        //压缩图片
-                        in = ImgConfigUtil.uploadImageReStream(in);
+                if (AliYunProperties.ossEnabled) {
+                    OssUtil.uploadFileToOss( relativePath.substring(1), in1);
+                } else {
+                    // 确保目录存在
+                    String saveDir = CustomProperties.uploadPath + datePath + "/";
+                    FileUtil.judeDirExists(saveDir);
+                    try(FileOutputStream fos0 = new FileOutputStream(CustomProperties.uploadPath + datePath + "/" + fileName)){
+                        // 将 in1 的内容写入本地文件
+                        byte[] buffer = new byte[8192];
+                        int len;
+                        while ((len = in1.read(buffer)) != -1) {
+                            fos0.write(buffer, 0, len);
+                        }
                     }
                 }
-                //文件相对路径
-                String path ="/upload/"+DateUtil.today()+"/"+fileName;
-                //上传到OSS
-                if (AliYunProperties.ossEnabled){
-                    OssUtil.uploadFileToOss(path.substring(1),in);
-                    //FileUtil.deleteFileAndFolderByUpload();
-                }else {
-                    // 设置上传图片的保存路径
-                    String savePath = CustomProperties.uploadPath+ DateUtil.today()+"/";
-                    String transUrl = savePath + fileName;
-                    //创建文件夹
-                    FileUtil.judeDirExists(savePath);
-                    File transFile = new File(transUrl);
-                    // 将文件保存到本地
-                    fos = new FileOutputStream(transFile);
-                    byte[] buffer = new byte[1024];
-                    int len;
-                    while ((len = in.read(buffer)) != -1) {
-                        fos.write(buffer, 0, len);
-                    }
-                }
-                logger.error("文件上传成功，路径：{}",path);
-                paths.add(path);
+                log.info("文件上传成功，路径：{}", ImgConfigUtil.getPrefix() + relativePath);
+                paths.add(relativePath);
+            } catch (Exception e) {
+                log.error(StrUtil.format("文件上传发生异常: {}", relativePath), e);
+                return R.fail("文件上传失败");
             }
-        }catch (Exception e){
-            logger.error("文件上传发生异常",e);
-            return R.fail(-1,"调用失败");
-        }finally {
-            IoUtil.close(in);
-            IoUtil.close(fos);
         }
+
         return R.ok(paths);
     }
 

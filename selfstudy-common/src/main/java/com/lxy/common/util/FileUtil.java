@@ -3,6 +3,7 @@ package com.lxy.common.util;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.pinyin.PinyinUtil;
 import com.lxy.common.properties.CustomProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,16 +76,29 @@ public class FileUtil {
     }
 
     /**
-     * 获得随机文件名
+     * 获取格式化后的随机文件名：
+     * 原始文件名（最多15字符） + "_" + 当前时间戳 + 原始后缀
      */
     public static String getRandomFileName(String fileName) {
-        if (fileName==null || "".equals(fileName)){
+        if (StrUtil.isBlank(fileName)) {
             return "";
         }
+
         int index = fileName.lastIndexOf(".");
-        fileName = StrUtil.format("{}_{}{}",DateUtil.current(), RandomUtil.randomInt(1000000, 10000000),fileName.substring(index));
-        return fileName;
+        String namePart = index != -1 ? fileName.substring(0, index) : fileName;
+        String suffix = index != -1 ? fileName.substring(index) : "";
+
+        // 包含中文就转拼音（正则判断）
+        if (namePart.matches(".*[\\u4e00-\\u9fa5].*")) {
+            namePart = PinyinUtil.getPinyin(namePart, "");
+        }
+
+        // 截取前15个字符
+        namePart = StrUtil.sub(namePart, 0, 15);
+
+        return StrUtil.format("{}_{}{}", namePart, DateUtil.current(), suffix);
     }
+
 
     /**
      * 删除upload文件夹里的具体文件
@@ -173,6 +187,6 @@ public class FileUtil {
 //        System.out.println(getHash(file,"MD5"));
 //        System.out.println(getHash(file,"SHA-1"));
 //        System.out.println(getHash(file,"SHA-256"));
-        System.out.println(getRandomFileName("test.txt"));
+        System.out.println(getRandomFileName("test你好的分成三等分.txt"));
     }
 }
