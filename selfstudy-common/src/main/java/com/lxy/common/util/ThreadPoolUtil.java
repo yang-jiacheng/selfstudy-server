@@ -76,7 +76,7 @@ public class ThreadPoolUtil {
         if (threadPool != null) {
             threadPool.shutdown();
             try {
-                if (!threadPool.awaitTermination(60, TimeUnit.SECONDS)) {
+                if (!threadPool.awaitTermination(30, TimeUnit.SECONDS)) {
                     threadPool.shutdownNow(); // 强制关闭
                 }
             } catch (InterruptedException e) {

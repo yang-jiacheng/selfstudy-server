@@ -76,16 +76,27 @@ stop() {
 
         if [ "$command" = "all" ] || [ "$command" = "$MODULE" ]; then
             commandOk=1
+            # 获取 PID
             PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
             if [ -n "$PID" ]; then
                 echo "$MODULE---$MODULE_NAME:准备结束,PID=$PID"
-                kill -9 $PID
-                PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
-                while [ -n "$PID" ]; do
-                    sleep 3s
+                # 发送 SIGTERM（kill -15）请求优雅关闭
+                kill -15 $PID
+                # 等待进程退出，最多等待 40 秒
+                WAIT_TIME=0
+                while [ -n "$PID" ] && [ $WAIT_TIME -lt 40 ]; do
+                    sleep 1s
                     PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
+                    WAIT_TIME=$((WAIT_TIME+1))
                 done
-                echo "$MODULE---$MODULE_NAME:成功结束"
+
+                if [ -n "$PID" ]; then
+                    # 如果超过40秒进程还没有退出，则强制杀死
+                    echo "$MODULE---$MODULE_NAME:超时未结束，强制终止, PID=$PID"
+                    kill -9 $PID
+                else
+                    echo "$MODULE---$MODULE_NAME:成功结束"
+                fi
                 okCount=$(($okCount+1))
             else
                 echo "$MODULE---$MODULE_NAME:未运行"
