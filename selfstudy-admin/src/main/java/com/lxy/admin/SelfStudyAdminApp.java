@@ -4,6 +4,7 @@ package com.lxy.admin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * nohup java -jar -Xms500m -Xmx500m selfstudy-admin.jar --spring.profiles.active=prod > /dev/null 2>&1 &
  */
 
-//@ComponentScan("com.lxy")
+@EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 @EnableTransactionManagement
 @SpringBootApplication(scanBasePackages = {"com.lxy"})
 public class SelfStudyAdminApp {
