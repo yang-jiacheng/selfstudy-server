@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.system.po.User;
 import com.lxy.system.mapper.UserMapper;
+import com.lxy.system.service.OperationLogService;
 import com.lxy.system.service.RedisService;
 import com.lxy.system.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -17,8 +18,11 @@ import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.system.vo.UserImportVO;
 import com.lxy.system.vo.UserRankVO;
+import jakarta.annotation.Resource;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -34,15 +38,15 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    private final RedisService redisService;
+    @Resource
+    private  RedisService redisService;
 
-    private final UserMapper userMapper;
+    @Resource
+    private  UserMapper userMapper;
 
-    @Autowired
-    public UserServiceImpl(RedisService redisService,UserMapper userMapper) {
-        this.redisService = redisService;
-        this.userMapper = userMapper;
-    }
+    @Resource
+    private OperationLogService operationLogService;
+
 
     @Override
     public Page<User> getUserPageList(String name, String phone, String startTime, String endTime, Integer current, Integer size) {
@@ -226,11 +230,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userMapper.insertBatchUser(userList);
     }
 
+
+    @Override
+    public void test() {
+        UserServiceImpl proxy = (UserServiceImpl)AopContext.currentProxy();
+        proxy.b();
+        throw new RuntimeException("test");
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void b(){
+        User user = new User();
+        user.setId(108);
+        user.setName("test");
+        this.updateById(user);
+    }
+
     private List<UserRankVO> getRankingsTotalDurationCache(){
         String key = RedisKeyConstant.getRankings();
         List<UserRankVO> list = redisService.getObject(key, ArrayList.class);
         return list;
     }
+
 
 
 }

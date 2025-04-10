@@ -47,4 +47,10 @@ public class IndexController {
         throw new RuntimeException("world error");
     }
 
+    @GetMapping("/test")
+    @ResponseBody
+    public void test() {
+        userService.test();
+    }
+
 }

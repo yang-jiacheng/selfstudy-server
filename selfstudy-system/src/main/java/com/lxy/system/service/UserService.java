@@ -78,4 +78,6 @@ public interface UserService extends IService<User> {
     UserRankVO getUserRankingById(Integer userId);
 
     void insertBatchUser(List<UserImportVO> userList);
+
+    void test();
 }
