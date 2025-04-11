@@ -1,6 +1,6 @@
-
 const stsUrl = `../resources/getStsToken`;
-const ossPath = "https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com"
+let ossPath = ""
+let compressionSize = 0
 
 // 获取STS Token的函数
 async function getStsToken() {
@@ -13,6 +13,8 @@ async function getStsToken() {
         });
 
         if (response.code === 0) {
+            ossPath = response.result.ossPath
+            compressionSize = response.result.compressionSize
             return response.result.credentials; // 返回有效的凭证
         } else {
             throw new Error(`获取STS Token失败，服务器返回错误 code: ${response.code}`);
@@ -88,12 +90,12 @@ async function multipartUploadFile(file,type) {
         // 上传成功后移除进度条
         setTimeout(data => {
             removeProgressOverlay();
-            layer.msg('上传成功！', { icon: 1 });
+            $msg.success('上传成功！');
         }, 500)
         return result;
     } catch (error) {
         removeProgressOverlay(); // 上传失败后移除进度条
-        layer.msg(`上传文件失败: ${error.message}`, { icon: 2 });
+        $msg.error(`上传文件失败: ${error.message}`);
         console.error("上传文件失败", error);
         return null;
     }
@@ -122,34 +124,42 @@ function getOssFileInput(nodeId, id, type, title, value) {
  * @param inpId 上传成功后显示的input的id
  * @param type 1 文件 2 APK
  * @param allowedTypes 文件类型数组
+ * @param maxSizeMB 文件大小限制 MB
  */
-function listeningFileInput(id,btnId,inpId,type,allowedTypes) {
+function listeningFileInput(id,btnId,inpId,type,allowedTypes,maxSizeMB) {
     // 点击按钮时，触发隐藏的文件选择器的click事件
     $(`#${btnId}`).on('click', function () {
         $(`#${id}`).click();
     });
     $(`#${id}`).on('change', async function (e) {
-        const file = e.target.files[0];
+        let file = e.target.files[0];
         if (file) {
             const fileSize = file.size;
-            const maxSize = 1024 * 1024  * 1024; //1024MB
+            //默认5MB
+            if (!maxSizeMB){
+                maxSizeMB = 5;
+            }
+            const maxSize = maxSizeMB * 1024  * 1024;
             // 检查文件大小
             if (fileSize > maxSize) {
                 $(this).val(''); // 清空文件选择器
-                layer.msg('文件大小不能超过1GB！', { icon: 2 });
+                $msg.warning(`文件大小不能超过${maxSizeMB}MB！`);
                 return;
             }
             // // 校验文件类型
-            // const allowedTypes = ['.pdf', '.docx', '.pptx', '.xlsx'];
             if (allowedTypes && allowedTypes.length > 0){
                 const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
                 if (!allowedTypes.includes(fileExtension)) {
                     $(this).val(''); // 清空文件选择器
-                    layer.msg(`只允许上传 ${allowedTypes.join(', ')} 文件！`, { icon: 8 });
+                    $msg.warning(`只允许上传 ${allowedTypes.join(', ')} 文件！`);
                     return;
                 }
             }
 
+            //压缩图片
+            if (fileSize >= compressionSize && file.type.startsWith('image/')){
+                file = await compressImageFile(file);
+            }
 
             const result = await multipartUploadFile(file,type);
             $(this).val(''); // 清空文件选择器
@@ -161,20 +171,88 @@ function listeningFileInput(id,btnId,inpId,type,allowedTypes) {
                 }else {
                     path = path.substring(path.indexOf("aliyuncs.com/") + 12)
                 }
-                $(`#${inpId}`).val(ossPath+path)
+                const inpDom = $(`#${inpId}`)
+                inpDom.val(ossPath+path)
+                inpDom.attr('src',ossPath+path)
             }
         }
     });
 }
 
-// 生成文件路径
-function generateFilePath(fileName) {
-    const today = new Date().toISOString().split('T')[0]; // 获取当前日期 (yyyy-MM-dd)
-    const currentTime = Date.now(); // 获取当前时间戳
-    const randomInt = Math.floor(Math.random() * (10000000 - 1000000) + 1000000); // 生成 1000000 到 10000000 之间的随机数
-    const fileExtension = fileName.substring(fileName.lastIndexOf('.')); // 获取文件扩展名
+/**
+ * 压缩图片并返回新的 File 对象
+ * @param {File} inputFile 输入的图片文件
+ * @param {number} [scale=0.9] 缩放比例（0-1）
+ * @param {number} [quality=0.6] 输出质量（0-1）
+ * @returns {Promise<File>} 压缩后的 File 对象
+ */
+async function compressImageFile(inputFile, scale = 0.9, quality = 0.7) {
+    let imageBitmap = null;
+    let canvas = null;
 
-    return `upload/${today}/${currentTime}_${randomInt}${fileExtension}`;
+    try {
+        // 1. 解码图片为 ImageBitmap（独立内存区）
+        imageBitmap = await createImageBitmap(inputFile);
+
+        // 2. 创建 OffscreenCanvas 绘制缩放后图像
+        canvas = new OffscreenCanvas(
+            imageBitmap.width  * scale,
+            imageBitmap.height  * scale
+        );
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(imageBitmap,  0, 0, canvas.width,  canvas.height);
+
+
+
+        // 3. 转换为压缩后的 Blob
+        const compressedBlob = await canvas.convertToBlob({
+            type: inputFile.type.startsWith('image/')  ? inputFile.type  : 'image/jpeg',
+            quality
+        });
+
+        // 4. 生成新 File 对象（保留原始文件名+时间戳）
+        return new File([compressedBlob], `compressed_${Date.now()}_${inputFile.name}`,  {
+            type: compressedBlob.type,
+            lastModified: Date.now()
+        });
+
+    } catch (error) {
+        console.error(' 压缩失败:', error);
+        throw error;
+    } finally {
+        if (imageBitmap) {
+            // 释放 ImageBitmap 内存
+            imageBitmap.close();
+            imageBitmap = null;
+        }
+        if (canvas) {
+            // 释放 Canvas 内存
+            canvas = null;
+        }
+    }
+}
+
+
+function generateFilePath(fileName) {
+    if (!fileName || fileName.trim()  === '') return '';
+    const today = new Date().toISOString().split('T')[0]; // 获取当前日期 (yyyy-MM-dd)
+    // 拆分文件名和扩展名
+    const lastDotIndex = fileName.lastIndexOf('.');
+    const namePart = lastDotIndex !== -1
+        ? fileName.slice(0,  lastDotIndex)
+        : fileName;
+    const suffix = lastDotIndex !== -1
+        ? fileName.slice(lastDotIndex)
+        : '';
+
+    // 截取前15个字符（兼容特殊符号）
+    const truncatedName = namePart.replace(/[^\w-]/g,  '_') // 非字母数字转下划线
+        .substring(0, 15)
+        .trim() || 'file'; // 空文件名兜底
+
+    const currentTime = Date.now(); // 获取当前时间戳
+
+    return `upload/${today}/${truncatedName}_${currentTime}${suffix}`;
 }
 
 // 创建并显示进度条的方法

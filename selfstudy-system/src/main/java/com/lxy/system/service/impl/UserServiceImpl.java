@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lxy.common.util.ThreadPoolUtil;
 import com.lxy.system.po.User;
 import com.lxy.system.mapper.UserMapper;
 import com.lxy.system.service.OperationLogService;
@@ -23,6 +24,7 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -46,6 +48,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private OperationLogService operationLogService;
+
+    @Resource
+    private TransactionTemplate transactionTemplate;
 
 
     @Override
@@ -234,16 +239,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void test() {
         UserServiceImpl proxy = (UserServiceImpl)AopContext.currentProxy();
-        proxy.b();
-        throw new RuntimeException("test");
+        ThreadPoolUtil.execute(() -> {
+            transactionTemplate.execute(status -> {
+                c();
+                return null;
+            });
+        });
+
+
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void b(){
+
+    public void b(UserServiceImpl proxy){
+        proxy.c();
+    }
+
+    //@Transactional(rollbackFor = Exception.class)
+    public void c(){
         User user = new User();
         user.setId(108);
         user.setName("test");
         this.updateById(user);
+        throw new RuntimeException("test");
     }
 
     private List<UserRankVO> getRankingsTotalDurationCache(){

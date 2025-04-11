@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/layui_v2.6.8/css/layui.css"/>
     <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
     <link rel="stylesheet" type="text/css" href="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/zoomify/zoomify.min.css"/>
+    <link href="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/message/message.css" rel="stylesheet">
 </head>
 <body>
 <div class="layui-form" style="margin-top: 15px;">
@@ -59,9 +60,10 @@
 <script src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/zoomify/zoomify.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/message/message.js"></script>
 <script src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/ali-oss-6.22.0/aliyun-oss-sdk.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="../ali-oss-6.22.0/ossUtil.js" type="text/javascript" charset="utf-8"></script>
-<!--<script src="../js/encode-word.js" type="text/javascript" charset="utf-8"></script>-->
+
 <script type="text/javascript">
     var form;
     var layer;
@@ -76,7 +78,7 @@
             upload = layui.upload;
             getVersionById()
 
-            listeningFileInput(`ossUp-file`,`ossUp-button`, "downloadUrl",2,['.apk'])
+            listeningFileInput(`ossUp-file`,`ossUp-button`, "downloadUrl",2,['.apk'],1024)
         });
     });
 

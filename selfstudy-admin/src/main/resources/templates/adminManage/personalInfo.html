@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/layui_v2.6.8/css/layui.css"/>
     <link rel="stylesheet" type="text/css" href="../css/commomPublic.css"/>
     <link rel="stylesheet" type="text/css" href="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/zoomify/zoomify.min.css"/>
+    <link href="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/message/message.css" rel="stylesheet">
     <style>
         .edit-avatar {
             display: -ms-flexbox;
@@ -33,7 +34,11 @@
             vertical-align: middle;
             -webkit-border-radius: 50%;
             border-radius: 50%;
-            margin-left: 26px;
+
+            overflow: hidden;
+            object-fit: contain;
+            object-position: center;
+
         }
         .img-avatar-48 {
             width: 48px;
@@ -71,12 +76,14 @@
             <div class="layui-form">
 
                 <div class="edit-avatar" >
-
-                    <img  id="pic"  class="img-avatar zoomify">
+                    <div style=" background-color: #f5f5f5;  margin-left: 26px;">
+                        <img  id="pic"  class="img-avatar zoomify">
+                    </div>
                     <div class="avatar-divider"></div>
                     <div class="edit-avatar-content">
+                        <input style="position: absolute;top: 50px;display: none" id="ossUp-file" type="file" accept=".png,.jpg,.jpeg,.webp"  name="file">
                         <button class="layui-btn layui-btn-primary" id="test1">修改头像</button>
-                        <p class="m-0" style="color: #2c95e9">选择一张你喜欢的图片，上传后会自动显示264x264大小，上传图片大小不能超过2M。</p>
+                        <p class="m-0" style="color: #2c95e9">选择一张你喜欢的图片，建议 长宽比为1:1，上传图片大小不能超过10M。</p>
                     </div>
                 </div>
                 <hr>
@@ -125,12 +132,14 @@
     </div>
 
 </div>
-<input id="imgPath" type="hidden" />
 <script src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/layui_v2.6.8/layui.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/zoomify/zoomify.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/encode-word.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/message/message.js"></script>
+<script src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/ali-oss-6.22.0/aliyun-oss-sdk.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../ali-oss-6.22.0/ossUtil.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     var form;
     var layer;
@@ -152,79 +161,43 @@
             upload=layui.upload;
 
             getAdminInfo()
-
-            var uploadInst=upload.render({
-                elem: '#test1'
-                ,url: '../resources/upload'
-                ,accept: 'images'//允许上传的文件类型，有：images（图片）、file（所有文件）、video（视频）、audio（音频）
-                ,acceptMime: 'image/*'//打开文件选择框时，筛选出的文件类型
-                //,size: 2048
-                ,before: function(obj){
-                    layer.load();
-                    //预读本地文件示例，不支持ie8
-                    obj.preview(function(index, file, result){
-                        var a= $('#pic').attr('src', result); //图片链接（base64）
-                    });
-                }
-                //上传成功
-                ,done: function(res){
-                    layer.closeAll('loading');
-                    if (res.code===0){
-                        layer.msg('上传成功',{icon:1});
-                        var imgPath=res.result[0];
-                        $("#imgPath").val(imgPath)
-                        return ;
-                    }
-                    layer.msg('上传失败',{icon:2});
-
-                },error: function(index, upload){
-                    layer.closeAll('loading');
-                }
-            });
-
+            listeningFileInput(`ossUp-file`,`test1`, "pic",1,['.png','.jpg','.jpeg','.webp'],10)
 
             $(".zoomify").zoomify()
         });
     });
 
+
     function getAdminInfo(){
-        $.ajax({
-            url:'../personalManage/getPersonalById',
-            type:'POST',
-            cache:false,//关缓存
-            async:false,//关闭异步
-            data:{},
-            dataType:"json", //期望服务端返回的数据类型
-            success:function (data) {
-                if (data.code===0){
-                    var obj=data.result
-                    adminId=obj.id
-                    if (obj.profilePath!==null){
-                        var imgPath=obj.profilePath
-                        $("#pic").attr('src',imgPath)
-                        $("#imgPath").val(imgPath.substring(imgPath.indexOf('/upload')))
-                    }
-                    $("#username").val(obj.username)
-                    $("#name").val(obj.name)
-                    $("#createTime").val(obj.createTime)
-                    form.render()
-                    return;
+        ajaxPost("../personalManage/getPersonalById",{},function(data){
+            if (data.code===0){
+                var obj=data.result
+                adminId=obj.id
+                if (obj.profilePath!==null){
+                    var imgPath=obj.profilePath
+                    $("#pic").attr('src',imgPath)
                 }
-                layer.msg(data.msg,{icon : 8})
-            },error:function (jqXHR, textStatus, errorThrown) {
-                layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+                $("#username").val(obj.username)
+                $("#name").val(obj.name)
+                $("#createTime").val(obj.createTime)
+                form.render()
+                return;
             }
-        });
+            $msg.error(data.msg)
+        })
     }
 
     function saveAdminInfo(){
         var name=$("#name").val()
         var oldPassword=$("#oldPassword").val()
         var newPassword=$("#newPassword").val()
-        var profilePath=$("#imgPath").val()
+        var profilePath=$("#pic").attr('src')
+        if (profilePath.indexOf('/upload')!==-1){
+            profilePath.substring(profilePath.indexOf('/upload'))
+        }
 
         if (name===''){
-            layer.msg('昵称是必填项！',{icon : 8})
+            $msg.warning('昵称是必填项！')
             return
         }
         //{"id":adminId,"name":name,"oldPassword":sha256_digest(oldPassword),"newPassword":sha256_digest(newPassword),"profilePath":profilePath}
@@ -237,23 +210,14 @@
             obj.newPassword = sha256_digest(newPassword)
         }
 
-        $.ajax({
-            url:'../personalManage/updatePersonal',
-            type:'POST',
-            cache:false,//关缓存
-            async:false,//关闭异步
-            data: obj,
-            dataType:"json", //期望服务端返回的数据类型
-            success:function (data) {
-                if (data.code===0){
-                    layer.msg("保存成功！",{icon : 1})
-                    return;
-                }
-                layer.msg(data.msg,{icon : 8})
-            },error:function (jqXHR, textStatus, errorThrown) {
-                layer.msg("HTTP状态码:"+jqXHR.status,{icon: 5})
+        ajaxPost("../personalManage/updatePersonal",obj,function(data){
+            if (data.code===0){
+                $msg.success('保存成功！')
+                return;
             }
-        });
+            $msg.error(data.msg)
+        })
+
     }
 
 </script>
