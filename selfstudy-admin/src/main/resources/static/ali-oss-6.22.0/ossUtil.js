@@ -211,7 +211,7 @@ async function compressImageFile(inputFile, scale = 0.9, quality = 0.7) {
         });
 
         // 4. 生成新 File 对象（保留原始文件名+时间戳）
-        return new File([compressedBlob], `compressed_${Date.now()}_${inputFile.name}`,  {
+        return new File([compressedBlob], `${inputFile.name}`,  {
             type: compressedBlob.type,
             lastModified: Date.now()
         });
