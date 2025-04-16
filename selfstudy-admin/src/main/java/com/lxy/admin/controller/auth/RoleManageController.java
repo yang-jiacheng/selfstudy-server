@@ -16,6 +16,7 @@ import com.lxy.common.domain.R;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.system.vo.LayUiResultVO;
 
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -32,25 +33,18 @@ import java.util.*;
 
 @RequestMapping("/roleManage")
 @Controller
-@PreAuthorize("hasAnyAuthority('/roleManage/roleList','/roleManage/permissionList')")
+@PreAuthorize("hasAnyAuthority('/roleManage/roleList')")
 public class RoleManageController {
 
-    private final RoleService roleService;
+    @Resource
+    private RoleService roleService;
+    @Resource
+    private RolePermissionRelateService rolePermissionRelateService;
+    @Resource
+    private PermissionService permissionService;
+    @Resource
+    private AdminRoleRelateService adminRoleRelateService;
 
-    private final RolePermissionRelateService rolePermissionRelateService;
-
-    private final PermissionService permissionService;
-
-    private final AdminRoleRelateService adminRoleRelateService;
-
-
-    @Autowired
-    public RoleManageController(RoleService roleService, RolePermissionRelateService rolePermissionRelateService, PermissionService permissionService, AdminRoleRelateService adminRoleRelateService) {
-        this.roleService = roleService;
-        this.rolePermissionRelateService = rolePermissionRelateService;
-        this.permissionService = permissionService;
-        this.adminRoleRelateService = adminRoleRelateService;
-    }
 
     @GetMapping("/roleList")
     public String roleList(){
@@ -144,40 +138,7 @@ public class RoleManageController {
         return R.ok(role.getId());
     }
 
-    @PostMapping(value = "/getPermissionList", produces = "application/json")
-    @ResponseBody
-    public Map<String ,Object> getPermissionList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                                    @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
-                                    @RequestParam(value = "urlCode",required = false) String urlCode){
-        Page<Permission> pg = permissionService.getPermissionList(urlCode, page, limit);
-        Map<String ,Object> map = new HashMap<>(4);
-        map.put("code",0);
-        map.put("msg","调用成功");
-        map.put("count",pg.getTotal());
-        map.put("data",pg.getRecords());
-        return map;
-    }
 
-    @PostMapping(value = "/getPermissionById", produces = "application/json")
-    @ResponseBody
-    public R<Permission> getPermissionById(@RequestParam("id") Integer id){
-        Permission permission = permissionService.getById(id);
-        return R.ok(permission);
-    }
-
-    @PostMapping(value = "/updatePermission", produces = "application/json")
-    @ResponseBody
-    public R<Object> updatePermission(@RequestParam(value = "permissionJson") String permissionJson){
-        Permission permission = JsonUtil.getTypeObj(permissionJson, Permission.class);
-        if (permission == null){
-            return R.fail(-1,"数据有误！");
-        }
-        if (permission.getId()!=null){
-            permission.setUpdateTime(new Date());
-        }
-        permissionService.saveOrUpdate(permission);
-        return R.ok();
-    }
 
 
 }

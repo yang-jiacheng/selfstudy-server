@@ -2,6 +2,7 @@ package com.lxy.admin.mapper;
 
 import com.lxy.admin.po.Permission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lxy.system.vo.PermissionTreeVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -17,4 +18,6 @@ import java.util.List;
 @Mapper
 public interface PermissionMapper extends BaseMapper<Permission> {
     List<Permission> getRolePermission(Integer roleId);
+
+    List<PermissionTreeVO> getPermissionTree();
 }

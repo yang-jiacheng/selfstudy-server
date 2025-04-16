@@ -22,7 +22,7 @@
 
     <select id="getPermissionsById" resultType="java.lang.String">
         SELECT
-            permission.url
+            permission.permission_str
         FROM
             admin_info
                 INNER JOIN admin_role_relate ON admin_info.id = admin_role_relate.admin_id

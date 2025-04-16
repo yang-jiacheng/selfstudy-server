@@ -5,23 +5,36 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lxy.admin.po.Permission">
         <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="level" property="level" />
+        <result column="node_path" property="nodePath" />
+        <result column="name_path" property="namePath" />
+        <result column="id_path" property="idPath" />
+        <result column="title" property="title" />
+        <result column="permission_str" property="permissionStr" />
         <result column="name" property="name" />
-        <result column="description" property="description" />
-        <result column="url" property="url" />
+        <result column="path" property="path" />
+        <result column="component" property="component" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
+        <result column="sort" property="sort" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, description, url, create_time, update_time
+        id, parent_id, level, node_path, name_path, id_path, title, permission_str, name, path, component,create_time, update_time, sort
     </sql>
 
     <select id="getRolePermission" resultType="com.lxy.admin.po.Permission">
-        SELECT p.*
+        SELECT p.id, parent_id, level, node_path, name_path, id_path, title, permission_str, name, path,component ,create_time, update_time, sort
         from permission p,role_permission_relate rp
         where
             rp.permission_id=p.id and rp.role_id=#{roleId}
+    </select>
+
+    <select id="getPermissionTree" resultType="com.lxy.system.vo.PermissionTreeVO">
+        SELECT id, parent_id, level,  title, permission_str, name, path,component ,sort
+        from permission
     </select>
 
 </mapper>

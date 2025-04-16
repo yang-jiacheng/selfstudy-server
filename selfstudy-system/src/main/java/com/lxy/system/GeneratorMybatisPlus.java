@@ -28,17 +28,17 @@ public class GeneratorMybatisPlus {
 	/**
 	 * 模块名称
 	 */
-	public static final String MODULE_NAME="selfstudy-system";
+	public static final String MODULE_NAME="selfstudy-admin";
 
 	/**
 	 * 包名配置
 	 */
-	public static final String PARENT_PACKAGE="com.lxy.system";
+	public static final String PARENT_PACKAGE="com.lxy.admin";
 
 	public static final String AUTHOR="jiacheng yang.";
 
 	public static final String[] TABS = {
-			"version"
+			"permission"
 	};
 
 	public static String DRIVER_NAME="";
@@ -88,7 +88,7 @@ public class GeneratorMybatisPlus {
 							.serviceBuilder()
 							.enableFileOverride()
 							.formatServiceFileName("%sService")
-//							.disable() // 禁用 Service 接口生成
+							.disable() // 禁用 Service 接口生成
 
 							.mapperBuilder()
 							.enableFileOverride()
@@ -98,7 +98,7 @@ public class GeneratorMybatisPlus {
 							.formatXmlFileName("%sMapper")
 							.mapperTemplate("/templates/mapper.java.vm") // 设置 Mapper 模板
 							.mapperXmlTemplate("/templates/mapper.xml.vm")
-//							.disable() // 禁用 Mapper 接口生成
+							.disable() // 禁用 Mapper 接口生成
 
 							.entityBuilder()
 							.enableFileOverride()

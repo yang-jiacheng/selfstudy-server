@@ -19,6 +19,9 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 操作日志切面
  *
@@ -71,9 +74,28 @@ public class OperationLogAspect {
     protected void handleOperationLog(final JoinPoint joinPoint, final Exception e, Log operationLog, Object jsonResult) {
         try {
             Object[] args = joinPoint.getArgs();
-            String params = JsonUtil.toJson(args);
+            StringBuilder params = new StringBuilder();
+            String param = "";
+            if (args != null) {
+                for (Object arg : args) {
+                    if (arg instanceof String) {
+                        param = (String) arg;
+                    } else {
+                        param = JsonUtil.toJson(arg);
+                    }
+                    params.append(param).append(" ");
+                }
+            }
+
             //返回结果
-            String  resultJson = JsonUtil.toJson(jsonResult);
+            String resultJson;
+            if (jsonResult == null) {
+                resultJson = e.getMessage();
+            } else if (jsonResult instanceof String){
+                resultJson = (String) jsonResult;
+            }else {
+                resultJson = JsonUtil.toJson(jsonResult);
+            }
             HttpServletRequest request = getRequest();
             /*
              * 客户端ip、请求uri、请求方法、模块标题、业务类型
@@ -96,7 +118,7 @@ public class OperationLogAspect {
             String durationStr = DateUtil.formatBetween(endTime - startTime, BetweenFormatter.Level.MILLISECOND);
             //操作日志对象
             OperationLog operLog = new OperationLog(
-                    title,businessType,userType,userId,requestURI,method,params,resultJson,clientIP,status,durationStr
+                    title,businessType,userType,userId,requestURI,method,params.toString(),resultJson,clientIP,status,durationStr
             );
             //发布事件
             eventPublisher.publishEvent(new OperationLogEvent(this, operLog));
