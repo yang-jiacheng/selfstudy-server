@@ -22,9 +22,9 @@ public class SmsUtil {
 
     private final static Logger logger = LoggerFactory.getLogger(SmsUtil.class);
 
-    private static Client clientInstance = null;
+    private static volatile Client clientInstance = null;
 
-    private final static String REGION = "cn-qingdao";
+    private final static String REGION = "cn-hangzhouo";
 
     private final static String ENDPOINT = "dysmsapi.aliyuncs.com";
 
@@ -35,16 +35,20 @@ public class SmsUtil {
     public static Client getClient(){
         //新sdk
         if (clientInstance == null) {
-            Config config = new Config();
-            config.setAccessKeyId(accessKeyId);
-            config.setAccessKeySecret(accessKeySecret);
-            config.setRegionId(REGION);
-            config.setEndpoint(ENDPOINT);
-            try {
-                clientInstance = new Client(config);
-            }catch (Exception e) {
-                clientInstance = null;
-                logger.error("短信客户端初始化失败",e);
+            synchronized (SmsUtil.class) {
+                if (clientInstance == null) {
+                    Config config = new Config();
+                    config.setAccessKeyId("LTAI5tCuHcK8GGaBqKX7thJD");
+                    config.setAccessKeySecret("nfxYQqeRgg0LqHj1fcOyJUo3XnaXiI");
+                    config.setRegionId(REGION);
+                    config.setEndpoint(ENDPOINT);
+                    try {
+                        clientInstance = new Client(config);
+                    }catch (Exception e) {
+                        clientInstance = null;
+                        logger.error("短信客户端初始化失败",e);
+                    }
+                }
             }
         }
         return clientInstance;
@@ -98,8 +102,7 @@ public class SmsUtil {
     }
 
     public static void main(String[] args) {
-        logger.error("error");
-        logger.debug("debug");
+        sendMessage("13811111111", getRandomCode());
     }
 
 }
