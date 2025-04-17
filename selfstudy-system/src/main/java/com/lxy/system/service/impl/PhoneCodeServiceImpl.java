@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.common.constant.ConfigConstant;
+import com.lxy.common.vo.SmsSendVO;
 import com.lxy.system.po.PhoneCode;
 import com.lxy.system.mapper.PhoneCodeMapper;
 import com.lxy.system.service.BusinessConfigService;
@@ -18,6 +19,8 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,7 +60,9 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
     @Override
     public boolean sendVerificationCode(String phone) {
         String code = SmsUtil.getRandomCode();
-        boolean flag = SmsUtil.sendMessage(phone, code);
+        Map<String, Object> map = new HashMap<>(1);
+        map.put("code", code);
+        boolean flag = SmsUtil.sendSmsByTemplate(SmsUtil.TEMPLATE_CODE,phone,map );
         if (flag){
             Date now = new Date();
             DateTime offsetMinute = DateUtil.offsetMinute(now, 10);
