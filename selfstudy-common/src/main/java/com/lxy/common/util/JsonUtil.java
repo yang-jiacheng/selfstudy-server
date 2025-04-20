@@ -80,9 +80,6 @@ public class JsonUtil {
 		}
 	}
 
-	public static void main(String[] args) {
-
-	}
 
 	public static <TYPE> List<TYPE> getListType(String json, Class<TYPE> type) {
 		if (StrUtil.isEmpty(json)) {

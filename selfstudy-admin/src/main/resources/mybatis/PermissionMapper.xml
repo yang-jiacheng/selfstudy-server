@@ -35,6 +35,7 @@
     <select id="getPermissionTree" resultType="com.lxy.system.vo.PermissionTreeVO">
         SELECT id, parent_id, level,  title, permission_str, name, path,component ,sort
         from permission
+        order by sort,id
     </select>
 
 </mapper>

@@ -26,19 +26,24 @@ import java.util.List;
 
 @RequestMapping("/permissionManage")
 @RestController
-@PreAuthorize("hasAnyAuthority('/roleManage/permissionList')")
+//@PreAuthorize("hasAnyAuthority('/roleManage/permissionList')")
 public class PermissionManageController {
 
     @Resource
     private PermissionService permissionService;
 
+    /**
+     * 获取菜单树
+     * @author jiacheng yang.
+     * @since 2025/4/20 1:16
+     */
     @PostMapping(value = "/getPermissionTree", produces = "application/json")
     public R<List<PermissionTreeVO>> getPermissionTree(){
         List<PermissionTreeVO> tree = permissionService.getPermissionTree();
         return R.ok(tree);
     }
 
-    @Log(title = "菜单管理", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "编辑菜单", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/saveOrUpdatePermission", produces = "application/json")
     public R<Object> saveOrUpdatePermission(@RequestBody Permission permission){
         R<Object> r =permissionService.saveOrUpdatePermission(permission);
