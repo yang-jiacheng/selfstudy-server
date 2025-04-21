@@ -5,7 +5,7 @@ import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.framework.security.serviice.LoginStatusService;
+import com.lxy.framework.security.service.LoginStatusService;
 import com.lxy.framework.security.wrapper.CustomHttpServletRequestWrapper;
 import com.lxy.system.service.BusinessConfigService;
 import com.lxy.common.util.JsonUtil;

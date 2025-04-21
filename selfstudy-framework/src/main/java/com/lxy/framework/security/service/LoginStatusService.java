@@ -1,4 +1,4 @@
-package com.lxy.framework.security.serviice;
+package com.lxy.framework.security.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
