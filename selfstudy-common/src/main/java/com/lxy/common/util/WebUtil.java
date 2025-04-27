@@ -1,6 +1,8 @@
 package com.lxy.common.util;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 
 /**
@@ -9,6 +11,8 @@ import java.io.IOException;
  * @since 2023/01/03 14:17
  * @version 1.0
  */
+
+@Slf4j
 public class WebUtil {
 
     public static void renderString(HttpServletResponse response,String str){
@@ -19,7 +23,7 @@ public class WebUtil {
         try {
             response.getWriter().write(str);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -31,7 +35,7 @@ public class WebUtil {
         try {
             response.sendRedirect(ImgConfigUtil.getAccessUrl()+url);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
