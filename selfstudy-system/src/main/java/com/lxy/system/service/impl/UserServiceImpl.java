@@ -3,10 +3,12 @@ package com.lxy.system.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lxy.common.util.RetryUtil;
 import com.lxy.common.util.ThreadPoolUtil;
 import com.lxy.system.po.User;
 import com.lxy.system.mapper.UserMapper;
@@ -20,6 +22,7 @@ import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.system.vo.UserImportVO;
 import com.lxy.system.vo.UserRankVO;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,8 @@ import java.util.concurrent.TimeUnit;
  * @author jiacheng yang.
  * @since 2022-10-22
  */
+
+@Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
@@ -240,21 +245,50 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void test() {
         UserServiceImpl proxy = (UserServiceImpl)AopContext.currentProxy();
         ThreadPoolUtil.execute(() -> {
-            transactionTemplate.execute(status -> {
-                c();
-                return null;
-            });
+//            transactionTemplate.execute(status -> {
+//                c();
+//                return null;
+//            });
+
+            int attempt = 0;
+            int maxRetries = 2;
+            int maxDelay = 5000;
+            String methodName = "test";
+            boolean success = false;
+
+            while (attempt <= maxRetries && !success) {
+                try {
+                    if (attempt > 0){
+                        log.error("{}：第{}次重试", methodName, attempt);
+                    }
+                    attempt++;
+                    proxy.c();
+                    success = true;  // 如果没有抛异常，表示操作成功
+                } catch (Exception e) {
+                    log.error("{}：操作异常,数据：{}", methodName, "11");
+                    log.error(e.getMessage(), e);
+                    if (attempt <= maxRetries) {
+                        long delay = (long) (Math.pow(2, attempt) * 1000);  // 指数退避
+                        long finalDelay = Math.min(delay, maxDelay);
+                        log.error("{}：延迟{}毫秒后重试", methodName,finalDelay);
+                        ThreadUtil.sleep(finalDelay, TimeUnit.MILLISECONDS);
+                    }
+                }
+            }
+
+            log.error("{}：重试{}次, 执行结果：{}", methodName, (attempt - 1), success);
+
+//            RetryUtil.retryOperation(3,5000,() -> {
+//                proxy.c();
+//                return null;
+//            },"test","11");
+
         });
 
 
     }
 
-
-    public void b(UserServiceImpl proxy){
-        proxy.c();
-    }
-
-    //@Transactional(rollbackFor = Exception.class)
+//    @Transactional(rollbackFor = Exception.class)
     public void c(){
         User user = new User();
         user.setId(108);
@@ -262,6 +296,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         this.updateById(user);
         throw new RuntimeException("test");
     }
+
+    public void b(UserServiceImpl proxy){
+        proxy.c();
+    }
+
+
 
     private List<UserRankVO> getRankingsTotalDurationCache(){
         String key = RedisKeyConstant.getRankings();
