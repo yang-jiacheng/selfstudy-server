@@ -19,10 +19,8 @@ public class PageDTO implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = -2335352111793861831L;
 
-    @NotNull
     private Integer page;
 
-    @NotNull
     private Integer limit;
 
     private String name;

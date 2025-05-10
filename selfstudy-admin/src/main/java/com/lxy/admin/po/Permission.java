@@ -51,6 +51,9 @@ public class Permission implements Serializable {
     //路由组件
     private String component;
 
+    //图标  例如：<el-icon ><i-ep-house /></el-icon>填写：house
+    private String icon;
+
     //每条记录的创建时间
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
     private Date createTime;

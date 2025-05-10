@@ -1,4 +1,4 @@
-package com.lxy.admin.vo;
+package com.lxy.system.vo;
 
 /**
  * TODO

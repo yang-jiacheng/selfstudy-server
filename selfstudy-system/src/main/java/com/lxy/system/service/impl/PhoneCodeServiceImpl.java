@@ -62,7 +62,7 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
         String code = SmsUtil.getRandomCode();
         Map<String, Object> map = new HashMap<>(1);
         map.put("code", code);
-        boolean flag = SmsUtil.sendSmsByTemplate(SmsUtil.TEMPLATE_CODE,phone,map );
+        boolean flag = SmsUtil.sendSmsByTemplate(SmsUtil.TEMPLATE_CODE,phone,map);
         if (flag){
             Date now = new Date();
             DateTime offsetMinute = DateUtil.offsetMinute(now, 10);

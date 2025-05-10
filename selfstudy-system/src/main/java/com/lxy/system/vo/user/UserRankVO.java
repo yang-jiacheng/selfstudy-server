@@ -1,4 +1,4 @@
-package com.lxy.system.vo;
+package com.lxy.system.vo.user;
 
 import java.io.Serializable;
 

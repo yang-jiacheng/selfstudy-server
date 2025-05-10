@@ -1,10 +1,12 @@
 package com.lxy.system.vo;
 
 import cn.hutool.core.collection.CollUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +46,12 @@ public class PermissionTreeVO implements Serializable {
     //路由组件
     private String component;
 
+    private String icon;
+
     private Integer sort;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    private Date createTime;
 
     private List<PermissionTreeVO> children;
 

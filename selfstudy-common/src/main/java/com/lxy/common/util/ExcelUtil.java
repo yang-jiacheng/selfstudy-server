@@ -1,18 +1,39 @@
 package com.lxy.common.util;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.lxy.common.annotation.ExcelHeader;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.xssf.eventusermodel.XSSFReader;
+import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
+import org.apache.poi.xssf.model.SharedStringsTable;
+import org.apache.poi.xssf.model.StylesTable;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Excel工具类
@@ -20,9 +41,10 @@ import java.net.URLEncoder;
  * @since 2022/09/06 17:37
  * @version 1.0
  */
+
+@Slf4j
 public class ExcelUtil {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ExcelUtil.class);
 
     /**
      * <P>居中对齐薄边框样式</P>
@@ -72,9 +94,7 @@ public class ExcelUtil {
      * @return XSSFFont
      */
     public static Font getBlackBoldHeight20Font(Workbook wb){
-        Font blackTitleFont = wb.createFont();
-        blackTitleFont.setColor(XSSFFont.DEFAULT_FONT_COLOR);
-        blackTitleFont.setBold(true);
+        Font blackTitleFont = getBlackBoldFont(wb);
         blackTitleFont.setFontHeightInPoints((short) 20);
         return blackTitleFont;
     }
@@ -120,10 +140,10 @@ public class ExcelUtil {
      * @param style 样式
      * @return XSSFCell
      */
-    public static Cell createCellValueAndStyle(Row row,int line,String value,CellStyle style){
+    public static Cell createCell(Row row,int line,String value,CellStyle style){
         Cell cell = row.createCell(line - 1);
         if (StrUtil.isEmpty(value)){
-            value = "-";
+            value = "";
         }
         cell.setCellValue(value);
         if (style !=null ){
@@ -145,18 +165,119 @@ public class ExcelUtil {
             response.reset();
             response.setCharacterEncoding("UTF-8");
             //告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
-            response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(fileName,"UTF-8"));
+            response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(fileName, StandardCharsets.UTF_8));
             //类型为xlsx
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             output = response.getOutputStream();
             wb.write(output);
             output.flush();
         }catch (Exception e){
-            LOG.error("导出excel失败: "+fileName,e);
+            log.error("导出excel失败: {}", fileName, e);
         }finally {
             IoUtil.close(output);
+            // 释放 Workbook 临时文件
+            if (wb instanceof SXSSFWorkbook) {
+                ((SXSSFWorkbook) wb).dispose();
+            }
             IoUtil.close(wb);
         }
+    }
+
+    /**
+     * 根据数据列表导出excel
+     * SXSSFWorkbook 专为处理大数据量设计，采用逐行写入磁盘的方式，减少内存占用，避免OOM。
+     * @author jiacheng yang.
+     * @since 2025/4/30 15:47
+     */
+    public static <T> void exportExcelByRecords(String sheetName, List<T> dataList, Class<T> clazz, HttpServletResponse response) {
+        // 创建工作簿
+        SXSSFWorkbook wb = new SXSSFWorkbook();
+        // 设置单元格样式：居中、薄边框
+        CellStyle style = getCenterBorderThinStyle(wb);
+        // 创建一个sheet
+        Sheet sheet = wb.createSheet(sheetName);
+        // ExcelHeader注解的字段
+        List<Field> exportFields = Arrays.stream(ReflectUtil.getFields(clazz))
+                .filter(field -> {
+                    ExcelHeader annotation = field.getAnnotation(ExcelHeader.class);
+                    return annotation != null && annotation.required();
+                })
+                .toList();
+        //设置动态列宽（按实际导出字段数量）
+        for (int i = 0; i < exportFields.size();  i++) {
+            sheet.setColumnWidth(i,  5000);
+        }
+        //生成表头行（使用title属性）
+        Row headerRow = createRow(sheet, 1);
+        for (int i = 0; i < exportFields.size();  i++) {
+            Field field = exportFields.get(i);
+            ExcelHeader annotation = field.getAnnotation(ExcelHeader.class);
+            String headerName = StrUtil.isEmpty(annotation.title())  ? field.getName()  : annotation.title();
+            createCell(headerRow, i + 1, headerName, style);
+        }
+
+        if (CollUtil.isNotEmpty(dataList)){
+            // 填充数据行
+            int startRow = 2;
+            for (T data : dataList) {
+                Row rowData = ExcelUtil.createRow(sheet, startRow);
+                for (int i = 0; i < exportFields.size();  i++) {
+                    Field field = exportFields.get(i);
+                    try {
+                        Object fieldValue = ReflectUtil.getFieldValue(data,  field);
+                        if (fieldValue == null){
+                            fieldValue = "";
+                        }
+                        createCell(rowData, i + 1, fieldValue.toString(), style);
+                    } catch (Exception e) {
+                        log.error(" 字段[{}]导出失败: {}",  field.getName(),  e.getMessage());
+                    }
+                }
+                startRow++;
+            }
+        }
+
+        // 导出 Excel 文件
+        exportExcel(response, wb, sheetName + ".xlsx");
+    }
+
+    public static <T> List<T> importExcel(MultipartFile file, Supplier<SheetHandlerResult<T>> handlerSupplier){
+        List<T> records = new ArrayList<>();
+        try (OPCPackage pkg = OPCPackage.open(file.getInputStream())){
+            XSSFReader reader = new XSSFReader(pkg);
+            SharedStringsTable sst = reader.getSharedStringsTable();
+            StylesTable styles = reader.getStylesTable();
+            XSSFReader.SheetIterator sheets = (XSSFReader.SheetIterator)
+                    reader.getSheetsData();
+
+            while (sheets.hasNext()) {
+                try(InputStream sheetStream = sheets.next()){
+                    // 每个 sheet 取一个全新的 handler
+                    SheetHandlerResult<T> hl = handlerSupplier.get();
+                    XMLReader parser = XMLReaderFactory.createXMLReader();
+                    parser.setContentHandler(new XSSFSheetXMLHandler(
+                            styles,sst, hl, new DataFormatter(Locale.CHINA),false
+                    ));
+
+                    InputSource sheetSource = new InputSource(sheetStream);
+                    parser.parse(sheetSource);
+                    //解析后的操作
+                    List<T> resultList = hl.getResultList();
+                    if (CollUtil.isNotEmpty(resultList)){
+                        log.info("解析EXCEL成功, 共解析到{}条数据", resultList.size());
+                        records.addAll(resultList);
+                    }
+                }
+            }
+        }catch (Exception e){
+            log.error("解析EXCEL出现异常",e);
+        }
+        return records;
+    }
+
+    public interface SheetHandlerResult<T>
+            extends XSSFSheetXMLHandler.SheetContentsHandler {
+        List<T> getResultList();
     }
 
 }

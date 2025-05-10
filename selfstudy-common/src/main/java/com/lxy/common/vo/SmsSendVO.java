@@ -1,5 +1,10 @@
 package com.lxy.common.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,7 +16,9 @@ import java.util.List;
  * @since 2022/12/20 10:49
  */
 
+@Data
 public class SmsSendVO implements Serializable {
+    @Serial
     private static final long serialVersionUID = 5967400312216805662L;
     /**
      * 模板编码
@@ -23,49 +30,12 @@ public class SmsSendVO implements Serializable {
      */
     private List<TemplateParam> templateParams;
 
-    public String getTemplateCode() {
-        return templateCode;
-    }
 
-    public void setTemplateCode(String templateCode) {
-        this.templateCode = templateCode;
-    }
-
-    public List<TemplateParam> getTemplateParams() {
-        return templateParams;
-    }
-
-    public void setTemplateParams(List<TemplateParam> templateParams) {
-        this.templateParams = templateParams;
-    }
-
-
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class TemplateParam{
         private String name;
         private String value;
-
-        public TemplateParam() {
-        }
-
-        public TemplateParam(String name, String value) {
-            this.name = name;
-            this.value = value;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
     }
 }

@@ -33,7 +33,7 @@
 
     </insert>
 
-    <select id="getRankingsTotalDuration" resultType="com.lxy.system.vo.UserRankVO">
+    <select id="getRankingsTotalDuration" resultType="com.lxy.system.vo.user.UserRankVO">
         SELECT
             u.id,
             name,
@@ -46,7 +46,7 @@
         LIMIT 0,100
     </select>
 
-    <select id="getUserRankingById" resultType="com.lxy.system.vo.UserRankVO">
+    <select id="getUserRankingById" resultType="com.lxy.system.vo.user.UserRankVO">
         SELECT
             u.id,
             u.profile_path,
@@ -56,6 +56,35 @@
         from user u
                  LEFT JOIN study_statistics ss on ss.user_id = #{userId} and ss.study_day = #{studyDay}
         where u.id = #{userId}
+    </select>
+    <select id="exportUserInExcel" resultType="com.lxy.system.vo.user.UserExportVO">
+        SELECT
+            u.id,
+            u.name,
+            u.phone,
+            u.gender,
+            u.address,
+            u.total_duration,
+            u.create_time,
+            u.regist_type
+        FROM
+            user u
+        <where>
+            <if test="dto.name != null and dto.name != ''">
+                and u.name like concat('%',#{dto.name},'%')
+            </if>
+            <if test="dto.phone != null and dto.phone != ''">
+                and u.phone like concat('%',#{dto.phone},'%')
+            </if>
+            <if test="dto.startTime != null and dto.startTime != ''">
+                and u.create_time &gt;= #{dto.startTime}
+            </if>
+            <if test="dto.endTime != null and dto.endTime != ''">
+                and u.create_time &lt;= #{dto.endTime}
+            </if>
+        </where>
+        ORDER BY
+            u.create_time DESC,u.id DESC
     </select>
 
 </mapper>

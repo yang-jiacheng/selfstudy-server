@@ -15,6 +15,7 @@
         <result column="name" property="name" />
         <result column="path" property="path" />
         <result column="component" property="component" />
+        <result column="icon" property="icon" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="sort" property="sort" />
@@ -22,18 +23,18 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, parent_id, level, node_path, name_path, id_path, title, permission_str, name, path, component,create_time, update_time, sort
+        id, parent_id, level, node_path, name_path, id_path, title, permission_str, name, path, component,icon,create_time, update_time, sort
     </sql>
 
     <select id="getRolePermission" resultType="com.lxy.admin.po.Permission">
-        SELECT p.id, parent_id, level, node_path, name_path, id_path, title, permission_str, name, path,component ,create_time, update_time, sort
+        SELECT p.id, parent_id, level, node_path, name_path, id_path, title, permission_str, name, path,component ,icon,create_time, update_time, sort
         from permission p,role_permission_relate rp
         where
             rp.permission_id=p.id and rp.role_id=#{roleId}
     </select>
 
     <select id="getPermissionTree" resultType="com.lxy.system.vo.PermissionTreeVO">
-        SELECT id, parent_id, level,  title, permission_str, name, path,component ,sort
+        SELECT id, parent_id, level,  title, permission_str, name, path,component ,icon,sort,create_time
         from permission
         order by sort,id
     </select>

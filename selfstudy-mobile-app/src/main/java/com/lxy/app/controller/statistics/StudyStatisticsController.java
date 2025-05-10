@@ -8,7 +8,7 @@ import com.lxy.system.service.StudyRecordService;
 import com.lxy.system.service.StudyStatisticsService;
 import com.lxy.system.service.UserService;
 import com.lxy.framework.security.util.UserIdUtil;
-import com.lxy.system.vo.UserRankVO;
+import com.lxy.system.vo.user.UserRankVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

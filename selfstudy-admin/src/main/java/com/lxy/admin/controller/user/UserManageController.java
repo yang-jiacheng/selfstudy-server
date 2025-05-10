@@ -4,10 +4,10 @@ import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lxy.admin.service.PoiService;
 import com.lxy.common.domain.R;
 import com.lxy.common.util.ExcelUtil;
-import com.lxy.admin.vo.ExcelErrorInfoVO;
+import com.lxy.system.vo.ExcelErrorInfoVO;
+import com.lxy.system.dto.UserPageDTO;
 import com.lxy.system.po.StudyRecord;
 import com.lxy.system.po.StudyStatistics;
 import com.lxy.system.po.User;
@@ -19,7 +19,8 @@ import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.OssUtil;
 import com.lxy.system.vo.LayUiResultVO;
 
-import org.apache.poi.ss.usermodel.Workbook;
+import com.lxy.system.vo.user.UserExportVO;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -43,22 +44,12 @@ import java.util.List;
 @PreAuthorize("hasAuthority('/userManage/toUserList')")
 public class UserManageController {
 
-    private final UserService userService;
-
-    private final StudyStatisticsService statisticsService;
-
-    private final StudyRecordService studyRecordService;
-
-    private final PoiService poiService;
-
-    @Autowired
-    public UserManageController(UserService userService, StudyStatisticsService statisticsService,
-                                StudyRecordService studyRecordService,PoiService poiService) {
-        this.userService = userService;
-        this.statisticsService = statisticsService;
-        this.studyRecordService = studyRecordService;
-        this.poiService = poiService;
-    }
+    @Resource
+    private UserService userService;
+    @Resource
+    private StudyStatisticsService statisticsService;
+    @Resource
+    private StudyRecordService studyRecordService;
 
     @GetMapping("/toUserList")
     public String toUserList(){
@@ -130,18 +121,17 @@ public class UserManageController {
     }
 
 
-    @GetMapping(value = "/exportUserInExcel",name = "导出用户信息")
-    public void exportUserInExcel(HttpServletResponse response){
-        String titleName= "团团云自习用户信息";
-        String fileName="团团云自习用户信息表.xlsx";
-        List<User> users = userService.list();
-        Workbook wb = poiService.exportUserInExcel(titleName,users);
-        ExcelUtil.exportExcel(response,wb,fileName);
+    @PostMapping(value = "/exportUserInExcel",name = "导出用户信息")
+    @ResponseBody
+    public void exportUserInExcel(@RequestBody UserPageDTO dto, HttpServletResponse response){
+        List<UserExportVO> list = userService.exportUserInExcel(dto);
+        ExcelUtil.exportExcelByRecords("用户信息", list, UserExportVO.class, response);
     }
 
     @GetMapping(value = "/downloadMaterial" ,name = "下载用户导入模板")
-    public void downloadMaterial(HttpServletResponse response,@RequestParam(value = "fileName") String fileName){
-        OssUtil.downloadOssFile(response,fileName);
+    @ResponseBody
+    public void downloadMaterial(HttpServletResponse response){
+        OssUtil.downloadOssFile(response,"用户导入模板.xlsx");
     }
 
     @PostMapping(value = "/importUsersInExcel",name = "导入用户")
@@ -150,7 +140,7 @@ public class UserManageController {
         if (file.isEmpty()){
             return R.fail("上传文件为空！");
         }
-        List<ExcelErrorInfoVO> errorList = poiService.importUsersInExcel(file);
+        List<ExcelErrorInfoVO> errorList = userService.importUsersInExcel(file);
         return R.ok(errorList);
     }
 

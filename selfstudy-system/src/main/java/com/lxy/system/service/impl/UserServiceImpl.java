@@ -4,30 +4,33 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.PhoneUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lxy.common.util.RetryUtil;
-import com.lxy.common.util.ThreadPoolUtil;
+import com.lxy.common.util.*;
+import com.lxy.system.dto.UserPageDTO;
 import com.lxy.system.po.User;
 import com.lxy.system.mapper.UserMapper;
 import com.lxy.system.service.OperationLogService;
 import com.lxy.system.service.RedisService;
 import com.lxy.system.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lxy.common.util.DateCusUtil;
-import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.system.vo.UserImportVO;
-import com.lxy.system.vo.UserRankVO;
+import com.lxy.system.vo.ExcelErrorInfoVO;
+import com.lxy.system.vo.user.UserExportVO;
+import com.lxy.system.vo.user.UserImportVO;
+import com.lxy.system.vo.user.UserRankVO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
+import org.apache.poi.xssf.usermodel.XSSFComment;
 import org.springframework.aop.framework.AopContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -236,10 +239,172 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insertBatchUser(List<UserImportVO> userList) {
-        userMapper.insertBatchUser(userList);
+        List<List<UserImportVO>> batchList = CollUtil.split(userList, 2000);
+        for (List<UserImportVO> batch : batchList) {
+            userMapper.insertBatchUser(batch);
+        }
     }
 
+    @Override
+    public List<UserExportVO> exportUserInExcel(UserPageDTO dto) {
+        return userMapper.exportUserInExcel(dto);
+    }
+
+    @Override
+    public List<ExcelErrorInfoVO> importUsersInExcel(MultipartFile file) {
+        List<UserImportVO> users = ExcelUtil.importExcel(file, UserSheetHandler::new);
+        List<ExcelErrorInfoVO> errorList = checkUserList(users);
+        if (CollUtil.isNotEmpty(errorList)){
+            return errorList;
+        }
+        UserServiceImpl proxy =  (UserServiceImpl) AopContext.currentProxy();
+        proxy.insertBatchUser(users);
+        return errorList;
+    }
+
+
+
+    private List<UserRankVO> getRankingsTotalDurationCache(){
+        String key = RedisKeyConstant.getRankings();
+        List<UserRankVO> list = redisService.getObject(key, ArrayList.class);
+        return list;
+    }
+
+    /**
+     *  用户excel处理器
+     */
+    public static class UserSheetHandler implements ExcelUtil.SheetHandlerResult<UserImportVO> {
+
+        private UserImportVO user = null;
+
+        private final List<UserImportVO> userList = new ArrayList<>();
+
+        @Override
+        public List<UserImportVO> getResultList() {
+            return userList;
+        }
+
+        /**
+         * 每一行的开始
+         * @param rowIndex 代表的是每一个sheet的行索引
+         */
+        @Override
+        public void startRow(int rowIndex) {
+            if (rowIndex == 0){
+                user = null;
+            }else {
+                user = new UserImportVO();
+            }
+        }
+
+        /**
+         * 处理每一行的所有单元格
+         */
+        @Override
+        public void cell(String cellName, String cellValue, XSSFComment xssfComment) {
+            if (StrUtil.isEmpty(cellValue)){
+                return;
+            }
+            if (cellValue.contains("\n")){
+                cellValue = cellValue.replace("\n", "<br>");
+            }
+            if (cellValue.contains("\r")){
+                cellValue=cellValue.replace("\r","<br>");
+            }
+            if (user !=null ){
+                //每个单元名称的首字母 A  B  C
+                String letter = cellName.substring(0, 1);
+                switch (letter) {
+                    //手机号
+                    case "A":{
+                        user.setPhone(cellValue);
+                        break;
+                    }
+                    //密码
+                    case "B":{
+                        user.setPassword(EncryptUtil.encryptSha256(cellValue));
+                        break;
+                    }
+                    //昵称
+                    case "C":{
+                        user.setName(cellValue);
+                        break;
+                    }
+                    //性别
+                    case "D":{
+                        user.setGender(cellValue);
+                        break;
+                    }
+                    //地址
+                    case "E":{
+                        user.setAddress(cellValue);
+                        break;
+                    }
+                    default:{
+                        break;
+                    }
+                }
+            }
+        }
+
+        /**
+         * 每一行的结束
+         * @param rowIndex 代表的是每一个sheet的行索引
+         */
+        @Override
+        public void endRow(int rowIndex) {
+            if (rowIndex!=0){
+                String defPath = "/upload/defPath.jpg";
+                String defCover = "/upload/defCover.jpg";
+                user.setRowIndex(rowIndex);
+                user.setCreateTime(new Date());
+                user.setUpdateTime(new Date());
+                user.setProfilePath(defPath);
+                user.setRegistType(2);
+                user.setTotalDuration(0);
+                user.setCoverPath(defCover);
+
+                String password = user.getPassword();
+                if (StrUtil.isEmpty(password)) {
+                    user.setPassword(EncryptUtil.encryptSha256("123456"));
+                }
+                userList.add(user);
+            }
+        }
+
+
+    }
+
+    /**
+     * 校验解析的用户数据是否正确
+     */
+    private static List<ExcelErrorInfoVO> checkUserList(List<UserImportVO> userList){
+        List<ExcelErrorInfoVO> errorList = new ArrayList<>();
+        if (CollUtil.isEmpty(userList)){
+            errorList.add(new ExcelErrorInfoVO("第1sheet","数据为空","请检查文件内容是否正确"));
+            return errorList;
+        }
+        for (UserImportVO user : userList) {
+            //具体哪一行
+            int rowIndex = user.getRowIndex() + 1;
+            //判断昵称是否为空
+            if (StrUtil.isEmpty(user.getName())){
+                errorList.add(new ExcelErrorInfoVO("第1sheet,第"+rowIndex+"行","昵称为空","此行略过"));
+            }
+            //判断手机号是否为空,校验手机号
+            if (StrUtil.isEmpty(user.getPhone())){
+                errorList.add(new ExcelErrorInfoVO("第1sheet,第"+rowIndex+"行","手机号为空","此行略过"));
+            }else {
+                if (!PhoneUtil.isMobile(user.getPhone())){
+                    errorList.add(new ExcelErrorInfoVO("第1sheet,第"+rowIndex+"行","手机号格式不正确","此行略过"));
+                }
+            }
+        }
+
+        return errorList;
+    }
 
     @Override
     public void test() {
@@ -288,7 +453,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     }
 
-//    @Transactional(rollbackFor = Exception.class)
+    //    @Transactional(rollbackFor = Exception.class)
     public void c(){
         User user = new User();
         user.setId(108);
@@ -300,15 +465,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void b(UserServiceImpl proxy){
         proxy.c();
     }
-
-
-
-    private List<UserRankVO> getRankingsTotalDurationCache(){
-        String key = RedisKeyConstant.getRankings();
-        List<UserRankVO> list = redisService.getObject(key, ArrayList.class);
-        return list;
-    }
-
-
 
 }

@@ -1,9 +1,11 @@
 package com.lxy.system.mapper;
 
+import com.lxy.system.dto.UserPageDTO;
 import com.lxy.system.po.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lxy.system.vo.UserImportVO;
-import com.lxy.system.vo.UserRankVO;
+import com.lxy.system.vo.user.UserExportVO;
+import com.lxy.system.vo.user.UserImportVO;
+import com.lxy.system.vo.user.UserRankVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,4 +27,6 @@ public interface UserMapper extends BaseMapper<User> {
     UserRankVO getUserRankingById(@Param("userId") Integer userId,@Param("studyDay") String studyDay);
 
     void insertBatchUser(List<UserImportVO> userList);
+
+    List<UserExportVO> exportUserInExcel(@Param("dto") UserPageDTO dto);
 }

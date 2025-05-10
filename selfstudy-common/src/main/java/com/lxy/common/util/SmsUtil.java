@@ -177,8 +177,4 @@ public class SmsUtil {
         return String.valueOf(ranNum);
     }
 
-    public static void main(String[] args) {
-
-    }
-
 }

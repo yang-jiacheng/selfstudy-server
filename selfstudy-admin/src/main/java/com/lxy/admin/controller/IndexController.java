@@ -6,9 +6,12 @@ import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Producer;
 import com.lxy.common.domain.R;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.util.SmsUtil;
+import com.lxy.common.vo.SmsSendVO;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.service.RedisService;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -28,10 +31,9 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  */
 
+@Slf4j
 @Controller
 public class IndexController {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name = "captchaProducerMath")
     private Producer captchaProducerMath;
@@ -47,14 +49,21 @@ public class IndexController {
     @RequestMapping("/hello")
     @ResponseBody
     public void hello() {
-        int userId = UserIdUtil.getUserId();
-        throw new RuntimeException("hello error");
+
+
     }
 
     @RequestMapping("/world")
     @ResponseBody
     public void world() {
-        throw new RuntimeException("world error");
+        String phoneNumbers = "15607150562";
+        SmsSendVO smsDTO = new SmsSendVO();
+        smsDTO.setTemplateCode(SmsUtil.TEMPLATE_CODE);
+        List<SmsSendVO.TemplateParam> params = new ArrayList<>();
+        params.add(new SmsSendVO.TemplateParam("code", SmsUtil.getRandomCode()));
+        smsDTO.setTemplateParams(params);
+        boolean b = SmsUtil.sendMessage(phoneNumbers, smsDTO);
+        log.info("短信发送结果：{}", b);
     }
 
     @RequestMapping("/login")
