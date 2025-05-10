@@ -56,7 +56,18 @@ public class RetryUtil {
 
     @FunctionalInterface
     public interface RetryableOperation<T> {
-        T execute() ;
+        T execute() throws Exception;
     }
 
+//    public static void main(String[] args) {
+//        // 重试机制 最多3次，最多延迟6秒
+//        final int maxRetries = 3;
+//        final long maxDelay = 6000;
+//        boolean flag = RetryUtil.retryOperation(maxRetries, maxDelay, () -> {
+//            return checkinGradeDailyService.saveCheckinGradeDaily(statisticsDTO);
+//        }, "saveCheckinGradeDaily", "");
+//        if (flag) {
+//            log.info("成功");
+//        }
+//    }
 }
