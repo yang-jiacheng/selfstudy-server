@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * TODO
@@ -23,7 +25,7 @@ public class ThreadPoolUtil {
     private static final int CORE_POOL_SIZE;
     private static final int MAXIMUM_POOL_SIZE;
     private static final long KEEP_ALIVE_TIME = 60L;
-    private static final int QUEUE_CAPACITY = 100;
+    private static final int QUEUE_CAPACITY = 500;
 
     // 静态代码块初始化线程池的核心线程数和最大线程数
     static {
@@ -103,6 +105,9 @@ public class ThreadPoolUtil {
             //执行具体逻辑，需要有返回值；
             return null;
         });
+
+        Queue<Integer> updates = new ConcurrentLinkedQueue<>();
+        AtomicInteger okCount = new AtomicInteger();
 
         // 用来存储所有 CompletableFuture
         List<CompletableFuture<Void>> futures = new ArrayList<>();
