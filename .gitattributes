@@ -1,0 +1,6 @@
+# 忽略 selfstudy-admin 模块中 resources/static 和 resources/templates 的统计
+selfstudy-admin/src/main/resources/static/** linguist-vendored
+selfstudy-admin/src/main/resources/templates/** linguist-vendored
+
+# 忽略整个 xxl-job-admin 模块的统计
+xxl-job-admin/** linguist-vendored
