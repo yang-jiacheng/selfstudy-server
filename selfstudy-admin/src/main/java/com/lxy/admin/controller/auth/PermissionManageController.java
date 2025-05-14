@@ -50,4 +50,11 @@ public class PermissionManageController {
         return r;
     }
 
+    @Log(title = "删除菜单", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
+    @PostMapping(value = "/removePermission", produces = "application/json")
+    public R<Object> removePermission(@RequestParam("id") Integer id){
+
+        return R.ok();
+    }
+
 }

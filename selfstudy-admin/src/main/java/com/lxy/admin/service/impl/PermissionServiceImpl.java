@@ -68,10 +68,11 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
      */
     private void updateNodePathInfo(Permission permission) {
         List<Integer> nodePath = new ArrayList<>();
+        nodePath.add(permission.getId());
         StringBuilder namePath = new StringBuilder(permission.getTitle());
         StringBuilder idPath = new StringBuilder(permission.getId().toString());
 
-        nodePath.add(permission.getId());
+
 
         if (permission.getParentId() != -1) {
             Permission parentNode = this.getById(permission.getParentId());
@@ -84,6 +85,13 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 namePath.insert(0, parentNode.getNamePath() + "/");
                 idPath.insert(0, parentNode.getIdPath() + "/");
             }
+        }
+
+        if (!namePath.toString().endsWith("/")) {
+            namePath.append("/");
+        }
+        if (!idPath.toString().endsWith("/")) {
+            idPath.append("/");
         }
 
         permission.setNodePath(JsonUtil.toJson(nodePath));

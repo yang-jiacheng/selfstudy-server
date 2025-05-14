@@ -28,6 +28,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * TODO
@@ -141,7 +143,7 @@ public class WordUtil {
                                 break;
                             case "w:tab":
                                 //制表符 \t
-                                result.append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                                result.append("&nbsp; &nbsp; &nbsp; ");
                                 break;
                         }
                     }
@@ -320,4 +322,52 @@ public class WordUtil {
         return sortedPictures;
     }
 
+
+    public static String replaceSpacesOutsideImg(String input) {
+        // 正则表达式匹配单个 <img ... /> 标签
+        String imgRegex = "<img[^>]*?/?>";
+        Pattern imgPattern = Pattern.compile(imgRegex);
+        Matcher imgMatcher = imgPattern.matcher(input);
+
+        List<String> imgTags = new ArrayList<>();
+        StringBuffer sb = new StringBuffer();
+        int imgCounter = 0;
+
+        // 将 <img> 标签替换为占位符，保存原始标签
+        while (imgMatcher.find()) {
+            imgTags.add(imgMatcher.group());
+            // 占位符格式 __IMG_x__
+            imgMatcher.appendReplacement(sb, "__IMG_" + imgCounter++ + "__");
+        }
+        imgMatcher.appendTail(sb);
+
+        // sb 中的内容是替换掉<img>标签后的文本
+        String textWithoutImg = sb.toString();
+
+        // 使用正则匹配连续两个及以上的空格： " {2,}"
+        Pattern spacePattern = Pattern.compile(" {2,}");
+        Matcher spaceMatcher = spacePattern.matcher(textWithoutImg);
+
+        // 用 StringBuffer 保存替换后的结果
+        StringBuffer sb2 = new StringBuffer();
+        while (spaceMatcher.find()) {
+            String spaces = spaceMatcher.group();
+            // 每个空格替换为 &nbsp;
+            StringBuilder replacedSpaces = new StringBuilder();
+            for (int i = 1; i < spaces.length(); i++) {
+                replacedSpaces.append("&nbsp; ");
+            }
+            spaceMatcher.appendReplacement(sb2, Matcher.quoteReplacement(replacedSpaces.toString()));
+        }
+        spaceMatcher.appendTail(sb2);
+
+        String result = sb2.toString();
+
+        // 将占位符替换回原始 <img> 标签
+        for (int i = 0; i < imgTags.size(); i++) {
+            result = result.replace("__IMG_" + i + "__", imgTags.get(i));
+        }
+
+        return result;
+    }
 }
