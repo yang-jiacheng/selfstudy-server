@@ -15,6 +15,7 @@
         <module>selfstudy-mobile-app</module>
         <module>selfstudy-system</module>
         <module>selfstudy-framework</module>
+        <module>xxl-job-admin</module>
     </modules>
 
     <name>selfstudy-server</name>
@@ -31,8 +32,8 @@
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.4.2</spring-boot.version>
-        <druid.version>1.2.23</druid.version>
+        <spring-boot.version>3.4.5</spring-boot.version>
+        <druid.version>1.2.24</druid.version>
         <kaptcha.version>2.3.2</kaptcha.version>
         <mybatis-plus-boot-starter>3.5.7</mybatis-plus-boot-starter>
         <mybatis-plus-generator>3.5.7</mybatis-plus-generator>
@@ -135,10 +136,17 @@
                 <version>${mybatis-plus-generator}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
+            <!-- mybatis-spring-boot-autoconfigure -->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
+                <version>${mybatis-boot-starter.version}</version>
+            </dependency>
+
+            <!-- mybatis-spring-boot-starter -->
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-boot-starter.version}</version>
             </dependency>
 
