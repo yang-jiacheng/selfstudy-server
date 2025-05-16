@@ -7,7 +7,7 @@
         <id column="id" property="id" />
         <result column="parent_id" property="parentId" />
         <result column="level" property="level" />
-        <result column="node_path" property="nodePath" />
+        <result column="node_path" property="nodePath" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler" />
         <result column="name_path" property="namePath" />
         <result column="id_path" property="idPath" />
         <result column="title" property="title" />
@@ -37,6 +37,40 @@
         SELECT id, parent_id, level,  title, permission_str, name, path,component ,icon,sort,create_time
         from permission
         order by sort,id
+    </select>
+
+    <select id="getPermissionListAndChildren" resultType="com.lxy.admin.po.Permission">
+        SELECT
+        id, parent_id, level, node_path, name_path, id_path, title, permission_str, name, path, component, icon, create_time, update_time, sort
+        FROM
+        permission
+        WHERE
+        JSON_OVERLAPS(node_path,
+        JSON_ARRAY(
+            <foreach collection="ids" item="id" separator=",">
+                #{id}
+            </foreach>
+            )
+        )
+    </select>
+
+    <select id="getPermissionListAndParent" resultType="com.lxy.admin.po.Permission">
+        WITH RECURSIVE ancestors AS (
+            -- 初始：从这批 ID 出发
+            SELECT id, parent_id, level, node_path, name_path, id_path, title, permission_str, name, path, component, icon, create_time, update_time, sort
+            FROM permission
+            WHERE id IN
+            <foreach collection="ids" item="id" open="("  separator="," close=")">
+                #{id}
+            </foreach>
+            UNION ALL
+            -- 递归：往上找 parent
+            SELECT m.id, m.parent_id, m.level, m.node_path, m.name_path, m.id_path, m.title, m.permission_str, m.name, m.path, m.component, m.icon, m.create_time, m.update_time, m.sort
+            FROM permission m
+                     JOIN ancestors a ON m.id = a.parent_id
+        )
+        SELECT DISTINCT *
+        FROM ancestors;
     </select>
 
 </mapper>

@@ -77,7 +77,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         if (permission.getParentId() != -1) {
             Permission parentNode = this.getById(permission.getParentId());
             if (parentNode != null) {
-                List<Integer> parentNodePathList = JsonUtil.getListType(parentNode.getNodePath(), Integer.class);
+                List<Integer> parentNodePathList = parentNode.getNodePath();
                 if (parentNodePathList != null) {
                     parentNodePathList.add(permission.getId());
                     nodePath = parentNodePathList;
@@ -94,7 +94,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             idPath.append("/");
         }
 
-        permission.setNodePath(JsonUtil.toJson(nodePath));
+        permission.setNodePath(nodePath);
         permission.setNamePath(namePath.toString());
         permission.setIdPath(idPath.toString());
     }
@@ -115,6 +115,27 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .collect(Collectors.groupingBy(PermissionTreeVO::getParentId));
         PermissionTreeVO.recursionFnTree(rootList,nonLevel1CatalogMap);
         return rootList;
+    }
+
+    @Override
+    public List<Permission> getPermissionListAndChildren(Collection<Integer> ids) {
+        return permissionMapper.getPermissionListAndChildren(ids);
+    }
+
+    @Override
+    public List<Permission> getPermissionListAndParent(Collection<Integer> ids) {
+        return permissionMapper.getPermissionListAndParent(ids);
+    }
+
+    @Override
+    public void removePermission(Integer id) {
+        List<Permission> list = this.getPermissionListAndChildren(Arrays.asList(id));
+        if (CollUtil.isEmpty(list)) {
+            return;
+        }
+        List<Integer> ids = list.stream()
+                .map(Permission::getId).toList();
+        this.removeByIds(ids);
     }
 
 }

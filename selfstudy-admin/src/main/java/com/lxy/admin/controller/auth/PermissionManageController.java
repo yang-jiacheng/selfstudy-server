@@ -32,6 +32,12 @@ public class PermissionManageController {
     @Resource
     private PermissionService permissionService;
 
+    @PostMapping(value = "/getPermissionList", produces = "application/json")
+    public R<List<Permission>> getPermissionList(){
+        List<Permission> list = permissionService.list();
+        return R.ok(list);
+    }
+
     /**
      * 获取菜单树
      * @author jiacheng yang.
@@ -53,7 +59,7 @@ public class PermissionManageController {
     @Log(title = "删除菜单", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/removePermission", produces = "application/json")
     public R<Object> removePermission(@RequestParam("id") Integer id){
-
+        permissionService.removePermission(id);
         return R.ok();
     }
 
