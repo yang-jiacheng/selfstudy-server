@@ -55,7 +55,7 @@ public class Permission implements Serializable {
     //路由组件
     private String component;
 
-    //图标  例如：<el-icon ><i-ep-house /></el-icon>填写：house
+    //图标 例如 Element-plus 的 Plus,直接写Plus即可
     private String icon;
 
     //每条记录的创建时间
