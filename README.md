@@ -26,7 +26,6 @@ jdk 17+
 - Alibaba Cloud RDS MySQL 8
 - Alibaba Cloud Object Storage Service (OSS)
 - Alibaba Cloud Content Delivery Network (CDN)
-- Alibaba Cloud ECS Servers
 
 ### 4. Structure
 
@@ -60,6 +59,7 @@ selfstudy-server
 │         └── vo                            // Value object
 │    └── GeneratorMybatisPlus.java          // MybatisPlus code generator
 ├── selfstudy-admin                     // Background management system server
+├── xxl-job-admin                       // XXL-JOB Background management system 
 ├── selfstudy-mobile-app                // APP server
 ├── start-server.sh                     // Startup script
 ```

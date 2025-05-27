@@ -27,7 +27,6 @@ jdk 17+
 - 阿里云RDS数据库mysql 8
 - 阿里云对象存储（OSS）
 - 阿里云内容分发网络（CDN）
-- 阿里云ECS服务器
 
 ### 4. 结构
 
@@ -61,6 +60,7 @@ selfstudy-server
 │         └── vo                            // 值对象
 │    └── GeneratorMybatisPlus.java          // MybatisPlus代码生成器
 ├── selfstudy-admin                     // 后管服务端
+├── xxl-job-admin                       // XXL-JOB 后管
 ├── selfstudy-mobile-app                // APP服务端
 ├── start-server.sh                     // 启动脚本
 ```
