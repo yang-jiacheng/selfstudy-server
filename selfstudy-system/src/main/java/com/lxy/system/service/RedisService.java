@@ -2,8 +2,7 @@ package com.lxy.system.service;
 
 
 import jakarta.annotation.Resource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
@@ -20,10 +19,9 @@ import java.util.stream.Collectors;
  * @since 2025/03/06 14:55
  */
 
+@Slf4j
 @Service
 public class RedisService {
-
-    private final static Logger logger = LoggerFactory.getLogger(RedisService.class);
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -55,7 +53,7 @@ public class RedisService {
         } else {
             redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
         }
-        logger.info("缓存对象成功, key:{}", key);
+        log.info("缓存对象成功, key:{}, value:{}", key, value);
     }
 
     /**
@@ -66,7 +64,7 @@ public class RedisService {
      */
     public <T> void setList(final String key, final List<T> dataList) {
         Long count = redisTemplate.opsForList().rightPushAll(key, dataList);
-        logger.info("缓存List类型数据成功, key:{}", key);
+        log.info("缓存List类型数据成功, key:{}", key);
     }
 
     /**
@@ -78,7 +76,7 @@ public class RedisService {
      */
     public <T> void setHashValue(final String key, final String hKey, final T value) {
         redisTemplate.opsForHash().put(key, hKey, value);
-        logger.info("缓存Hash类型数据成功, key:{}, hKey:{}", key, hKey);
+        log.info("缓存Hash类型数据成功, key:{}, hKey:{}, value:{}", key, hKey, value);
     }
 
     @SuppressWarnings("all")
@@ -106,7 +104,7 @@ public class RedisService {
                 return null;
             });
         }
-        logger.info(" 批量缓存对象成功");
+        log.info(" 批量缓存对象成功");
     }
 
     /**
