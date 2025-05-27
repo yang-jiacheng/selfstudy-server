@@ -52,7 +52,6 @@ public class IndexController {
     @ResponseBody
     public void hello() {
 
-
     }
 
     @RequestMapping("/world")
