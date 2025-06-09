@@ -6,9 +6,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 菜单权限树形结构VO
@@ -70,6 +68,30 @@ public class PermissionTreeVO implements Serializable {
                 recursionFnTree(childList,map);
             }
         }
+    }
+
+
+    public static List<PermissionTreeVO> buildTree(List<PermissionTreeVO> flatList) {
+        List<PermissionTreeVO> roots = new ArrayList<>();
+        if (CollUtil.isEmpty(flatList)) {
+            return roots;
+        }
+        Map<Integer, PermissionTreeVO> nodeMap = new HashMap<>(flatList.size());
+        for (PermissionTreeVO node : flatList) {
+            node.setChildren(new ArrayList<>());
+            nodeMap.put(node.getId(), node);
+        }
+        for (PermissionTreeVO node : flatList) {
+            Integer parentId = node.getParentId() == null ? 0 : node.getParentId();
+            PermissionTreeVO parentNode = nodeMap.get(parentId);
+            if (parentNode == null) {
+                // 作为根节点
+                roots.add(node);
+            } else {
+                parentNode.getChildren().add(node);
+            }
+        }
+        return roots;
     }
 
 }

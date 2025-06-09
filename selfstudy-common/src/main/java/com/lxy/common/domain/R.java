@@ -1,5 +1,9 @@
 package com.lxy.common.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -9,6 +13,10 @@ import java.io.Serializable;
  * @since  2024/01/24 11:23
  * @version 1.0
  */
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class R<T> implements Serializable {
 
     @Serial
@@ -31,9 +39,6 @@ public class R<T> implements Serializable {
 
     private T result;
 
-    public R() {
-    }
-
     public static <T> R<T> ok() {
         return restResult(null, SUCCESS, "操作成功");
     }
@@ -54,6 +59,10 @@ public class R<T> implements Serializable {
         return restResult(null, code, msg);
     }
 
+    public static <T> R<T> fail(T result,int code, String msg) {
+        return restResult(result, code, msg);
+    }
+
     private static <T> R<T> restResult(T result, int code, String msg) {
         R<T> r = new R<>();
         r.setCode(code);
@@ -62,27 +71,4 @@ public class R<T> implements Serializable {
         return r;
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public T getResult() {
-        return result;
-    }
-
-    public void setResult(T result) {
-        this.result = result;
-    }
 }
