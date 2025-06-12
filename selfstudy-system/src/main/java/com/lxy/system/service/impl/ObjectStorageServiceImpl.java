@@ -6,7 +6,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lxy.system.dto.ObjectStorageDTO;
-import com.lxy.system.dto.PageDTO;
+import com.lxy.common.dto.PageDTO;
 import com.lxy.system.po.ObjectStorage;
 import com.lxy.system.mapper.ObjectStorageMapper;
 import com.lxy.system.service.ObjectStorageService;

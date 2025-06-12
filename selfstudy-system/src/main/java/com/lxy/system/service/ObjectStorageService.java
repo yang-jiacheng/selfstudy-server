@@ -2,7 +2,7 @@ package com.lxy.system.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lxy.system.dto.ObjectStorageDTO;
-import com.lxy.system.dto.PageDTO;
+import com.lxy.common.dto.PageDTO;
 import com.lxy.system.po.ObjectStorage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lxy.system.vo.ObjectStorageVO;

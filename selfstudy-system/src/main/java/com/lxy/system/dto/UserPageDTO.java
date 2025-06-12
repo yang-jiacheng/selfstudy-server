@@ -1,5 +1,6 @@
 package com.lxy.system.dto;
 
+import com.lxy.common.dto.PageDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +16,7 @@ import java.io.Serial;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class UserPageDTO extends PageDTO{
+public class UserPageDTO extends PageDTO {
 
     @Serial
     private static final long serialVersionUID = 7139077598108468633L;

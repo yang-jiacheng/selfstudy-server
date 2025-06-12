@@ -1,7 +1,6 @@
-package com.lxy.system.dto;
+package com.lxy.common.dto;
 
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serial;

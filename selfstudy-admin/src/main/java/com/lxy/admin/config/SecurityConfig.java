@@ -61,7 +61,7 @@ public class SecurityConfig {
     private final static String[] AUTH_URL = {
             "/home/**","/adminManage/**","/businessConfigManage/**","/classifyManage/**","/feedBackManage/**",
             "/personalManage/**","/roleManage/**","/studyRecord/**","/userAgreementManage/**","/userManage/**","/versionManage/**",
-            "/resources/upload","/resources/uploadApp","/resources/generateImage","/objectStorageManage/**"
+            "/resources/upload","/resources/uploadApp","/resources/generateImage","/objectStorageManage/**","/permissionManage/**"
     };
 
     private final static String[] PERMIT_URL = {

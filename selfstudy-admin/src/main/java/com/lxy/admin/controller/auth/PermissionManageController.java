@@ -6,12 +6,8 @@ import com.lxy.common.annotation.Log;
 import com.lxy.common.domain.R;
 import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
-import com.lxy.common.util.JsonUtil;
-import com.lxy.system.dto.PageDTO;
 import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
-import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
