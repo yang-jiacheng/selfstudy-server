@@ -1,5 +1,7 @@
 package com.lxy.admin.security.handle;
 
+import com.lxy.common.domain.R;
+import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +24,8 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         logger.error("权限不足异常：{}",request.getRequestURI(),accessDeniedException);
-        WebUtil.renderRedirect(response,"/error403");
+        String result = JsonUtil.toJson(R.fail(403, "禁止访问此资源!"));
+        WebUtil.renderString(response,result);
     }
 
 }

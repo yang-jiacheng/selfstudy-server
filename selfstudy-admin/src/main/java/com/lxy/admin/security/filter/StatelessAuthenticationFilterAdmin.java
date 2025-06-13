@@ -1,7 +1,7 @@
 package com.lxy.admin.security.filter;
 
 import cn.hutool.core.collection.CollUtil;
-import com.lxy.admin.service.AdminInfoService;
+import com.lxy.system.service.AdminInfoService;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.system.service.RedisService;
 import com.lxy.framework.security.domain.StatelessUser;

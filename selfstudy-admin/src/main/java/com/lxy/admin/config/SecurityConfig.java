@@ -4,7 +4,7 @@ import com.lxy.admin.security.filter.StatelessAuthenticationFilterAdmin;
 import com.lxy.admin.security.handle.AccessDeniedHandlerImpl;
 import com.lxy.admin.security.handle.AuthenticationEntryPointAdminImpl;
 import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
-import com.lxy.admin.service.AdminInfoService;
+import com.lxy.system.service.AdminInfoService;
 import com.lxy.common.enums.LogUserType;
 import com.lxy.system.service.RedisService;
 import com.lxy.framework.security.encoder.MinePasswordEncoder;
