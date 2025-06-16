@@ -1,6 +1,7 @@
 package com.lxy.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.lxy.system.po.Permission;
 import com.lxy.system.mapper.PermissionMapper;
 import com.lxy.system.service.PermissionService;
@@ -63,28 +64,31 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     private void updateNodePathInfo(Permission permission) {
         List<Integer> nodePath = new ArrayList<>();
         nodePath.add(permission.getId());
+
         StringBuilder namePath = new StringBuilder(permission.getTitle());
         StringBuilder idPath = new StringBuilder(permission.getId().toString());
-
-
 
         if (permission.getParentId() != -1) {
             Permission parentNode = this.getById(permission.getParentId());
             if (parentNode != null) {
                 List<Integer> parentNodePathList = parentNode.getNodePath();
                 if (parentNodePathList != null) {
-                    parentNodePathList.add(permission.getId());
-                    nodePath = parentNodePathList;
+                    nodePath = new ArrayList<>(parentNodePathList); // 避免污染原数据
+                    nodePath.add(permission.getId());
                 }
-                namePath.insert(0, parentNode.getNamePath() + "/");
-                idPath.insert(0, parentNode.getIdPath() + "/");
+
+                String parentNamePath = StrUtil.removeSuffix(parentNode.getNamePath(), "/");
+                String parentIdPath = StrUtil.removeSuffix(parentNode.getIdPath(), "/");
+
+                namePath.insert(0, parentNamePath + "/");
+                idPath.insert(0, parentIdPath + "/");
             }
         }
 
-        if (!namePath.toString().endsWith("/")) {
+        if (!StrUtil.endWith(namePath, "/")) {
             namePath.append("/");
         }
-        if (!idPath.toString().endsWith("/")) {
+        if (!StrUtil.endWith(idPath, "/")) {
             idPath.append("/");
         }
 
