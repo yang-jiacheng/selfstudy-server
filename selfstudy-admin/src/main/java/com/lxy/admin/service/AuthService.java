@@ -2,18 +2,15 @@ package com.lxy.admin.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.common.domain.R;
 import com.lxy.common.util.JsonUtil;
+import com.lxy.system.dto.AdminEditDTO;
+import com.lxy.system.dto.AdminStatusDTO;
 import com.lxy.system.dto.RoleEditDTO;
-import com.lxy.system.po.AdminRoleRelate;
-import com.lxy.system.po.Permission;
-import com.lxy.system.po.Role;
-import com.lxy.system.po.RolePermissionRelate;
-import com.lxy.system.service.AdminRoleRelateService;
-import com.lxy.system.service.PermissionService;
-import com.lxy.system.service.RolePermissionRelateService;
-import com.lxy.system.service.RoleService;
+import com.lxy.system.po.*;
+import com.lxy.system.service.*;
 import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -40,6 +37,8 @@ public class AuthService {
     private PermissionService permissionService;
     @Resource
     private AdminRoleRelateService adminRoleRelateService;
+    @Resource
+    private AdminInfoService adminInfoService;
 
     /**
      * 删除角色 及其关联关系
@@ -80,7 +79,7 @@ public class AuthService {
      * @since 2025/6/13 10:54
      * @return 角色id
      */
-    @Transactional(rollbackFor = Exception.class,timeout = 10)
+    @Transactional(rollbackFor = Exception.class)
     public Integer addOrUpdateRole(RoleEditDTO roleEditDTO){
         List<Integer> permissionIds = roleEditDTO.getPermissionIds();
         Role role = new Role();
@@ -109,6 +108,70 @@ public class AuthService {
         rolePermissionRelateService.saveBatch(list);
 
         return roleId;
+    }
+
+    /**
+     * 修改后管用户
+     * @author jiacheng yang.
+     * @since 2025/6/17 19:25
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public R<Object> editAdminInfo(AdminEditDTO adminEditDTO){
+        AdminInfo adminInfo = adminEditDTO.getAdminInfo();
+        List<Integer> roleIds = adminEditDTO.getRoleIds();
+        LambdaQueryWrapper<AdminInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(AdminInfo::getPhone, adminInfo.getPhone());
+        //是修改
+        if (adminInfo.getId()!=null){
+            wrapper.ne(AdminInfo::getId,adminInfo.getId());
+            adminInfo.setUpdateTime(new Date());
+            rolePermissionRelateService.removeCachePermissionInRole(roleIds);
+        }
+
+        AdminInfo one = adminInfoService.getOne(wrapper);
+        if (one!=null){
+            return R.fail("手机号已被使用！");
+        }
+        adminInfoService.saveOrUpdate(adminInfo);
+        Integer id = adminInfo.getId();
+        //先把记录干掉
+        adminRoleRelateService.remove(new LambdaUpdateWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId,id));
+        //再新增
+        List<AdminRoleRelate> relates = new ArrayList<>(roleIds.size());
+        AdminRoleRelate relate = null;
+        for (Integer roleId : roleIds) {
+            relate = new AdminRoleRelate();
+            relate.setAdminId(id);
+            relate.setRoleId(roleId);
+            relates.add(relate);
+        }
+        adminRoleRelateService.saveBatch(relates);
+        return R.ok();
+    }
+
+    /**
+     * 修改后管用户状态
+     * @author jiacheng yang.
+     * @since 2025/6/17 19:34
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void disabledAdminInfo(AdminStatusDTO dto){
+        LambdaUpdateWrapper<AdminInfo> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(AdminInfo::getId,dto.getId()).set(AdminInfo::getStatus,dto.getStatus());
+        adminInfoService.update(wrapper);
+        adminInfoService.removeCachePermissionInAdminIds(Arrays.asList(dto.getId()));
+    }
+
+    /**
+     * 删除后管用户
+     * @author jiacheng yang.
+     * @since 2025/6/17 19:34
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void removeAdminInfoByIds(List<Integer> userIds){
+        adminInfoService.removeByIds(userIds);
+        adminRoleRelateService.remove(new LambdaQueryWrapper<AdminRoleRelate>().in(AdminRoleRelate::getAdminId,userIds));
+        adminInfoService.removeCachePermissionInAdminIds(userIds);
     }
 
 }

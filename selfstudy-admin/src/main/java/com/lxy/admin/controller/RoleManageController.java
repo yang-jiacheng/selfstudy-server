@@ -4,10 +4,15 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.thread.ThreadUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.admin.service.AuthService;
+import com.lxy.common.annotation.Log;
+import com.lxy.common.domain.CollResult;
 import com.lxy.common.dto.PageDTO;
+import com.lxy.common.enums.LogBusinessType;
+import com.lxy.common.enums.LogUserType;
 import com.lxy.system.dto.RoleEditDTO;
 import com.lxy.system.dto.RolePageDTO;
 import com.lxy.system.po.AdminRoleRelate;
@@ -46,25 +51,6 @@ public class RoleManageController {
     @Resource
     private AuthService authService;
 
-    @PostMapping(value = "/hello", produces = "application/json")
-    public R<Object> hello() {
-        List<Role> roles = new ArrayList<>(50);
-        Role role = null;
-        Date now = new Date();
-        for (int i = 0; i < 50; i++) {
-            role = new Role();
-            role.setName("角色" + i);
-            role.setDescription("角色描述" + i);
-            role.setCreateTime(new Date());
-            role.setCreateTime(now);
-            roles.add(role);
-            now = DateUtil.offsetDay(now, 4);
-            now = DateUtil.offsetHour(now, 1);
-            now =DateUtil.offsetMinute(now, 3);
-        }
-        roleService.saveBatch(roles);
-        return R.ok();
-    }
 
     /**
      * 角色分页列表
@@ -77,11 +63,17 @@ public class RoleManageController {
         return R.ok(pg);
     }
 
+    @PostMapping(value = "/getRoleRecords", produces = "application/json")
+    public R<CollResult<Role>> getRoleRecords(){
+        return R.ok(new CollResult<>(roleService.list()));
+    }
+
     /**
      * 删除角色
      * @author jiacheng yang.
      * @since 2025/6/13 10:47
      */
+    @Log(title = "删除角色", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/removeRoleById", produces = "application/json")
     public R<Object> removeRoleById(@RequestParam("id") Integer id){
         authService.removeRoleById(id);
@@ -104,11 +96,13 @@ public class RoleManageController {
      * @author jiacheng yang.
      * @since 2025/6/13 10:44
      */
+    @Log(title = "编辑角色", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/addOrUpdateRole", produces = "application/json")
     public R<Integer> addOrUpdateRole(@RequestBody @Valid RoleEditDTO roleEditDTO){
         Integer roleId = authService.addOrUpdateRole(roleEditDTO);
         return R.ok(roleId);
     }
+
 
 
 }

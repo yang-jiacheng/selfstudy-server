@@ -4,8 +4,13 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lxy.admin.service.AuthService;
 import com.lxy.common.annotation.Log;
 import com.lxy.common.domain.R;
+import com.lxy.common.dto.PageDTO;
+import com.lxy.system.dto.AdminEditDTO;
+import com.lxy.system.dto.AdminInfoPageDTO;
+import com.lxy.system.dto.AdminStatusDTO;
 import com.lxy.system.po.AdminInfo;
 import com.lxy.system.po.AdminRoleRelate;
 import com.lxy.system.po.Role;
@@ -18,6 +23,9 @@ import com.lxy.system.service.RolePermissionRelateService;
 import com.lxy.system.service.RoleService;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.system.vo.LayUiResultVO;
+import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -34,51 +42,37 @@ import java.util.*;
  */
 
 @RequestMapping("/adminManage")
-@Controller
-@PreAuthorize("hasAuthority('/adminManage/adminList')")
+@RestController
+//@PreAuthorize("hasAuthority('/adminManage/adminList')")
 public class AdminManageController {
 
-    private final AdminInfoService adminInfoService;
+    @Resource
+    private AdminInfoService adminInfoService;
+    @Resource
+    private AdminRoleRelateService adminRoleRelateService;
+    @Resource
+    private AuthService authService;
 
-    private final RoleService roleService;
 
-    private final AdminRoleRelateService adminRoleRelateService;
-
-    private final RolePermissionRelateService rolePermissionRelateService;
-
-    @Autowired
-    public AdminManageController(AdminInfoService adminInfoService, RoleService roleService, AdminRoleRelateService adminRoleRelateService,
-                                 RolePermissionRelateService rolePermissionRelateService) {
-        this.adminInfoService = adminInfoService;
-        this.roleService = roleService;
-        this.adminRoleRelateService = adminRoleRelateService;
-        this.rolePermissionRelateService = rolePermissionRelateService;
-    }
-
-    @GetMapping("/adminList")
-    public String adminList(){
-        return "adminManage/adminList";
-    }
-
-    @GetMapping("/updateAdmin")
-    public String updateAdmin(HttpServletRequest request){
-        List<Role> roles = roleService.list();
-        request.setAttribute("list",roles);
-        return "adminManage/updateAdmin";
-    }
-
-    @RequestMapping(value = "/getAdminInfoList", produces = "application/json")
-    @ResponseBody
-    public LayUiResultVO getAdminInfoList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                                   @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
-                                   @RequestParam(value = "username",required = false) String username){
+    /**
+     * 获取后管用户
+     * @author jiacheng yang.
+     * @since 2025/6/17 19:13
+     */
+    @PostMapping(value = "/getAdminInfoPageList", produces = "application/json")
+    public R<Page<AdminInfo>> getAdminInfoList(@RequestBody AdminInfoPageDTO pageDTO){
         int userId = UserIdUtil.getUserId();
-        Page<AdminInfo> pg = adminInfoService.getAdminInfoList(username, page, limit,userId);
-        return new LayUiResultVO((int) pg.getTotal(), pg.getRecords());
+        pageDTO.setUserId(userId);
+        Page<AdminInfo> pg = adminInfoService.getAdminInfoPageList(pageDTO);
+        return R.ok(pg);
     }
 
+    /**
+     * 获取后管用户根据id
+     * @author jiacheng yang.
+     * @since 2025/6/17 19:13
+     */
     @PostMapping(value ="/getAdminInfoById", produces = "application/json")
-    @ResponseBody
     public R<Map<String ,Object>> getAdminInfoById(@RequestParam("id") Integer id){
         AdminInfo adminInfo = adminInfoService.getById(id);
         adminInfo.setPassword(null);
@@ -94,64 +88,22 @@ public class AdminManageController {
     }
 
     @Log(title = "修改后管用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
-    @PostMapping(value ="/addAdminInfo", produces = "application/json")
-    @ResponseBody
-    public R<Object> addAdminInfo(@RequestParam(value = "adminInfoJson") String adminInfoJson,
-                              @RequestParam(value = "idsJson") String idsJson){
-        AdminInfo adminInfo = JsonUtil.getTypeObj(adminInfoJson, AdminInfo.class);
-        List<Integer> roleIds = JsonUtil.getListType(idsJson, Integer.class);
-        if (adminInfo == null || CollUtil.isEmpty(roleIds)){
-            return R.fail(-1,"数据有误！");
-        }
-        LambdaQueryWrapper<AdminInfo> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(AdminInfo::getPhone, adminInfo.getPhone());
-        //是修改
-        if (adminInfo.getId()!=null){
-            wrapper.ne(AdminInfo::getId,adminInfo.getId());
-            adminInfo.setUpdateTime(new Date());
-            rolePermissionRelateService.removeCachePermissionInRole(roleIds);
-        }
-        AdminInfo one = adminInfoService.getOne(wrapper);
-        if (one!=null){
-            return R.fail(-1,"手机号已被使用！");
-        }
-        boolean flag = adminInfoService.saveOrUpdate(adminInfo);
-        if (flag){
-            Integer id = adminInfo.getId();
-            //先把记录干掉
-            adminRoleRelateService.remove(new LambdaUpdateWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId,id));
-            //再新增
-            List<AdminRoleRelate> relates = new ArrayList<>(roleIds.size());
-            AdminRoleRelate relate = null;
-            for (Integer roleId : roleIds) {
-                relate = new AdminRoleRelate();
-                relate.setAdminId(id);
-                relate.setRoleId(roleId);
-                relates.add(relate);
-            }
-            adminRoleRelateService.saveBatch(relates);
-        }
-        return R.ok();
+    @PostMapping(value ="/editAdminInfo", produces = "application/json")
+    public R<Object> editAdminInfo(@RequestBody @Valid AdminEditDTO adminEditDTO){
+        return authService.editAdminInfo(adminEditDTO);
     }
 
+    @Log(title = "修改后管用户状态", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value ="/disabledAdminInfo", produces = "application/json")
-    @ResponseBody
-    public R<Object> disabledAdminInfo(@RequestParam("id") Integer id,@RequestParam("status") Integer status){
-        LambdaUpdateWrapper<AdminInfo> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(AdminInfo::getId,id).set(AdminInfo::getStatus,status);
-        adminInfoService.update(wrapper);
+    public R<Object> disabledAdminInfo(@RequestBody @Valid AdminStatusDTO dto){
+        authService.disabledAdminInfo(dto);
         return R.ok();
     }
 
+    @Log(title = "删除后管用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value ="/removeAdminInfoByIds", produces = "application/json")
-    @ResponseBody
-    public  R<Object>  removeAdminInfoByIds(@RequestParam(value = "ids") String ids){
-        List<Integer> userIds = JsonUtil.getListType(ids, Integer.class);
-        if (CollUtil.isEmpty(userIds)){
-            return R.fail(-1,"请至少选择一个用户！");
-        }
-        adminInfoService.removeByIds(userIds);
-        adminRoleRelateService.remove(new LambdaQueryWrapper<AdminRoleRelate>().in(AdminRoleRelate::getAdminId,userIds));
+    public  R<Object> removeAdminInfoByIds(@RequestBody @NotEmpty List<Integer> userIds){
+        authService.removeAdminInfoByIds(userIds);
         return R.ok();
     }
 }

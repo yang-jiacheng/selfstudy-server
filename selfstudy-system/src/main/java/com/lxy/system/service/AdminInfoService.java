@@ -1,6 +1,7 @@
 package com.lxy.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lxy.system.dto.AdminInfoPageDTO;
 import com.lxy.system.po.AdminInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -32,12 +33,11 @@ public interface AdminInfoService extends IService<AdminInfo> {
     AdminInfo getAdminInfoByUsernameAndPassword(String username ,String password);
 
     /**
-     * 条件查询系统用户
-     * @param username 用户名
-     * @param page 当前页
-     * @param limit 每页数量
-     * @return Page<AdminInfo>
+     * 获取系统用户
+     * @author jiacheng yang.
+     * @since 2025/6/17 19:13
      */
-    Page<AdminInfo> getAdminInfoList(String username, Integer page, Integer limit, int userId);
+    Page<AdminInfo> getAdminInfoPageList(AdminInfoPageDTO pageDTO);
 
+    void removeCachePermissionInAdminIds(List<Integer> adminIds);
 }

@@ -83,7 +83,7 @@ public class OperationLogAspect {
                     } else {
                         param = JsonUtil.toJson(arg);
                     }
-                    params.append(param).append(" ");
+                    params.append(param).append(", ");
                 }
             }
 
