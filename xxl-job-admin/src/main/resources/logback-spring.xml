@@ -45,9 +45,7 @@
 
 
     <!-- 禁止日志事件向上传递additivity="false" 控制台输出appender）-->
-    <logger name="com.xxl.job.admin.dao" level="DEBUG"  additivity="false">
-        <appender-ref ref="stdout"/>
-    </logger>
+    <logger name="com.xxl.job.admin.dao" level="DEBUG"  />
 
     <logger name="com.apache.ibatis" level="INFO"/>
     <logger name="org.mybatis.spring" level="INFO"/>

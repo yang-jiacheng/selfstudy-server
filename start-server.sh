@@ -10,7 +10,7 @@ JARS=('selfstudy-admin.jar' 'selfstudy-mobile-app.jar')
 # jar包路径数组
 JAR_PATHS=('/java/selfstudy-admin/' '/java/selfstudy-mobile-app/')
 # jvm参数
-JAVA_OPTIONS=('-Xms650m -Xmx650m' '-Xms256m -Xmx512m')
+JAVA_OPTIONS=('-Xms256m -Xmx512m -XX:+UseG1GC ' '-Xms256m -Xmx512m -XX:+UseG1GC ')
 
 start() {
     local MODULE=
@@ -38,7 +38,7 @@ start() {
             if [ -n "$PID" ]; then
                 echo "$MODULE---$MODULE_NAME:已经运行,PID=$PID"
             else
-                nohup java -jar $JAVA_OPTION $JAR_PATH$JAR_NAME --spring.profiles.active=prod > /dev/null 2>&1 &
+                nohup java $JAVA_OPTION -jar $JAR_PATH$JAR_NAME --spring.profiles.active=prod > /dev/null 2>&1 &
                 PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
                 while [ -z "$PID" ]; do
                     if (($count == 30)); then
@@ -109,6 +109,7 @@ stop() {
         echo "............本次共停止:$okCount个服务............"
     fi
 }
+
 
 case "$1" in
     start)
