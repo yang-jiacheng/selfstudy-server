@@ -55,7 +55,7 @@ public class AdminInfoServiceImpl extends ServiceImpl<AdminInfoMapper, AdminInfo
         wrapper.ne(AdminInfo::getId,pageDTO.getUserId());
         String name = pageDTO.getName();
         if (StrUtil.isNotEmpty(name)){
-            wrapper.like(AdminInfo::getUsername,name);
+            wrapper.like(AdminInfo::getName,name);
         }
         pg = this.page(pg,wrapper);
         return pg;

@@ -23,6 +23,7 @@ public class AdminStatusDTO implements java.io.Serializable {
     private Integer id;
 
     @NotNull
+    //状态 1正常 2禁用
     private Integer status;
 
 }
