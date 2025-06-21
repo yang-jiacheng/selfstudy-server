@@ -47,17 +47,7 @@ public class PermissionManageController {
         return R.ok(tree);
     }
 
-    /**
-     * 根据登录用户获取菜单
-     * @author jiacheng yang.
-     * @since 2025/6/21 18:33
-     */
-    @PostMapping(value = "/getMinePermissionTree", produces = "application/json")
-    public R<List<PermissionTreeVO>> getMinePermissionTree(){
-        int userId = UserIdUtil.getUserId();
-        List<PermissionTreeVO> tree = permissionService.getMinePermissionTree(userId);
-        return R.ok(tree);
-    }
+
 
     @Log(title = "编辑菜单", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/saveOrUpdatePermission", produces = "application/json")

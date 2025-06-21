@@ -65,7 +65,7 @@ public class SecurityConfig {
     };
 
     private final static String[] PERMIT_URL = {
-            "/druid/**","/token/**","/upload/**","/hello"
+            "/druid/**","/token/**","/upload/**","/hello","/mine/**"
     };
 
     @Bean

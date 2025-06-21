@@ -11,7 +11,9 @@ import com.lxy.common.util.SmsUtil;
 import com.lxy.common.vo.SmsSendVO;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.po.User;
+import com.lxy.system.service.PermissionService;
 import com.lxy.system.service.RedisService;
+import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -41,6 +43,8 @@ public class IndexController {
     private Producer captchaProducerMath;
     @Resource
     private RedisService redisService;
+    @Resource
+    private PermissionService permissionService;
 
     @RequestMapping("/")
     @ResponseBody
@@ -82,6 +86,8 @@ public class IndexController {
     public String error404() {
         return "error/404";
     }
+
+
 
     /**
      * 验证码生成

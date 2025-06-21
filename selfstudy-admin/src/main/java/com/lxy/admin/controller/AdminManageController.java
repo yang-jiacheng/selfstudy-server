@@ -8,6 +8,7 @@ import com.lxy.admin.service.AuthService;
 import com.lxy.common.annotation.Log;
 import com.lxy.common.domain.R;
 import com.lxy.common.dto.PageDTO;
+import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.system.dto.AdminEditDTO;
 import com.lxy.system.dto.AdminInfoPageDTO;
 import com.lxy.system.dto.AdminStatusDTO;
@@ -52,6 +53,7 @@ public class AdminManageController {
     private AdminRoleRelateService adminRoleRelateService;
     @Resource
     private AuthService authService;
+
 
 
     /**
