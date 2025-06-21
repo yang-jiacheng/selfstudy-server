@@ -25,7 +25,7 @@ import java.util.List;
 
 @RequestMapping("/versionManage")
 @Controller
-@PreAuthorize("hasAuthority('/versionManage/toVersionManage')")
+@PreAuthorize("hasAuthority('versionManage')")
 public class VersionManageController {
 
     private final VersionService versionService;

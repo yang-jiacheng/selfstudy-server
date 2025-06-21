@@ -73,4 +73,34 @@
         FROM ancestors;
     </select>
 
+    <select id="getMinePermissionTree" resultType="com.lxy.system.vo.PermissionTreeVO">
+        SELECT
+            permission.id,
+            permission.parent_id,
+            permission.level,
+            permission.node_path,
+            permission.name_path,
+            permission.id_path,
+            permission.title,
+            permission.permission_str,
+            permission.name,
+            permission.path,
+            permission.component,
+            permission.icon,
+            permission.sort,
+            permission.update_time,
+            permission.create_time
+
+        FROM
+            admin_info
+                INNER JOIN admin_role_relate ON admin_info.id = admin_role_relate.admin_id
+                INNER JOIN role ON admin_role_relate.role_id = role.id
+                INNER JOIN role_permission_relate ON role.id = role_permission_relate.role_id
+                INNER JOIN permission ON role_permission_relate.permission_id = permission.id
+        WHERE
+            admin_info.id = #{userId}
+
+        order by permission.sort, permission.id
+    </select>
+
 </mapper>

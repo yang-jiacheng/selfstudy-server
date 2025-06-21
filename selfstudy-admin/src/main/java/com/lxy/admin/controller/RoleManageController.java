@@ -29,6 +29,7 @@ import com.lxy.common.util.JsonUtil;
 import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -43,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 
 @RequestMapping("/roleManage")
 @RestController
-//@PreAuthorize("hasAnyAuthority('/roleManage/roleList')")
+@PreAuthorize("hasAnyAuthority('systemManage','systemManage:roleManage')")
 public class RoleManageController {
 
     @Resource

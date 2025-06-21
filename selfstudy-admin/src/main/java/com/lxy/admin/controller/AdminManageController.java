@@ -43,7 +43,7 @@ import java.util.*;
 
 @RequestMapping("/adminManage")
 @RestController
-//@PreAuthorize("hasAuthority('/adminManage/adminList')")
+@PreAuthorize("hasAnyAuthority('systemManage','systemManage:adminManage')")
 public class AdminManageController {
 
     @Resource

@@ -21,7 +21,7 @@ import java.util.List;
 
 @RequestMapping("/businessConfigManage")
 @Controller
-@PreAuthorize("hasAuthority('/businessConfigManage/toConfigManage')")
+@PreAuthorize("hasAuthority('businessConfigManage')")
 public class BusinessConfigManageController {
 
     private final BusinessConfigService businessConfigService;

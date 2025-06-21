@@ -1,5 +1,6 @@
 package com.lxy.admin.controller;
 
+import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.po.Permission;
 import com.lxy.system.service.PermissionService;
 import com.lxy.common.annotation.Log;
@@ -8,6 +9,7 @@ import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
 import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.List;
 
 @RequestMapping("/permissionManage")
 @RestController
-//@PreAuthorize("hasAnyAuthority('/roleManage/permissionList')")
+@PreAuthorize("hasAnyAuthority('systemManage','systemManage:permissionManage')")
 public class PermissionManageController {
 
     @Resource
@@ -42,6 +44,18 @@ public class PermissionManageController {
     @PostMapping(value = "/getPermissionTree", produces = "application/json")
     public R<List<PermissionTreeVO>> getPermissionTree(){
         List<PermissionTreeVO> tree = permissionService.getPermissionTree();
+        return R.ok(tree);
+    }
+
+    /**
+     * 根据登录用户获取菜单
+     * @author jiacheng yang.
+     * @since 2025/6/21 18:33
+     */
+    @PostMapping(value = "/getMinePermissionTree", produces = "application/json")
+    public R<List<PermissionTreeVO>> getMinePermissionTree(){
+        int userId = UserIdUtil.getUserId();
+        List<PermissionTreeVO> tree = permissionService.getMinePermissionTree(userId);
         return R.ok(tree);
     }
 

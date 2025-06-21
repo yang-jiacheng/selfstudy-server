@@ -24,7 +24,7 @@ import java.util.List;
 
 @RequestMapping("/studyRecord")
 @Controller
-@PreAuthorize("hasAuthority('/studyRecord/toStudyRecord')")
+@PreAuthorize("hasAuthority('studyRecord')")
 public class StudyRecordController {
 
     private final ClassifyService classifyService;

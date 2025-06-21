@@ -24,7 +24,7 @@ import jakarta.validation.Valid;
 
 @RequestMapping("/objectStorageManage")
 @Controller
-@PreAuthorize("hasAuthority('/objectStorageManage/toObjectStorageManage')")
+@PreAuthorize("hasAuthority('objectStorageManage')")
 public class ObjectStorageManageController {
 
     @Resource

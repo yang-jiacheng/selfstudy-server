@@ -120,7 +120,12 @@ public class AuthService {
         AdminInfo adminInfo = adminEditDTO.getAdminInfo();
         List<Integer> roleIds = adminEditDTO.getRoleIds();
         LambdaQueryWrapper<AdminInfo> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(AdminInfo::getPhone, adminInfo.getPhone());
+        wrapper.nested(
+                w->
+                        w.eq(AdminInfo::getPhone, adminInfo.getPhone())
+                        .or()
+                        .eq(AdminInfo::getUsername, adminInfo.getUsername())
+        );
         //是修改
         if (adminInfo.getId()!=null){
             wrapper.ne(AdminInfo::getId,adminInfo.getId());
@@ -130,7 +135,7 @@ public class AuthService {
 
         AdminInfo one = adminInfoService.getOne(wrapper);
         if (one!=null){
-            return R.fail("手机号已被使用！");
+            return R.fail("用户名或手机号已被使用！");
         }
         adminInfoService.saveOrUpdate(adminInfo);
         Integer id = adminInfo.getId();

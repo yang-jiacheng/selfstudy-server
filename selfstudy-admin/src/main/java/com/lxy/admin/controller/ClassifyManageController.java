@@ -25,7 +25,7 @@ import java.util.List;
 
 @RequestMapping("/classifyManage")
 @Controller
-@PreAuthorize("hasAuthority('/classifyManage/toClassifyTree')")
+@PreAuthorize("hasAuthority('classifyManage')")
 public class ClassifyManageController {
 
     private final CatalogService catalogService;

@@ -25,7 +25,7 @@ import java.util.Map;
 
 @RequestMapping("/userAgreementManage")
 @Controller
-@PreAuthorize("hasAuthority('/userAgreementManage/toPrivacyPolicy')")
+@PreAuthorize("hasAuthority('userAgreementManage')")
 public class UserAgreementController {
 
     private final UserAgreementService agreementService;

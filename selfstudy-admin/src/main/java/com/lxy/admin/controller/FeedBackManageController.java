@@ -24,7 +24,7 @@ import java.util.Date;
 
 @RequestMapping("/feedBackManage")
 @Controller
-@PreAuthorize("hasAuthority('/feedBackManage/toFeedBackManage')")
+@PreAuthorize("hasAuthority('feedBackManage')")
 public class FeedBackManageController {
 
     private final FeedbackService feedbackService;

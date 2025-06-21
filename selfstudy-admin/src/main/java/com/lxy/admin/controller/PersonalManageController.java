@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/personalManage")
 @Controller
-@PreAuthorize("hasAuthority('/personalManage/personalInfo')")
+@PreAuthorize("hasAuthority('personalManage')")
 public class PersonalManageController {
 
     private final AdminInfoService adminInfoService;

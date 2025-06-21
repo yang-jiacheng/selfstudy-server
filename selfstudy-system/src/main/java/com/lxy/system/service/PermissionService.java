@@ -59,4 +59,11 @@ public interface PermissionService extends IService<Permission> {
      * @since 2025/5/16 16:07
      */
     void removePermission(Integer id);
+
+    /**
+     * 根据登录用户获取菜单
+     * @author jiacheng yang.
+     * @since 2025/6/21 18:33
+     */
+    List<PermissionTreeVO> getMinePermissionTree(int userId);
 }

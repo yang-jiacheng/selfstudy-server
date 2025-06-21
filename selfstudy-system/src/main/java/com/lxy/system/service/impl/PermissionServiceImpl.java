@@ -103,15 +103,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         if (CollUtil.isEmpty(list)) {
             return List.of();
         }
-//        List<PermissionTreeVO> rootList = list.stream()
-//                .filter(t -> t.getLevel() == 1)
-//                .collect(Collectors.toList());
-//
-//        // 处理 level != 1 的，这些 节parentId 是上一级目录的 id
-//        Map<Integer, List<PermissionTreeVO>> nonLevel1CatalogMap = list.stream()
-//                .filter(t -> t.getLevel() != 1)
-//                .collect(Collectors.groupingBy(PermissionTreeVO::getParentId));
-//        PermissionTreeVO.recursionFnTree(rootList,nonLevel1CatalogMap);
         list =  PermissionTreeVO.buildTree(list);
         return list;
     }
@@ -135,6 +126,16 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         List<Integer> ids = list.stream()
                 .map(Permission::getId).toList();
         this.removeByIds(ids);
+    }
+
+    @Override
+    public List<PermissionTreeVO> getMinePermissionTree(int userId) {
+        List<PermissionTreeVO> list =permissionMapper.getMinePermissionTree(userId);
+        if (CollUtil.isEmpty(list)) {
+            return List.of();
+        }
+        list =  PermissionTreeVO.buildTree(list);
+        return list;
     }
 
 }

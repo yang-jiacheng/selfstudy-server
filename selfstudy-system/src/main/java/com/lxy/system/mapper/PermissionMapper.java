@@ -26,4 +26,6 @@ public interface PermissionMapper extends BaseMapper<Permission> {
     List<Permission> getPermissionListAndChildren(@Param("ids") Collection<Integer> ids);
 
     List<Permission> getPermissionListAndParent(@Param("ids") Collection<Integer> ids);
+
+    List<PermissionTreeVO> getMinePermissionTree(@Param("userId") Integer userId);
 }

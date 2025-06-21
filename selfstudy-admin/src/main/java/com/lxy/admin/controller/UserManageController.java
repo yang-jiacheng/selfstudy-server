@@ -40,7 +40,7 @@ import java.util.List;
 
 @RequestMapping("/userManage")
 @Controller
-@PreAuthorize("hasAuthority('/userManage/toUserList')")
+@PreAuthorize("hasAuthority('userManage')")
 public class UserManageController {
 
     @Resource
