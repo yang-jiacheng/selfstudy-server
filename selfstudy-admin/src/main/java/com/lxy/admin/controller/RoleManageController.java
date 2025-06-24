@@ -13,6 +13,7 @@ import com.lxy.common.domain.CollResult;
 import com.lxy.common.dto.PageDTO;
 import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
+import com.lxy.common.vo.EnumVO;
 import com.lxy.system.dto.RoleEditDTO;
 import com.lxy.system.dto.RolePageDTO;
 import com.lxy.system.po.AdminRoleRelate;
@@ -65,8 +66,13 @@ public class RoleManageController {
     }
 
     @PostMapping(value = "/getRoleRecords", produces = "application/json")
-    public R<CollResult<Role>> getRoleRecords(){
-        return R.ok(new CollResult<>(roleService.list()));
+    public R<CollResult<EnumVO>> getRoleRecords(){
+        List<Role> list = roleService.list();
+        List<EnumVO> vos = new ArrayList<>();
+        for (Role role : list) {
+            vos.add(new EnumVO(role.getId(), role.getName()));
+        }
+        return R.ok(new CollResult<>(vos));
     }
 
     /**

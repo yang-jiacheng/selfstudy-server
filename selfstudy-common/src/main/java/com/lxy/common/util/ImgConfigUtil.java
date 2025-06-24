@@ -51,7 +51,7 @@ public class ImgConfigUtil {
         ) {
             // 使用 Thumbnails 进行压缩
             Thumbnails.of(originalImageStream)
-                    .scale(0.9f)
+                    .scale(1f)
                     .outputQuality(0.6)
                     .toOutputStream(compressedByteArrayOutputStream);
 
