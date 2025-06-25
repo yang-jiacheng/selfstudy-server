@@ -13,7 +13,7 @@ The platform offers a variety of study modes. Students can create or join public
 
 jdk 17+
 
-- Core Framework：[Spring Boot 3.4.2](https://github.com/spring-projects/spring-boot)
+- Core Framework：[Spring Boot 3.4.5](https://github.com/spring-projects/spring-boot)
 - Security Framework：[Spring Security](https://github.com/spring-projects/spring-security)
 - ORM Framework：[Mybatis Plus 3.5.7](https://github.com/baomidou/mybatis-plus)
 - Database：[MySQL 8.0](https://github.com/mysql/mysql-server)
