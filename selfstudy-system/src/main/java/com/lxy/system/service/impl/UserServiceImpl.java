@@ -49,41 +49,41 @@ import java.util.concurrent.TimeUnit;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Resource
-    private  RedisService redisService;
+    private RedisService redisService;
 
     @Resource
-    private  UserMapper userMapper;
-
-    @Resource
-    private OperationLogService operationLogService;
-
-    @Resource
-    private TransactionTemplate transactionTemplate;
+    private UserMapper userMapper;
 
 
     @Override
-    public Page<User> getUserPageList(String name, String phone, String startTime, String endTime, Integer current, Integer size) {
-        Page<User> pg = new Page<>(current,size);
+    public Page<User> getUserPageList(UserPageDTO dto) {
+        Integer page = dto.getPage();
+        Integer limit = dto.getLimit();
+        Page<User> pg = new Page<>(page,limit);
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByDesc(User::getId);
-        if (StrUtil.isNotBlank(name)){
-            wrapper.like(User::getName,name);
+        if (StrUtil.isNotBlank(dto.getName())){
+            wrapper.like(User::getName,dto.getName());
+        }
+        if (StrUtil.isNotBlank(dto.getPhone())){
+            wrapper.like(User::getPhone,dto.getPhone());
         }
 
-        if (StrUtil.isNotBlank(phone)){
-            wrapper.like(User::getPhone,phone);
+        if (StrUtil.isNotEmpty(dto.getStartTime())){
+            wrapper.ge(User::getCreateTime,dto.getStartTime());
         }
 
-        if (StrUtil.isNotEmpty(startTime)){
-            wrapper.gt(User::getCreateTime,startTime);
-        }
-
-        if (StrUtil.isNotEmpty(endTime)){
-            wrapper.lt(User::getCreateTime,endTime);
+        if (StrUtil.isNotEmpty(dto.getEndTime())){
+            wrapper.le(User::getCreateTime,dto.getEndTime());
         }
 
         pg = this.page(pg,wrapper);
 
+        List<User> records = pg.getRecords();
+        for (User user : records) {
+            user.setProfilePath(ImgConfigUtil.joinUploadUrl(user.getProfilePath()));
+        }
+        pg.setRecords(records);
         return pg;
     }
 

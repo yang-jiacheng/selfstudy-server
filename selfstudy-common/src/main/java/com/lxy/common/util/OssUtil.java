@@ -11,6 +11,7 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.http.ProtocolType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,7 @@ import static com.lxy.common.properties.AliYunProperties.*;
  * @since 2022/12/20 15:10
  * @version 1.0
  */
+@Slf4j
 public class OssUtil {
 
     private final static Logger LOG = LoggerFactory.getLogger(OssUtil.class);
@@ -167,7 +169,7 @@ public class OssUtil {
                     out.close();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                //静默关闭
             }
             if (ossClient != null) {
                 ossClient.shutdown();

@@ -25,7 +25,7 @@ public interface UserService extends IService<User> {
     /**
      * 分页条件查询用户
      */
-    Page<User> getUserPageList(String name,String phone,String startTime,String endTime,Integer current,Integer size);
+    Page<User> getUserPageList(UserPageDTO dto);
 
     /**
      * 保存用户
