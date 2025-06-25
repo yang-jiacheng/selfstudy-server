@@ -14,7 +14,7 @@
 
 jdk 17+
 
-- 核心框架：[Spring Boot 3.4.2](https://github.com/spring-projects/spring-boot)
+- 核心框架：[Spring Boot 3.4.5](https://github.com/spring-projects/spring-boot)
 - 安全框架：[Spring Security](https://github.com/spring-projects/spring-security)
 - ORM 框架：[Mybatis Plus 3.5.7](https://github.com/baomidou/mybatis-plus)
 - 数据库：[MySQL 8.0](https://github.com/mysql/mysql-server)
@@ -67,15 +67,21 @@ selfstudy-server
 
 ### 5. 项目地址
 
-| 平台   | selfstudy-server（后端）                          | StudyRoom（Android端）              |
-| ------ | ------------------------------------------------- | ----------------------------------- |
-| github | https://github.com/yang-jiacheng/selfstudy-server | https://github.com/yang-jiacheng/StudyRoom |
+- **服务端:** https://github.com/yang-jiacheng/selfstudy-server
+- **后台管理系统:** https://github.com/yang-jiacheng/studyroom-admin-web
+- **Android 客户端:** https://github.com/yang-jiacheng/StudyRoom
 
 ### 6. 演示地址
 
 后台管理系统：http://115.29.185.30/selfStudyAdmin/login
 
+演示账号：管理员：yjc123/123456；其他角色：xiuyu123/123456
+
 App 服务端：http://115.29.185.30/selfStudyApp/
+
+演示账号：17508660924/123456
+
+由于阿里云SMS短信服务限制，个人开发者无法申请短信签名，所以请使用密码登录
 
 ### 7. 打包
 
@@ -95,6 +101,8 @@ mvn clean package
 │       └── selfstudy-admin.jar           // 后管jar包
 ├── /selfstudy-mobile-app/
 │       └── selfstudy-mobile-app.jar      // APP jar包
+├── /xxl-job-admin/
+│       └── xxl-job-admin.jar 
 ├── /start-server.sh                      // 启动脚本
 ```
 
@@ -106,26 +114,14 @@ mvn clean package
 ./start-server.sh start selfstudy-admin
 ```
 
-### License
-
-```license
-Copyright 2022 jiacheng yang.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
+### 联系我
 
 如有任何问题请联系：杨嘉诚
 
 微信号：crushed_whiskey
 
 邮箱：yjc1529425632@gmail.com
+
+### License
+
+Selfstudy-server 是根据Apache许可证2.0版获得许可的。有关完整的许可证文本，请参阅[LICENSE](https://github.com/yang-jiacheng/selfstudy-server/blob/master/LICENSE)

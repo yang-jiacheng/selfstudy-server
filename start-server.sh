@@ -1,16 +1,16 @@
 #! /bin/sh
 # 端口号
-PORTS=(8071 8072)
+PORTS=(8071 8072 8060)
 # 模块
-MODULES=('selfstudy-admin' 'selfstudy-mobile-app')
+MODULES=('selfstudy-admin' 'selfstudy-mobile-app' 'xxl-job-admin')
 # 模块名称
-MODULE_NAMES=('后台管理系统' 'APP服务端')
+MODULE_NAMES=('后台管理系统' 'APP服务端' 'xxl-job任务调度')
 # jar包数组
-JARS=('selfstudy-admin.jar' 'selfstudy-mobile-app.jar')
+JARS=('selfstudy-admin.jar' 'selfstudy-mobile-app.jar' 'xxl-job-admin.jar')
 # jar包路径数组
-JAR_PATHS=('/java/selfstudy-admin/' '/java/selfstudy-mobile-app/')
+JAR_PATHS=('/java/selfstudy-admin/' '/java/selfstudy-mobile-app/' '/java/xxl-job-admin/')
 # jvm参数
-JAVA_OPTIONS=('-Xms256m -Xmx512m -XX:+UseG1GC ' '-Xms256m -Xmx512m -XX:+UseG1GC ')
+JAVA_OPTIONS=('-Xms256m -Xmx512m -XX:+UseG1GC ' '-Xms256m -Xmx512m -XX:+UseG1GC ' '-Xms256m -Xmx512m -XX:+UseG1GC ')
 
 start() {
     local MODULE=

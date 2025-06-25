@@ -66,15 +66,21 @@ selfstudy-server
 
 ### 5. Project Link
 
-| Platform   | selfstudy-server（Backend）                          | StudyRoom（Android）              |
-| ------ | ------------------------------------------------- | ----------------------------------- |
-| github | https://github.com/yang-jiacheng/selfstudy-server | https://github.com/yang-jiacheng/StudyRoom |
+- **Server:** https://github.com/yang-jiacheng/selfstudy-server
+- **Background management:** https://github.com/yang-jiacheng/studyroom-admin-web
+- **Android client:** https://github.com/yang-jiacheng/StudyRoom
 
 ### 6. Demo Link
 
 Admin Backend：http://115.29.185.30/selfStudyAdmin/login
 
+Demo account: administrator：yjc123/123456; Other role：xiuyu123/123456
+
 App Server：http://115.29.185.30/selfStudyApp/
+
+Demo account: 17508660924/123456
+
+Due to the restriction of Aliyun SMS service, individual developers cannot apply for SMS signature, so please use the password to log in.
 
 ### 7. Deployment
 
@@ -94,6 +100,8 @@ The suggested structure is as follows, with the startup script in the project ro
 │       └── selfstudy-admin.jar           // Background management system jar package
 ├── /selfstudy-mobile-app/
 │       └── selfstudy-mobile-app.jar      // APP jar package
+├── /xxl-job-admin/
+│       └── xxl-job-admin.jar 
 ├── /start-server.sh                      // Startup script
 ```
 
