@@ -5,6 +5,7 @@ import com.lxy.system.po.AdminInfo;
 import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.framework.security.encoder.MinePasswordEncoder;
 import com.lxy.system.service.AdminInfoService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,12 +25,9 @@ import java.util.Objects;
 @Service
 public class AdminDetailsServiceImpl implements UserDetailsService {
 
-    private final AdminInfoService adminInfoService;
+    @Resource
+    private AdminInfoService adminInfoService;
 
-    @Autowired
-    public AdminDetailsServiceImpl(AdminInfoService adminInfoService) {
-        this.adminInfoService = adminInfoService;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -78,7 +78,7 @@ public class LoginServiceImpl implements LoginService {
         // 登录状态持久化
         loginStatusService.loginStatusToRedis(key,principal, endDay);
         //设置客户端cookie
-        Cookie cookie = new Cookie(CommonConstant.COOKIE_NAME_ADMIN, token);
+        Cookie cookie = new Cookie(CommonConstant.TOKEN_NAME_ADMIN, token);
         cookie.setMaxAge(Integer.MAX_VALUE);
         cookie.setPath(CustomProperties.contentPath);
         response.addCookie(cookie);
@@ -102,8 +102,8 @@ public class LoginServiceImpl implements LoginService {
             //删除客户端cookie
             Cookie[] cookies = request.getCookies();
             for (Cookie cookie : cookies) {
-                if (CommonConstant.COOKIE_NAME_ADMIN.equals(cookie.getName())){
-                    Cookie c = new Cookie(CommonConstant.COOKIE_NAME_ADMIN, null);
+                if (CommonConstant.TOKEN_NAME_ADMIN.equals(cookie.getName())){
+                    Cookie c = new Cookie(CommonConstant.TOKEN_NAME_ADMIN, null);
                     c.setMaxAge(0);
                     c.setPath(CustomProperties.contentPath);
                     response.addCookie(c);

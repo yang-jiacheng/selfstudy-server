@@ -1,11 +1,14 @@
 package com.lxy.common.util;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lxy.common.constant.CommonConstant;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.lang.Strings;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +21,8 @@ import java.util.*;
 /**
  * Json Web Token的工具类
  */
+
+@Slf4j
 public class JsonWebTokenUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonWebTokenUtil.class);
@@ -49,10 +54,7 @@ public class JsonWebTokenUtil {
         //获取密钥
         String secretKey = getSecretKey(userId);
         //过期时间
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(new Date());
-//        calendar.add(Calendar.DATE, EXPIRED_DAYS);
-//        Date expiredTime = calendar.getTime();
+        //long expiredTime = DateUtil.offsetDay(new Date(), EXPIRED_DAYS).getTime();
         //自定义载荷属性
         Map<String, Object> claimsMap = new HashMap<String, Object>();
         claimsMap.put(CommonConstant.PARAM_NAME_DEVICE, device);
@@ -87,7 +89,7 @@ public class JsonWebTokenUtil {
             claimsUnSign = objectMapper.readValue(payload, new TypeReference<HashMap<String, Object>>() {
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("解析JWT失败", e);
             return null;
         }
 
@@ -103,8 +105,8 @@ public class JsonWebTokenUtil {
 
         // 获取用户的密钥
         String secretKey = getSecretKey(userId);
-        if (secretKey == null || secretKey.length() < 1) {
-            logger.error(userId + "用户无法得到加密密匙");
+        if (secretKey == null || secretKey.isEmpty()) {
+            logger.error("{}用户无法得到加密密匙", userId);
             return null;
         }
 
@@ -150,7 +152,7 @@ public class JsonWebTokenUtil {
             // base64解码，获取payload
             decode = Base64.getUrlDecoder().decode(base64UrlEncodedPayload);
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("读取载荷属性失败", e);
             return null;
         }
 
@@ -181,35 +183,10 @@ public class JsonWebTokenUtil {
             return accessToken;
         }
         accessToken = request.getHeader(name);
-        if (StrUtil.isNotEmpty(accessToken)) {
-            return accessToken;
-        }
-        Cookie[] cookies = request.getCookies();
-        if (null == cookies || cookies.length == 0) {
-            return null;
-        }
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(name)) {
-                accessToken = cookie.getValue();
-                break;
-            }
-        }
+        StrUtil.isNotEmpty(accessToken);
         return accessToken;
     }
 
-    public static Object getInfo(String key, String accessToken) {
-        String payload = getPayload(accessToken);
-        ObjectMapper objectMapper_JWT = new ObjectMapper();
-        Map map = null;
-        try {
-            map = objectMapper_JWT.readValue(payload, LinkedHashMap.class);
-            return map.get(key);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
 
     public static void main(String[] args) {
 //        Calendar calendar = Calendar.getInstance();
@@ -217,7 +194,7 @@ public class JsonWebTokenUtil {
 //        calendar.add(Calendar.DATE, EXPIRED_DAYS);
 //        Date expiredTime = calendar.getTime();
 //        System.out.println(expiredTime);
-        Claims claimsSign = getClaimsSign("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ4aXV5dSBMaS4iLCJ1c2VyVHlwZSI6IjIiLCJkZXZpY2UiOiJhbmRyb2lkIiwidXNlcklkIjoxLCJpYXQiOjE2NjY0MzYxMTF9.CwsG9fQ7olIQHFITiNMMG0rJgVE3z5ImXjUBUqigwQz5hxCL13684HeLRx1GEzqE97SV00Xj-zgIG347vl3tJg");
+        Claims claimsSign = getClaimsSign("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWFjaGVuZyB5YW5nLiIsInVzZXJUeXBlIjoiMSIsImRldmljZSI6IndlYiIsInVzZXJJZCI6MSwiaWF0IjoxNzUwNzUyNTIyfQ.Ovo3GlXpzLf2ZrVNTkOPkZ1UGCVsCvH5q19IeCFiK3eo5525pEFkgA2nz7SCfbe88z4I3ETbH1q-yBT7SdDXwA");
         System.out.println(claimsSign);
         claimsSign.get("");
 //        System.out.println(getJwtStr(1,"ios","2"));

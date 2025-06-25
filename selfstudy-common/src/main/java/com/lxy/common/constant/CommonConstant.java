@@ -18,13 +18,13 @@ public class CommonConstant {
 	 */
 	public static String PARAM_NAME_USER_ID = "userId";
 	/**
-	 * cookie中的Json web token的名称(管理员)
+	 * coken的名称(管理员)
 	 */
-	public static final String COOKIE_NAME_ADMIN = "selfStudyAdminToken";
+	public static final String TOKEN_NAME_ADMIN = "selfStudyAdminToken";
 	/**
 	 * token的名称(客户端)
 	 */
-	public static final String COOKIE_NAME_APP = "studyRoomToken";
+	public static final String TOKEN_NAME_APP = "studyRoomToken";
 
 
 }

@@ -44,7 +44,7 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String tokenKey = loginUserType.equals(LogUserType.ADMIN.type) ? COOKIE_NAME_ADMIN : COOKIE_NAME_APP;
+        String tokenKey = loginUserType.equals(LogUserType.ADMIN.type) ? TOKEN_NAME_ADMIN : TOKEN_NAME_APP;
 
         // 访问的地址
         String accessToken = JsonWebTokenUtil.getAccessToken(request, tokenKey);

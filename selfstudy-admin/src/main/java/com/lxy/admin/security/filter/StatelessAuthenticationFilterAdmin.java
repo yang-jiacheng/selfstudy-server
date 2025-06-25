@@ -59,7 +59,7 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
 
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, COOKIE_NAME_ADMIN);
+        String accessToken = JsonWebTokenUtil.getAccessToken(request, TOKEN_NAME_ADMIN);
 
         if (accessToken == null){
             logger.error("token未获取到");
@@ -93,35 +93,11 @@ public class StatelessAuthenticationFilterAdmin extends OncePerRequestFilter {
                 new UsernamePasswordAuthenticationToken(loginStatus,null,loginStatus.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         //输出日志
-        // 创建 CustomHttpServletRequestWrapper，包装原始的 HttpServletRequest
-        CustomHttpServletRequestWrapper wrappedRequest = new CustomHttpServletRequestWrapper(request);
-        String requestBody = wrappedRequest.getBody();
-        String msg  = LogUtil.logOperation(userId, request,requestBody);
+        String msg  = LogUtil.logOperation(userId, request,"");
         logger.warn(msg);
         //放行
-        filterChain.doFilter(wrappedRequest, response);
+        filterChain.doFilter(request, response);
 
-    }
-
-    /**
-     * 更新权限信息
-     * 从缓存中获取权限，若缓存中没有则才正常从数据库中获取
-     * 注意：如果用户权限发生改变时，需要将缓存中的数据删除
-     * @author jiacheng yang.
-     * @since 2025/03/06 18:57
-     */
-    public void updatePermissions(String key,Integer userId, StatelessUser loginStatus){
-        if (CollUtil.isEmpty(loginStatus.getPermissions())){
-            //根据用户查询权限信息 添加到StatelessUser中
-            List<String> permissions = adminInfoService.getPermissionsById(userId);
-            loginStatus.setPermissions(permissions);
-            //修改缓存里的权限
-            List<StatelessUser> loginList = redisService.getObject(key, ArrayList.class);
-            for (StatelessUser statelessUser : loginList) {
-                statelessUser.setPermissions(permissions);
-            }
-            redisService.setObject(key, loginList, -1L, null);
-        }
     }
 
 }

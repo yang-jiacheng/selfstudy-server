@@ -1,14 +1,19 @@
 package com.lxy.system.service;
 
 
+import com.lxy.common.domain.R;
+import com.lxy.system.po.User;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +32,8 @@ public class RedisService {
     private RedisTemplate<String, Object> redisTemplate;
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private RedissonClient redissonClient;
 
     /**
      * 判断 key是否存在
@@ -183,4 +190,39 @@ public class RedisService {
         this.redisTemplate.delete(keys);
     }
 
+
+    /**
+     * Redisson 分布式锁
+     *
+     * @param lockKey      锁的 key
+     * @param waitTime     尝试获取锁的最大等待时间
+     * @param leaseTime    锁自动释放时间
+     * @param timeUnit     时间单位
+     * @param action       要执行的业务逻辑
+     * @param <T>          返回类型
+     * @return             执行结果
+     */
+    public <T> T tryLock(String lockKey, long waitTime, long leaseTime, TimeUnit timeUnit, Supplier<T> action) {
+        RLock lock = redissonClient.getLock(lockKey);
+        boolean isLocked = false;
+        try {
+            isLocked = lock.tryLock(waitTime, leaseTime, timeUnit);
+            if (isLocked) {
+                return action.get();
+            } else {
+                log.error("系统繁忙，请稍后重试");
+                return null;
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("操作被中断", e);
+        }catch (Exception e){
+            log.error("操作失败", e);
+        }finally {
+            if (isLocked && lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
+        }
+        return null;
+    }
 }

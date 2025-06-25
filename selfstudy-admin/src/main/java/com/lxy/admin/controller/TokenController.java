@@ -42,7 +42,7 @@ public class TokenController {
     @PostMapping(value = "/logout", produces = "application/json")
     @ResponseBody
     public R<Object> logout(HttpServletRequest request,HttpServletResponse response){
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstant.COOKIE_NAME_ADMIN);
+        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstant.TOKEN_NAME_ADMIN);
         loginService.logout(accessToken,request,response);
         return R.ok();
     }

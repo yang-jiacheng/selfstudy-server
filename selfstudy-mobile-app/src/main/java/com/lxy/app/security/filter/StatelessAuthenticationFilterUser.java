@@ -49,7 +49,7 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
         String msg = "";
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstant.COOKIE_NAME_APP);
+        String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstant.TOKEN_NAME_APP);
         if (accessToken == null){
             logger.error("token未获取到");
             filterChain.doFilter(request, response);
@@ -81,13 +81,11 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginStatus,null,loginStatus.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        // 创建 CustomHttpServletRequestWrapper，包装原始的 HttpServletRequest
-        CustomHttpServletRequestWrapper wrappedRequest = new CustomHttpServletRequestWrapper(request);
-        String requestBody = wrappedRequest.getBody();
-        msg = LogUtil.logOperation(userId, request,requestBody);
+
+        msg = LogUtil.logOperation(userId, request,"");
         logger.info(msg);
         //放行
-        filterChain.doFilter(wrappedRequest, response);
+        filterChain.doFilter(request, response);
     }
 
 
