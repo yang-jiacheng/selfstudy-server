@@ -76,7 +76,7 @@ Admin Backend：http://115.29.185.30/selfStudyAdmin/login
 
 Demo account: administrator：yjc123/123456; Other role：xiuyu123/123456
 
-App Server：http://115.29.185.30/selfStudyApp/
+Android Client: https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/android/studyroom/apk/studyroom-1.0.6-7-0125.apk
 
 Demo account: 17508660924/123456
 

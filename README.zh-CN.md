@@ -77,7 +77,7 @@ selfstudy-server
 
 演示账号：管理员：yjc123/123456；其他角色：xiuyu123/123456
 
-App 服务端：http://115.29.185.30/selfStudyApp/
+Android 客户端：https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/android/studyroom/apk/studyroom-1.0.6-7-0125.apk
 
 演示账号：17508660924/123456
 
