@@ -58,7 +58,7 @@ public class ResourcesService {
                     // 图片压缩
                     InputStream in1 = (ImgConfigUtil.isImage(fileName)
                             && multipartFile.getSize() >= 1024L  * size)
-                            ? ImgConfigUtil.uploadImageReStream(in0)
+                            ? ImgConfigUtil.uploadImageReStream(in0,fileName)
                             : in0
             ) {
 

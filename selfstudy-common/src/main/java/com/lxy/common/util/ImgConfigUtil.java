@@ -3,6 +3,7 @@ package com.lxy.common.util;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
@@ -45,18 +46,17 @@ public class ImgConfigUtil {
     /**
      * 压缩图片并返回
      */
-    public static InputStream uploadImageReStream(InputStream originalImageStream) {
-        try (
-                ByteArrayOutputStream compressedByteArrayOutputStream = new ByteArrayOutputStream();
-        ) {
-            // 使用 Thumbnails 进行压缩
+    public static InputStream uploadImageReStream(InputStream originalImageStream, String fileName) {
+        try {
+            String extension = FileNameUtil.getSuffix(fileName);
+            File tempFile = File.createTempFile("compressed-", "." + extension);
             Thumbnails.of(originalImageStream)
                     .scale(1f)
-                    .outputQuality(0.6)
-                    .toOutputStream(compressedByteArrayOutputStream);
+                    .outputQuality(0.75)
+                    .toFile(tempFile);
 
-            // 返回压缩后图片的输入流
-            return new ByteArrayInputStream(compressedByteArrayOutputStream.toByteArray());
+            // 自动清理临时文件的 InputStream
+            return new AutoDeleteFileInputStream(tempFile);
         } catch (IOException e) {
             LOG.error("压缩图片失败", e);
             return null;
