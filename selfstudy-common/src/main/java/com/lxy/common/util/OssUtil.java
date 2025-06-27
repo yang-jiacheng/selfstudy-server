@@ -144,7 +144,6 @@ public class OssUtil {
             response.reset();
             response.setCharacterEncoding("UTF-8");
             //告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
-            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(fileName, StandardCharsets.UTF_8));
             response.setContentType("application/octet-stream");
             out = response.getOutputStream();

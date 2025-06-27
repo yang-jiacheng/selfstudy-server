@@ -82,6 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<User> records = pg.getRecords();
         for (User user : records) {
             user.setProfilePath(ImgConfigUtil.joinUploadUrl(user.getProfilePath()));
+            user.setCoverPath(ImgConfigUtil.joinUploadUrl(user.getCoverPath()));
         }
         pg.setRecords(records);
         return pg;

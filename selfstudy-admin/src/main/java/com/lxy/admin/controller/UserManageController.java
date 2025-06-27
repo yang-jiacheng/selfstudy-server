@@ -4,7 +4,10 @@ import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lxy.common.annotation.Log;
 import com.lxy.common.domain.R;
+import com.lxy.common.enums.LogBusinessType;
+import com.lxy.common.enums.LogUserType;
 import com.lxy.common.util.ExcelUtil;
 import com.lxy.system.vo.ExcelErrorInfoVO;
 import com.lxy.system.dto.UserPageDTO;
@@ -67,6 +70,7 @@ public class UserManageController {
 
 
     @PostMapping(value = "/saveUser", produces = "application/json")
+    @Log(title = "保存用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     public R<Object> saveUser(@RequestBody @NotNull User user){
         String phone = user.getPhone();
         if (! cn.hutool.core.util.PhoneUtil.isMobile(phone)) {
@@ -81,6 +85,7 @@ public class UserManageController {
 
     @PostMapping(value = "/removeUserByIds", produces = "application/json")
     @Transactional(rollbackFor = Exception.class)
+    @Log(title = "批量删除用户", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
     public R<Object> removeUserByIds(@RequestBody @NotEmpty List<Integer> ids){
         userService.removeByIds(ids);
         userService.removeUserInfoCacheByIds(ids);
@@ -91,7 +96,8 @@ public class UserManageController {
     }
 
 
-    @PostMapping(value = "/exportUserInExcel",name = "导出用户信息")
+    @PostMapping(value = "/exportUserInExcel")
+    @Log(title = "导出用户信息", businessType = LogBusinessType.EXPORT, userType = LogUserType.ADMIN)
     public void exportUserInExcel(@RequestBody UserPageDTO dto, HttpServletResponse response){
         List<UserExportVO> list = userService.exportUserInExcel(dto);
         ExcelUtil.exportExcelByRecords("用户信息", list, UserExportVO.class, response);
@@ -102,7 +108,8 @@ public class UserManageController {
         OssUtil.downloadOssFile(response,"用户导入模板.xlsx");
     }
 
-    @PostMapping(value = "/importUsersInExcel",name = "导入用户")
+    @PostMapping(value = "/importUsersInExcel")
+    @Log(title = "导入用户", businessType = LogBusinessType.IMPORT, userType = LogUserType.ADMIN)
     public R<Object> importUsersInExcel(@RequestParam("file") MultipartFile file, HttpServletRequest request){
         if (file.isEmpty()){
             return R.fail("上传文件为空！");
