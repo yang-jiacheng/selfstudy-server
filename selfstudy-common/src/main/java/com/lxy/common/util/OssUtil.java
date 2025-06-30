@@ -100,7 +100,6 @@ public class OssUtil {
         String endpoint = "sts.cn-hangzhou.aliyuncs.com";
         String roleArn = "acs:ram::1942543017597927:role/ram-sts";
         String roleSessionName = "Ram-Sts";
-        LOG.error("accessKeyId: {},accessKeySecret: {}",accessKeyId,accessKeySecret);
         try {
             // 构造profile
             DefaultProfile.addEndpoint("cn-hangzhou", "Sts", endpoint);

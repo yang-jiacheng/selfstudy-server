@@ -1,6 +1,7 @@
 package com.lxy.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.system.po.Catalog;
 import com.lxy.system.mapper.CatalogMapper;
 import com.lxy.system.po.StudyRecord;
@@ -8,10 +9,7 @@ import com.lxy.system.service.CatalogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.system.service.StudyRecordService;
 import com.lxy.common.util.ImgConfigUtil;
-import com.lxy.system.vo.CatalogVO;
-import com.lxy.system.vo.ClassifyDetailVO;
-import com.lxy.system.vo.RoomVO;
-import com.lxy.system.vo.ZtreeVO;
+import com.lxy.system.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +39,16 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     }
 
     @Override
-    public List<ZtreeVO> getCatalogTree() {
+    public List<CatalogTreeVO> getCatalogTree() {
+        List<CatalogTreeVO> tree = catalogMapper.getTree();
+        tree = CatalogTreeVO.buildTree(tree);//按时间倒序
+        //details.sort((t1,t2) -> t2.getUpdateTime().compareTo(t1.getUpdateTime()));
+        //tree.sort(Comparator.comparing(CatalogTreeVO::getSort));
+        tree.sort((a, b) -> {
+            Integer sortA = a.getSort() == null ? 0 : a.getSort();
+            Integer sortB = b.getSort() == null ? 0 : b.getSort();
+            return sortA.compareTo(sortB);
+        });
         return catalogMapper.getTree();
     }
 
@@ -94,6 +101,12 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     @Override
     public RoomVO getRoomDetail(Integer roomId) {
         return catalogMapper.getRoomDetail(roomId);
+    }
+
+    @Override
+    public void removeCatalog(Integer id) {
+        this.removeById(id);
+        this.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getParentId,id));
     }
 
     /**

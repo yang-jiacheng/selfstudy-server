@@ -2,6 +2,7 @@ package com.lxy.system.mapper;
 
 import com.lxy.system.po.Catalog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lxy.system.vo.CatalogTreeVO;
 import com.lxy.system.vo.ClassifyDetailVO;
 import com.lxy.system.vo.RoomVO;
 import com.lxy.system.vo.ZtreeVO;
@@ -21,7 +22,7 @@ import java.util.List;
 @Mapper
 public interface CatalogMapper extends BaseMapper<Catalog> {
 
-    List<ZtreeVO> getTree();
+    List<CatalogTreeVO> getTree();
 
     ClassifyDetailVO getCatalogByClassify(@Param("classifyId") Integer classifyId);
 

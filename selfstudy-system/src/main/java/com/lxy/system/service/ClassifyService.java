@@ -26,7 +26,7 @@ public interface ClassifyService extends IService<Classify> {
     /**
      * 更新图书馆信息
      */
-    R<Object> updateClassify(String mainJson);
+    void updateClassify(Classify classify);
 
     /**
      * 获取图书馆
@@ -48,4 +48,10 @@ public interface ClassifyService extends IService<Classify> {
      */
     List<ClassifyVO> getClassifyListCache();
 
+    /**
+     * 删除图书馆
+     * @author jiacheng yang.
+     * @since 2025/6/30 16:48
+     */
+    void removeClassify(Integer id);
 }

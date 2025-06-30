@@ -1,34 +1,23 @@
 package com.lxy.admin.controller;
 
-import cn.hutool.core.collection.CollUtil;
-import com.alibaba.fastjson2.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.common.annotation.Log;
 import com.lxy.common.domain.R;
 import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
 import com.lxy.common.util.ExcelUtil;
+import com.lxy.system.service.UserStatisticsService;
 import com.lxy.system.vo.ExcelErrorInfoVO;
 import com.lxy.system.dto.UserPageDTO;
-import com.lxy.system.po.StudyRecord;
-import com.lxy.system.po.StudyStatistics;
 import com.lxy.system.po.User;
-import com.lxy.system.service.StudyRecordService;
-import com.lxy.system.service.StudyStatisticsService;
 import com.lxy.system.service.UserService;
-import com.lxy.common.util.ImgConfigUtil;
-import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.OssUtil;
-import com.lxy.system.vo.LayUiResultVO;
 
 import com.lxy.system.vo.user.UserExportVO;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,9 +41,8 @@ public class UserManageController {
     @Resource
     private UserService userService;
     @Resource
-    private StudyStatisticsService statisticsService;
-    @Resource
-    private StudyRecordService studyRecordService;
+    private UserStatisticsService userStatisticsService;
+
 
 
     /**
@@ -84,14 +72,9 @@ public class UserManageController {
     }
 
     @PostMapping(value = "/removeUserByIds", produces = "application/json")
-    @Transactional(rollbackFor = Exception.class)
     @Log(title = "批量删除用户", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
     public R<Object> removeUserByIds(@RequestBody @NotEmpty List<Integer> ids){
-        userService.removeByIds(ids);
-        userService.removeUserInfoCacheByIds(ids);
-        //删用户其他关联数据...
-        statisticsService.remove(new LambdaQueryWrapper<StudyStatistics>().in(StudyStatistics::getUserId,ids));
-        studyRecordService.remove(new LambdaQueryWrapper<StudyRecord>().in(StudyRecord::getUserId,ids));
+        userStatisticsService.removeUserByIds(ids);
         return R.ok();
     }
 

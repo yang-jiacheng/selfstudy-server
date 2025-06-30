@@ -38,30 +38,30 @@
         </collection>
     </resultMap>
 
-    <select id="getTree" resultType="com.lxy.system.vo.ZtreeVO">
+    <select id="getTree" resultType="com.lxy.system.vo.CatalogTreeVO">
         SELECT
             CONCAT( aec.id, '|co' ) AS id,
-            aec.NAME AS NAME,
-            -1 AS pId,
-            1 AS LEVEL ,
+            aec.NAME AS name,
+            -1 AS parentId,
+            1 AS level ,
             aec.sort as sort
         FROM
                 (SELECT id,name,sort FROM classify ) aec
         UNION
         SELECT
             CONCAT( aec.id, '|no' ) AS id,
-            aec.NAME AS NAME,
-            CONCAT( aec.classify_id, '|co' ) AS pId,
-            aec.LEVEL + 1 AS LEVEL ,
+            aec.NAME AS name,
+            CONCAT( aec.classify_id, '|co' ) AS parentId,
+            aec.LEVEL + 1 AS level ,
             aec.sort as sort
         FROM
             ( SELECT id,name,classify_id,level,sort FROM catalog WHERE LEVEL = 1 ) aec
         UNION
         SELECT
             CONCAT( aec.id, '|no' ) AS id,
-            aec.NAME AS NAME,
-            CONCAT( aec.parent_id, '|no' ) AS pId,
-            aec.LEVEL + 1 AS LEVEL ,
+            aec.NAME AS name,
+            CONCAT( aec.parent_id, '|no' ) AS parentId,
+            aec.LEVEL + 1 AS level ,
             aec.sort as sort
         FROM
             ( SELECT id,name,parent_id,level,sort FROM catalog WHERE LEVEL = 2 ) aec

@@ -2,11 +2,14 @@ package com.lxy.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.common.domain.R;
 import com.lxy.common.enums.StudyStatus;
+import com.lxy.system.po.Catalog;
 import com.lxy.system.po.Classify;
 import com.lxy.system.mapper.ClassifyMapper;
 import com.lxy.system.po.StudyRecord;
+import com.lxy.system.service.CatalogService;
 import com.lxy.system.service.ClassifyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.system.service.RedisService;
@@ -17,6 +20,7 @@ import com.lxy.system.vo.ClassifyVO;
 
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +44,8 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
     private ClassifyMapper classifyMapper;
     @Resource
     private RedisService redisService;
+    @Resource
+    private CatalogService catalogService;
 
     @Override
     public Classify getClassifyById(Integer id) {
@@ -50,18 +56,15 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
     }
 
     @Override
-    public R<Object> updateClassify(String mainJson) {
-        Classify classify = JSON.parseObject(mainJson, Classify.class);
-        if (classify == null){
-            return R.fail("数据有误！");
-        }
+    @Transactional(rollbackFor = Exception.class)
+    public void updateClassify(Classify classify) {
         Integer id = classify.getId();
         classify.setUpdateTime(new Date());
         if (id == null){
             classify.setCreateTime(new Date());
         }
         this.saveOrUpdate(classify);
-        return R.ok();
+        this.removeClassifyCache();
     }
 
     @Override
@@ -109,6 +112,14 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
     public List<ClassifyVO> getClassifyListCache(){
         List<ClassifyVO> list = redisService.getObject(RedisKeyConstant.getClassify(), ArrayList.class);
         return list;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void removeClassify(Integer id) {
+        this.removeById(id);
+        catalogService.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getClassifyId,id));
+        this.removeClassifyCache();
     }
 
 }

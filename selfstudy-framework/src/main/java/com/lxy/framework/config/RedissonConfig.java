@@ -48,7 +48,7 @@ public class RedissonConfig {
 
         // 配置单节点 Redis
         config.useSingleServer()
-                .setAddress("redis://" + host + ":" + port)  // 必须指定 redis:// 或 rediss://（TLS）
+                .setAddress("redis://" + host + ":" + port)  // 必须指定 redis://
                 .setPassword(password)                  // 可选：Redis 密码
                 .setDatabase(database)                               // 可选：选择数据库（默认 0）
                 .setClientName(clientName)             // 可选：客户端名称，便于在 Redis 监控中识别
