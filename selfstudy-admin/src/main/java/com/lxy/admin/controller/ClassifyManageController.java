@@ -40,10 +40,6 @@ public class ClassifyManageController {
     private ClassifyService classifyService;
 
 
-    @GetMapping("/toClassifyTree")
-    public String toClassifyTree(){
-        return "classifyManage/classifyTree";
-    }
 
     @PostMapping(value = "/getClassifyTree", produces = "application/json")
     public R<List<CatalogTreeVO>> getClassifyTree(){

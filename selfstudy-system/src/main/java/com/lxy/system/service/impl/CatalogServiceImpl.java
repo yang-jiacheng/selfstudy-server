@@ -49,7 +49,7 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
             Integer sortB = b.getSort() == null ? 0 : b.getSort();
             return sortA.compareTo(sortB);
         });
-        return catalogMapper.getTree();
+        return tree;
     }
 
     @Override

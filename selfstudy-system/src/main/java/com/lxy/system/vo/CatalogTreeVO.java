@@ -45,7 +45,7 @@ public class CatalogTreeVO implements java.io.Serializable {
             nodeMap.put(node.getId(), node);
         }
         for (CatalogTreeVO node : flatList) {
-            String parentId = node.getParentId() == null ? "0" : node.getParentId();
+            String parentId = node.getParentId() == null ? "-1" : node.getParentId();
             CatalogTreeVO parentNode = nodeMap.get(parentId);
             if (parentNode == null) {
                 // 作为根节点
