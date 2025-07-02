@@ -1,10 +1,14 @@
 package com.lxy.admin.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lxy.common.domain.CollResult;
 import com.lxy.common.domain.R;
+import com.lxy.system.dto.BusinessEditDTO;
 import com.lxy.system.po.BusinessConfig;
 import com.lxy.system.service.BusinessConfigService;
 import com.lxy.system.vo.LayUiResultVO;
+import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -20,33 +24,23 @@ import java.util.List;
  */
 
 @RequestMapping("/businessConfigManage")
-@Controller
+@RestController
 @PreAuthorize("hasAuthority('businessConfigManage')")
 public class BusinessConfigManageController {
 
-    private final BusinessConfigService businessConfigService;
+    @Resource
+    private BusinessConfigService businessConfigService;
 
-    @Autowired
-    public BusinessConfigManageController(BusinessConfigService businessConfigService) {
-        this.businessConfigService = businessConfigService;
-    }
-
-    @GetMapping("/toConfigManage")
-    public String toConfigManage(){
-        return "businessConfigManage/configList";
-    }
 
     @PostMapping(value = "/getBusinessList" , produces = "application/json")
-    @ResponseBody
-    public LayUiResultVO getBusinessList(){
+    public R<CollResult<BusinessConfig>> getBusinessList(){
         List<BusinessConfig> list = businessConfigService.list(new LambdaQueryWrapper<BusinessConfig>().eq(BusinessConfig::getShowStatus, 1));
-        return new LayUiResultVO(list.size(),list);
+        return R.ok(new CollResult<>(list));
     }
 
     @PostMapping(value = "/updateBusiness" , produces = "application/json")
-    @ResponseBody
-    public R<Object> updateBusiness(@RequestParam("id") Integer id, @RequestParam("value") String value){
-        businessConfigService.updateBusinessConfigById(id,value);
+    public R<Object> updateBusiness(@RequestBody@Valid BusinessEditDTO dto){
+        businessConfigService.updateBusinessConfigById(dto.getId(), dto.getValue());
         return R.ok();
     }
 
