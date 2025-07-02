@@ -57,7 +57,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateClassify(Classify classify) {
+    public Integer updateClassify(Classify classify) {
         Integer id = classify.getId();
         classify.setUpdateTime(new Date());
         if (id == null){
@@ -65,6 +65,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
         }
         this.saveOrUpdate(classify);
         this.removeClassifyCache();
+        return classify.getId();
     }
 
     @Override

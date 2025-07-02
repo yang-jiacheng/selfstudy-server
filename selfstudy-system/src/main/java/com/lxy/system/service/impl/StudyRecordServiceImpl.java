@@ -9,8 +9,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lxy.common.domain.PageResult;
 import com.lxy.system.dto.StudyRecordDTO;
 import com.lxy.common.enums.StudyStatus;
+import com.lxy.system.dto.StudyRecordPageDTO;
 import com.lxy.system.po.Catalog;
 import com.lxy.system.po.StudyRecord;
 import com.lxy.system.mapper.StudyRecordMapper;
@@ -192,10 +194,11 @@ public class StudyRecordServiceImpl extends ServiceImpl<StudyRecordMapper, Study
     }
 
     @Override
-    public PageInfo<StudyRecordVO> getStudyRecordByAdmin(String phone, Integer classifyId, Integer status, Integer page, Integer limit) {
-        PageHelper.startPage(page,limit,"start_time desc");
-        com.github.pagehelper.Page<StudyRecordVO> pg = (com.github.pagehelper.Page<StudyRecordVO>) studyRecordMapper.getStudyRecordByAdmin(phone, classifyId, status);
-        return new PageInfo<>(pg);
+    public PageResult<StudyRecordVO> getStudyRecordByAdmin(StudyRecordPageDTO dto) {
+        PageHelper.startPage(dto.getPage(),dto.getLimit(),"start_time desc");
+        com.github.pagehelper.Page<StudyRecordVO> pg = (com.github.pagehelper.Page<StudyRecordVO>)
+                studyRecordMapper.getStudyRecordByAdmin(dto.getPhone(), dto.getClassifyId(), dto.getStatus());
+        return  PageResult.convert(new PageInfo<>(pg));
     }
 
     /**

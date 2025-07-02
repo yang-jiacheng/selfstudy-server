@@ -26,7 +26,7 @@ public interface ClassifyService extends IService<Classify> {
     /**
      * 更新图书馆信息
      */
-    void updateClassify(Classify classify);
+    Integer updateClassify(Classify classify);
 
     /**
      * 获取图书馆

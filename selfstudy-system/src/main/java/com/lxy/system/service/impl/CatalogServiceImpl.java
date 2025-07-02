@@ -53,7 +53,7 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     }
 
     @Override
-    public void saveCatalog(Catalog catalog) {
+    public Integer saveCatalog(Catalog catalog) {
         Integer level = catalog.getLevel();
         if (level == 1){
             catalog.setParentId(-1);
@@ -69,15 +69,12 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
         }
         catalog.setUpdateTime(new Date());
         this.saveOrUpdate(catalog);
+        return catalog.getId();
     }
 
     @Override
     public ClassifyDetailVO getCatalogByClassify(Integer classifyId) {
         ClassifyDetailVO classify = catalogMapper.getCatalogByClassify(classifyId);
-        if (classify != null){
-
-        }
-
         //设置头像和封面
         classify.setIconPath(ImgConfigUtil.joinUploadUrl(classify.getIconPath()));
         classify.setCoverPath(ImgConfigUtil.joinUploadUrl(classify.getCoverPath()));

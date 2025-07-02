@@ -55,9 +55,8 @@ public class ClassifyManageController {
 
     @PostMapping(value = "/updateClassify", produces = "application/json")
     @Log(title = "修改图书馆", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
-    public R<Object> updateClassify(@RequestBody Classify classify){
-        classifyService.updateClassify(classify);
-        return R.ok();
+    public R<Integer> updateClassify(@RequestBody Classify classify){
+        return R.ok(classifyService.updateClassify(classify));
     }
 
     @PostMapping(value = "/removeClassify", produces = "application/json")
@@ -82,9 +81,8 @@ public class ClassifyManageController {
 
     @PostMapping(value = "/saveCatalog", produces = "application/json")
     @Log(title = "保存节点", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
-    public R<Object> saveCatalog(Catalog catalog){
-        catalogService.saveCatalog(catalog);
-        return R.ok();
+    public R<Integer> saveCatalog(@RequestBody Catalog catalog){
+        return R.ok( catalogService.saveCatalog(catalog));
     }
 
 }

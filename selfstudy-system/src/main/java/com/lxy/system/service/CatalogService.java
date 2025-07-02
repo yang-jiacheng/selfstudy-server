@@ -24,7 +24,7 @@ public interface CatalogService extends IService<Catalog> {
      */
     List<CatalogTreeVO> getCatalogTree();
 
-    void saveCatalog(Catalog catalog);
+    Integer saveCatalog(Catalog catalog);
 
     /**
      * 获取某图书馆下的自习室

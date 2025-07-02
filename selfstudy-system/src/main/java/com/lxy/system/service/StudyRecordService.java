@@ -1,7 +1,9 @@
 package com.lxy.system.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lxy.common.domain.PageResult;
 import com.lxy.system.dto.StudyRecordDTO;
+import com.lxy.system.dto.StudyRecordPageDTO;
 import com.lxy.system.po.Catalog;
 import com.lxy.system.po.StudyRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -77,6 +79,6 @@ public interface StudyRecordService extends IService<StudyRecord> {
     /**
      * 获取自习记录,后台查询用
      */
-    PageInfo<StudyRecordVO> getStudyRecordByAdmin(String phone,Integer classifyId,Integer status,Integer page,Integer limit);
+    PageResult<StudyRecordVO> getStudyRecordByAdmin(StudyRecordPageDTO dto);
 
 }
