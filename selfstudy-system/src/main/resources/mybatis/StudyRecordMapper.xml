@@ -153,7 +153,10 @@
             sr.setting_duration,
             sr.actual_duration,
             sr.`status`,
-            sr.start_time
+            sr.start_time,
+            sr.note_status,
+            sr.note_content,
+            sr.note_path
         from study_record sr
              INNER JOIN user u on sr.user_id = u.id
              INNER JOIN classify cl on sr.classify_id = cl.id

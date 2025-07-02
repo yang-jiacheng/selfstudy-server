@@ -196,9 +196,11 @@ public class StudyRecordServiceImpl extends ServiceImpl<StudyRecordMapper, Study
     @Override
     public PageResult<StudyRecordVO> getStudyRecordByAdmin(StudyRecordPageDTO dto) {
         PageHelper.startPage(dto.getPage(),dto.getLimit(),"start_time desc");
-        com.github.pagehelper.Page<StudyRecordVO> pg = (com.github.pagehelper.Page<StudyRecordVO>)
-                studyRecordMapper.getStudyRecordByAdmin(dto.getPhone(), dto.getClassifyId(), dto.getStatus());
-        return  PageResult.convert(new PageInfo<>(pg));
+        List<StudyRecordVO> list = studyRecordMapper.getStudyRecordByAdmin(dto.getPhone(), dto.getClassifyId(), dto.getStatus());
+        list.forEach(record -> record.setNotePath(ImgConfigUtil.joinUploadUrl(record.getNotePath())));
+//        com.github.pagehelper.Page<StudyRecordVO> pg = (com.github.pagehelper.Page<StudyRecordVO>)
+//                studyRecordMapper.getStudyRecordByAdmin(dto.getPhone(), dto.getClassifyId(), dto.getStatus());
+        return  PageResult.convert(new PageInfo<>(list));
     }
 
     /**
