@@ -1,6 +1,7 @@
 package com.lxy.admin.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.lxy.common.domain.PageResult;
 import com.lxy.common.domain.R;
 import com.lxy.system.dto.ObjectStorageDTO;
 import com.lxy.common.dto.PageDTO;
@@ -23,32 +24,20 @@ import jakarta.validation.Valid;
  */
 
 @RequestMapping("/objectStorageManage")
-@Controller
+@RestController
 @PreAuthorize("hasAuthority('objectStorageManage')")
 public class ObjectStorageManageController {
 
     @Resource
     private ObjectStorageService objectStorageService;
 
-    @GetMapping("/toObjectStorageManage")
-    public String toObjectStorageManage(){
-        return "objectStorageManage/objectStorageList";
-    }
-
-    @GetMapping("/toSaveObjectStorage")
-    public String toSaveObjectStorage(){
-        return "objectStorageManage/saveObjectStorage";
-    }
-
     @PostMapping(value = "/getObjectStoragePageList" , produces = "application/json")
-    @ResponseBody
-    public LayUiResultVO getObjectStoragePageList(PageDTO pageDTO){
-        PageInfo<ObjectStorageVO> pg = objectStorageService.getObjectStoragePageList(pageDTO);
-        return new LayUiResultVO((int) pg.getTotal(),pg.getList());
+    public R<PageResult<ObjectStorageVO>> getObjectStoragePageList(@RequestBody PageDTO pageDTO){
+        PageResult<ObjectStorageVO> pg = objectStorageService.getObjectStoragePageList(pageDTO);
+        return R.ok(pg);
     }
 
     @PostMapping(value = "/saveObjectStorage" , produces = "application/json")
-    @ResponseBody
     public R<Object> saveObjectStorage(@RequestBody @Valid ObjectStorageDTO objectStorageDTO){
         int adminId = UserIdUtil.getUserId();
         objectStorageService.saveObjectStorage(objectStorageDTO,adminId);
@@ -56,7 +45,6 @@ public class ObjectStorageManageController {
     }
 
     @PostMapping(value = "/deleteObjectStorage" , produces = "application/json")
-    @ResponseBody
     public R<Object> deleteObjectStorage(@RequestParam("id") Integer id){
         objectStorageService.deleteObjectStorage(id);
         return R.ok();

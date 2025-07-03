@@ -1,7 +1,9 @@
 package com.lxy.app.controller.feedback;
 
 import com.github.pagehelper.PageInfo;
+import com.lxy.common.domain.PageResult;
 import com.lxy.common.domain.R;
+import com.lxy.system.dto.FeedbackPageDTO;
 import com.lxy.system.po.Feedback;
 import com.lxy.system.vo.FeedbackVO;
 import com.lxy.system.service.FeedbackService;
@@ -49,8 +51,11 @@ public class FeedBackController {
         }
         //可见的反馈
         Integer status = 1;
-        PageInfo<FeedbackVO> pg = feedbackService.getFeedBackList(null, null, status,userId, page, limit);
-        return R.ok(pg.getList());
+        FeedbackPageDTO dto = new FeedbackPageDTO(null,null,null,userId,status);
+        dto.setLimit(limit);
+        dto.setPage(page);
+        PageResult<FeedbackVO> pg = feedbackService.getFeedBackList(dto);
+        return R.ok(pg.getRecords());
     }
 
     /**

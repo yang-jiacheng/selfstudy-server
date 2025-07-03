@@ -1,5 +1,6 @@
 package com.lxy.system.mapper;
 
+import com.lxy.system.dto.FeedbackPageDTO;
 import com.lxy.system.po.Feedback;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lxy.system.vo.FeedbackVO;
@@ -19,9 +20,9 @@ import java.util.List;
 @Mapper
 public interface FeedbackMapper extends BaseMapper<Feedback> {
 
-    List<FeedbackVO> getFeedBackList(@Param("content") String content,@Param("replyStatus") Integer replyStatus,@Param("status")Integer status,@Param("userId") Integer userId);
+    List<FeedbackVO> getFeedBackList(@Param("dto") FeedbackPageDTO dto);
 
-    Integer getFeedBackList_COUNT(@Param("content") String content,@Param("replyStatus") Integer replyStatus,@Param("status")Integer status,@Param("userId") Integer userId);
+    Integer getFeedBackList_COUNT(@Param("dto") FeedbackPageDTO dto);
 
     FeedbackVO getFeedBackDetail(@Param("id") Integer id);
 }

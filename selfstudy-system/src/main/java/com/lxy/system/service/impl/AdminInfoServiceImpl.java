@@ -5,7 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.domain.R;
 import com.lxy.system.dto.AdminInfoPageDTO;
+import com.lxy.system.dto.PersonalEditDTO;
 import com.lxy.system.mapper.AdminInfoMapper;
 import com.lxy.system.po.AdminInfo;
 import com.lxy.system.service.AdminInfoService;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.bouncycastle.asn1.x500.style.RFC4519Style.name;
 
 /**
  * <p>
@@ -71,5 +75,29 @@ public class AdminInfoServiceImpl extends ServiceImpl<AdminInfoMapper, AdminInfo
                 .collect(Collectors.toList());
 
         redisService.deleteKeys(keys);
+    }
+
+    @Override
+    public R<Object> updatePersonal(PersonalEditDTO dto) {
+        AdminInfo adminInfo = this.getById(dto.getId());
+        String password = adminInfo.getPassword();
+        String oldPassword = dto.getOldPassword();
+        String newPassword = dto.getNewPassword();
+        String name = dto.getName();
+        String profilePath = dto.getProfilePath();
+
+        if (StrUtil.isNotBlank(oldPassword) && StrUtil.isNotBlank(newPassword) ){
+            if (!password.equals(oldPassword)) {
+                return R.fail(-1, "旧密码错误！");
+            }
+            if (password.equals(newPassword)) {
+                return R.fail(-1, "新密码与旧密码不能相同！");
+            }
+            adminInfo.setPassword(newPassword);
+        }
+        adminInfo.setName(name);
+        adminInfo.setProfilePath(profilePath);
+        this.updateById(adminInfo);
+        return R.ok();
     }
 }

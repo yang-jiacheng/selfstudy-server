@@ -3,6 +3,8 @@ package com.lxy.system.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lxy.common.domain.PageResult;
+import com.lxy.system.dto.FeedbackPageDTO;
 import com.lxy.system.po.Feedback;
 import com.lxy.system.mapper.FeedbackMapper;
 import com.lxy.system.vo.FeedbackVO;
@@ -33,11 +35,15 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback> i
     }
 
     @Override
-    public PageInfo<FeedbackVO> getFeedBackList(String content, Integer replyStatus,Integer status, Integer userId,Integer page, Integer limit) {
+    public PageResult<FeedbackVO> getFeedBackList(FeedbackPageDTO dto) {
         //开始分页
-        PageHelper.startPage(page,limit,"id desc");
-        Page<FeedbackVO> pg = (Page<FeedbackVO>) getFeedBackList(content, replyStatus,status, userId);
-        return new PageInfo<>(pg);
+        PageHelper.startPage(dto.getPage(),dto.getLimit(),"id desc");
+        List<FeedbackVO> list = feedbackMapper.getFeedBackList(dto);
+        list.forEach(vo -> {
+            vo.setPic(ImgConfigUtil.joinUploadUrl(vo.getPic()));
+            vo.setProfilePath(ImgConfigUtil.joinUploadUrl(vo.getProfilePath()));
+        });
+        return PageResult.convert(new PageInfo<>(list));
     }
 
     @Override
@@ -46,18 +52,5 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback> i
         feedback.setPic(ImgConfigUtil.joinUploadUrl(feedback.getPic()));
         feedback.setProfilePath(ImgConfigUtil.joinUploadUrl(feedback.getProfilePath()));
         return feedback;
-    }
-
-    private List<FeedbackVO> getFeedBackList(String content, Integer replyStatus,Integer status,Integer userId) {
-        List<FeedbackVO> list = feedbackMapper.getFeedBackList(content, replyStatus,status, userId);
-        list.forEach(vo -> {
-            vo.setPic(ImgConfigUtil.joinUploadUrl(vo.getPic()));
-            vo.setProfilePath(ImgConfigUtil.joinUploadUrl(vo.getProfilePath()));
-        });
-        return list;
-    }
-
-    private Integer getFeedBackListCount(String content, Integer replyStatus,Integer status,Integer userId) {
-        return feedbackMapper.getFeedBackList_COUNT(content, replyStatus, status,userId);
     }
 }

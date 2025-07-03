@@ -1,7 +1,9 @@
 package com.lxy.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lxy.common.domain.R;
 import com.lxy.system.dto.AdminInfoPageDTO;
+import com.lxy.system.dto.PersonalEditDTO;
 import com.lxy.system.po.AdminInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -40,4 +42,6 @@ public interface AdminInfoService extends IService<AdminInfo> {
     Page<AdminInfo> getAdminInfoPageList(AdminInfoPageDTO pageDTO);
 
     void removeCachePermissionInAdminIds(List<Integer> adminIds);
+
+    R<Object> updatePersonal(PersonalEditDTO dto);
 }

@@ -1,7 +1,10 @@
 package com.lxy.admin.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.lxy.common.domain.PageResult;
 import com.lxy.common.domain.R;
+import com.lxy.system.dto.FeedBackReplyDTO;
+import com.lxy.system.dto.FeedbackPageDTO;
 import com.lxy.system.po.Feedback;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.vo.FeedbackVO;
@@ -23,7 +26,7 @@ import java.util.Date;
  */
 
 @RequestMapping("/feedBackManage")
-@Controller
+@RestController
 @PreAuthorize("hasAuthority('feedBackManage')")
 public class FeedBackManageController {
 
@@ -34,41 +37,25 @@ public class FeedBackManageController {
         this.feedbackService = feedbackService;
     }
 
-    @GetMapping("/toFeedBackManage")
-    public String toFeedBackManage(){
-        return "feedBack/feedbackList";
-    }
-
-    @GetMapping("/toReplyFeed")
-    public String toReplyFeed(){
-        return "feedBack/replyFeedback";
-    }
-
     @PostMapping(value = "/getFeedBackPageList" , produces = "application/json")
-    @ResponseBody
-    public LayUiResultVO getFeedBackPageList(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                                  @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit,
-                                  @RequestParam(value = "content",required = false) String content,
-                                  @RequestParam(value = "replyStatus",required = false) Integer replyStatus){
-        PageInfo<FeedbackVO> pg = feedbackService.getFeedBackList(content, replyStatus, null,null, page, limit);
-        return new LayUiResultVO((int) pg.getTotal(),pg.getList());
+    public R<PageResult<FeedbackVO>> getFeedBackPageList(@RequestBody FeedbackPageDTO dto){
+        PageResult<FeedbackVO> pg = feedbackService.getFeedBackList(dto);
+        return R.ok(pg);
     }
 
     @PostMapping(value = "/removeFeedBackById" , produces = "application/json")
-    @ResponseBody
     public R<Object> removeFeedBackById(@RequestParam("id") Integer id){
         feedbackService.removeById(id);
         return R.ok();
     }
 
     @PostMapping(value = "/replyFeedBackById" , produces = "application/json")
-    @ResponseBody
-    public R<Object> replyFeedBackById(@RequestParam("id") Integer id,@RequestParam("reply") String reply){
+    public R<Object> replyFeedBackById(@RequestBody FeedBackReplyDTO dto){
         int userId = UserIdUtil.getUserId();
         Feedback feedback = new Feedback();
-        feedback.setId(id);
+        feedback.setId(dto.getId());
         feedback.setAdminId(userId);
-        feedback.setReply(reply);
+        feedback.setReply(dto.getReply());
         feedback.setReplyStatus(1);
         feedback.setReplyTime(new Date());
         feedbackService.updateById(feedback);

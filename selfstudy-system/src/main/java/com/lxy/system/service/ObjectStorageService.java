@@ -1,6 +1,7 @@
 package com.lxy.system.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lxy.common.domain.PageResult;
 import com.lxy.system.dto.ObjectStorageDTO;
 import com.lxy.common.dto.PageDTO;
 import com.lxy.system.po.ObjectStorage;
@@ -17,7 +18,7 @@ import com.lxy.system.vo.ObjectStorageVO;
  */
 public interface ObjectStorageService extends IService<ObjectStorage> {
 
-    PageInfo<ObjectStorageVO> getObjectStoragePageList(PageDTO pageDTO);
+    PageResult<ObjectStorageVO> getObjectStoragePageList(PageDTO pageDTO);
 
     void deleteObjectStorage(Integer id);
 

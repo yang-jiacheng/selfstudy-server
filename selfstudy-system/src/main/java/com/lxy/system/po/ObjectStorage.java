@@ -2,10 +2,14 @@ package com.lxy.system.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.io.Serial;
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -14,10 +18,12 @@ import java.io.Serializable;
  * Date: 2025-02-19
  */
 
+@Data
 @TableName(value = "object_storage", autoResultMap = true)
 public class ObjectStorage implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 
 	@TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -37,66 +43,5 @@ public class ObjectStorage implements Serializable {
     //创建时间
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
     private Date createTime;
-
-    public Integer getId() {
-    	return id;
-    }
-
-    public void setId(Integer id) {
-    	this.id = id;
-    }
-
-    public String getFileName() {
-    	return fileName;
-    }
-
-    public void setFileName(String fileName) {
-    	this.fileName = fileName;
-    }
-
-    public BigDecimal getFileSize() {
-    	return fileSize;
-    }
-
-    public void setFileSize(BigDecimal fileSize) {
-    	this.fileSize = fileSize;
-    }
-
-    public String getDownloadUrl() {
-    	return downloadUrl;
-    }
-
-    public void setDownloadUrl(String downloadUrl) {
-    	this.downloadUrl = downloadUrl;
-    }
-
-    public Integer getCreatorId() {
-    	return creatorId;
-    }
-
-    public void setCreatorId(Integer creatorId) {
-    	this.creatorId = creatorId;
-    }
-
-    public Date getCreateTime() {
-    	return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-    	this.createTime = createTime;
-    }
-
-
-    @Override
-    public String toString() {
-	    return "ObjectStorage{" +
-	            ", id=" + id +
-	            ", fileName=" + fileName +
-	            ", fileSize=" + fileSize +
-	            ", downloadUrl=" + downloadUrl +
-	            ", creatorId=" + creatorId +
-	            ", createTime=" + createTime +
-	    "}";
-    }
 
 }

@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lxy.common.domain.PageResult;
 import com.lxy.system.dto.ObjectStorageDTO;
 import com.lxy.common.dto.PageDTO;
 import com.lxy.system.po.ObjectStorage;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -33,11 +35,11 @@ public class ObjectStorageServiceImpl extends ServiceImpl<ObjectStorageMapper, O
     private ObjectStorageMapper objectStorageMapper;
 
     @Override
-    public PageInfo<ObjectStorageVO> getObjectStoragePageList(PageDTO pageDTO) {
+    public PageResult<ObjectStorageVO> getObjectStoragePageList(PageDTO pageDTO) {
         //开始分页
         PageHelper.startPage(pageDTO.getPage(), pageDTO.getLimit(),"id desc");
-        Page<ObjectStorageVO> pg = (Page<ObjectStorageVO>) objectStorageMapper.getObjectStorageList(pageDTO);
-        return new PageInfo<>(pg);
+        List<ObjectStorageVO> list = objectStorageMapper.getObjectStorageList(pageDTO);
+        return PageResult.convert(new PageInfo<>(list));
     }
 
     @Override

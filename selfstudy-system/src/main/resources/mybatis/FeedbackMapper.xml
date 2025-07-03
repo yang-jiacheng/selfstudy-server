@@ -42,17 +42,20 @@
             INNER JOIN USER u ON u.id = f.user_id
             LEFT JOIN admin_info ai ON ai.id = f.admin_id
         <where>
-            <if test="content != null and content != ''">
-                and f.content like concat ('%',#{content},'%')
+            <if test="dto.phone != null and dto.phone != ''">
+                and u.phone like concat ('%',#{phone},'%')
             </if>
-            <if test="replyStatus != null ">
-                and  f.reply_status = #{replyStatus}
+            <if test="dto.content != null and dto.content != ''">
+                and f.content like concat ('%',#{dto.content},'%')
             </if>
-            <if test="status != null ">
-                and f.status = #{status}
+            <if test="dto.replyStatus != null ">
+                and  f.reply_status = #{dto.replyStatus}
             </if>
-            <if test="userId != null ">
-                and f.user_id = #{userId}
+            <if test="dto.status != null ">
+                and f.status = #{dto.status}
+            </if>
+            <if test="dto.userId != null ">
+                and f.user_id = #{dto.userId}
             </if>
         </where>
     </select>
@@ -65,17 +68,20 @@
         INNER JOIN USER u ON u.id = f.user_id
         LEFT JOIN admin_info ai ON ai.id = f.admin_id
         <where>
-            <if test="content != null and content != ''">
-                and f.content like concat ('%',#{content},'%')
+            <if test="dto.phone != null and dto.phone != ''">
+                and u.phone like concat ('%',#{phone},'%')
             </if>
-            <if test="replyStatus != null ">
-                and f.reply_status = #{replyStatus}
+            <if test="dto.content != null and dto.content != ''">
+                and f.content like concat ('%',#{dto.content},'%')
             </if>
-            <if test="status != null ">
-                and  f.status = #{status}
+            <if test="dto.replyStatus != null ">
+                and  f.reply_status = #{dto.replyStatus}
             </if>
-            <if test="userId != null ">
-                and  f.user_id = #{userId}
+            <if test="dto.status != null ">
+                and f.status = #{dto.status}
+            </if>
+            <if test="dto.userId != null ">
+                and f.user_id = #{dto.userId}
             </if>
         </where>
     </select>
