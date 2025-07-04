@@ -72,7 +72,7 @@ selfstudy-server
 
 ### 6. Demo Link
 
-Admin Backend：http://115.29.185.30/selfStudyAdmin/login
+Admin Backend：http://115.29.185.30/studyRoomAdminWeb/#/
 
 Demo account: administrator：yjc123/123456; Other role：xiuyu123/123456
 
