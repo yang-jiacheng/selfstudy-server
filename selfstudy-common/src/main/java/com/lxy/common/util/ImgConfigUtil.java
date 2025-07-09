@@ -12,9 +12,8 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.properties.CustomProperties;
 import com.lxy.common.domain.GraphicsTextParameter;
+import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -33,9 +32,9 @@ import java.util.regex.Pattern;
  * @since 2022/12/02 9:38
  * @version 1.0
  */
-public class ImgConfigUtil {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ImgConfigUtil.class);
+@Slf4j
+public class ImgConfigUtil {
 
     public final static String UPLOAD_FOLDER = "/upload";
 
@@ -58,7 +57,7 @@ public class ImgConfigUtil {
             // 自动清理临时文件的 InputStream
             return new AutoDeleteFileInputStream(tempFile);
         } catch (IOException e) {
-            LOG.error("压缩图片失败", e);
+            log.error("压缩图片失败", e);
             return null;
         }
     }
@@ -108,7 +107,7 @@ public class ImgConfigUtil {
             OssUtil.uploadFileToOss(ossUrl,inputStream);
             return ossUrl;
         }catch (Exception e){
-            LOG.error("生成二维码失败", e);
+            log.error("生成二维码失败", e);
             return null;
         }finally {
             IoUtil.close(os);
@@ -167,7 +166,7 @@ public class ImgConfigUtil {
             //图片传oss
             imgStr = readBufferedImageToOSS(newBufferedImage);
         }catch (Exception e){
-            LOG.error("生成图片失败：" + url, e);
+            log.error("生成图片失败：" + url, e);
         }finally {
             if (bufferedImage != null) {
                 try {
@@ -210,10 +209,10 @@ public class ImgConfigUtil {
                 OssUtil.uploadFileToOss(path.substring(1), inputStream);
                 // 返回图片绝对路径
                 imgStr = realPath;
-                LOG.error(StrUtil.format("上传图片到oss成功: {}", imgStr));
+                log.error(StrUtil.format("上传图片到oss成功: {}", imgStr));
             }
         } catch (Exception e) {
-            LOG.error(StrUtil.format("上传图片到oss失败: {}", imgStr), e);
+            log.error(StrUtil.format("上传图片到oss失败: {}", imgStr), e);
         }
 
         return imgStr;

@@ -12,8 +12,6 @@ import com.aliyuncs.http.ProtocolType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -30,8 +28,6 @@ import static com.lxy.common.properties.AliYunProperties.*;
  */
 @Slf4j
 public class OssUtil {
-
-    private final static Logger LOG = LoggerFactory.getLogger(OssUtil.class);
 
     public static final String BUCKET_NAME = ossBucket;
 
@@ -54,7 +50,7 @@ public class OssUtil {
         try {
             ossClient.putObject(BUCKET_NAME, url, fileInputStream);
         }catch (Exception e){
-            LOG.error(StrUtil.format("上传文件到OSS失败: {}", url),e);
+            log.error(StrUtil.format("上传文件到OSS失败: {}", url),e);
         }finally {
             ossClient.shutdown();
         }
@@ -75,7 +71,7 @@ public class OssUtil {
                 ossClient.deleteObject(BUCKET_NAME, filePath);
             }
         }catch (Exception e){
-            LOG.error(StrUtil.format("删除文件失败: {}", filePath), e);
+            log.error(StrUtil.format("删除文件失败: {}", filePath), e);
         }finally {
             ossClient.shutdown();
         }
@@ -91,7 +87,7 @@ public class OssUtil {
         try {
             ossObject = ossClient.getObject(BUCKET_NAME, filePath);
         }catch (Exception e){
-            LOG.error(StrUtil.format("获取OSS对象失败: {}", filePath), filePath,e);
+            log.error(StrUtil.format("获取OSS对象失败: {}", filePath), filePath,e);
         }
         return ossObject;
     }
@@ -124,7 +120,7 @@ public class OssUtil {
                 client.shutdown();
             }
         } catch (Exception e) {
-            LOG.error("Failed to get STS credentials", e);
+            log.error("Failed to get STS credentials", e);
         }
         return null;
     }
@@ -157,7 +153,7 @@ public class OssUtil {
             out.flush();
             ossObject.close();
         }catch (Exception e){
-            LOG.error(StrUtil.format("下载OSS文件失败: {}", path),e);
+            log.error(StrUtil.format("下载OSS文件失败: {}", path),e);
         }finally {
             try {
                 if (in != null) {
