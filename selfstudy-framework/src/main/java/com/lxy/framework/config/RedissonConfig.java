@@ -36,6 +36,16 @@ public class RedissonConfig {
     @Value("${spring.application.name}")
     private String clientName;
 
+    private static final int CORE_THREAD_SIZE;
+
+    // 静态代码块初始化线程池的核心线程数和最大线程数
+    static {
+        int availableProcessors = Runtime.getRuntime().availableProcessors();
+        log.info("Redisson -> CPU逻辑处理器数: {}", availableProcessors);
+        // 至少4个线程
+        CORE_THREAD_SIZE = Math.max(4, availableProcessors);
+    }
+
     @PostConstruct
     public void validate() {
         log.info("Redisson 配置初始化 -> host: {}, port: {}, db: {}, clientName: {}", host, port, database, clientName);
@@ -46,6 +56,9 @@ public class RedissonConfig {
         // 创建配置对象
         Config config = new Config();
 
+        config.setThreads(CORE_THREAD_SIZE);  // 线程池大小（默认 16）
+        config.setNettyThreads(CORE_THREAD_SIZE * 2);  // 多线程模式下，Netty 线程数建议设置为 CORE_THREAD_SIZE * 2
+        config.setLockWatchdogTimeout(3000);  // 锁超时时间（毫秒）
         // 配置单节点 Redis
         config.useSingleServer()
                 .setAddress("redis://" + host + ":" + port)  // 必须指定 redis://
@@ -57,8 +70,11 @@ public class RedissonConfig {
                 .setConnectionPoolSize(64)                    // 连接池大小（默认 64）
                 .setConnectionMinimumIdleSize(10)             // 最小空闲连接数（默认 10）
 
+                .setSubscriptionConnectionPoolSize(50)        // 订阅连接池大小（默认 50）
+                .setSubscriptionConnectionMinimumIdleSize(10) // 订阅连接池最小空闲连接数（默认 10）
+
                 // 超时设置
-                .setConnectTimeout(10000)                     // 连接超时时间（毫秒，默认 10000）
+                .setConnectTimeout(6000)                     // 连接超时时间（毫秒，默认 10000）
                 .setTimeout(3000)                             // 命令等待响应超时时间（默认 3000）
                 // 重试策略
                 .setRetryAttempts(3)                          // 命令失败重试次数（默认 3）
