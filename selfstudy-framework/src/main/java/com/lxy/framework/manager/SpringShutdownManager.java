@@ -2,8 +2,7 @@ package com.lxy.framework.manager;
 
 
 import com.lxy.common.util.ThreadPoolUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +14,13 @@ import org.springframework.stereotype.Component;
  * @since 2025/03/07 15:40
  */
 
+@Slf4j
 @Component
 public class SpringShutdownManager implements DisposableBean {
-    private final static Logger LOG = LoggerFactory.getLogger(SpringShutdownManager.class);
 
     @Override
     public void destroy() {
-        LOG.info("SpringShutdownManager destroy");
+        log.info("SpringShutdownManager destroy");
         ThreadPoolUtil.shutdown();
     }
 }
