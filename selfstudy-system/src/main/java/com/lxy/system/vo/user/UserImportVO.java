@@ -14,12 +14,22 @@ public class UserImportVO extends User {
 
     private Integer rowIndex;
 
+    private Integer sheetIndex;
+
     public Integer getRowIndex() {
         return rowIndex;
     }
 
     public void setRowIndex(Integer rowIndex) {
         this.rowIndex = rowIndex;
+    }
+
+    public Integer getSheetIndex() {
+        return sheetIndex;
+    }
+
+    public void setSheetIndex(Integer sheetIndex) {
+        this.sheetIndex = sheetIndex;
     }
 
     @Override

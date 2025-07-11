@@ -12,6 +12,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
+import org.apache.poi.xssf.model.SharedStrings;
 import org.apache.poi.xssf.model.SharedStringsTable;
 import org.apache.poi.xssf.model.StylesTable;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -32,6 +33,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -241,19 +243,26 @@ public class ExcelUtil {
         exportExcel(response, wb, sheetName + ".xlsx");
     }
 
-    public static <T> List<T> importExcel(MultipartFile file, Supplier<SheetHandlerResult<T>> handlerSupplier){
+    /**
+     * Excel导入方法
+     * @param file Excel文件
+     * @param handlerSupplier 处理器供应商，接收sheet编号参数
+     * @return 解析结果列表
+     */
+    public static <T> List<T> importExcel(MultipartFile file, Function<Integer, SheetHandlerResult<T>> handlerSupplier){
         List<T> records = new ArrayList<>();
         try (OPCPackage pkg = OPCPackage.open(file.getInputStream())){
             XSSFReader reader = new XSSFReader(pkg);
-            SharedStringsTable sst = reader.getSharedStringsTable();
+            SharedStrings sst = reader.getSharedStringsTable();
             StylesTable styles = reader.getStylesTable();
             XSSFReader.SheetIterator sheets = (XSSFReader.SheetIterator)
                     reader.getSheetsData();
 
+            int sheetIndex = 1; // sheet编号从1开始
             while (sheets.hasNext()) {
                 try(InputStream sheetStream = sheets.next()){
-                    // 每个 sheet 取一个全新的 handler
-                    SheetHandlerResult<T> hl = handlerSupplier.get();
+                    // 每个 sheet 取一个全新的 handler，并传递sheet编号
+                    SheetHandlerResult<T> hl = handlerSupplier.apply(sheetIndex);
                     XMLReader parser = XMLReaderFactory.createXMLReader();
                     parser.setContentHandler(new XSSFSheetXMLHandler(
                             styles,sst, hl, new DataFormatter(Locale.CHINA),false
@@ -264,9 +273,10 @@ public class ExcelUtil {
                     //解析后的操作
                     List<T> resultList = hl.getResultList();
                     if (CollUtil.isNotEmpty(resultList)){
-                        log.info("解析EXCEL成功, 共解析到{}条数据", resultList.size());
+                        log.info("解析EXCEL第{}sheet成功, 共解析到{}条数据", sheetIndex, resultList.size());
                         records.addAll(resultList);
                     }
+                    sheetIndex++; // 增加sheet编号
                 }
             }
         }catch (Exception e){
@@ -275,9 +285,6 @@ public class ExcelUtil {
         return records;
     }
 
-    public interface SheetHandlerResult<T>
-            extends XSSFSheetXMLHandler.SheetContentsHandler {
-        List<T> getResultList();
-    }
+
 
 }

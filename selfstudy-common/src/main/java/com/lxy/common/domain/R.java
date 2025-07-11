@@ -59,7 +59,7 @@ public class R<T> implements Serializable {
         return restResult(null, code, msg);
     }
 
-    public static <T> R<T> fail(T result,int code, String msg) {
+    public static <T> R<T> fail(int code, String msg,T result) {
         return restResult(result, code, msg);
     }
 

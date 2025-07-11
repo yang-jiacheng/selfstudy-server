@@ -1,5 +1,6 @@
 package com.lxy.admin.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.common.annotation.Log;
 import com.lxy.common.domain.R;
@@ -98,7 +99,10 @@ public class UserManageController {
             return R.fail("上传文件为空！");
         }
         List<ExcelErrorInfoVO> errorList = userService.importUsersInExcel(file);
-        return R.ok(errorList);
+        if (CollUtil.isEmpty(errorList)){
+            return R.fail(R.FAIL,"导入失败！数据有误",errorList);
+        }
+        return R.ok();
     }
 
 

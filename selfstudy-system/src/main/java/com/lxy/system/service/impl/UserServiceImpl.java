@@ -276,11 +276,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      *  用户excel处理器
      */
-    public static class UserSheetHandler implements ExcelUtil.SheetHandlerResult<UserImportVO> {
+    public static class UserSheetHandler implements SheetHandlerResult<UserImportVO> {
 
         private UserImportVO user = null;
 
         private final List<UserImportVO> userList = new ArrayList<>();
+
+        private Integer sheetIndex = 1;
+
+        public UserSheetHandler() {
+        }
+
+        public UserSheetHandler(Integer sheetIndex) {
+            this.sheetIndex = sheetIndex;
+        }
 
         @Override
         public List<UserImportVO> getResultList() {
@@ -371,6 +380,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 if (StrUtil.isEmpty(password)) {
                     user.setPassword(EncryptUtil.encryptSha256("123456"));
                 }
+                user.setSheetIndex(sheetIndex);
                 userList.add(user);
             }
         }
@@ -384,22 +394,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private static List<ExcelErrorInfoVO> checkUserList(List<UserImportVO> userList){
         List<ExcelErrorInfoVO> errorList = new ArrayList<>();
         if (CollUtil.isEmpty(userList)){
-            errorList.add(new ExcelErrorInfoVO("第1sheet","数据为空","请检查文件内容是否正确"));
+            errorList.add(new ExcelErrorInfoVO("sheet","数据为空","请检查文件内容是否正确"));
             return errorList;
         }
         for (UserImportVO user : userList) {
             //具体哪一行
             int rowIndex = user.getRowIndex() + 1;
+            //当前sheet编号
+            int sheetIndex = user.getSheetIndex() != null ? user.getSheetIndex() : 1;
             //判断昵称是否为空
             if (StrUtil.isEmpty(user.getName())){
-                errorList.add(new ExcelErrorInfoVO("第1sheet,第"+rowIndex+"行","昵称为空","此行略过"));
+                errorList.add(new ExcelErrorInfoVO("第"+sheetIndex+"sheet ,第"+rowIndex+"行","昵称为空","此行略过"));
             }
             //判断手机号是否为空,校验手机号
             if (StrUtil.isEmpty(user.getPhone())){
-                errorList.add(new ExcelErrorInfoVO("第1sheet,第"+rowIndex+"行","手机号为空","此行略过"));
+                errorList.add(new ExcelErrorInfoVO("第"+sheetIndex+"sheet 第"+rowIndex+"行","手机号为空","此行略过"));
             }else {
                 if (!PhoneUtil.isMobile(user.getPhone())){
-                    errorList.add(new ExcelErrorInfoVO("第1sheet,第"+rowIndex+"行","手机号格式不正确","此行略过"));
+                    errorList.add(new ExcelErrorInfoVO("第"+sheetIndex+"sheet ,第"+rowIndex+"行","手机号格式不正确","此行略过"));
                 }
             }
         }
