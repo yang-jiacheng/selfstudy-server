@@ -250,6 +250,7 @@ public class AdminManageController {
 
 ### 8.2 日志格式
 - 使用lombok的`@Slf4j`标注类
+  仅在增删改类业务逻辑类上添加 `@Slf4j` 注解
 ```java
 @Slf4j
 
