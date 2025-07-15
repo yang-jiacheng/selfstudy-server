@@ -11,8 +11,8 @@ JARS=('selfstudy-admin.jar' 'selfstudy-mobile-app.jar' 'xxl-job-admin.jar')
 JAR_PATHS=('/java/selfstudy-admin/' '/java/selfstudy-mobile-app/' '/java/xxl-job-admin/')
 # jvm参数
 JAVA_OPTIONS=(
-'-Xms128m -Xmx384m -XX:+UseG1GC -XX:MaxDirectMemorySize=64m -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=128m -XX:ReservedCodeCacheSize=64m -XX:CompressedClassSpaceSize=32m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication'
-'-Xms128m -Xmx384m -XX:+UseG1GC -XX:MaxDirectMemorySize=64m -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=128m -XX:ReservedCodeCacheSize=64m -XX:CompressedClassSpaceSize=32m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication'
+'-Xms128m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=64m -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=128m -XX:ReservedCodeCacheSize=64m -XX:CompressedClassSpaceSize=32m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication'
+'-Xms128m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=64m -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=128m -XX:ReservedCodeCacheSize=64m -XX:CompressedClassSpaceSize=32m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication'
 '-Xms128m -Xmx256m -XX:+UseG1GC -XX:MaxDirectMemorySize=32m -XX:MetaspaceSize=32m -XX:MaxMetaspaceSize=64m -XX:ReservedCodeCacheSize=32m -XX:CompressedClassSpaceSize=16m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication'
 )
 
@@ -21,6 +21,7 @@ JAVA_OPTIONS=(
 # -Xms: 堆内存初始大小
 # -Xmx: 堆内存最大大小
 # -XX:+UseG1GC: 使用G1垃圾收集器（适合低延迟场景）
+# -XX:CICompilerCount: JIT编译器线程数
 # -XX:MaxDirectMemorySize: 直接内存最大大小（限制堆外内存）
 # -XX:MetaspaceSize: 元空间初始大小
 # -XX:MaxMetaspaceSize: 元空间最大大小（存储类元数据）
