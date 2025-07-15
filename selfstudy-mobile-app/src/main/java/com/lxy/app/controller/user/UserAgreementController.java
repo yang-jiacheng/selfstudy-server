@@ -43,7 +43,7 @@ public class UserAgreementController {
      * Param: [type, model]
      */
     @GetMapping("/agreementPolicyInfoPage{type}")
-    public String agreementPolicyInfoPage(@PathVariable Integer type, Model model){
+    public String agreementPolicyInfoPage(@PathVariable("type") Integer type, Model model){
         LambdaQueryWrapper<UserAgreement> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserAgreement::getType,type);
         UserAgreement one = userAgreementService.getOne(wrapper);
