@@ -11,9 +11,9 @@ JARS=('selfstudy-admin.jar' 'selfstudy-mobile-app.jar' 'xxl-job-admin.jar')
 JAR_PATHS=('/java/selfstudy-admin/' '/java/selfstudy-mobile-app/' '/java/xxl-job-admin/')
 # jvm参数 (JDK 17兼容)
 JAVA_OPTIONS=(
-'-Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=64m -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=128m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -Xlog:gc:/java/logs/gc/gc-selfstudy-admin.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-admin.hprof'
-'-Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=64m -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=128m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -Xlog:gc:/java/logs/gc/gc-selfstudy-mobile-app.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-mobile-app.hprof'
-'-Xms256m -Xmx256m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=32m -XX:MetaspaceSize=32m -XX:MaxMetaspaceSize=64m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -Xlog:gc:/java/logs/gc/gc-xxljob-admin.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/xxljob-admin.hprof'
+'-Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=64m -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=128m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-admin.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-admin.hprof'
+'-Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=64m -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=128m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-mobile-app.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-mobile-app.hprof'
+'-Xms256m -Xmx256m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=32m -XX:MetaspaceSize=32m -XX:MaxMetaspaceSize=64m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-xxljob-admin.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/xxljob-admin.hprof'
 )
 
 # ==================== JVM参数配置 ====================
@@ -29,6 +29,7 @@ JAVA_OPTIONS=(
 # -XX:MaxGCPauseMillis: GC停顿时间目标（毫秒）
 # -XX:G1HeapRegionSize: G1堆区域大小
 # -XX:+UseStringDeduplication: 启用字符串去重（节省内存）
+# -XX:+ParallelRefProcEnabled: 启用并行引用处理（提高GC效率）
 # -Xlog:gc: GC日志配置（记录GC详细信息）
 # -XX:+HeapDumpOnOutOfMemoryError: 发生OOM时自动dump堆内存
 # -XX:HeapDumpPath: 堆dump文件保存路径
