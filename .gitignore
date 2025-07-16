@@ -12,5 +12,6 @@ buildNumber.properties
 .idea/
 *.iml
 logs/
+.promptx/
 *.properties
 *.yaml
