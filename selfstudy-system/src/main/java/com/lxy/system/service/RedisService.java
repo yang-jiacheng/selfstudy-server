@@ -225,4 +225,230 @@ public class RedisService {
         }
         return null;
     }
+
+    /**
+     * 添加元素到有序集合
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param value 要添加的值
+     * @param score 分数
+     */
+    public void addToSortedSet(final String key, final Object value, final double score) {
+        redisTemplate.opsForZSet().add(key, value, score);
+        log.info("添加元素到有序集合成功, key:{}, value:{}, score:{}", key, value, score);
+    }
+
+    /**
+     * 批量添加元素到有序集合
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param tuples 元素和分数的集合
+     */
+    public void addToSortedSetBatch(final String key, final Set<ZSetOperations.TypedTuple<Object>> tuples) {
+        redisTemplate.opsForZSet().add(key, tuples);
+        log.info("批量添加元素到有序集合成功, key:{}, size:{}", key, tuples.size());
+    }
+
+    /**
+     * 获取有序集合指定范围的元素（按分数从低到高）
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param start 开始位置
+     * @param end 结束位置
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Set<T> getSortedSetRange(final String key, final long start, final long end) {
+        return (Set<T>) redisTemplate.opsForZSet().range(key, start, end);
+    }
+
+    /**
+     * 获取有序集合指定范围的元素（按分数从高到低）
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param start 开始位置
+     * @param end 结束位置
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Set<T> getSortedSetReverseRange(final String key, final long start, final long end) {
+        return (Set<T>) redisTemplate.opsForZSet().reverseRange(key, start, end);
+    }
+
+    /**
+     * 获取有序集合指定分数范围的元素
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param min 最小分数
+     * @param max 最大分数
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Set<T> getSortedSetRangeByScore(final String key, final double min, final double max) {
+        return (Set<T>) redisTemplate.opsForZSet().rangeByScore(key, min, max);
+    }
+
+    /**
+     * 获取有序集合指定分数范围的元素（带分数）
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param min 最小分数
+     * @param max 最大分数
+     */
+    public Set<ZSetOperations.TypedTuple<Object>> getSortedSetRangeByScoreWithScores(final String key, final double min, final double max) {
+        return redisTemplate.opsForZSet().rangeByScoreWithScores(key, min, max);
+    }
+
+    /**
+     * 获取有序集合元素的分数
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param value 元素值
+     */
+    public Double getSortedSetScore(final String key, final Object value) {
+        return redisTemplate.opsForZSet().score(key, value);
+    }
+
+    /**
+     * 获取有序集合元素的排名（从小到大）
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param value 元素值
+     */
+    public Long getSortedSetRank(final String key, final Object value) {
+        return redisTemplate.opsForZSet().rank(key, value);
+    }
+
+    /**
+     * 获取有序集合元素的排名（从大到小）
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param value 元素值
+     */
+    public Long getSortedSetReverseRank(final String key, final Object value) {
+        return redisTemplate.opsForZSet().reverseRank(key, value);
+    }
+
+    /**
+     * 获取有序集合的元素数量
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     */
+    public Long getSortedSetSize(final String key) {
+        return redisTemplate.opsForZSet().size(key);
+    }
+
+    /**
+     * 获取有序集合指定分数范围内的元素数量
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param min 最小分数
+     * @param max 最大分数
+     */
+    public Long getSortedSetCount(final String key, final double min, final double max) {
+        return redisTemplate.opsForZSet().count(key, min, max);
+    }
+
+    /**
+     * 删除有序集合中的元素
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param values 要删除的元素
+     */
+    public Long removeFromSortedSet(final String key, final Object... values) {
+        Long count = redisTemplate.opsForZSet().remove(key, values);
+        log.info("删除有序集合元素成功, key:{}, count:{}", key, count);
+        return count;
+    }
+
+    /**
+     * 删除有序集合指定排名范围的元素
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param start 开始位置
+     * @param end 结束位置
+     */
+    public Long removeFromSortedSetByRange(final String key, final long start, final long end) {
+        Long count = redisTemplate.opsForZSet().removeRange(key, start, end);
+        log.info("删除有序集合指定排名范围元素成功, key:{}, start:{}, end:{}, count:{}", key, start, end, count);
+        return count;
+    }
+
+    /**
+     * 删除有序集合指定分数范围的元素
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param min 最小分数
+     * @param max 最大分数
+     */
+    public Long removeFromSortedSetByScore(final String key, final double min, final double max) {
+        Long count = redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
+        log.info("删除有序集合指定分数范围元素成功, key:{}, min:{}, max:{}, count:{}", key, min, max, count);
+        return count;
+    }
+
+    /**
+     * 增加有序集合元素的分数
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param value 元素值
+     * @param delta 增加的分数
+     */
+    public Double incrementSortedSetScore(final String key, final Object value, final double delta) {
+        Double newScore = redisTemplate.opsForZSet().incrementScore(key, value, delta);
+        log.info("增加有序集合元素分数成功, key:{}, value:{}, delta:{}, newScore:{}", key, value, delta, newScore);
+        return newScore;
+    }
+
+    /**
+     * 有序集合交集操作
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 目标键
+     * @param otherKey 其他键
+     * @param destKey 结果存储键
+     */
+    public Long intersectSortedSet(final String key, final String otherKey, final String destKey) {
+        Long count = redisTemplate.opsForZSet().intersectAndStore(key, otherKey, destKey);
+        log.info("有序集合交集操作成功, key:{}, otherKey:{}, destKey:{}, count:{}", key, otherKey, destKey, count);
+        return count;
+    }
+
+    /**
+     * 有序集合并集操作
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 目标键
+     * @param otherKey 其他键
+     * @param destKey 结果存储键
+     */
+    public Long unionSortedSet(final String key, final String otherKey, final String destKey) {
+        Long count = redisTemplate.opsForZSet().unionAndStore(key, otherKey, destKey);
+        log.info("有序集合并集操作成功, key:{}, otherKey:{}, destKey:{}, count:{}", key, otherKey, destKey, count);
+        return count;
+    }
+
+    /**
+     * 判断有序集合是否包含指定元素
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
+     * @param key 缓存的键值
+     * @param value 元素值
+     */
+    public boolean isSortedSetMember(final String key, final Object value) {
+        Double score = redisTemplate.opsForZSet().score(key, value);
+        return score != null;
+    }
 }

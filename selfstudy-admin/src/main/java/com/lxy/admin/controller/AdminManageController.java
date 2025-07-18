@@ -36,7 +36,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * TODO
+ * 系统用户管理
  * @author jiacheng yang.
  * @since 2022/10/08 20:11
  * @version 1.0
@@ -76,7 +76,7 @@ public class AdminManageController {
      */
     @PostMapping(value ="/getAdminInfoById", produces = "application/json")
     public R<Map<String ,Object>> getAdminInfoById(@RequestParam("id") Integer id){
-        AdminInfo adminInfo = adminInfoService.getById(id);
+        AdminInfo adminInfo = adminInfoService.getAdminInfoById(id);
         adminInfo.setPassword(null);
         List<AdminRoleRelate> roleRelates = adminRoleRelateService.list(new LambdaQueryWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId, id));
         List<Integer> roles = new ArrayList<>();

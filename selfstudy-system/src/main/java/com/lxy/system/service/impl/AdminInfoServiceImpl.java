@@ -1,5 +1,6 @@
 package com.lxy.system.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -13,11 +14,15 @@ import com.lxy.system.po.AdminInfo;
 import com.lxy.system.service.AdminInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.system.service.RedisService;
+import com.lxy.system.vo.AdminInfoVO;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.bouncycastle.asn1.x500.style.RFC4519Style.name;
@@ -41,6 +46,39 @@ public class AdminInfoServiceImpl extends ServiceImpl<AdminInfoMapper, AdminInfo
     @Override
     public List<String> getPermissionsById(Integer userId) {
         return adminInfoMapper.getPermissionsById(userId);
+    }
+
+    @Override
+    public AdminInfoVO getAdminInfoById(Integer id) {
+        String key = RedisKeyConstant.getAdminInfo(id);
+        AdminInfoVO adminInfoVO = redisService.getObject(key, AdminInfoVO.class);
+        if (adminInfoVO == null) {
+            adminInfoVO = this.updateAdminInfoCache(id);
+        }
+        return adminInfoVO;
+    }
+
+    @Override
+    public void updateAdmin(AdminInfo adminInfo) {
+        this.saveOrUpdate(adminInfo);
+        Integer id = adminInfo.getId();
+        this.updateAdminInfoCache(id);
+    }
+
+    @Override
+    public AdminInfoVO updateAdminInfoCache(Integer id) {
+        String key = RedisKeyConstant.getAdminInfo(id);
+        AdminInfo adminInfo = this.getById(id);
+        if (adminInfo == null) {
+            return null;
+        }
+        List<String> permissions = adminInfoMapper.getPermissionsById(id);
+        AdminInfoVO adminInfoVO = new AdminInfoVO();
+        BeanUtil.copyProperties(adminInfo, adminInfoVO);
+        adminInfoVO.setPermissions(permissions);
+        //热点数据永不过期
+        redisService.setObject(key, adminInfoVO, -1L, TimeUnit.DAYS);
+        return adminInfoVO;
     }
 
     @Override
@@ -71,7 +109,7 @@ public class AdminInfoServiceImpl extends ServiceImpl<AdminInfoMapper, AdminInfo
             return;
         }
         List<String> keys = adminIds.stream()
-                .map(RedisKeyConstant::getAdminLoginStatus)
+                .map(RedisKeyConstant::getAdminInfo)
                 .collect(Collectors.toList());
 
         redisService.deleteKeys(keys);

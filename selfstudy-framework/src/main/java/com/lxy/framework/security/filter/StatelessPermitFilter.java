@@ -2,6 +2,7 @@ package com.lxy.framework.security.filter;
 
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.enums.LogUserType;
+import com.lxy.common.util.DualTokenUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.util.LogUtil;
 import com.lxy.framework.security.domain.StatelessUser;
@@ -20,7 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.lxy.common.constant.CommonConstant.*;
+import static com.lxy.common.util.DualTokenUtil.*;
 
 /**
  * TODO
@@ -47,7 +48,7 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
         String tokenKey = loginUserType.equals(LogUserType.ADMIN.type) ? TOKEN_NAME_ADMIN : TOKEN_NAME_APP;
 
         // 访问的地址
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, tokenKey);
+        String accessToken = DualTokenUtil.getToken(request, tokenKey);
         if (accessToken == null){
             //放行
             filterChain.doFilter(request, response);
@@ -64,27 +65,17 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String loginStatusKey = loginUserType.equals(LogUserType.ADMIN.type) ? RedisKeyConstant.getAdminLoginStatus(userId) : RedisKeyConstant.getLoginStatus(userId);
-        //控制一个账号在线数
-        StatelessUser loginStatus = loginStatusService.getLoginStatus(loginStatusKey,accessToken);
-        if (loginStatus == null){
-            logger.error("无法识别的登录状态");
-            filterChain.doFilter(request, response);
-            return;
-        }
+        String loginStatusKey = loginUserType.equals(LogUserType.ADMIN.type) ? RedisKeyConstant.getAdminInfo(userId) : RedisKeyConstant.getLoginStatus(userId);
 
-        //存入SecurityContextHolder
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginStatus,null,loginStatus.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        //输出日志
-        // 创建 CustomHttpServletRequestWrapper，包装原始的 HttpServletRequest
-        CustomHttpServletRequestWrapper wrappedRequest = new CustomHttpServletRequestWrapper(request);
-        String requestBody = wrappedRequest.getBody();
-        String msg  = LogUtil.logOperation(userId, request,requestBody);
-        logger.warn(msg);
+//        //存入SecurityContextHolder
+//        UsernamePasswordAuthenticationToken authenticationToken =
+//                new UsernamePasswordAuthenticationToken(loginStatus,null,loginStatus.getAuthorities());
+//        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+//        //输出日志
+//        String msg  = LogUtil.logOperation(userId, request,"");
+//        logger.warn(msg);
         //放行
-        filterChain.doFilter(wrappedRequest, response);
+        filterChain.doFilter(request, response);
 
     }
 }

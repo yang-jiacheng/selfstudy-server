@@ -6,7 +6,9 @@ import com.lxy.system.dto.AdminInfoPageDTO;
 import com.lxy.system.dto.PersonalEditDTO;
 import com.lxy.system.po.AdminInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lxy.system.vo.AdminInfoVO;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,6 +28,12 @@ public interface AdminInfoService extends IService<AdminInfo> {
      */
     List<String> getPermissionsById(Integer userId);
 
+    AdminInfoVO getAdminInfoById(Integer id);
+
+    void updateAdmin(AdminInfo adminInfo);
+
+    AdminInfoVO updateAdminInfoCache(Integer id);
+
     /**
      * 根据用户名和密码查询
      * @param username 用户名
@@ -44,4 +52,6 @@ public interface AdminInfoService extends IService<AdminInfo> {
     void removeCachePermissionInAdminIds(List<Integer> adminIds);
 
     R<Object> updatePersonal(PersonalEditDTO dto);
+
+
 }

@@ -2,6 +2,7 @@ package com.lxy.system.dto;
 
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.io.Serializable;
  * @since 2025/03/07 14:45
  */
 
+@Data
 public class LoginVerifyCodeDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 7408311634569283764L;
@@ -29,45 +31,5 @@ public class LoginVerifyCodeDTO implements Serializable {
 
     private String uuid;
 
-    private String device  = "web";
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getVerifyCode() {
-        return verifyCode;
-    }
-
-    public void setVerifyCode(String verifyCode) {
-        this.verifyCode = verifyCode;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getDevice() {
-        return device;
-    }
-
-    public void setDevice(String device) {
-        this.device = device;
-    }
+    private String clientIp;
 }

@@ -2,15 +2,14 @@ package com.lxy.framework.security.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
+import com.lxy.common.domain.TokenPair;
 import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.system.service.RedisService;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 登录状态服务
@@ -20,12 +19,16 @@ import java.util.List;
  * @since 2022/12/20 10:49
  */
 
+@Slf4j
 @Service
 public class LoginStatusService {
 
     @Resource
     private RedisService redisService;
 
+    /**
+     * 传统单令牌登录状态管理
+     */
     public void removeInRedis(String key, String token) {
         List<StatelessUser> loginList = redisService.getObject(key, ArrayList.class);
         if (CollUtil.isNotEmpty(loginList)){
@@ -116,6 +119,104 @@ public class LoginStatusService {
                     .orElse(null);
         }
         return loginStatus;
+    }
+
+    // ========== 双令牌会话管理 ==========
+
+    /**
+     * 管理用户会话
+     * @param userId 用户ID
+     * @param sessionKey Redis会话键
+     * @param tokenPair 令牌对
+     * @param maxSessions 最大会话数
+     */
+    public void manageUserSessions(Integer userId, String sessionKey, TokenPair tokenPair, int maxSessions) {
+        // 清理过期会话
+        cleanExpiredSessions(sessionKey);
+
+        // 检查会话数量是否超过限制
+        Long sessionCount = redisService.getSortedSetSize(sessionKey);
+        if (sessionCount != null && sessionCount >= maxSessions) {
+            // 删除最早过期的会话
+            long deleteCount = sessionCount - maxSessions + 1;
+            redisService.removeFromSortedSetByRange(sessionKey, 0, deleteCount - 1);
+        }
+
+        // 添加新会话，使用RefreshToken过期时间作为分数
+        double score = tokenPair.getRefreshExpires().getTime();
+        redisService.addToSortedSet(sessionKey, tokenPair, score);
+        Long curSessionCount = redisService.getSortedSetSize(sessionKey);
+        log.info("用户`{}`会话管理完成，当前会话数: {}", userId, curSessionCount);
+    }
+
+    /**
+     * 清理过期会话
+     * @param sessionKey Redis键
+     */
+    public void cleanExpiredSessions(String sessionKey) {
+        long currentTime = System.currentTimeMillis();
+        redisService.removeFromSortedSetByScore(sessionKey, 0, currentTime);
+    }
+
+
+    /**
+     * 通过RefreshId移除会话
+     * @param sessionKey Redis键
+     * @param refreshId 刷新令牌ID
+     */
+    public void removeSessionByRefreshId(String sessionKey, String refreshId) {
+        Set<TokenPair> sessions = redisService.getSortedSetRange(sessionKey, 0, -1);
+        if (sessions != null) {
+            sessions.stream()
+                    .filter(session -> refreshId.equals(session.getRefreshId()))
+                    .findFirst()
+                    .ifPresent(session -> {
+                        redisService.removeFromSortedSet(sessionKey, session);
+                        log.info("已移除会话，sessionKey: {}, refreshId: {}", sessionKey,refreshId);
+                    });
+        }
+    }
+
+    /**
+     * 检查会话是否存在
+     * @param sessionKey Redis键
+     * @param refreshId 刷新令牌ID
+     * @return 是否存在
+     */
+    public boolean isSessionExists(String sessionKey, String refreshId) {
+        Set<TokenPair> sessions = redisService.getSortedSetRange(sessionKey, 0, -1);
+        if (sessions != null) {
+            return sessions.stream()
+                    .anyMatch(session -> refreshId.equals(session.getRefreshId()));
+        }
+        return false;
+    }
+
+
+    /**
+     * 获取用户会话数量
+     * @param sessionKey 会话键
+     * @return 会话数量
+     */
+    public long getSessionCount(String sessionKey) {
+
+        // 清理过期会话
+        cleanExpiredSessions(sessionKey);
+
+        // 获取会话数量
+        Long count = redisService.getSortedSetSize(sessionKey);
+        return count != null ? count : 0;
+
+    }
+
+    /**
+     * 清除用户所有会话
+     * @param sessionKey 会话键
+     */
+    public void clearAllSessions(String sessionKey) {
+        redisService.deleteKey(sessionKey);
+        log.info("已清除所有会话: {}", sessionKey);
+
     }
 
 }

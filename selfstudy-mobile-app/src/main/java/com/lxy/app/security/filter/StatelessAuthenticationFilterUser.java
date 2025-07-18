@@ -43,7 +43,6 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         this.loginStatusService = loginStatusService;
     }
 
-    private static final String MSG = JsonUtil.toJson(R.fail(1000,"认证失败，请重新登录！"));
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

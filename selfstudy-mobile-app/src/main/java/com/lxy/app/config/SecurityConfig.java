@@ -92,32 +92,32 @@ public class SecurityConfig  {
         return http.build();
     }
 
-    @Bean
-    @Order(2)
-    public SecurityFilterChain securityFilterChainPermit(HttpSecurity http) throws Exception {
-        http
-                // 会话管理（无状态）
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-
-                // securityMatcher 限定此过滤器链仅处理 PERMIT_URL 的请求
-                .securityMatcher(PERMIT_URL)
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll())
-                //添加过滤器
-                .addFilterBefore(
-                        new StatelessPermitFilter(LogUserType.USER.type,loginStatusService),
-                        UsernamePasswordAuthenticationFilter.class
-                )
-                //关闭csrf //允许跨域
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(configurationSource()))
-                //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
-
-        return http.build();
-    }
+//    @Bean
+//    @Order(2)
+//    public SecurityFilterChain securityFilterChainPermit(HttpSecurity http) throws Exception {
+//        http
+//                // 会话管理（无状态）
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                )
+//
+//                // securityMatcher 限定此过滤器链仅处理 PERMIT_URL 的请求
+//                .securityMatcher(PERMIT_URL)
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .anyRequest().permitAll())
+//                //添加过滤器
+//                .addFilterBefore(
+//                        new StatelessPermitFilter(LogUserType.USER.type,loginStatusService),
+//                        UsernamePasswordAuthenticationFilter.class
+//                )
+//                //关闭csrf //允许跨域
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .cors(cors -> cors.configurationSource(configurationSource()))
+//                //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
+//                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+//
+//        return http.build();
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){

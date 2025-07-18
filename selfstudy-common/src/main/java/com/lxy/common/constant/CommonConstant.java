@@ -17,14 +17,12 @@ public class CommonConstant {
 	 * JWT中userId参数的key名称
 	 */
 	public static String PARAM_NAME_USER_ID = "userId";
-	/**
-	 * coken的名称(管理员)
-	 */
-	public static final String TOKEN_NAME_ADMIN = "selfStudyAdminToken";
+
 	/**
 	 * token的名称(客户端)
 	 */
 	public static final String TOKEN_NAME_APP = "studyRoomToken";
+
 
 
 }

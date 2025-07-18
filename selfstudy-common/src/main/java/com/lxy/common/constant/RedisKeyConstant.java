@@ -19,6 +19,16 @@ public class RedisKeyConstant {
     private static final String ADMIN_LOGIN_STATUS = "ADMIN_LOGIN_STATUS";
 
     /**
+     * admin双令牌会话 - 使用有序集合存储
+     */
+    private static final String ADMIN_DUAL_TOKEN_SESSIONS = "ADMIN_DUAL_TOKEN_SESSIONS";
+
+    /**
+     * admin权限
+     */
+    private static final String ADMIN_INFO = "ADMIN_INFO:";
+
+    /**
      * 业务配置
      */
     private static final String BUSINESS_CONFIG = "BusinessConfig:";
@@ -56,6 +66,13 @@ public class RedisKeyConstant {
         return ADMIN_LOGIN_STATUS + ":admin_" + adminId;
     }
 
+    /**
+     * 获取管理员双令牌会话Redis键
+     */
+    public static String getAdminDualTokenSessions(Integer adminId) {
+        return ADMIN_DUAL_TOKEN_SESSIONS + ":admin_" + adminId;
+    }
+
     public static String getBusinessConfig(String key){
         return BUSINESS_CONFIG+key;
     }
@@ -82,5 +99,9 @@ public class RedisKeyConstant {
 
     public static String getMathCodeKey(String uuid){
         return MATH_CODE_KEY + "uuid_" + uuid;
+    }
+
+    public static String getAdminInfo(Integer adminId){
+        return ADMIN_INFO + "admin_" + adminId;
     }
 }

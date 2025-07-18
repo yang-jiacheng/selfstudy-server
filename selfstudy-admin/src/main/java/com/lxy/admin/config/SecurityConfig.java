@@ -1,16 +1,11 @@
 package com.lxy.admin.config;
 
-import com.lxy.admin.security.filter.StatelessAuthenticationFilterAdmin;
+import com.lxy.admin.security.filter.DualTokenAuthenticationFilter;
 import com.lxy.admin.security.handle.AccessDeniedHandlerImpl;
 import com.lxy.admin.security.handle.AuthenticationEntryPointAdminImpl;
 import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
 import com.lxy.system.service.AdminInfoService;
-import com.lxy.common.enums.LogUserType;
-import com.lxy.system.service.RedisService;
 import com.lxy.framework.security.encoder.MinePasswordEncoder;
-import com.lxy.framework.security.filter.StatelessPermitFilter;
-import com.lxy.framework.security.service.LoginStatusService;
-import com.lxy.system.service.BusinessConfigService;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +15,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -50,13 +44,7 @@ public class SecurityConfig {
     @Resource
     private AdminDetailsServiceImpl adminDetailsService;
     @Resource
-    private BusinessConfigService businessConfigService;
-    @Resource
-    private LoginStatusService loginStatusService;
-    @Resource
-    private RedisService redisService;
-    @Resource
-    private AdminInfoService  adminInfoService;
+    private AdminInfoService adminInfoService;
 
     private final static String[] AUTH_URL = {
             "/home/**","/adminManage/**","/businessConfigManage/**","/classifyManage/**","/feedBackManage/**",
@@ -69,9 +57,12 @@ public class SecurityConfig {
             "/druid/**","/token/**","/upload/**","/hello"
     };
 
+    /**
+     * 双令牌认证过滤器链
+     */
     @Bean
     @Order(1)
-    public SecurityFilterChain securityFilterChainAuth(HttpSecurity http) throws Exception {
+    public SecurityFilterChain dualTokenSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 // 会话管理（无状态）
                 .sessionManagement(session -> session
@@ -83,7 +74,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .addFilterBefore(
-                        new StatelessAuthenticationFilterAdmin(businessConfigService, loginStatusService,adminInfoService,redisService),
+                        new DualTokenAuthenticationFilter(adminInfoService),
                         UsernamePasswordAuthenticationFilter.class
                 )
 
@@ -100,32 +91,35 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    @Order(2)
-    public SecurityFilterChain securityFilterChainPermit(HttpSecurity http) throws Exception {
-        http
-                // 会话管理（无状态）
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-
-                // securityMatcher 限定此过滤器链仅处理 PERMIT_URL 的请求
-                .securityMatcher(PERMIT_URL)
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll())
-                //添加过滤器
-                .addFilterBefore(
-                        new StatelessPermitFilter(LogUserType.ADMIN.type,loginStatusService),
-                        UsernamePasswordAuthenticationFilter.class
-                )
-                //关闭csrf //允许跨域
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(configurationSource()))
-                //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
-
-        return http.build();
-    }
+    /**
+     * 公开资源过滤器链
+     */
+//    @Bean
+//    @Order(2)
+//    public SecurityFilterChain securityFilterChainPermit(HttpSecurity http) throws Exception {
+//        http
+//                // 会话管理（无状态）
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                )
+//
+//                // securityMatcher 限定此过滤器链仅处理 PERMIT_URL 的请求
+//                .securityMatcher(PERMIT_URL)
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .anyRequest().permitAll())
+//                //添加过滤器
+//                .addFilterBefore(
+//                        new StatelessPermitFilter(LogUserType.ADMIN.type,loginStatusService),
+//                        UsernamePasswordAuthenticationFilter.class
+//                )
+//                //关闭csrf //允许跨域
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .cors(cors -> cors.configurationSource(configurationSource()))
+//                //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
+//                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+//
+//        return http.build();
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -144,7 +138,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource configurationSource() {
         List<String> list = Collections.singletonList("*");
-        List<String> methods = Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS");
+        List<String> methods = Arrays.asList("GET", "POST", "OPTIONS");
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedHeaders(list);
         corsConfiguration.setAllowedMethods(methods);

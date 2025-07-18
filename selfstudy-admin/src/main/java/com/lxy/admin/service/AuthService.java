@@ -137,7 +137,7 @@ public class AuthService {
         if (one!=null){
             return R.fail("用户名或手机号已被使用！");
         }
-        adminInfoService.saveOrUpdate(adminInfo);
+        adminInfoService.updateAdmin(adminInfo);
         Integer id = adminInfo.getId();
         //先把记录干掉
         adminRoleRelateService.remove(new LambdaUpdateWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId,id));
@@ -165,6 +165,7 @@ public class AuthService {
         wrapper.eq(AdminInfo::getId,dto.getId()).set(AdminInfo::getStatus,dto.getStatus());
         adminInfoService.update(wrapper);
         adminInfoService.removeCachePermissionInAdminIds(Arrays.asList(dto.getId()));
+        adminInfoService.updateAdminInfoCache(dto.getId());
     }
 
     /**

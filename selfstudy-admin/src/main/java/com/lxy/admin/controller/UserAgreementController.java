@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO
+ * 用户协议与隐私政策
  * @author jiacheng yang.
  * @since 2022/12/19 10:25
  * @version 1.0

@@ -47,7 +47,7 @@ public class RolePermissionRelateServiceImpl extends ServiceImpl<RolePermissionR
             return;
         }
         List<String> keys = adminIds.stream()
-                .map(RedisKeyConstant::getAdminLoginStatus)
+                .map(RedisKeyConstant::getAdminInfo)
                 .collect(Collectors.toList());
 
         redisService.deleteKeys(keys);
