@@ -9,6 +9,7 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -34,6 +35,44 @@ public class RedisService {
     private StringRedisTemplate stringRedisTemplate;
     @Resource
     private RedissonClient redissonClient;
+
+    /**
+     * 扫描 Redis 中匹配的 key
+     * @param pattern 通配符，如 "user:*"
+     * @param count 每次扫描数量建议值，非限制
+     * @return 所有匹配的 key 列表
+     */
+    public Set<String> scanKeys(String pattern, Integer count) {
+        Set<String> keys = new HashSet<>();
+
+        redisTemplate.execute((RedisCallback<Void>) connection -> {
+            StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+
+            // 构建 ScanOptions，只在 count 不为空时设置
+            ScanOptions.ScanOptionsBuilder builder = ScanOptions.scanOptions().match(pattern);
+            if (count != null) {
+                builder.count(count);
+            }
+            ScanOptions options = builder.build();
+
+            try (Cursor<byte[]> cursor = connection.keyCommands().scan(options)) {
+                while (cursor.hasNext()) {
+                    String key = stringRedisSerializer.deserialize(cursor.next());
+                    if (key != null) {
+                        keys.add(key);
+                    }
+                }
+            } catch (Exception e) {
+                log.error("scanKeys 异常: pattern={}, count={}", pattern, count, e);
+            }
+
+            return null;
+        });
+
+        return keys;
+    }
+
+
 
     /**
      * 判断 key是否存在

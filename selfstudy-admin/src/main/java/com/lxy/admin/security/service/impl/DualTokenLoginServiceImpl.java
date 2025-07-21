@@ -69,8 +69,6 @@ public class DualTokenLoginServiceImpl implements LoginService {
         TokenPair tokenPair = DualTokenUtil.generateTokenPair(userId, LogUserType.ADMIN.type);
         // 设置ip
         tokenPair.setClientIp(dto.getClientIp());
-        //设置权限
-        tokenPair.setPermissions(principal.getPermissions());
         // 获取最大会话数量配置
         int maxSessions = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.ADMIN_HAS_NUM));
         // 管理会话

@@ -37,7 +37,7 @@ public class DualTokenUtil {
     /**
      * RefreshToken过期时间(天)
      */
-    private static final int REFRESH_TOKEN_EXPIRE_DAYS = 7;
+    private static final int REFRESH_TOKEN_EXPIRE_DAYS = 30;
 
     /**
      * Token类型标识
@@ -98,11 +98,8 @@ public class DualTokenUtil {
      */
     public static TokenPair generateTokenPair(Integer userId, Integer userType) {
         Date now = new Date();
-//        Date accessExpires = DateUtil.offsetMinute(now, ACCESS_TOKEN_EXPIRE_MINUTES);
-//        Date refreshExpires = DateUtil.offsetDay(now, REFRESH_TOKEN_EXPIRE_DAYS);
-
-        Date accessExpires = DateUtil.offsetMinute(now, 1);
-        Date refreshExpires = DateUtil.offsetMinute(now, 5);
+        Date accessExpires = DateUtil.offsetMinute(now, ACCESS_TOKEN_EXPIRE_MINUTES);
+        Date refreshExpires = DateUtil.offsetDay(now, REFRESH_TOKEN_EXPIRE_DAYS);
 
         // 生成AccessToken
         String accessId = IdUtil.simpleUUID();
@@ -221,7 +218,7 @@ public class DualTokenUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e){
-            log.error("token已过期: {}",token, e);
+            log.error("token已过期: {}",token);
             return null;
         } catch(Exception e) {
             log.error("无法解析token: {}",token, e);

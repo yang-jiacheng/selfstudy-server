@@ -50,13 +50,10 @@ public class TokenPair implements Serializable {
      */
     private Integer userId;
 
-
     /**
      * 用户类型
      */
     private Integer userType;
-
-    private List<String> permissions;
 
     /**
      * 创建时间
