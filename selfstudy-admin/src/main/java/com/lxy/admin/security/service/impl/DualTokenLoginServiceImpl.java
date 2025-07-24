@@ -90,7 +90,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
             }
             Claims claims = DualTokenUtil.parseToken(token);
             userId = (Integer) claims.get(PARAM_NAME_USER_ID);
-            String refreshId = claims.getId();
+            String refreshId = (String) claims.get(PARAM_NAME_JID);
             if (userId != -1){
                 String sessionKey = RedisKeyConstant.getAdminDualTokenSessions(userId);
                 // 移除会话
