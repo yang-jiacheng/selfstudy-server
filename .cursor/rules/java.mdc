@@ -261,6 +261,9 @@ log.info("业务信息: {}", businessMessage);
 log.debug("调试信息: {}", debugMessage);
 ```
 
+### 8.3 注意
+- 仅在必要时：新增或删除才记录日志
+
 ## 9. 数据库相关规范
 
 ### 9.1 实体类规范
@@ -348,6 +351,12 @@ public void removeAdminInfoByIds(List<Integer> userIds) {
             .in(AdminRoleRelate::getAdminId, userIds));
 }
 ```
+
+### 12.3 注意
+- @Transactional 不能应用在非 public 修饰的方法上
+- 同一个类中方法调用，会导致@Transactional失效
+- 异常被catch会导致@Transactional失效
+- 尽量把事务范围控制在最小范围
 
 ## 13. 工具类规范
 

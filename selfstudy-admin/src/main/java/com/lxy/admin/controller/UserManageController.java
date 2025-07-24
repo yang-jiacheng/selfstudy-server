@@ -99,7 +99,7 @@ public class UserManageController {
             return R.fail("上传文件为空！");
         }
         List<ExcelErrorInfoVO> errorList = userService.importUsersInExcel(file);
-        if (CollUtil.isEmpty(errorList)){
+        if (CollUtil.isNotEmpty(errorList)){
             return R.fail(R.FAIL,"导入失败！数据有误",errorList);
         }
         return R.ok();
