@@ -54,7 +54,7 @@ public class TokenController {
     @PostMapping(value = "/logout", produces = "application/json")
     @ResponseBody
     public R<Object> logout(HttpServletRequest request,HttpServletResponse response){
-        String accessToken = DualTokenUtil.getToken(request, DualTokenUtil.TOKEN_NAME_ADMIN);
+        String accessToken = DualTokenUtil.getToken(request, DualTokenUtil.TOKEN_REFRESH);
         loginService.logout(accessToken,request,response);
         return R.ok();
     }

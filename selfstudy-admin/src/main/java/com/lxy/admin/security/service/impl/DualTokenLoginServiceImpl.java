@@ -84,7 +84,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
     public void logout(String token, HttpServletRequest request, HttpServletResponse response) {
         Integer userId = -1;
         try {
-            boolean isValid = DualTokenUtil.validateAccessToken(token);
+            boolean isValid = DualTokenUtil.validateRefreshToken(token);
             if (!isValid) {
                 return;
             }
