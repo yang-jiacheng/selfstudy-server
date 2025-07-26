@@ -8,8 +8,36 @@ With the development of internet technology, traditional offline study rooms are
 
 The platform offers a variety of study modes. Students can create or join public study rooms, participate in focused sessions, set learning goals, etc. By studying together with peers, students can effectively improve their learning efficiency and cultivate focus.
 
+### 2. Core Features
 
-### 2. Technology Stack
+#### 🚀 **Learning Management**
+- **Smart Study Rooms**: Support creating/joining public study rooms with real-time online user display
+- **Multiple Timing Modes**: Countdown and count-up timing modes to suit different study habits
+- **Study Records**: Automatic recording of study duration and notes, generating detailed study reports
+- **Seat Management**: Virtual seat allocation to create authentic study room atmosphere
+
+#### 👥 **Social Interaction**
+- **Study Leaderboards**: Daily/weekly/monthly study duration rankings to motivate continuous learning
+- **Study Note Sharing**: Support text and image notes to promote knowledge exchange
+- **User Feedback**: Comprehensive feedback mechanism for continuous user experience optimization
+
+#### 🔐 **Security Authentication**
+- **Dual Token Authentication**: Admin backend uses Access Token + Refresh Token dual protection
+- **Single Token Authentication**: Mobile app uses JWT single token authentication, balancing security and convenience
+- **Permission Management**: Fine-grained permission control system based on RBAC
+
+#### 📊 **Data Statistics**
+- **Study Analytics**: Personal study duration, focus analysis, and progress trend analysis
+- **Real-time Monitoring**: System operation status and user activity real-time monitoring
+- **Data Export**: Support Excel export of study data and user data
+
+#### ⚙️ **System Management**
+- **Business Configuration**: Dynamic configuration management with runtime parameter adjustment
+- **Version Management**: APP version release and update management
+- **Scheduled Tasks**: Distributed task scheduling based on XXL-JOB
+- **Audit Logging**: Complete operation log recording and querying
+
+### 3. Technology Stack
 
 jdk 17+
 
@@ -20,14 +48,38 @@ jdk 17+
 - NoSQL Cache：[Redis 6.2](https://github.com/redis/redis)
 - Message Queue：[RabbitMQ 3.10](https://github.com/rabbitmq/rabbitmq-server)
 
-### 3. Cloud Services
+### 4. Cloud Services
 
 - Alibaba Cloud SMS Service
 - Alibaba Cloud RDS MySQL 8
 - Alibaba Cloud Object Storage Service (OSS)
 - Alibaba Cloud Content Delivery Network (CDN)
 
-### 4. Structure
+### 5. System Architecture
+
+#### Technical Architecture Features
+- **Modular Design**: High cohesion and low coupling module division for easy maintenance and expansion
+- **Event-Driven**: Asynchronous event processing mechanism based on Spring Event
+- **Caching Strategy**: Multi-level cache design to improve system response speed
+- **Monitoring System**: Complete operation audit chain with AOP + event listening
+
+#### Security Architecture
+```
+┌─────────────────┐    ┌──────────────────┐
+│   Admin Auth    │    │   Mobile Auth    │
+│ AccessToken(15m)│    │   JWT Token      │
+│RefreshToken(30d)│    │   (Long-term)    │
+└─────────────────┘    └──────────────────┘
+         │                       │
+         └───────────┬───────────┘
+                     │
+            ┌─────────────────┐
+            │  Spring Security│
+            │ Unified Security │
+            └─────────────────┘
+```
+
+### 6. Structure
 
 ```txt
 selfstudy-server    
@@ -64,34 +116,80 @@ selfstudy-server
 ├── start-server.sh                     // Startup script
 ```
 
-### 5. Project Link
+### 7. Quick Start
 
-- **Server:** https://github.com/yang-jiacheng/selfstudy-server
-- **Background management:** https://github.com/yang-jiacheng/studyroom-admin-web
-- **Android client:** https://github.com/yang-jiacheng/StudyRoom
+1. Import SQL script `docs/selfstudy.sql`
+2. Configure `application-dev.properties`
+3. Access URLs
+   - Admin API: http://localhost:8071/selfStudyAdmin
+   - Mobile API: http://localhost:8072/selfStudyApp
+   - XXL-JOB: http://localhost:8060/xxl-job-admin
 
-### 6. Demo Link
+### 8. Project Links
 
-Admin Backend：http://115.29.185.30/studyRoomAdminWeb/#/
+#### 🔗 Related Repositories
 
-Demo account: administrator：yjc123/123456; Other role：xiuyu123/123456
+- **🖥️ Server:** https://github.com/yang-jiacheng/selfstudy-server
+- **🌐 Admin Web:** https://github.com/yang-jiacheng/studyroom-admin-web  
+- **📱 Android Client:** https://github.com/yang-jiacheng/StudyRoom
 
-Android Client: https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/android/studyroom/apk/studyroom-1.0.6-7-0125.apk
+#### 🏗️ Project Architecture Diagram
 
-Demo account: 17508660924/123456
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Cloud Study Ecosystem                   │
+├─────────────────────────────────────────────────────────────┤
+│  📱 Android App          🌐 Admin Web         🖥️ Backend    │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐ │
+│  │   User App      │    │   Admin Panel   │    │   API Server    │ │
+│  │                │    │                │    │                │ │
+│  │ • Room Booking  │◄──►│ • User Mgmt     │◄──►│ • Spring Boot   │ │
+│  │ • Study Records │    │ • Statistics    │    │ • MySQL DB      │ │
+│  │ • Profile       │    │ • System Config │    │ • Redis Cache   │ │
+│  │ • Notifications │    │ • Permission    │    │ • OSS Storage   │ │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
 
-Due to the restriction of Aliyun SMS service, individual developers cannot apply for SMS signature, so please use the password to log in.
+### 9. Demo Links
 
-### 7. Deployment
+#### 🌐 Online Experience
 
-- Project Root Execute Packaging Commands
+**Admin Backend：** http://115.29.185.30/studyRoomAdminWeb/#/
+
+**Demo Accounts：**
+
+- Administrator：`yjc123` / `123456`
+- Other Roles：`xiuyu123` / `123456`
+
+**Android Client Download：** https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/android/studyroom/apk/studyroom-1.0.6-7-0125.apk
+
+**Mobile Demo Account：** `17508660924` / `123456`
+
+> ⚠️ **Note:** Due to Aliyun SMS service restrictions, individual developers cannot apply for SMS signature, please use password login
+
+#### 📱 Feature Preview
+
+You can try the following features during the experience:
+
+- ✅ User login and permission switching
+- ✅ Dynamic menus and routing
+- ✅ User management and role assignment  
+- ✅ Study record queries and statistics
+- ✅ System configuration and parameter management
+- ✅ OSS file upload and storage management
+- ✅ Responsive layout adaptation
+
+### 10. Deployment
+
+#### Local Packaging
+Execute packaging commands in the project root directory
 
 ```shell
 mvn clean package
 ```
 
-- Server Deployment
-
+#### Server Deployment
 The suggested structure is as follows, with the startup script in the project root directory：
 
 ```txt
@@ -105,8 +203,7 @@ The suggested structure is as follows, with the startup script in the project ro
 ├── /start-server.sh                      // Startup script
 ```
 
-- Deployment command
-
+#### Deployment Commands
 ```shell
 # start | restart | stop
 # The `selfstudy-admin` is the name of the jar package without suffix, or it can be written as `all`, that is, it is executed on all jar packages.
@@ -114,12 +211,38 @@ The suggested structure is as follows, with the startup script in the project ro
 ```
 
 ### Contact Me
-For any inquiries, please contact: jiacheng yang
 
-WeChat：crushed_whiskey
+#### 👨‍💻 Author Information
 
-Email：yjc1529425632@gmail.com
+**Jiacheng Yang** - Full Stack Developer
+
+**Contact:**
+
+- 📧 **Email:** yjc1529425632@gmail.com
+- 💬 **WeChat:** crushed_whiskey
+- 🐙 **GitHub:** https://github.com/yang-jiacheng
+
+**About Author:**
+
+- 💼 Focus on full-stack development and system architecture
+- 🌟 Passionate about open source projects and technology sharing
+- 🎯 Committed to building elegant and efficient software systems
+
+#### 💡 Feedback & Suggestions
+
+If you have any questions, suggestions or feedback, please contact us through:
+
+1. **GitHub Issues** - Report bugs or feature requests
+2. **Email Contact** - Technical communication and cooperation
+3. **WeChat Consultation** - Quick response and technical support
 
 ### License
 
 Selfstudy-server is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/yang-jiacheng/selfstudy-server/blob/master/LICENSE) for the full license text.
+
+---
+
+<div align="center">
+	<p><strong>⭐ If this project helps you, please give me a Star! ⭐</strong></p>
+    <p><strong>📢 Welcome to share with more friends in need! 📢</strong></p>
+</div>
