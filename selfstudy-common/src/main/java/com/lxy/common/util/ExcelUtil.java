@@ -2,6 +2,7 @@ package com.lxy.common.util;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.lxy.common.annotation.ExcelHeader;
@@ -61,6 +62,42 @@ public class ExcelUtil {
         style.setBorderTop(BorderStyle.THIN);
         style.setBorderBottom(BorderStyle.THIN);
         return style;
+    }
+
+    /**
+     * <P>表头专用样式：灰色背景，粗体，居中对齐，薄边框</P>
+     * @param wb 工作簿
+     * @return CellStyle 表头样式
+     */
+    public static CellStyle getHeaderStyle(SXSSFWorkbook wb){
+        CellStyle headerStyle = wb.createCellStyle();
+
+        // 设置背景色为灰色
+        headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        // 设置字体为粗体
+        Font headerFont = wb.createFont();
+        headerFont.setBold(true);
+        headerFont.setFontHeightInPoints((short) 12);
+        headerFont.setColor(IndexedColors.BLACK.getIndex());
+        headerStyle.setFont(headerFont);
+
+        // 设置对齐方式为居中
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+        headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        // 设置边框
+        headerStyle.setBorderLeft(BorderStyle.THIN);
+        headerStyle.setBorderRight(BorderStyle.THIN);
+        headerStyle.setBorderTop(BorderStyle.THIN);
+        headerStyle.setBorderBottom(BorderStyle.THIN);
+
+        // 设置数据格式为文本
+        DataFormat format = wb.createDataFormat();
+        headerStyle.setDataFormat(format.getFormat("@"));
+
+        return headerStyle;
     }
 
     /**
@@ -192,10 +229,13 @@ public class ExcelUtil {
      * @since 2025/4/30 15:47
      */
     public static <T> void exportExcelByRecords(String sheetName, List<T> dataList, Class<T> clazz, HttpServletResponse response) {
+        sheetName = ReUtil.replaceAll(sheetName, "[\\\\/:*?\"<>|]", "_");
         // 创建工作簿
         SXSSFWorkbook wb = new SXSSFWorkbook();
-        // 设置单元格样式：居中、薄边框
-        CellStyle style = getCenterBorderThinStyle(wb);
+        // 设置单元格样式：居中、薄边框（用于数据行）
+        CellStyle dataStyle = getCenterBorderThinStyle(wb);
+        // 设置表头专用样式
+        CellStyle headerStyle = getHeaderStyle(wb);
         // 创建一个sheet
         Sheet sheet = wb.createSheet(sheetName);
         // ExcelHeader注解的字段
@@ -209,20 +249,22 @@ public class ExcelUtil {
         for (int i = 0; i < exportFields.size();  i++) {
             sheet.setColumnWidth(i,  5000);
         }
-        //生成表头行（使用title属性）
+        //生成表头行（使用title属性和表头专用样式）
         Row headerRow = createRow(sheet, 1);
+        // 设置表头行高为25磅
+        headerRow.setHeightInPoints(25);
         for (int i = 0; i < exportFields.size();  i++) {
             Field field = exportFields.get(i);
             ExcelHeader annotation = field.getAnnotation(ExcelHeader.class);
             String headerName = StrUtil.isEmpty(annotation.title())  ? field.getName()  : annotation.title();
-            createCell(headerRow, i + 1, headerName, style);
+            createCell(headerRow, i + 1, headerName, headerStyle);
         }
 
         if (CollUtil.isNotEmpty(dataList)){
             // 填充数据行
             int startRow = 2;
             for (T data : dataList) {
-                Row rowData = ExcelUtil.createRow(sheet, startRow);
+                Row rowData = createRow(sheet, startRow);
                 for (int i = 0; i < exportFields.size();  i++) {
                     Field field = exportFields.get(i);
                     try {
@@ -230,7 +272,7 @@ public class ExcelUtil {
                         if (fieldValue == null){
                             fieldValue = "";
                         }
-                        createCell(rowData, i + 1, fieldValue.toString(), style);
+                        createCell(rowData, i + 1, fieldValue.toString(), dataStyle);
                     } catch (Exception e) {
                         log.error(" 字段[{}]导出失败: {}",  field.getName(),  e.getMessage());
                     }
