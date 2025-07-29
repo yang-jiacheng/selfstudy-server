@@ -128,6 +128,7 @@ public class HttpsRequestUtil {
         HttpPost httpPost = new HttpPost(url);
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(30000)
+                .setRedirectsEnabled(true)
                 .setConnectionRequestTimeout(10000)
                 .setSocketTimeout(60000)
                 .build();
