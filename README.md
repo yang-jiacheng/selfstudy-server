@@ -198,8 +198,6 @@ The suggested structure is as follows, with the startup script in the project ro
 │       └── selfstudy-admin.jar           // Background management system jar package
 ├── /selfstudy-mobile-app/
 │       └── selfstudy-mobile-app.jar      // APP jar package
-├── /xxl-job-admin/
-│       └── xxl-job-admin.jar 
 ├── /start-server.sh                      // Startup script
 ```
 

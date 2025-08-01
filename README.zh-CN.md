@@ -198,8 +198,6 @@ mvn clean package
 │       └── selfstudy-admin.jar           // 后管jar包
 ├── /selfstudy-mobile-app/
 │       └── selfstudy-mobile-app.jar      // APP jar包
-├── /xxl-job-admin/
-│       └── xxl-job-admin.jar 
 ├── /start-server.sh                      // 启动脚本
 ```
 
