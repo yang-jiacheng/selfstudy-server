@@ -1,12 +1,18 @@
 package com.lxy.common.util;
 
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.SecureRandom;
 
 /**
  * 3DES对称加密工具
@@ -14,71 +20,95 @@ import java.security.Key;
  * @since 2021/5/16 14:08
  * @version 1.0
  */
-public class DESUtil {
-    //算法
-    private static final String ALGORITHM = "DESede";
-    //参数：第一段是加密算法的名称，第二段是分组加密的模式，第三段是指最后一个分组的填充方式
-    private static final String PARAM = "DESede/CBC/PKCS5Padding";
-    // 密钥 长度不得小于24
-    private final static String SECRET_KEY = "lanshan-edu-ycyk-2022-java" ;
-    // 向量 可有可无 终端后台也要约定
-    private final static String IV = "20220802";
-    // 加解密统一使用的编码方式
-    private final static String ENCODING = "utf-8";
-    //密钥种子
-    private static final Key KEY;
 
-    static {
+@Slf4j
+@Component
+public class DESUtil {
+
+    private static final String ALGORITHM = "DESede";
+    private static final String PARAM = "DESede/CBC/PKCS5Padding";
+    private static final String ENCODING = "utf-8";
+
+    @Value("${crypto.des.secret-key}")
+    private String secretKeyConfig;
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        this.key = generateKey(secretKeyConfig);
+    }
+
+    /**
+     * 生成 Key
+     */
+    private Key generateKey(String secret) {
         try {
-            //DES算法策略
-            DESedeKeySpec spec = new DESedeKeySpec(SECRET_KEY.getBytes());
-            //密钥工厂
-            SecretKeyFactory keyfactory = SecretKeyFactory.getInstance(ALGORITHM);
-            //获取密钥种子
-            KEY = keyfactory.generateSecret(spec);
-        }catch (Exception e){
-            throw new RuntimeException("生成密钥种子失败",e);
+            if (secret == null || secret.length() < 24) {
+                throw new IllegalArgumentException("3DES 密钥长度不得小于 24 位");
+            }
+            DESedeKeySpec spec = new DESedeKeySpec(secret.getBytes(StandardCharsets.UTF_8));
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
+            return keyFactory.generateSecret(spec);
+        } catch (Exception e) {
+            throw new RuntimeException("生成密钥失败", e);
         }
     }
 
     /**
      * 加密
-     * @param plainText 普通文本
+     * @param plainText 明文
+     * @return Base64(IV + 密文)
      */
-    public static String encode(String plainText) {
+    public String encode(String plainText) {
         try {
+            // 随机生成IV
+            byte[] ivBytes = new byte[8];
+            new SecureRandom().nextBytes(ivBytes);
+            IvParameterSpec iv = new IvParameterSpec(ivBytes);
+
             Cipher cipher = Cipher.getInstance(PARAM);
-            IvParameterSpec ips = new IvParameterSpec( IV.getBytes());
-            cipher.init(Cipher.ENCRYPT_MODE, KEY, ips);
-            byte[] encryptData = cipher.doFinal( plainText.getBytes(ENCODING));
-            return Base64.encodeBase64String(encryptData);
-        }catch (Exception e){
-            throw new RuntimeException("加密失败",e);
+            cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+
+            byte[] encryptData = cipher.doFinal(plainText.getBytes(ENCODING));
+
+            // 拼接 IV + 密文
+            byte[] ivAndCipher = new byte[ivBytes.length + encryptData.length];
+            System.arraycopy(ivBytes, 0, ivAndCipher, 0, ivBytes.length);
+            System.arraycopy(encryptData, 0, ivAndCipher, ivBytes.length, encryptData.length);
+
+            return Base64.encodeBase64String(ivAndCipher);
+        } catch (Exception e) {
+            log.error("加密失败", e);
+            return null;
         }
     }
 
     /**
      * 解密
-     * @param encryptText 加密文本
+     * @param encryptText Base64(IV + 密文)
      */
-    public static String decode(String encryptText) {
+    public String decode(String encryptText) {
         try {
+            byte[] ivAndCipher = Base64.decodeBase64(encryptText);
+
+            // 提取 IV
+            byte[] ivBytes = new byte[8];
+            System.arraycopy(ivAndCipher, 0, ivBytes, 0, ivBytes.length);
+            IvParameterSpec iv = new IvParameterSpec(ivBytes);
+
+            // 提取密文
+            byte[] cipherBytes = new byte[ivAndCipher.length - ivBytes.length];
+            System.arraycopy(ivAndCipher, ivBytes.length, cipherBytes, 0, cipherBytes.length);
+
             Cipher cipher = Cipher.getInstance(PARAM);
-            IvParameterSpec ips = new IvParameterSpec(IV.getBytes());
-            cipher. init(Cipher.DECRYPT_MODE, KEY, ips);
-            byte[] decryptData = cipher.doFinal(Base64.decodeBase64(encryptText));
-            return new String( decryptData, ENCODING);
-        }catch (Exception e){
-            throw new RuntimeException("解密失败", e);
+            cipher.init(Cipher.DECRYPT_MODE, key, iv);
+
+            byte[] decryptData = cipher.doFinal(cipherBytes);
+            return new String(decryptData, ENCODING);
+        } catch (Exception e) {
+            log.error("解密失败", e);
+            return null;
         }
     }
-
-    public static void main(String[] args) {
-        String plainText = "hello world";
-        String encrypted = encode(plainText);
-        System.out.println("加密后的文本："+encrypted);
-        String decrypted = decode(encrypted);
-        System.out.println("解密后的文本："+decrypted);
-    }
-
 }
