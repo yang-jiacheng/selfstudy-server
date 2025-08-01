@@ -1,19 +1,18 @@
 #! /bin/sh
 # 端口号
-PORTS=(8071 8072 8060)
+PORTS=(8071 8072)
 # 模块
-MODULES=('selfstudy-admin' 'selfstudy-mobile-app' 'xxl-job-admin')
+MODULES=('selfstudy-admin' 'selfstudy-mobile-app')
 # 模块名称
-MODULE_NAMES=('后台管理系统' 'APP服务端' 'xxl-job任务调度')
+MODULE_NAMES=('后台管理系统' 'APP服务端')
 # jar包数组
-JARS=('selfstudy-admin.jar' 'selfstudy-mobile-app.jar' 'xxl-job-admin.jar')
+JARS=('selfstudy-admin.jar' 'selfstudy-mobile-app.jar')
 # jar包路径数组
-JAR_PATHS=('/java/selfstudy-admin/' '/java/selfstudy-mobile-app/' '/java/xxl-job-admin/')
+JAR_PATHS=('/java/selfstudy-admin/' '/java/selfstudy-mobile-app/')
 # jvm参数 (JDK 17兼容)
 JAVA_OPTIONS=(
 '-Xms512m -Xmx512m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-admin.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-admin.hprof'
 '-Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=96m -XX:MetaspaceSize=96m -XX:MaxMetaspaceSize=192m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-mobile-app.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-mobile-app.hprof'
-'-Xms256m -Xmx256m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=64m -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=128m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-xxljob-admin.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/xxljob-admin.hprof'
 )
 
 
