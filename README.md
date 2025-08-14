@@ -194,6 +194,9 @@ The suggested structure is as follows, with the startup script in the project ro
 
 ```txt
 /java     
+├── /logs/
+│       └── gc/                           // gc log directory
+│       └── heap-dumps/                   // Automatic dump heap file directory when OOM occurs, must have
 ├── /selfstudy-admin/           
 │       └── selfstudy-admin.jar           // Background management system jar package
 ├── /selfstudy-mobile-app/

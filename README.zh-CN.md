@@ -194,6 +194,9 @@ mvn clean package
 
 ```txt
 /java
+├── /logs/
+│       └── gc/                           // gc日志目录
+│       └── heap-dumps/                   // 发生OOM时自动dump堆文件目录，必须有
 ├── /selfstudy-admin/           
 │       └── selfstudy-admin.jar           // 后管jar包
 ├── /selfstudy-mobile-app/

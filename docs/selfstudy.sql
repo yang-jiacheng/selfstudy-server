@@ -5,6 +5,9 @@
  File Encoding         : 65001
 */
 
+CREATE database if NOT EXISTS `selfstudy` default character set utf8mb4 collate utf8mb4_unicode_ci;
+use `selfstudy`;
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -966,6 +969,16 @@ CREATE TABLE `xxl_job_user`  (
 -- ----------------------------
 -- Records of xxl_job_user
 -- ----------------------------
-INSERT INTO `xxl_job_user` VALUES (1, 'admin', 'eb1c4f4bbf7a679f4e5d73e1c00ded04', 1, NULL);
+INSERT INTO `xxl_job_user` VALUES (1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', 1, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+commit;
+
+-- 创建用户
+CREATE USER 'lxy'@'%' IDENTIFIED BY '@Lxy+mmhjd123';
+-- 授权用户访问
+GRANT ALL PRIVILEGES ON selfstudy.* TO 'lxy'@'%';
+-- 刷新权限
+FLUSH PRIVILEGES;
