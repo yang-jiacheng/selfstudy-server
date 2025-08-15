@@ -68,7 +68,7 @@ start() {
             if [ -n "$PID" ]; then
                 echo "$MODULE---$MODULE_NAME:已经运行,PID=$PID"
             else
-                nohup java $JAVA_OPTION -jar $JAR_PATH$JAR_NAME --spring.profiles.active=prod > /dev/null 2>&1 &
+                nohup java $JAVA_OPTION -jar $JAR_PATH$JAR_NAME --spring.config.additional-location=${JAR_PATH}application-prod.properties --spring.profiles.active=prod > /dev/null 2>&1 &
                 PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
                 while [ -z "$PID" ]; do
                     if (($count == 30)); then
