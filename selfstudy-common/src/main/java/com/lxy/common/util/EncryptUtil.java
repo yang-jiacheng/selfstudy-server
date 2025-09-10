@@ -1,15 +1,15 @@
 package com.lxy.common.util;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
  * 加密工具类(不可逆)
+ *
  * @author jiacheng yang.
- * @since 2021/5/19 0:24
  * @version 1.0
+ * @since 2021/5/19 0:24
  */
 public class EncryptUtil {
     /**

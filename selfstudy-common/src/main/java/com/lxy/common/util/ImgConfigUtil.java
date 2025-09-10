@@ -9,16 +9,20 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.lxy.common.domain.GraphicsTextParameter;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.properties.CustomProperties;
-import com.lxy.common.domain.GraphicsTextParameter;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -28,9 +32,10 @@ import java.util.regex.Pattern;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/02 9:38
  * @version 1.0
+ * @since 2022/12/02 9:38
  */
 
 @Slf4j
@@ -65,28 +70,29 @@ public class ImgConfigUtil {
     /**
      * 判断文件是否图片
      */
-    public static boolean isImage(String fileName){
+    public static boolean isImage(String fileName) {
         String suffix = fileName.substring(fileName.lastIndexOf(".")).toUpperCase();
         return IMG_FORMAT.contains(suffix);
     }
 
     /**
      * 拼接图片路径
+     *
      * @param url 图片相对路径
      * @return 图片访问路径
      */
-    public static String joinUploadUrl(String url){
-        if (StrUtil.isEmpty(url)){
+    public static String joinUploadUrl(String url) {
+        if (StrUtil.isEmpty(url)) {
             return null;
         }
-        if (!url.contains(UPLOAD_FOLDER)){
+        if (!url.contains(UPLOAD_FOLDER)) {
             return null;
         }
         url = url.substring(url.indexOf(UPLOAD_FOLDER));
         return getPrefix() + url;
     }
 
-    public static String generateDimensionalCode(String uniCode){
+    public static String generateDimensionalCode(String uniCode) {
         //文件名
         String fileName = generateRandomString() + ".jpg";
         fileName = FileUtil.getRandomFileName(fileName);
@@ -98,18 +104,18 @@ public class ImgConfigUtil {
         try {
             os = new ByteArrayOutputStream();
             //生成二维码到输出流
-            QrCodeUtil.generate(uniCode, config, ImgUtil.IMAGE_TYPE_JPG,os);
+            QrCodeUtil.generate(uniCode, config, ImgUtil.IMAGE_TYPE_JPG, os);
             byte[] bytes = os.toByteArray();
             inputStream = new ByteArrayInputStream(bytes);
             String prefix = "/upload/DimensionalCode/";
-            String ossUrl = prefix+fileName;
+            String ossUrl = prefix + fileName;
             //传到oss
-            OssUtil.uploadFileToOss(ossUrl,inputStream);
+            OssUtil.uploadFileToOss(ossUrl, inputStream);
             return ossUrl;
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("生成二维码失败", e);
             return null;
-        }finally {
+        } finally {
             IoUtil.close(os);
             IoUtil.close(inputStream);
         }
@@ -123,31 +129,32 @@ public class ImgConfigUtil {
     /**
      * 获取图片前缀
      */
-    public static String getPrefix(){
+    public static String getPrefix() {
         //开启了OSS
-        if (AliYunProperties.ossEnabled){
+        if (AliYunProperties.ossEnabled) {
             return AliYunProperties.ossPath;
         }
-        if ("prod".equals(CustomProperties.activeProfile)){
-            return "http://" + CustomProperties.hostName +   CustomProperties.contentPath;
+        if ("prod".equals(CustomProperties.activeProfile)) {
+            return "http://" + CustomProperties.hostName + CustomProperties.contentPath;
         }
-        return "http://" + CustomProperties.hostName + ":" + CustomProperties.port+  CustomProperties.contentPath;
+        return "http://" + CustomProperties.hostName + ":" + CustomProperties.port + CustomProperties.contentPath;
     }
 
-    public static String getAccessUrl(){
-        if ("prod".equals(CustomProperties.activeProfile)){
-            return "http://" + CustomProperties.hostName +   CustomProperties.contentPath;
+    public static String getAccessUrl() {
+        if ("prod".equals(CustomProperties.activeProfile)) {
+            return "http://" + CustomProperties.hostName + CustomProperties.contentPath;
         }
-        return "http://" + CustomProperties.hostName + ":" + CustomProperties.port+  CustomProperties.contentPath;
+        return "http://" + CustomProperties.hostName + ":" + CustomProperties.port + CustomProperties.contentPath;
     }
 
     /**
      * 处理图片模板
-     * @param url 图片路径
+     *
+     * @param url        图片路径
      * @param parameters 模板参数
      * @return 处理后的图片路径
      */
-    public static String processImage(String url,List<GraphicsTextParameter> parameters){
+    public static String processImage(String url, List<GraphicsTextParameter> parameters) {
         String imgStr = "";
         BufferedImage bufferedImage = null;
         BufferedImage newBufferedImage = null;
@@ -165,9 +172,9 @@ public class ImgConfigUtil {
             newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
             //图片传oss
             imgStr = readBufferedImageToOSS(newBufferedImage);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("生成图片失败：" + url, e);
-        }finally {
+        } finally {
             if (bufferedImage != null) {
                 try {
                     bufferedImage.flush();
@@ -195,7 +202,7 @@ public class ImgConfigUtil {
      */
     public static String readBufferedImageToOSS(BufferedImage image) {
         String imgStr = "";
-        if (image == null ) {
+        if (image == null) {
             return imgStr;
         }
         // try-with-resources 自动关闭资源
@@ -222,14 +229,14 @@ public class ImgConfigUtil {
      * 绘制文本到图片上
      *
      * @param parameter 文本内容和样式的参数
-     * @param image 背景图片
+     * @param image     背景图片
      */
     public static void drawTextOnImage(GraphicsTextParameter parameter, BufferedImage image) {
         String text = parameter.getValue();
         // 获取样式参数
         String fontFamily = parameter.getFontKey();
         int fontSize = parameter.getFontSize() != null ? parameter.getFontSize() : 24;
-        int x = parameter.getX() != null ? parameter.getX()  : 0;
+        int x = parameter.getX() != null ? parameter.getX() : 0;
         int y = parameter.getY() != null ? parameter.getY() + fontSize : 0;
 
         String fontWeight = parameter.getFontWeight();

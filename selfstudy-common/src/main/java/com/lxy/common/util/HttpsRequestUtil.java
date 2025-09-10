@@ -49,15 +49,15 @@ public class HttpsRequestUtil {
             httpclient = SSLClient.wrapClient();
             URIBuilder builder = new URIBuilder(url);
             if (params != null) {
-                for(String key : params.keySet()) {
-                    builder.addParameter(key, (String)params.get(key));
+                for (String key : params.keySet()) {
+                    builder.addParameter(key, (String) params.get(key));
                 }
             }
 
             URI uri = builder.build();
             HttpGet httpGet = new HttpGet(uri);
             if (headers != null) {
-                for(String key : headers.keySet()) {
+                for (String key : headers.keySet()) {
                     httpGet.setHeader(key, headers.get(key));
                 }
             }
@@ -84,7 +84,7 @@ public class HttpsRequestUtil {
         setPostHeaders(httpPost, headers);
         if (MapUtil.isNotEmpty(params)) {
             List<NameValuePair> nvps = new ArrayList<>(params.size());
-            for(Map.Entry<String, Object> mapEntry : params.entrySet()) {
+            for (Map.Entry<String, Object> mapEntry : params.entrySet()) {
                 nvps.add(new BasicNameValuePair(mapEntry.getKey(), mapEntry.getValue().toString()));
             }
             httpPost.setEntity(new UrlEncodedFormEntity(nvps, StandardCharsets.UTF_8));
@@ -103,7 +103,7 @@ public class HttpsRequestUtil {
         return result;
     }
 
-    public static String doPostJson(String url, String jsonString,Map<String, String> headers) {
+    public static String doPostJson(String url, String jsonString, Map<String, String> headers) {
         CloseableHttpClient httpClient = SSLClient.wrapClient();
         CloseableHttpResponse response = null;
         String resultString = "";
@@ -136,9 +136,9 @@ public class HttpsRequestUtil {
         return httpPost;
     }
 
-    public static void setPostHeaders(HttpPost httpPost,Map<String, String> headers){
-        if(MapUtil.isNotEmpty(headers)){
-            for(Map.Entry<String, String> entry : headers.entrySet()) {
+    public static void setPostHeaders(HttpPost httpPost, Map<String, String> headers) {
+        if (MapUtil.isNotEmpty(headers)) {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
                 httpPost.setHeader(entry.getKey(), entry.getValue());
             }
         }
@@ -176,7 +176,7 @@ public class HttpsRequestUtil {
                     public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
                     }
                 };
-                ctx.init((KeyManager[])null, new TrustManager[]{tm}, (SecureRandom)null);
+                ctx.init((KeyManager[]) null, new TrustManager[]{tm}, (SecureRandom) null);
                 SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(ctx, NoopHostnameVerifier.INSTANCE);
                 return HttpClients.custom().setSSLSocketFactory(ssf).build();
             } catch (Exception var4) {

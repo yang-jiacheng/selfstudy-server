@@ -5,42 +5,46 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import com.aliyun.dysmsapi20170525.Client;
-import com.aliyun.dysmsapi20170525.models.*;
+import com.aliyun.dysmsapi20170525.models.QuerySmsTemplateListRequest;
+import com.aliyun.dysmsapi20170525.models.QuerySmsTemplateListResponse;
+import com.aliyun.dysmsapi20170525.models.QuerySmsTemplateListResponseBody;
+import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
+import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
 import com.aliyun.teaopenapi.models.Config;
 import com.aliyun.teautil.models.RuntimeOptions;
 import com.lxy.common.vo.SmsSendVO;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
-import static com.lxy.common.properties.AliYunProperties.*;
+import static com.lxy.common.properties.AliYunProperties.accessKeyId;
+import static com.lxy.common.properties.AliYunProperties.accessKeySecret;
 
 /**
  * 阿里云短信
+ *
  * @author jiacheng yang.
- * @since 2022/12/19 11:41
  * @version 1.0
+ * @since 2022/12/19 11:41
  */
 
 @Slf4j
 public class SmsUtil {
 
 
-    private static volatile Client clientInstance = null;
-
+    public final static String TEMPLATE_CODE = "SMS_269495080";
     private final static String REGION = "cn-hangzhouo";
 
     private final static String ENDPOINT = "dysmsapi.aliyuncs.com";
-
-    public final static String TEMPLATE_CODE = "SMS_269495080";
-
     private final static String SIGN_NAME = "团团云自习";
-
     private final static String SUCCESS_CODE = "OK";
+    private static volatile Client clientInstance = null;
 
-    public static Client getClient(){
+    public static Client getClient() {
         //新sdk
         if (clientInstance == null) {
             synchronized (SmsUtil.class) {
@@ -52,9 +56,9 @@ public class SmsUtil {
                     config.setEndpoint(ENDPOINT);
                     try {
                         clientInstance = new Client(config);
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         clientInstance = null;
-                        log.error("短信客户端初始化失败",e);
+                        log.error("短信客户端初始化失败", e);
                     }
                 }
             }
@@ -64,17 +68,18 @@ public class SmsUtil {
 
     /**
      * 根据模板id发送短信
+     *
      * @author jiacheng yang.
      * @since 2025/4/17 11:22
      */
-    public static <T> boolean sendSmsByTemplate(String smsCode,String phoneNumbers,T record) {
+    public static <T> boolean sendSmsByTemplate(String smsCode, String phoneNumbers, T record) {
         String content = getTemplateContent(smsCode);
         SmsSendVO smsDTO = new SmsSendVO();
         smsDTO.setTemplateCode(smsCode);
         //正则提取所有 ${xxx} 中的 xxx
         List<String> variableNames = ReUtil.findAll("\\$\\{(.*?)\\}", content, 1);
         // 如果模板里有参数
-        if (CollUtil.isNotEmpty(variableNames)){
+        if (CollUtil.isNotEmpty(variableNames)) {
             //遍历取值、校验、组装
             List<SmsSendVO.TemplateParam> params = new ArrayList<>();
             for (String varName : variableNames) {
@@ -94,10 +99,11 @@ public class SmsUtil {
 
     /**
      * 发送短信
+     *
      * @author jiacheng yang.
      * @since 2025/4/17 11:03
      */
-    public static boolean sendMessage(String phoneNumbers, SmsSendVO smsSendVO){
+    public static boolean sendMessage(String phoneNumbers, SmsSendVO smsSendVO) {
         boolean flag = false;
         Client client = getClient();
         SendSmsRequest request = new SendSmsRequest();
@@ -120,24 +126,25 @@ public class SmsUtil {
             RuntimeOptions runtime = new RuntimeOptions();
             SendSmsResponse response = client.sendSmsWithOptions(request, runtime);
             String code = response.getBody().getCode();
-            if (code.equals(SUCCESS_CODE)){
+            if (code.equals(SUCCESS_CODE)) {
                 flag = true;
-                log.info("短信发送成功，手机号：{},模板：{},参数：{}", phoneNumbers,templateCode, json);
-            }else {
-                log.error("短信发送失败，手机号：{},模板：{},参数：{},原因：{}", phoneNumbers,templateCode, json, response.getBody().getMessage());
+                log.info("短信发送成功，手机号：{},模板：{},参数：{}", phoneNumbers, templateCode, json);
+            } else {
+                log.error("短信发送失败，手机号：{},模板：{},参数：{},原因：{}", phoneNumbers, templateCode, json, response.getBody().getMessage());
             }
-        }catch (Exception e) {
-            log.error(StrUtil.format("短信发送异常，手机号：{},模板：{},参数：{}", phoneNumbers,templateCode, json),e);
+        } catch (Exception e) {
+            log.error(StrUtil.format("短信发送异常，手机号：{},模板：{},参数：{}", phoneNumbers, templateCode, json), e);
         }
         return flag;
     }
 
     /**
      * 查询短信模板
+     *
      * @author jiacheng yang.
      * @since 2025/4/17 11:03
      */
-    public static List<QuerySmsTemplateListResponseBody.QuerySmsTemplateListResponseBodySmsTemplateList> querySmsTemplateList(){
+    public static List<QuerySmsTemplateListResponseBody.QuerySmsTemplateListResponseBodySmsTemplateList> querySmsTemplateList() {
         Client client = getClient();
         QuerySmsTemplateListRequest request = new QuerySmsTemplateListRequest();
         request.setPageIndex(1);
@@ -146,23 +153,24 @@ public class SmsUtil {
             RuntimeOptions runtime = new RuntimeOptions();
             QuerySmsTemplateListResponse response = client.querySmsTemplateListWithOptions(request, runtime);
             String code = response.getBody().getCode();
-            if (code.equals(SUCCESS_CODE)){
+            if (code.equals(SUCCESS_CODE)) {
                 return response.getBody().getSmsTemplateList();
             }
-        }catch (Exception e) {
-            log.error("查询短信模板失败",e);
+        } catch (Exception e) {
+            log.error("查询短信模板失败", e);
         }
         return null;
     }
 
     /**
      * 根据code获取模板内容
+     *
      * @author jiacheng yang.
      * @since 2025/4/17 11:07
      */
-    public static String getTemplateContent(String templateCode){
+    public static String getTemplateContent(String templateCode) {
         List<QuerySmsTemplateListResponseBody.QuerySmsTemplateListResponseBodySmsTemplateList> list = querySmsTemplateList();
-        if (CollUtil.isEmpty(list)){
+        if (CollUtil.isEmpty(list)) {
             return "";
         }
         String templateContent = list.stream()
@@ -171,7 +179,7 @@ public class SmsUtil {
         return templateContent;
     }
 
-    public static String getRandomCode(){
+    public static String getRandomCode() {
         Random random = new Random();
         int ranNum = (int) (random.nextDouble() * (999999 - 100000 + 1)) + 100000;
         return String.valueOf(ranNum);

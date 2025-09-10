@@ -8,9 +8,10 @@ import java.util.List;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/09 14:54
  * @version 1.0
+ * @since 2022/12/09 14:54
  */
 public class WeekData {
 
@@ -29,7 +30,7 @@ public class WeekData {
 
     public WeekData(List<LocalDate> localDates) {
         this.start = localDates.get(0);
-        this.end = localDates.get(localDates.size()-1);
+        this.end = localDates.get(localDates.size() - 1);
     }
 
     public String getStart() {

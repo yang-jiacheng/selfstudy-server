@@ -2,9 +2,10 @@ package com.lxy.common.constant;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/19 15:44
  * @version 1.0
+ * @since 2022/12/19 15:44
  */
 public class ConfigConstant {
 

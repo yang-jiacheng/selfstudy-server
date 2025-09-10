@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 
 public enum LogBusinessType {
 
-    OTHER(0,"其他"),
-    INSERT(1,"新增"),
-    UPDATE(2,"修改"),
-    DELETE(3,"删除"),
-    IMPORT(4,"导入"),
-    EXPORT(5,"导出");
+    OTHER(0, "其他"),
+    INSERT(1, "新增"),
+    UPDATE(2, "修改"),
+    DELETE(3, "删除"),
+    IMPORT(4, "导入"),
+    EXPORT(5, "导出");
 
     public final Integer type;
     public final String name;

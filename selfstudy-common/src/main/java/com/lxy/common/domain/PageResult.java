@@ -25,15 +25,48 @@ public class PageResult<T> {
     /**
      * 总的信息条数
      */
-    private Long total=0L;
+    private Long total = 0L;
     /**
      * 总的页数
      */
-    private Integer pages=0;
+    private Integer pages = 0;
     /**
      * 数据集合
      */
     private List<T> records;
+
+    public PageResult() {
+    }
+
+    public PageResult(Integer current, Integer size, Long total, Integer pages, List<T> records) {
+        this.current = current;
+        this.size = size;
+        this.total = total;
+        this.pages = pages;
+        this.records = records;
+    }
+
+    public PageResult(Integer current, Integer size, Long total, List<T> records) {
+        this.current = current;
+        this.size = size;
+        this.total = total;
+        this.records = records;
+
+        this.pages = total.intValue() % size == 0 ? (total.intValue() / size) : (total.intValue() / size + 1);
+    }
+
+    /**
+     * 静态工厂方法：从  com.github.pagehelper.PageInfo 转换为 PageResult
+     */
+    public static <T> PageResult<T> convert(PageInfo<T> pageInfo) {
+        return new PageResult<>(
+                pageInfo.getPageNum(),
+                pageInfo.getPageSize(),
+                pageInfo.getTotal(),
+                pageInfo.getPages(),
+                pageInfo.getList()
+        );
+    }
 
     public Integer getCurrent() {
         return current;
@@ -73,38 +106,5 @@ public class PageResult<T> {
 
     public void setRecords(List<T> records) {
         this.records = records;
-    }
-
-    public PageResult() {
-    }
-
-    public PageResult(Integer current, Integer size, Long total, Integer pages, List<T> records) {
-        this.current = current;
-        this.size = size;
-        this.total = total;
-        this.pages = pages;
-        this.records = records;
-    }
-
-    public PageResult(Integer current, Integer size, Long total, List<T> records) {
-        this.current = current;
-        this.size = size;
-        this.total = total;
-        this.records = records;
-
-        this.pages = total.intValue() % size == 0 ? ( total.intValue() / size ) : ( total.intValue() / size + 1 );
-    }
-
-    /**
-     * 静态工厂方法：从  com.github.pagehelper.PageInfo 转换为 PageResult
-     */
-    public static <T> PageResult<T> convert(PageInfo<T> pageInfo) {
-        return new PageResult<>(
-                pageInfo.getPageNum(),
-                pageInfo.getPageSize(),
-                pageInfo.getTotal(),
-                pageInfo.getPages(),
-                pageInfo.getList()
-        );
     }
 }

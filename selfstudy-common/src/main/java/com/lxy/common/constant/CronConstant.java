@@ -2,9 +2,10 @@ package com.lxy.common.constant;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/23 18:04
  * @version 1.0
+ * @since 2022/12/23 18:04
  */
 public class CronConstant {
 

@@ -5,7 +5,10 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.lxy.common.domain.TokenPair;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,33 +20,13 @@ import java.util.Map;
 
 /**
  * 双Token机制的JWT工具类
+ *
  * @author jiacheng yang.
- * @since 2025/01/18 10:00
  * @version 1.0
+ * @since 2025/01/18 10:00
  */
 @Slf4j
 public class DualTokenUtil {
-
-    /**
-     * 密钥池
-     */
-    private static final String[] SECRET_KEY_POOL = {"CGls309Gb1rP7WGQ", "cX0EgfdjkFBK0Kwh", "E8xJtz46xIZDuonV"};
-
-    /**
-     * AccessToken过期时间(分钟)
-     */
-    private static final int ACCESS_TOKEN_EXPIRE_MINUTES = 15;
-
-    /**
-     * RefreshToken过期时间(天)
-     */
-    private static final int REFRESH_TOKEN_EXPIRE_DAYS = 30;
-
-    /**
-     * Token类型标识
-     */
-    private static final String TOKEN_TYPE_ACCESS = "access";
-    private static final String TOKEN_TYPE_REFRESH = "refresh";
 
     /**
      * JWT中userType参数的key名称  LogUserType
@@ -57,12 +40,10 @@ public class DualTokenUtil {
      * JWT中jId参数的key名称
      */
     public static final String PARAM_NAME_JID = "jId";
-
     /**
      * token类型
      */
     public static final String PARAM_NAME_TOKEN_TYPE = "tokenType";
-
     /**
      * token的名称(管理员)
      */
@@ -75,6 +56,23 @@ public class DualTokenUtil {
      * token的名称(客户端)
      */
     public static final String TOKEN_REFRESH = "refreshToken";
+    /**
+     * 密钥池
+     */
+    private static final String[] SECRET_KEY_POOL = {"CGls309Gb1rP7WGQ", "cX0EgfdjkFBK0Kwh", "E8xJtz46xIZDuonV"};
+    /**
+     * AccessToken过期时间(分钟)
+     */
+    private static final int ACCESS_TOKEN_EXPIRE_MINUTES = 15;
+    /**
+     * RefreshToken过期时间(天)
+     */
+    private static final int REFRESH_TOKEN_EXPIRE_DAYS = 30;
+    /**
+     * Token类型标识
+     */
+    private static final String TOKEN_TYPE_ACCESS = "access";
+    private static final String TOKEN_TYPE_REFRESH = "refresh";
 
     public static String getToken(HttpServletRequest request, String name) {
         // 优先从Header获取
@@ -92,7 +90,8 @@ public class DualTokenUtil {
 
     /**
      * 生成双Token
-     * @param userId 用户ID
+     *
+     * @param userId   用户ID
      * @param userType 用户类型
      * @return TokenPair
      */
@@ -107,9 +106,9 @@ public class DualTokenUtil {
 
         // 生成RefreshToken
         String refreshId = IdUtil.simpleUUID();
-        String refreshToken = generateToken(refreshId,userId,  userType,  TOKEN_TYPE_REFRESH, refreshExpires);
+        String refreshToken = generateToken(refreshId, userId, userType, TOKEN_TYPE_REFRESH, refreshExpires);
 
-        TokenPair tokenPair = new TokenPair(refreshId,accessToken, refreshToken, accessExpires, refreshExpires);
+        TokenPair tokenPair = new TokenPair(refreshId, accessToken, refreshToken, accessExpires, refreshExpires);
         tokenPair.setUserId(userId);
         tokenPair.setUserType(userType);
 
@@ -139,6 +138,7 @@ public class DualTokenUtil {
 
     /**
      * 验证AccessToken
+     *
      * @param accessToken 访问Token
      * @return 是否有效
      */
@@ -154,6 +154,7 @@ public class DualTokenUtil {
 
     /**
      * 验证RefreshToken
+     *
      * @param refreshToken 刷新Token
      * @return 是否有效
      */
@@ -192,6 +193,7 @@ public class DualTokenUtil {
 
     /**
      * 解析Token
+     *
      * @param token JWT Token
      * @return Claims
      */
@@ -203,7 +205,8 @@ public class DualTokenUtil {
         try {
             // 先解析获取用户ID
             String payload = getPayload(token);
-            Map<String, Object> claimsMap = JsonUtil.getObj(payload,new TypeReference<HashMap<String,Object>>(){});
+            Map<String, Object> claimsMap = JsonUtil.getObj(payload, new TypeReference<HashMap<String, Object>>() {
+            });
             Integer userId = (Integer) claimsMap.get(PARAM_NAME_USER_ID);
 
             if (userId == null) {
@@ -217,11 +220,11 @@ public class DualTokenUtil {
                     .setSigningKey(secretKey)
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (ExpiredJwtException e){
-            log.error("token已过期: {}",token);
+        } catch (ExpiredJwtException e) {
+            log.error("token已过期: {}", token);
             return null;
-        } catch(Exception e) {
-            log.error("无法解析token: {}",token, e);
+        } catch (Exception e) {
+            log.error("无法解析token: {}", token, e);
             return null;
         }
     }

@@ -16,9 +16,10 @@ import java.security.SecureRandom;
 
 /**
  * 3DES对称加密工具
+ *
  * @author jiacheng yang.
- * @since 2021/5/16 14:08
  * @version 1.0
+ * @since 2021/5/16 14:08
  */
 
 @Slf4j
@@ -57,6 +58,7 @@ public class DESUtil {
 
     /**
      * 加密
+     *
      * @param plainText 明文
      * @return Base64(IV + 密文)
      */
@@ -86,6 +88,7 @@ public class DESUtil {
 
     /**
      * 解密
+     *
      * @param encryptText Base64(IV + 密文)
      */
     public String decode(String encryptText) {

@@ -10,8 +10,8 @@ package com.lxy.common.enums;
 
 public enum LogUserType {
 
-    ADMIN(0,"后台用户"),
-    USER(1,"APP用户");
+    ADMIN(0, "后台用户"),
+    USER(1, "APP用户");
 
     public final Integer type;
     public final String name;
@@ -21,9 +21,9 @@ public enum LogUserType {
         this.name = name;
     }
 
-    public static String getName(Integer type){
-        for(LogUserType logUserType : LogUserType.values()){
-            if(logUserType.type.equals(type)){
+    public static String getName(Integer type) {
+        for (LogUserType logUserType : LogUserType.values()) {
+            if (logUserType.type.equals(type)) {
                 return logUserType.name;
             }
         }

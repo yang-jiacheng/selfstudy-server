@@ -2,9 +2,10 @@ package com.lxy.common.constant;
 
 /**
  * redis的所有key
+ *
  * @author jiacheng yang.
- * @since 2022/04/25 16:45
  * @version 1.0
+ * @since 2022/04/25 16:45
  */
 public class RedisKeyConstant {
 
@@ -73,35 +74,35 @@ public class RedisKeyConstant {
         return ADMIN_DUAL_TOKEN_SESSIONS + ":admin_" + adminId;
     }
 
-    public static String getBusinessConfig(String key){
-        return BUSINESS_CONFIG+key;
+    public static String getBusinessConfig(String key) {
+        return BUSINESS_CONFIG + key;
     }
 
-    public static String getPhoneSms(String phone){
-        return PHONE_SMS+ "phone_"+ phone;
+    public static String getPhoneSms(String phone) {
+        return PHONE_SMS + "phone_" + phone;
     }
 
-    public static String getClassify(){
+    public static String getClassify() {
         return CLASSIFY_LIST;
     }
 
-    public static String getUserInfo(Integer userId){
+    public static String getUserInfo(Integer userId) {
         return USER_INFO + "userId_" + userId;
     }
 
-    public static String getRankings(){
+    public static String getRankings() {
         return RANKINGS;
     }
 
-    public static String getCodeKey(String uuid){
-        return CODE_KEY + "uuid_" +  uuid;
+    public static String getCodeKey(String uuid) {
+        return CODE_KEY + "uuid_" + uuid;
     }
 
-    public static String getMathCodeKey(String uuid){
+    public static String getMathCodeKey(String uuid) {
         return MATH_CODE_KEY + "uuid_" + uuid;
     }
 
-    public static String getAdminInfo(Integer adminId){
+    public static String getAdminInfo(Integer adminId) {
         return ADMIN_INFO + "admin_" + adminId;
     }
 }

@@ -34,7 +34,7 @@ public class SmsSendVO implements Serializable {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class TemplateParam{
+    public static class TemplateParam {
         private String name;
         private String value;
     }

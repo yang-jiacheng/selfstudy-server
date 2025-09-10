@@ -3,7 +3,11 @@ package com.lxy.common.annotation;
 import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * 操作日志注解
@@ -13,7 +17,7 @@ import java.lang.annotation.*;
  * @since 2022/12/20 10:49
  */
 
-@Target({ ElementType.PARAMETER, ElementType.METHOD })
+@Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Log {

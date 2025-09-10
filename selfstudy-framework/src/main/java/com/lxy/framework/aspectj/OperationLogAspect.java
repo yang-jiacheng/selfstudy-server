@@ -4,9 +4,9 @@ import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.lxy.common.annotation.Log;
+import com.lxy.common.util.JsonUtil;
 import com.lxy.framework.event.OperationLogEvent;
 import com.lxy.framework.security.util.UserIdUtil;
-import com.lxy.common.util.JsonUtil;
 import com.lxy.system.po.OperationLog;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +18,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 操作日志切面
@@ -41,7 +38,8 @@ public class OperationLogAspect {
     private final ThreadLocal<Long> timeHolder = new ThreadLocal<>();
 
     @Pointcut("@annotation(operationLog)")
-    public void logPointCut(Log operationLog) {}
+    public void logPointCut(Log operationLog) {
+    }
 
     /**
      * 前置通知：记录方法执行前的日志
@@ -53,22 +51,24 @@ public class OperationLogAspect {
 
     /**
      * 后置通知：记录方法执行完后的日志
+     *
      * @param joinPoint 切点，获取目标方法的执行结果等信息
      */
     @AfterReturning(pointcut = "logPointCut(operationLog)", returning = "result", argNames = "joinPoint,operationLog,result")
     public void afterMethod(JoinPoint joinPoint, Log operationLog, Object result) {
-        handleOperationLog(joinPoint, null,operationLog, result);
+        handleOperationLog(joinPoint, null, operationLog, result);
     }
 
 
     /**
      * 异常通知：记录方法执行时的异常
+     *
      * @param joinPoint 切点，获取目标方法的执行信息
-     * @param e 异常信息
+     * @param e         异常信息
      */
-    @AfterThrowing(pointcut = "logPointCut(operationLog)" ,throwing = "e", argNames = "joinPoint,operationLog,e")
-    public void afterThrowingMethod(JoinPoint joinPoint, Log operationLog, Exception e){
-        handleOperationLog(joinPoint, e, operationLog,null);
+    @AfterThrowing(pointcut = "logPointCut(operationLog)", throwing = "e", argNames = "joinPoint,operationLog,e")
+    public void afterThrowingMethod(JoinPoint joinPoint, Log operationLog, Exception e) {
+        handleOperationLog(joinPoint, e, operationLog, null);
     }
 
     protected void handleOperationLog(final JoinPoint joinPoint, final Exception e, Log operationLog, Object jsonResult) {
@@ -91,9 +91,9 @@ public class OperationLogAspect {
             String resultJson;
             if (jsonResult == null) {
                 resultJson = e.getMessage();
-            } else if (jsonResult instanceof String){
+            } else if (jsonResult instanceof String) {
                 resultJson = (String) jsonResult;
-            }else {
+            } else {
                 resultJson = JsonUtil.toJson(jsonResult);
             }
             HttpServletRequest request = getRequest();
@@ -118,13 +118,13 @@ public class OperationLogAspect {
             String durationStr = DateUtil.formatBetween(endTime - startTime, BetweenFormatter.Level.MILLISECOND);
             //操作日志对象
             OperationLog operLog = new OperationLog(
-                    title,businessType,userType,userId,requestURI,method,params.toString(),resultJson,clientIP,status,durationStr
+                    title, businessType, userType, userId, requestURI, method, params.toString(), resultJson, clientIP, status, durationStr
             );
             //发布事件
             eventPublisher.publishEvent(new OperationLogEvent(this, operLog));
         } catch (Exception ex) {
             log.error("记录操作日志异常", ex);
-        }finally {
+        } finally {
             // 清除 ThreadLocal 防止内存泄漏
             log.info("清除 ThreadLocal !!!");
             timeHolder.remove();
@@ -134,6 +134,7 @@ public class OperationLogAspect {
 
     /**
      * 获取request对象
+     *
      * @author jiacheng yang.
      * @since 2025/3/21 15:17
      */

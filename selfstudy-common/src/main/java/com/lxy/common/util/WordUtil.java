@@ -5,7 +5,15 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.lxy.common.properties.AliYunProperties;
-import org.apache.poi.xwpf.usermodel.*;
+import org.apache.poi.xwpf.usermodel.BodyElementType;
+import org.apache.poi.xwpf.usermodel.IBodyElement;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFPicture;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -17,12 +25,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import javax.xml.transform.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -33,9 +50,10 @@ import java.util.regex.Pattern;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2024/11/16 16:38
  * @version 1.0
+ * @since 2024/11/16 16:38
  */
 public class WordUtil {
 
@@ -51,7 +69,7 @@ public class WordUtil {
      * Date: 2024/11/16 16:39
      * Param: [inputStream]
      */
-    public static List<String> wordAnalysisAutomation(InputStream inputStream) throws Exception{
+    public static List<String> wordAnalysisAutomation(InputStream inputStream) throws Exception {
         List<String> paragraphs = new ArrayList<>();
         XWPFDocument word = new XWPFDocument(inputStream);
         for (IBodyElement ibodyelement : word.getBodyElements()) {
@@ -60,11 +78,11 @@ public class WordUtil {
                 //段落解析
                 //每一个段落的图片
                 List<XWPFPicture> sortedPictures = geSortPictures(paragraph);
-                String paragraphStr = parseParagraph(paragraph,sortedPictures);
-                if (StrUtil.isNotBlank(paragraphStr)){
+                String paragraphStr = parseParagraph(paragraph, sortedPictures);
+                if (StrUtil.isNotBlank(paragraphStr)) {
                     paragraphs.add(paragraphStr);
                 }
-            }else if (ibodyelement.getElementType().equals(BodyElementType.TABLE)) {   //表格
+            } else if (ibodyelement.getElementType().equals(BodyElementType.TABLE)) {   //表格
                 XWPFTable table = (XWPFTable) ibodyelement;
                 for (XWPFTableRow row : table.getRows()) {  //行
                     for (XWPFTableCell cell : row.getTableCells()) {    //cell
@@ -73,7 +91,7 @@ public class WordUtil {
                             //每一个段落的图片
                             List<XWPFPicture> sortedPictures = geSortPictures(paragraph);
                             String paragraphStr = parseParagraph(paragraph, sortedPictures);
-                            if (StrUtil.isNotBlank(paragraphStr)){
+                            if (StrUtil.isNotBlank(paragraphStr)) {
                                 paragraphs.add(paragraphStr);
                             }
                         }
@@ -92,7 +110,7 @@ public class WordUtil {
      * Date: 2024/11/16 16:59
      * Param: [paragraph, sortedPictures]
      */
-    public static String parseParagraph(XWPFParagraph xwpfParagraph, List<XWPFPicture> allPictures) throws Exception{
+    public static String parseParagraph(XWPFParagraph xwpfParagraph, List<XWPFPicture> allPictures) throws Exception {
         StringBuilder result = new StringBuilder();
         CTP ctp = xwpfParagraph.getCTP();
         String xmlText = ctp.xmlText();
@@ -112,7 +130,7 @@ public class WordUtil {
                  */
                 String xml = ele.asXML();
                 String qualifiedName = ele.getQName().getQualifiedName();
-                if(qualifiedName.equals("m:oMath")){
+                if (qualifiedName.equals("m:oMath")) {
                     //xml转 mathml
                     String mathml = xmlConvertMathML(xml);
                     //mathml转latex
@@ -120,7 +138,7 @@ public class WordUtil {
                     //latex转图片，返回img标签
                     String imgStr = lateConvertImg(latex);
                     result.append(imgStr);
-                }else if (qualifiedName.equals("w:r")){
+                } else if (qualifiedName.equals("w:r")) {
                     //处理文本和图片
                     List<Element> runElements = ele.elements();
                     for (Element runEle : runElements) {
@@ -148,9 +166,9 @@ public class WordUtil {
                         }
                     }
 
-                }else {
+                } else {
                     String stringValue = ele.getStringValue();
-                    if (StrUtil.isNotEmpty(stringValue)){
+                    if (StrUtil.isNotEmpty(stringValue)) {
                         result.append(stringValue);
                     }
 
@@ -197,7 +215,7 @@ public class WordUtil {
      */
     public static String lateConvertImg(String latex) {
         String imgStr = "";
-        if (StrUtil.isEmpty(latex)){
+        if (StrUtil.isEmpty(latex)) {
             return "";
         }
         TeXFormula formula = new TeXFormula(latex);
@@ -244,7 +262,7 @@ public class WordUtil {
 
         // 设置服务器上的 XSLT 依赖文件路径（MML2TEX_PATH 为服务器的绝对路径）
         URIResolver r = (href, base) -> {
-            try (InputStream inputStream =Files.newInputStream(Paths.get(MML2TEX_PATH, href))){
+            try (InputStream inputStream = Files.newInputStream(Paths.get(MML2TEX_PATH, href))) {
                 return new StreamSource(inputStream);
             } catch (Exception e) {
                 LOG.error("设置服务器上的 XSLT 依赖文件路径失败", e);
@@ -272,7 +290,7 @@ public class WordUtil {
      */
     public static String xmlConvertMathML(String xml) {
         // 进行转换的过程中需要借助这个文件,一般来说本机安装office就会有这个文件,找到就可以
-        return xslConvert(xml,  CONVERT_PATH,null);
+        return xslConvert(xml, CONVERT_PATH, null);
     }
 
     /**
@@ -282,12 +300,12 @@ public class WordUtil {
      * Param: [xml]
      */
     @SuppressWarnings("all")
-    public static String xslConvert(String xml, String xslpath,URIResolver uriResolver) {
+    public static String xslConvert(String xml, String xslpath, URIResolver uriResolver) {
         TransformerFactory tFac = TransformerFactory.newInstance();
-        if(uriResolver != null) {
+        if (uriResolver != null) {
             tFac.setURIResolver(uriResolver);
         }
-        try (InputStream asStream = Files.newInputStream(Paths.get(xslpath))){
+        try (InputStream asStream = Files.newInputStream(Paths.get(xslpath))) {
             StreamSource xslSource = new StreamSource(asStream);
             StringWriter writer = new StringWriter();
             Transformer t = tFac.newTransformer(xslSource);
@@ -295,7 +313,7 @@ public class WordUtil {
             Result result = new StreamResult(writer);
             t.transform(source, result);
             return writer.getBuffer().toString();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOG.error("xsl转换失败", e);
             return "";

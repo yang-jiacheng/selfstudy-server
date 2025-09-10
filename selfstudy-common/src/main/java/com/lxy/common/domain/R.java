@@ -9,9 +9,10 @@ import java.io.Serializable;
 
 /**
  * 返回结果对象
- * @author  jiacheng yang.
- * @since  2024/01/24 11:23
+ *
+ * @author jiacheng yang.
  * @version 1.0
+ * @since 2024/01/24 11:23
  */
 
 @Getter
@@ -19,20 +20,16 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class R<T> implements Serializable {
 
-    @Serial
-    private static final long serialVersionUID = -7393525156672911665L;
-
     /**
      * 成功
      */
     public static final int SUCCESS = 0;
-
     /**
      * 失败
      */
     public static final int FAIL = -1;
-
-
+    @Serial
+    private static final long serialVersionUID = -7393525156672911665L;
     private int code;
 
     private String msg;
@@ -59,7 +56,7 @@ public class R<T> implements Serializable {
         return restResult(null, code, msg);
     }
 
-    public static <T> R<T> fail(int code, String msg,T result) {
+    public static <T> R<T> fail(int code, String msg, T result) {
         return restResult(result, code, msg);
     }
 

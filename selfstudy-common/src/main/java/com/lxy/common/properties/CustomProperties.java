@@ -5,9 +5,10 @@ import org.springframework.stereotype.Component;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/11/10 17:20
  * @version 1.0
+ * @since 2022/11/10 17:20
  */
 @Component
 public class CustomProperties {

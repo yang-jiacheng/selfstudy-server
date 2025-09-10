@@ -6,13 +6,13 @@ import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 双Token机制的Token对象
+ *
  * @author jiacheng yang.
- * @since 2025/01/18 10:00
  * @version 1.0
+ * @since 2025/01/18 10:00
  */
 
 @Data

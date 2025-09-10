@@ -1,22 +1,24 @@
 package com.lxy.common.util;
 
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lxy.common.constant.CommonConstant;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.lang.Strings;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Json Web Token的工具类
@@ -25,7 +27,6 @@ import java.util.*;
 @Slf4j
 public class JsonWebTokenUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(JsonWebTokenUtil.class);
     /**
      * JWT的分隔符
      */
@@ -38,15 +39,17 @@ public class JsonWebTokenUtil {
      * JWT过期天数
      */
     public static final int EXPIRED_DAYS = 7;
+    private static final Logger logger = LoggerFactory.getLogger(JsonWebTokenUtil.class);
 
     /**
      * 产生JWT字符串
-     * @param userId 用户id
-     * @param device 设备类型 android、ios、web
+     *
+     * @param userId   用户id
+     * @param device   设备类型 android、ios、web
      * @param userType 用户类型 学生2，管理员1
      * @return JWT字符串
      */
-    public static String getJwtStr(Integer userId, String device,String userType) {
+    public static String getJwtStr(Integer userId, String device, String userType) {
         if (userId == null) {
             logger.error("userId is null");
             return null;
@@ -73,8 +76,9 @@ public class JsonWebTokenUtil {
 
     /**
      * 解码JWT并校验，然后从payload中获取用户自定义数据，如果校验失败返回空
+     *
      * @param accessToken 令牌
-     * @return  Claims
+     * @return Claims
      */
     public static Claims getClaimsSign(String accessToken) {
         if (accessToken == null) {
@@ -151,7 +155,7 @@ public class JsonWebTokenUtil {
             }
             // base64解码，获取payload
             decode = Base64.getUrlDecoder().decode(base64UrlEncodedPayload);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("读取载荷属性失败", e);
             return null;
         }
@@ -174,7 +178,7 @@ public class JsonWebTokenUtil {
     /**
      * 获取access_token
      */
-    public static String getAccessToken(HttpServletRequest request,String name) {
+    public static String getAccessToken(HttpServletRequest request, String name) {
         if (request == null) {
             return null;
         }

@@ -7,9 +7,10 @@ import java.io.Serial;
 
 /**
  * 分页查询基础对象
+ *
  * @author jiacheng yang.
- * @since 2024/12/14 15:59
  * @version 1.0
+ * @since 2024/12/14 15:59
  */
 
 @Data

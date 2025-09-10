@@ -1,31 +1,36 @@
 package com.lxy.common.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/10 18:17
  * @version 1.0
+ * @since 2022/12/10 18:17
  */
 
 @Slf4j
 public class ThreadPoolUtil {
 
-    private static volatile ThreadPoolExecutor threadPool;
-
     private static final int CORE_POOL_SIZE;
     private static final int MAXIMUM_POOL_SIZE;
     private static final long KEEP_ALIVE_TIME = 60L;
     private static final int QUEUE_CAPACITY = 500;
+    private static volatile ThreadPoolExecutor threadPool;
 
     // 静态代码块初始化线程池的核心线程数和最大线程数
     static {
@@ -63,17 +68,17 @@ public class ThreadPoolUtil {
     }
 
     //执行任务
-    public static void execute(Runnable command){
+    public static void execute(Runnable command) {
         getInstance().execute(command);
     }
 
     //有返回值
-    public static <T> Future<T> submit(Callable<T> task){
+    public static <T> Future<T> submit(Callable<T> task) {
         return getInstance().submit(task);
     }
 
     //关闭线程池
-    public static void shutdown(){
+    public static void shutdown() {
         log.info("关闭线程池");
         if (threadPool != null) {
             threadPool.shutdown();
@@ -98,7 +103,7 @@ public class ThreadPoolUtil {
 
     public static void main(String[] args) {
         // 用法
-        ThreadPoolUtil.execute(() ->{
+        ThreadPoolUtil.execute(() -> {
             //执行具体逻辑
         });
         ThreadPoolUtil.submit(() -> {
