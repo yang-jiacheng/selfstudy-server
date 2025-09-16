@@ -1,10 +1,11 @@
 package com.lxy.system.po;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Description: 后台管理员表
@@ -14,10 +15,10 @@ import java.io.Serializable;
 
 public class AdminInfo implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     //管理员自增主键
-	@TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private String phone;
@@ -35,102 +36,102 @@ public class AdminInfo implements Serializable {
     private String profilePath;
 
     //修改时间
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date updateTime;
 
     //创建时间
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     //状态 1正常 2禁用
     private Integer status;
 
     public Integer getId() {
-    	return id;
+        return id;
     }
 
     public void setId(Integer id) {
-    	this.id = id;
+        this.id = id;
     }
 
     public String getPhone() {
-    	return phone;
+        return phone;
     }
 
     public void setPhone(String phone) {
-    	this.phone = phone;
+        this.phone = phone;
     }
 
     public String getUsername() {
-    	return username;
+        return username;
     }
 
     public void setUsername(String username) {
-    	this.username = username;
+        this.username = username;
     }
 
     public String getName() {
-    	return name;
+        return name;
     }
 
     public void setName(String name) {
-    	this.name = name;
+        this.name = name;
     }
 
     public String getPassword() {
-    	return password;
+        return password;
     }
 
     public void setPassword(String password) {
-    	this.password = password;
+        this.password = password;
     }
 
     public String getProfilePath() {
-    	return profilePath;
+        return profilePath;
     }
 
     public void setProfilePath(String profilePath) {
-    	this.profilePath = profilePath;
+        this.profilePath = profilePath;
     }
 
     public Date getUpdateTime() {
-    	return updateTime;
+        return updateTime;
     }
 
     public void setUpdateTime(Date updateTime) {
-    	this.updateTime = updateTime;
+        this.updateTime = updateTime;
     }
 
     public Date getCreateTime() {
-    	return createTime;
+        return createTime;
     }
 
     public void setCreateTime(Date createTime) {
-    	this.createTime = createTime;
+        this.createTime = createTime;
     }
 
     public Integer getStatus() {
-    	return status;
+        return status;
     }
 
     public void setStatus(Integer status) {
-    	this.status = status;
+        this.status = status;
     }
 
 
     @Override
     public String toString() {
-	    return "AdminInfo{" +
-	            ", id=" + id +
-	            ", phone=" + phone +
-	            ", username=" + username +
-	            ", name=" + name +
-	            ", password=" + password +
-	            ", profilePath=" + profilePath +
-	            ", updateTime=" + updateTime +
-	            ", createTime=" + createTime +
-	            ", status=" + status +
-	    "}";
+        return "AdminInfo{" +
+                ", id=" + id +
+                ", phone=" + phone +
+                ", username=" + username +
+                ", name=" + name +
+                ", password=" + password +
+                ", profilePath=" + profilePath +
+                ", updateTime=" + updateTime +
+                ", createTime=" + createTime +
+                ", status=" + status +
+                "}";
     }
 
 }

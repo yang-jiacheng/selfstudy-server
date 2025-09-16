@@ -2,7 +2,6 @@ package com.lxy.app.task;
 
 import cn.hutool.core.thread.ThreadUtil;
 import com.xxl.job.core.handler.annotation.XxlJob;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +19,12 @@ public class MobileAppTask {
 
     /**
      * 测试mobile-app任务
+     *
      * @author jiacheng yang.
      * @since 2025/5/9 15:08
      */
     @XxlJob("testMobileAppTask")
-    public void testMobileAppTask(){
+    public void testMobileAppTask() {
         log.info("测试mobile-app任务开始");
         ThreadUtil.sleep(3000);
         log.info("测试mobile-app任务结束");

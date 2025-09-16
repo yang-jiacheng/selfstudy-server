@@ -3,11 +3,10 @@ package com.lxy.app.config;
 import com.lxy.app.security.filter.StatelessAuthenticationFilterUser;
 import com.lxy.app.security.handle.AuthenticationEntryPointUserImpl;
 import com.lxy.app.security.service.impl.UserDetailsServiceImpl;
-import com.lxy.common.enums.LogUserType;
 import com.lxy.framework.security.encoder.MinePasswordEncoder;
-import com.lxy.framework.security.filter.StatelessPermitFilter;
 import com.lxy.framework.security.service.LoginStatusService;
 import com.lxy.system.service.BusinessConfigService;
+import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -26,42 +25,38 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import jakarta.annotation.Resource;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2023/02/13 9:34
  * @version 1.0
+ * @since 2023/02/13 9:34
  */
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-public class SecurityConfig  {
+public class SecurityConfig {
 
+    private final static String[] PERMIT_URL = {
+            "/druid/**", "/", "/token/**", "/upload/**",
+            "/userAgreement/**", "/personalCenter/updatePassword", "/version/**"
+    };
+    private final static String[] AUTH_URL = {
+            "/catalog/**", "/feedBack/**", "/home/**", "/personalCenter/getUserInfo", "/personalCenter/updateUserInfo",
+            "/personalCenter/getUserInfoById", "/studyRecord/**", "/studyStatistics/**",
+            "/resources/upload", "/resources/uploadApp", "/resources/generateImage"
+    };
     @Resource
     private UserDetailsServiceImpl userDetailsService;
     @Resource
     private BusinessConfigService businessConfigService;
     @Resource
     private LoginStatusService loginStatusService;
-
-
-    private final static String[] PERMIT_URL = {
-            "/druid/**","/","/token/**","/upload/**",
-            "/userAgreement/**","/personalCenter/updatePassword","/version/**"
-    };
-
-    private final static String[] AUTH_URL = {
-            "/catalog/**","/feedBack/**","/home/**","/personalCenter/getUserInfo","/personalCenter/updateUserInfo",
-            "/personalCenter/getUserInfoById","/studyRecord/**","/studyStatistics/**",
-            "/resources/upload","/resources/uploadApp","/resources/generateImage"
-    };
 
     @Bean
     @Order(1)
@@ -120,7 +115,7 @@ public class SecurityConfig  {
 //    }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new MinePasswordEncoder();
     }
 

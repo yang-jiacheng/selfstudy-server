@@ -1,7 +1,7 @@
 package com.lxy.system.mapper;
 
-import com.lxy.system.po.StudyRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lxy.system.po.StudyRecord;
 import com.lxy.system.vo.StudyRecordVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -27,11 +27,11 @@ public interface StudyRecordMapper extends BaseMapper<StudyRecord> {
 
     StudyRecordVO getLearningRecordDetail(@Param("recordId") Integer recordId);
 
-    List<StudyRecordVO> getStudyRecordList(@Param("userId") Integer userId,@Param("classifyId") Integer classifyId,@Param("status") Integer status);
+    List<StudyRecordVO> getStudyRecordList(@Param("userId") Integer userId, @Param("classifyId") Integer classifyId, @Param("status") Integer status);
 
-    Integer getStudyRecordList_COUNT(@Param("userId") Integer userId,@Param("classifyId") Integer classifyId,@Param("status") Integer status);
+    Integer getStudyRecordList_COUNT(@Param("userId") Integer userId, @Param("classifyId") Integer classifyId, @Param("status") Integer status);
 
-    List<StudyRecordVO> getStudyRecordByAdmin(@Param("phone") String phone,@Param("classifyId") Integer classifyId,@Param("status") Integer status);
+    List<StudyRecordVO> getStudyRecordByAdmin(@Param("phone") String phone, @Param("classifyId") Integer classifyId, @Param("status") Integer status);
 
-    Integer getStudyRecordByAdmin_COUNT(@Param("phone") String phone,@Param("classifyId") Integer classifyId,@Param("status") Integer status);
+    Integer getStudyRecordByAdmin_COUNT(@Param("phone") String phone, @Param("classifyId") Integer classifyId, @Param("status") Integer status);
 }

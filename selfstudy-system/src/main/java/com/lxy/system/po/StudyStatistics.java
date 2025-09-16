@@ -1,11 +1,12 @@
 package com.lxy.system.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Description: 学习统计
@@ -16,16 +17,16 @@ import java.io.Serializable;
 @TableName(value = "study_statistics", autoResultMap = true)
 public class StudyStatistics implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     //用户id
     private Integer userId;
 
     //学习日期
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date studyDay;
 
     //学习时长
@@ -41,46 +42,46 @@ public class StudyStatistics implements Serializable {
     }
 
     public Integer getId() {
-    	return id;
+        return id;
     }
 
     public void setId(Integer id) {
-    	this.id = id;
+        this.id = id;
     }
 
     public Integer getUserId() {
-    	return userId;
+        return userId;
     }
 
     public void setUserId(Integer userId) {
-    	this.userId = userId;
+        this.userId = userId;
     }
 
     public Date getStudyDay() {
-    	return studyDay;
+        return studyDay;
     }
 
     public void setStudyDay(Date studyDay) {
-    	this.studyDay = studyDay;
+        this.studyDay = studyDay;
     }
 
     public Integer getDuration() {
-    	return duration;
+        return duration;
     }
 
     public void setDuration(Integer duration) {
-    	this.duration = duration;
+        this.duration = duration;
     }
 
 
     @Override
     public String toString() {
-	    return "StudyStatistics{" +
-	            ", id=" + id +
-	            ", userId=" + userId +
-	            ", studyDay=" + studyDay +
-	            ", duration=" + duration +
-	    "}";
+        return "StudyStatistics{" +
+                ", id=" + id +
+                ", userId=" + userId +
+                ", studyDay=" + studyDay +
+                ", duration=" + duration +
+                "}";
     }
 
 }

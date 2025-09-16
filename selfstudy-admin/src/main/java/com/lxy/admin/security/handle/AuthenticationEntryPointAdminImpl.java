@@ -3,14 +3,14 @@ package com.lxy.admin.security.handle;
 import com.lxy.common.domain.R;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.WebUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -23,9 +23,9 @@ public class AuthenticationEntryPointAdminImpl implements AuthenticationEntryPoi
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        logger.error("认证过程异常：{}", request.getRequestURI(),authException);
+        logger.error("认证过程异常：{}", request.getRequestURI(), authException);
         String result = JsonUtil.toJson(R.fail(1000, "认证失败，请重新登录！"));
-        WebUtil.renderString(response,result);
+        WebUtil.renderString(response, result);
     }
 
 }

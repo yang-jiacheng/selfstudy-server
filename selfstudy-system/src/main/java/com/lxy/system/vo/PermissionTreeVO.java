@@ -6,7 +6,11 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单权限树形结构VO
@@ -48,24 +52,25 @@ public class PermissionTreeVO implements Serializable {
 
     private Integer sort;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     private List<PermissionTreeVO> children;
 
     /**
      * 递归处理树形结构
+     *
+     * @param list 树形结构列表
+     * @param map  父子关系映射
      * @author jiacheng yang.
      * @since 2025/4/16 18:56
-     * @param list 树形结构列表
-     * @param map 父子关系映射
      */
-    public static void recursionFnTree(List<PermissionTreeVO> list, Map<Integer , List<PermissionTreeVO>> map){
+    public static void recursionFnTree(List<PermissionTreeVO> list, Map<Integer, List<PermissionTreeVO>> map) {
         for (PermissionTreeVO treeSelect : list) {
             List<PermissionTreeVO> childList = map.get(treeSelect.getId());
             treeSelect.setChildren(childList);
-            if (CollUtil.isNotEmpty(childList)){
-                recursionFnTree(childList,map);
+            if (CollUtil.isNotEmpty(childList)) {
+                recursionFnTree(childList, map);
             }
         }
     }

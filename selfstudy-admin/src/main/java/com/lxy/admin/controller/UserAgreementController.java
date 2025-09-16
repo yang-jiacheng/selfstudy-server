@@ -11,20 +11,19 @@ import com.lxy.system.po.UserAgreement;
 import com.lxy.system.service.UserAgreementService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 用户协议与隐私政策
+ *
  * @author jiacheng yang.
- * @since 2022/12/19 10:25
  * @version 1.0
+ * @since 2022/12/19 10:25
  */
 
 @RequestMapping("/userAgreementManage")
@@ -36,12 +35,12 @@ public class UserAgreementController {
     private UserAgreementService agreementService;
 
     @PostMapping(value = "/getAgreement-{type}", produces = "application/json")
-    public R<String> getAgreement(@PathVariable(value = "type") Integer type){
+    public R<String> getAgreement(@PathVariable(value = "type") Integer type) {
         LambdaQueryWrapper<UserAgreement> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(UserAgreement::getType,type);
+        wrapper.eq(UserAgreement::getType, type);
         UserAgreement agreement = agreementService.getOne(wrapper);
         String content = "";
-        if(agreement != null){
+        if (agreement != null) {
             content = agreement.getContent();
         }
         return R.ok(content);
@@ -49,9 +48,9 @@ public class UserAgreementController {
 
     @Log(title = "修改隐私政策与用户协议", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/saveAgreement", produces = "application/json")
-    public R<Object> saveAgreement(@RequestBody @Valid AgreementEditDTO dto){
+    public R<Object> saveAgreement(@RequestBody @Valid AgreementEditDTO dto) {
         LambdaUpdateWrapper<UserAgreement> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(UserAgreement::getType,dto.getType()).set(UserAgreement::getContent,dto.getContent());
+        wrapper.eq(UserAgreement::getType, dto.getType()).set(UserAgreement::getContent, dto.getContent());
         agreementService.update(wrapper);
         return R.ok();
     }

@@ -6,9 +6,10 @@ import java.io.Serializable;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/24 16:10
  * @version 1.0
+ * @since 2022/12/24 16:10
  */
 public class StudyRecordVO extends StudyRecord implements Serializable {
     private static final long serialVersionUID = -559230604195324125L;

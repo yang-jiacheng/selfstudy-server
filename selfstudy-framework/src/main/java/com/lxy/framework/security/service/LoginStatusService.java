@@ -9,7 +9,11 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 登录状态服务
@@ -31,11 +35,11 @@ public class LoginStatusService {
      */
     public void removeInRedis(String key, String token) {
         List<StatelessUser> loginList = redisService.getObject(key, ArrayList.class);
-        if (CollUtil.isNotEmpty(loginList)){
+        if (CollUtil.isNotEmpty(loginList)) {
             loginList.removeIf(o -> o.getToken().equals(token));
-            if (loginList.isEmpty()){
+            if (loginList.isEmpty()) {
                 redisService.deleteKey(key);
-            }else {
+            } else {
                 redisService.setObject(key, loginList, -1L, null);
             }
         }
@@ -43,10 +47,11 @@ public class LoginStatusService {
 
     /**
      * 登录状态持久化到redis
+     *
      * @param statelessUser 用户信息
-     * @param endDay 过期时长单位天
+     * @param endDay        过期时长单位天
      */
-    public void loginStatusToRedis(String key, StatelessUser statelessUser, int endDay){
+    public void loginStatusToRedis(String key, StatelessUser statelessUser, int endDay) {
         Date now = new Date();
         statelessUser.setLoginTime(now);
 
@@ -54,7 +59,7 @@ public class LoginStatusService {
         //设置过期时间
         statelessUser.setEndTime(end);
         List<StatelessUser> loginList = redisService.getObject(key, ArrayList.class);
-        if (CollUtil.isEmpty(loginList)){
+        if (CollUtil.isEmpty(loginList)) {
             loginList = new ArrayList<>(1);
         }
         loginList.add(statelessUser);
@@ -63,31 +68,32 @@ public class LoginStatusService {
 
     /**
      * 控制一个账号在线数
+     *
+     * @param key       缓存key
+     * @param onlineNum 一个账号在线数
+     * @param endDay    在线时长 天
+     * @param token     token
      * @author jiacheng yang.
      * @since 2025/03/06 18:55
-     * @param key 缓存key
-     * @param onlineNum 一个账号在线数
-     * @param endDay 在线时长 天
-     * @param token token
      */
-    public StatelessUser controlLoginNum(String key, Integer onlineNum, int endDay, String token){
+    public StatelessUser controlLoginNum(String key, Integer onlineNum, int endDay, String token) {
         Date now = new Date();
 
         StatelessUser loginStatus = null;
-        if (redisService.hasKey(key)){
+        if (redisService.hasKey(key)) {
             List<StatelessUser> loginList = redisService.getObject(key, ArrayList.class);
-            if (CollUtil.isNotEmpty(loginList)){
+            if (CollUtil.isNotEmpty(loginList)) {
                 //删除过期的jwt
                 loginList.removeIf(o -> DateUtil.compare(now, o.getEndTime()) > 0);
                 //按过期时间正序
                 loginList.sort(Comparator.comparing(StatelessUser::getEndTime));
                 int size = loginList.size();
-                if (size > onlineNum){
+                if (size > onlineNum) {
                     loginList.remove(0);
                 }
                 for (StatelessUser status : loginList) {
                     String accessToken = status.getToken();
-                    if (token.equals(accessToken)){
+                    if (token.equals(accessToken)) {
                         Date end = DateUtil.offsetDay(now, endDay);
                         status.setEndTime(end);
                         loginStatus = status;
@@ -102,10 +108,11 @@ public class LoginStatusService {
 
     /**
      * 获取登录状态
+     *
      * @author jiacheng yang.
      * @since 2025/4/2 16:36
      */
-    public StatelessUser getLoginStatus(String key,String token){
+    public StatelessUser getLoginStatus(String key, String token) {
         StatelessUser loginStatus = null;
         if (redisService.hasKey(key)) {
             List<StatelessUser> loginList = redisService.getObject(key, ArrayList.class);
@@ -125,9 +132,10 @@ public class LoginStatusService {
 
     /**
      * 管理用户会话
-     * @param userId 用户ID
-     * @param sessionKey Redis会话键
-     * @param tokenPair 令牌对
+     *
+     * @param userId      用户ID
+     * @param sessionKey  Redis会话键
+     * @param tokenPair   令牌对
      * @param maxSessions 最大会话数
      */
     public void manageUserSessions(Integer userId, String sessionKey, TokenPair tokenPair, int maxSessions) {
@@ -151,6 +159,7 @@ public class LoginStatusService {
 
     /**
      * 清理过期会话
+     *
      * @param sessionKey Redis键
      */
     public void cleanExpiredSessions(String sessionKey) {
@@ -161,8 +170,9 @@ public class LoginStatusService {
 
     /**
      * 通过RefreshId移除会话
+     *
      * @param sessionKey Redis键
-     * @param refreshId 刷新令牌ID
+     * @param refreshId  刷新令牌ID
      */
     public void removeSessionByRefreshId(String sessionKey, String refreshId) {
         Set<TokenPair> sessions = redisService.getSortedSetRange(sessionKey, 0, -1);
@@ -172,15 +182,16 @@ public class LoginStatusService {
                     .findFirst()
                     .ifPresent(session -> {
                         redisService.removeFromSortedSet(sessionKey, session);
-                        log.info("已移除会话，sessionKey: {}, refreshId: {}", sessionKey,refreshId);
+                        log.info("已移除会话，sessionKey: {}, refreshId: {}", sessionKey, refreshId);
                     });
         }
     }
 
     /**
      * 检查会话是否存在
+     *
      * @param sessionKey Redis键
-     * @param refreshId 刷新令牌ID
+     * @param refreshId  刷新令牌ID
      * @return 是否存在
      */
     public boolean isSessionExists(String sessionKey, String refreshId) {
@@ -195,6 +206,7 @@ public class LoginStatusService {
 
     /**
      * 获取用户会话数量
+     *
      * @param sessionKey 会话键
      * @return 会话数量
      */
@@ -211,6 +223,7 @@ public class LoginStatusService {
 
     /**
      * 清除用户所有会话
+     *
      * @param sessionKey 会话键
      */
     public void clearAllSessions(String sessionKey) {

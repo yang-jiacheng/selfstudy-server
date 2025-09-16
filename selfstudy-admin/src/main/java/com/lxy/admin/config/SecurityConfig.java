@@ -4,8 +4,8 @@ import com.lxy.admin.security.filter.DualTokenAuthenticationFilter;
 import com.lxy.admin.security.handle.AccessDeniedHandlerImpl;
 import com.lxy.admin.security.handle.AuthenticationEntryPointAdminImpl;
 import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
-import com.lxy.system.service.AdminInfoService;
 import com.lxy.framework.security.encoder.MinePasswordEncoder;
+import com.lxy.system.service.AdminInfoService;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,9 +31,10 @@ import java.util.List;
 
 /**
  * Security配置
+ *
  * @author jiacheng yang.
- * @since 2025/3/21 15:51
  * @version 2.0.0
+ * @since 2025/3/21 15:51
  */
 
 @Configuration
@@ -41,21 +42,19 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    private final static String[] AUTH_URL = {
+            "/home/**", "/adminManage/**", "/businessConfigManage/**", "/classifyManage/**", "/feedBackManage/**",
+            "/personalManage/**", "/roleManage/**", "/studyRecord/**", "/userAgreementManage/**", "/userManage/**", "/versionManage/**",
+            "/resources/upload", "/resources/uploadApp", "/resources/generateImage", "/objectStorageManage/**", "/permissionManage/**",
+            "/mine/**"
+    };
+    private final static String[] PERMIT_URL = {
+            "/druid/**", "/token/**", "/upload/**", "/hello"
+    };
     @Resource
     private AdminDetailsServiceImpl adminDetailsService;
     @Resource
     private AdminInfoService adminInfoService;
-
-    private final static String[] AUTH_URL = {
-            "/home/**","/adminManage/**","/businessConfigManage/**","/classifyManage/**","/feedBackManage/**",
-            "/personalManage/**","/roleManage/**","/studyRecord/**","/userAgreementManage/**","/userManage/**","/versionManage/**",
-            "/resources/upload","/resources/uploadApp","/resources/generateImage","/objectStorageManage/**","/permissionManage/**",
-            "/mine/**"
-    };
-
-    private final static String[] PERMIT_URL = {
-            "/druid/**","/token/**","/upload/**","/hello"
-    };
 
     /**
      * 双令牌认证过滤器链
@@ -80,13 +79,13 @@ public class SecurityConfig {
 
                 // 配置异常处理
                 .exceptionHandling(exception -> exception
-                    .authenticationEntryPoint(new AuthenticationEntryPointAdminImpl())
-                    .accessDeniedHandler(new AccessDeniedHandlerImpl()))
+                        .authenticationEntryPoint(new AuthenticationEntryPointAdminImpl())
+                        .accessDeniedHandler(new AccessDeniedHandlerImpl()))
                 //关闭csrf //允许跨域
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(configurationSource()))
                 //X-Frame-Options 页面只能被本站页面嵌入到iframe或者frame中
-               .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
         return http.build();
     }
@@ -120,9 +119,8 @@ public class SecurityConfig {
 //
 //        return http.build();
 //    }
-
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new MinePasswordEncoder();
     }
 

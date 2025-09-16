@@ -12,7 +12,11 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -32,10 +36,24 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Slf4j
 public class OperationLogAspect {
 
+    private final ThreadLocal<Long> timeHolder = new ThreadLocal<>();
     @Resource
     private ApplicationEventPublisher eventPublisher;
 
-    private final ThreadLocal<Long> timeHolder = new ThreadLocal<>();
+    /**
+     * 获取request对象
+     *
+     * @author jiacheng yang.
+     * @since 2025/3/21 15:17
+     */
+    public static HttpServletRequest getRequest() {
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes servletAttributes = (ServletRequestAttributes) attributes;
+        if (servletAttributes == null) {
+            return null;
+        }
+        return servletAttributes.getRequest();
+    }
 
     @Pointcut("@annotation(operationLog)")
     public void logPointCut(Log operationLog) {
@@ -58,7 +76,6 @@ public class OperationLogAspect {
     public void afterMethod(JoinPoint joinPoint, Log operationLog, Object result) {
         handleOperationLog(joinPoint, null, operationLog, result);
     }
-
 
     /**
      * 异常通知：记录方法执行时的异常
@@ -130,21 +147,6 @@ public class OperationLogAspect {
             timeHolder.remove();
         }
 
-    }
-
-    /**
-     * 获取request对象
-     *
-     * @author jiacheng yang.
-     * @since 2025/3/21 15:17
-     */
-    public static HttpServletRequest getRequest() {
-        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
-        ServletRequestAttributes servletAttributes = (ServletRequestAttributes) attributes;
-        if (servletAttributes == null) {
-            return null;
-        }
-        return servletAttributes.getRequest();
     }
 
 }

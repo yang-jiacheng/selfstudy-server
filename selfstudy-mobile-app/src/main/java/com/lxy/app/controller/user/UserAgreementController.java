@@ -31,7 +31,7 @@ public class UserAgreementController {
     private final BusinessConfigService businessConfigService;
 
     @Autowired
-    public UserAgreementController(UserAgreementService userAgreementService,BusinessConfigService businessConfigService) {
+    public UserAgreementController(UserAgreementService userAgreementService, BusinessConfigService businessConfigService) {
         this.userAgreementService = userAgreementService;
         this.businessConfigService = businessConfigService;
     }
@@ -43,27 +43,27 @@ public class UserAgreementController {
      * Param: [type, model]
      */
     @GetMapping("/agreementPolicyInfoPage{type}")
-    public String agreementPolicyInfoPage(@PathVariable("type") Integer type, Model model){
+    public String agreementPolicyInfoPage(@PathVariable("type") Integer type, Model model) {
         LambdaQueryWrapper<UserAgreement> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(UserAgreement::getType,type);
+        wrapper.eq(UserAgreement::getType, type);
         UserAgreement one = userAgreementService.getOne(wrapper);
         model.addAttribute("data", one);
         return "agreementPolicyInfo/agreementPolicyInfoPage";
     }
 
-   /**
-    * Description: 关于软件
-    * author: jiacheng yang.
-    * Date: 2025/02/20 10:18
-    * Param: [model]
-    */
+    /**
+     * Description: 关于软件
+     * author: jiacheng yang.
+     * Date: 2025/02/20 10:18
+     * Param: [model]
+     */
     @GetMapping("/aboutSoftware")
-    public String callMe( Model model){
+    public String callMe(Model model) {
         String content = businessConfigService.getBusinessConfigValue(ConfigConstant.ABOUT_US);
         String title = "关于软件";
-        Map<String ,Object> map = new HashMap<>(2);
-        map.put("title",title);
-        map.put("content",content);
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("title", title);
+        map.put("content", content);
         model.addAttribute("data", map);
         return "agreementPolicyInfo/agreementPolicyInfoPage";
     }

@@ -1,17 +1,18 @@
 package com.lxy.system.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
-import java.util.Date;
+
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 版本控制
+ *
  * @author jiacheng yang.
  * @since 2025-04-03
  */
@@ -20,9 +21,9 @@ import java.io.Serializable;
 @TableName(value = "version", autoResultMap = true)
 public class Version implements Serializable {
     @Serial
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     //版本号
@@ -40,9 +41,8 @@ public class Version implements Serializable {
     //是否检测更新 1是 0 否
     private Integer checkUpdate;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date updateTime;
-
 
 
 }

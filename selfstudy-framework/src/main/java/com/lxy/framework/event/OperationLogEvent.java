@@ -8,9 +8,10 @@ import java.io.Serial;
 
 /**
  * 操作日志事件
+ *
  * @author jiacheng yang.
- * @since  2022/12/20 10:49
- * @version  1.0
+ * @version 1.0
+ * @since 2022/12/20 10:49
  */
 
 @Getter

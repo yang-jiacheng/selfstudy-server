@@ -1,39 +1,35 @@
 package com.lxy.admin.security.filter;
 
-import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.domain.R;
-import com.lxy.common.domain.TokenPair;
 import com.lxy.common.util.DualTokenUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.LogUtil;
 import com.lxy.common.util.WebUtil;
 import com.lxy.framework.security.domain.StatelessUser;
-import com.lxy.framework.security.service.LoginStatusService;
 import com.lxy.system.service.AdminInfoService;
-import com.lxy.system.service.RedisService;
 import com.lxy.system.vo.AdminInfoVO;
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Set;
 
-import static com.lxy.common.util.DualTokenUtil.*;
+import static com.lxy.common.util.DualTokenUtil.PARAM_NAME_USER_ID;
+import static com.lxy.common.util.DualTokenUtil.TOKEN_NAME_ADMIN;
 
 /**
  * 双令牌认证过滤器
  * 基于Access Token + Refresh Token的无状态认证
+ *
  * @author jiacheng yang.
- * @since 2025/01/18 15:30
  * @version 1.0
+ * @since 2025/01/18 15:30
  */
 @Slf4j
 public class DualTokenAuthenticationFilter extends OncePerRequestFilter {
@@ -60,7 +56,7 @@ public class DualTokenAuthenticationFilter extends OncePerRequestFilter {
         if (!DualTokenUtil.validateAccessToken(accessToken)) {
             log.error("token无效或已过期");
             String result = JsonUtil.toJson(R.fail(401, "token无效或已过期!"));
-            WebUtil.renderString(response,result);
+            WebUtil.renderString(response, result);
             return;
         }
         // 解析Access Token
@@ -71,9 +67,9 @@ public class DualTokenAuthenticationFilter extends OncePerRequestFilter {
         StatelessUser statelessUser = new StatelessUser(userId, null, null);
         //设置权限
         AdminInfoVO adminInfo = adminInfoService.getAdminInfoById(userId);
-        if (adminInfo == null){
+        if (adminInfo == null) {
             // 用户不存在，也放行，交给Spring Security处理
-            log.error("用户不存在,请重新登录,userId:{}",userId);
+            log.error("用户不存在,请重新登录,userId:{}", userId);
             filterChain.doFilter(request, response);
             return;
         }

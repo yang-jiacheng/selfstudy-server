@@ -1,8 +1,8 @@
 package com.lxy.system.service;
 
-import com.lxy.system.po.Permission;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lxy.common.domain.R;
+import com.lxy.system.po.Permission;
 import com.lxy.system.vo.PermissionTreeVO;
 
 import java.util.Collection;
@@ -20,6 +20,7 @@ public interface PermissionService extends IService<Permission> {
 
     /**
      * 获取角色权限
+     *
      * @param roleId 角色id
      * @return 权限集合
      */
@@ -27,6 +28,7 @@ public interface PermissionService extends IService<Permission> {
 
     /**
      * 修改菜单权限
+     *
      * @author jiacheng yang.
      * @since 2025/4/16 16:33
      */
@@ -34,6 +36,7 @@ public interface PermissionService extends IService<Permission> {
 
     /**
      * 获取权限树
+     *
      * @author jiacheng yang.
      * @since 2025/4/16 19:01
      */
@@ -41,6 +44,7 @@ public interface PermissionService extends IService<Permission> {
 
     /**
      * 根据 `id`  集合查询所有子级及自身
+     *
      * @author jiacheng yang.
      * @since 2025/5/16 16:06
      */
@@ -48,6 +52,7 @@ public interface PermissionService extends IService<Permission> {
 
     /**
      * 根据 `id`  集合查询所有父级及自身
+     *
      * @author jiacheng yang.
      * @since 2025/5/16 16:07
      */
@@ -55,6 +60,7 @@ public interface PermissionService extends IService<Permission> {
 
     /**
      * 删除菜单
+     *
      * @author jiacheng yang.
      * @since 2025/5/16 16:07
      */
@@ -62,6 +68,7 @@ public interface PermissionService extends IService<Permission> {
 
     /**
      * 根据登录用户获取菜单
+     *
      * @author jiacheng yang.
      * @since 2025/6/21 18:33
      */

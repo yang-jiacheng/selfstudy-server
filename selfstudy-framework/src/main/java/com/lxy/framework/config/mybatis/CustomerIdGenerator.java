@@ -24,6 +24,7 @@ public class CustomerIdGenerator implements IdentifierGenerator {
 
     /**
      * 自定义id生成器, 只生成16位的id, 防止前端的无法完整接收
+     *
      * @author jiacheng yang.
      * @since 2025/4/27 12:41
      */

@@ -1,11 +1,12 @@
 package com.lxy.system.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Description: 意见反馈
@@ -16,9 +17,9 @@ import java.io.Serializable;
 @TableName(value = "feedback", autoResultMap = true)
 public class Feedback implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     //用户id
@@ -37,11 +38,11 @@ public class Feedback implements Serializable {
     private Integer adminId;
 
     //创建时间
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     //回复时间
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date replyTime;
 
     //用户是否可见 1可见 2不可见
@@ -63,100 +64,100 @@ public class Feedback implements Serializable {
     }
 
     public Integer getId() {
-    	return id;
+        return id;
     }
 
     public void setId(Integer id) {
-    	this.id = id;
+        this.id = id;
     }
 
     public Integer getUserId() {
-    	return userId;
+        return userId;
     }
 
     public void setUserId(Integer userId) {
-    	this.userId = userId;
+        this.userId = userId;
     }
 
     public String getContent() {
-    	return content;
+        return content;
     }
 
     public void setContent(String content) {
-    	this.content = content;
+        this.content = content;
     }
 
     public String getPic() {
-    	return pic;
+        return pic;
     }
 
     public void setPic(String pic) {
-    	this.pic = pic;
+        this.pic = pic;
     }
 
     public String getReply() {
-    	return reply;
+        return reply;
     }
 
     public void setReply(String reply) {
-    	this.reply = reply;
+        this.reply = reply;
     }
 
     public Integer getAdminId() {
-    	return adminId;
+        return adminId;
     }
 
     public void setAdminId(Integer adminId) {
-    	this.adminId = adminId;
+        this.adminId = adminId;
     }
 
     public Date getCreateTime() {
-    	return createTime;
+        return createTime;
     }
 
     public void setCreateTime(Date createTime) {
-    	this.createTime = createTime;
+        this.createTime = createTime;
     }
 
     public Date getReplyTime() {
-    	return replyTime;
+        return replyTime;
     }
 
     public void setReplyTime(Date replyTime) {
-    	this.replyTime = replyTime;
+        this.replyTime = replyTime;
     }
 
     public Integer getStatus() {
-    	return status;
+        return status;
     }
 
     public void setStatus(Integer status) {
-    	this.status = status;
+        this.status = status;
     }
 
     public Integer getReplyStatus() {
-    	return replyStatus;
+        return replyStatus;
     }
 
     public void setReplyStatus(Integer replyStatus) {
-    	this.replyStatus = replyStatus;
+        this.replyStatus = replyStatus;
     }
 
 
     @Override
     public String toString() {
-	    return "Feedback{" +
-	            ", id=" + id +
-	            ", userId=" + userId +
-	            ", content=" + content +
-	            ", pic=" + pic +
-	            ", reply=" + reply +
-	            ", adminId=" + adminId +
-	            ", createTime=" + createTime +
-	            ", replyTime=" + replyTime +
-	            ", status=" + status +
-	            ", replyStatus=" + replyStatus +
-	    "}";
+        return "Feedback{" +
+                ", id=" + id +
+                ", userId=" + userId +
+                ", content=" + content +
+                ", pic=" + pic +
+                ", reply=" + reply +
+                ", adminId=" + adminId +
+                ", createTime=" + createTime +
+                ", replyTime=" + replyTime +
+                ", status=" + status +
+                ", replyStatus=" + replyStatus +
+                "}";
     }
 
 }

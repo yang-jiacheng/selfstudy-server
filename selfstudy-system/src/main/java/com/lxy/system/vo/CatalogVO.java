@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/24 11:12
  * @version 1.0
+ * @since 2022/12/24 11:12
  */
 public class CatalogVO implements Serializable {
     private static final long serialVersionUID = 162687177993801603L;

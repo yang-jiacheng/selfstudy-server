@@ -2,6 +2,7 @@ package com.lxy.system.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 /**
@@ -12,9 +13,9 @@ import java.io.Serializable;
 
 public class AdminRoleRelate implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     //管理员id
@@ -24,37 +25,37 @@ public class AdminRoleRelate implements Serializable {
     private Integer roleId;
 
     public Integer getId() {
-    	return id;
+        return id;
     }
 
     public void setId(Integer id) {
-    	this.id = id;
+        this.id = id;
     }
 
     public Integer getAdminId() {
-    	return adminId;
+        return adminId;
     }
 
     public void setAdminId(Integer adminId) {
-    	this.adminId = adminId;
+        this.adminId = adminId;
     }
 
     public Integer getRoleId() {
-    	return roleId;
+        return roleId;
     }
 
     public void setRoleId(Integer roleId) {
-    	this.roleId = roleId;
+        this.roleId = roleId;
     }
 
 
     @Override
     public String toString() {
-	    return "AdminRoleRelate{" +
-	            ", id=" + id +
-	            ", adminId=" + adminId +
-	            ", roleId=" + roleId +
-	    "}";
+        return "AdminRoleRelate{" +
+                ", id=" + id +
+                ", adminId=" + adminId +
+                ", roleId=" + roleId +
+                "}";
     }
 
 }

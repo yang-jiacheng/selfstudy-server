@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/24 9:19
  * @version 1.0
+ * @since 2022/12/24 9:19
  */
 public class UserRankVO implements Serializable {
 
@@ -23,6 +24,9 @@ public class UserRankVO implements Serializable {
     private Integer todayDuration;
 
     private Integer ranking;
+
+    public UserRankVO() {
+    }
 
     public Integer getId() {
         return id;
@@ -70,9 +74,6 @@ public class UserRankVO implements Serializable {
 
     public void setTodayDuration(Integer todayDuration) {
         this.todayDuration = todayDuration;
-    }
-
-    public UserRankVO() {
     }
 
     @Override

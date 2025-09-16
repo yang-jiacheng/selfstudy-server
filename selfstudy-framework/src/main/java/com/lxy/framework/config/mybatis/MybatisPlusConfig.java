@@ -9,16 +9,17 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2021/09/13 13:23
  * @version 1.0
+ * @since 2021/09/13 13:23
  */
 @Configuration
 @MapperScan("com.lxy.**.mapper") //设置mapper接口的扫描包
 public class MybatisPlusConfig {
 
     @Bean
-    public MybatisPlusInterceptor MybatisPlusInterceptor(){
+    public MybatisPlusInterceptor MybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         //分页拦截器：默认对 left join 进行优化,虽然能优化count,但是加上分页的话如果1对多本身结果条数就是不正确的
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));

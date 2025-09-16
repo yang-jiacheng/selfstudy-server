@@ -24,13 +24,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import static com.lxy.common.util.DualTokenUtil.*;
+import static com.lxy.common.util.DualTokenUtil.PARAM_NAME_JID;
+import static com.lxy.common.util.DualTokenUtil.PARAM_NAME_USER_ID;
+import static com.lxy.common.util.DualTokenUtil.PARAM_NAME_USER_TYPE;
 
 /**
  * 基于双Token机制的登录服务实现
+ *
  * @author jiacheng yang.
- * @since 2025/01/18 10:00
  * @version 1.0
+ * @since 2025/01/18 10:00
  */
 
 @Slf4j
@@ -49,7 +52,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
     @Override
     public R<Object> login(LoginVerifyCodeDTO dto, HttpServletResponse response) {
         boolean flag = checkVerifyCode(dto.getVerifyCode(), dto.getUuid());
-        if (!flag){
+        if (!flag) {
             return R.fail("验证码错误或已失效！");
         }
         //AuthenticationManager authenticate进行用户认证
@@ -58,12 +61,12 @@ public class DualTokenLoginServiceImpl implements LoginService {
         Authentication authenticate = null;
         try {
             authenticate = authenticationManager.authenticate(authenticationToken);
-        }catch (Exception e){
-            log.error("用户名或密码错误",e);
+        } catch (Exception e) {
+            log.error("用户名或密码错误", e);
             return R.fail("用户名或密码错误！");
         }
         //如果认证通过了，使用userid生成jwt
-        StatelessUser principal = (StatelessUser)authenticate.getPrincipal();
+        StatelessUser principal = (StatelessUser) authenticate.getPrincipal();
         Integer userId = principal.getUserId();
         // 生成双Token
         TokenPair tokenPair = DualTokenUtil.generateTokenPair(userId, LogUserType.ADMIN.type);
@@ -91,7 +94,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
             Claims claims = DualTokenUtil.parseToken(token);
             userId = (Integer) claims.get(PARAM_NAME_USER_ID);
             String refreshId = (String) claims.get(PARAM_NAME_JID);
-            if (userId != -1){
+            if (userId != -1) {
                 String sessionKey = RedisKeyConstant.getAdminDualTokenSessions(userId);
                 // 移除会话
                 loginStatusService.removeSessionByRefreshId(sessionKey, refreshId);
@@ -107,7 +110,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
     @Override
     public R<TokenPair> refreshToken(String refreshToken) {
         R<TokenPair> r = R.fail(1000, "认证失败，请重新登录！");
-        if (StrUtil.isEmpty(refreshToken)){
+        if (StrUtil.isEmpty(refreshToken)) {
             return r;
         }
         // 验证刷新令牌
@@ -143,7 +146,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
      * 校验验证码
      */
     private boolean checkVerifyCode(String verifyCode, String uuid) {
-        if ("pass".equals(verifyCode)){
+        if ("pass".equals(verifyCode)) {
             return true;
         }
         if (StrUtil.isEmpty(verifyCode) || StrUtil.isEmpty(uuid)) {

@@ -1,7 +1,7 @@
 package com.lxy.system.service;
 
-import com.lxy.system.po.BusinessConfig;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lxy.system.po.BusinessConfig;
 
 /**
  * <p>
@@ -15,6 +15,7 @@ public interface BusinessConfigService extends IService<BusinessConfig> {
 
     /**
      * 根据bkey获取bvalue
+     *
      * @param key bkey
      * @return bvalue
      */
@@ -22,19 +23,21 @@ public interface BusinessConfigService extends IService<BusinessConfig> {
 
     /**
      * 根据bkey查询
+     *
      * @return BusinessConfig
      */
     BusinessConfig getBusinessConfigByKey(String key);
 
     /**
      * 更新或修改
-     * @param key 键
-     * @param value 值
+     *
+     * @param key         键
+     * @param value       值
      * @param description 描述
      * @return BusinessConfig
      */
-    BusinessConfig updateBusinessConfigByKey(String key,String value,String description);
+    BusinessConfig updateBusinessConfigByKey(String key, String value, String description);
 
-    void updateBusinessConfigById(Integer id,String value);
+    void updateBusinessConfigById(Integer id, String value);
 
 }

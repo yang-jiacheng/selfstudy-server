@@ -4,17 +4,16 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.ConfigConstant;
-import com.lxy.common.vo.SmsSendVO;
-import com.lxy.system.po.PhoneCode;
+import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.util.DateCusUtil;
+import com.lxy.common.util.SmsUtil;
 import com.lxy.system.mapper.PhoneCodeMapper;
+import com.lxy.system.po.PhoneCode;
 import com.lxy.system.service.BusinessConfigService;
 import com.lxy.system.service.PhoneCodeService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.system.service.RedisService;
-import com.lxy.common.util.DateCusUtil;
-import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.util.SmsUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author jiacheng yang.
@@ -47,11 +46,11 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
         int maxCount = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.PHONE_CODE_NUM));
         String key = RedisKeyConstant.getPhoneSms(phone);
         String value = redisService.getObject(key, String.class);
-        int num = 0 ;
-        if (value != null){
+        int num = 0;
+        if (value != null) {
             num = Integer.parseInt(value);
         }
-        if (num < maxCount){
+        if (num < maxCount) {
             flag = true;
         }
         return flag;
@@ -62,21 +61,21 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
         String code = SmsUtil.getRandomCode();
         Map<String, Object> map = new HashMap<>(1);
         map.put("code", code);
-        boolean flag = SmsUtil.sendSmsByTemplate(SmsUtil.TEMPLATE_CODE,phone,map);
-        if (flag){
+        boolean flag = SmsUtil.sendSmsByTemplate(SmsUtil.TEMPLATE_CODE, phone, map);
+        if (flag) {
             Date now = new Date();
             DateTime offsetMinute = DateUtil.offsetMinute(now, 10);
-            PhoneCode phoneCode = new PhoneCode(phone, code,0, now, offsetMinute);
+            PhoneCode phoneCode = new PhoneCode(phone, code, 0, now, offsetMinute);
             this.save(phoneCode);
             //添加发送次数
             String key = RedisKeyConstant.getPhoneSms(phone);
             String value = redisService.getObject(key, String.class);
-            int num = 0 ;
-            if (value != null){
+            int num = 0;
+            if (value != null) {
                 num = Integer.parseInt(value);
             }
             num += 1;
-            redisService.setObject(key,String.valueOf(num), DateCusUtil.getEndByDay(),TimeUnit.SECONDS);
+            redisService.setObject(key, String.valueOf(num), DateCusUtil.getEndByDay(), TimeUnit.SECONDS);
         }
         return flag;
     }
@@ -85,10 +84,10 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
     public boolean checkVerificationCode(String phone, String verificationCode) {
         boolean flag = true;
         LambdaQueryWrapper<PhoneCode> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(PhoneCode::getPhone,phone).eq(PhoneCode::getCode,verificationCode).ne(PhoneCode::getUseStatus,1);
+        wrapper.eq(PhoneCode::getPhone, phone).eq(PhoneCode::getCode, verificationCode).ne(PhoneCode::getUseStatus, 1);
         PhoneCode phoneCode = this.getOne(wrapper);
         Date now = new Date();
-        if (phoneCode == null || DateUtil.compare(now,phoneCode.getEndTime()) > 0){
+        if (phoneCode == null || DateUtil.compare(now, phoneCode.getEndTime()) > 0) {
             flag = false;
         }
         return flag;
@@ -97,7 +96,7 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
     @Override
     public boolean updateVerificationCodeStatus(String phone, String verificationCode) {
         LambdaUpdateWrapper<PhoneCode> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(PhoneCode::getCode,verificationCode).eq(PhoneCode::getPhone,phone).set(PhoneCode::getUseStatus,1);
+        wrapper.eq(PhoneCode::getCode, verificationCode).eq(PhoneCode::getPhone, phone).set(PhoneCode::getUseStatus, 1);
         return this.update(wrapper);
     }
 }

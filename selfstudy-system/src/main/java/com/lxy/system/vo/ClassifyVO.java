@@ -4,9 +4,10 @@ import com.lxy.system.po.Classify;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/19 17:59
  * @version 1.0
+ * @since 2022/12/19 17:59
  */
 public class ClassifyVO extends Classify {
 

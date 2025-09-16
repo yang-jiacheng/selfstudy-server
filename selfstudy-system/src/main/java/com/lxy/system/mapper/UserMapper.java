@@ -1,8 +1,8 @@
 package com.lxy.system.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lxy.system.dto.UserPageDTO;
 import com.lxy.system.po.User;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lxy.system.vo.user.UserExportVO;
 import com.lxy.system.vo.user.UserImportVO;
 import com.lxy.system.vo.user.UserRankVO;
@@ -24,7 +24,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     List<UserRankVO> getRankingsTotalDuration();
 
-    UserRankVO getUserRankingById(@Param("userId") Integer userId,@Param("studyDay") String studyDay);
+    UserRankVO getUserRankingById(@Param("userId") Integer userId, @Param("studyDay") String studyDay);
 
     void insertBatchUser(List<UserImportVO> userList);
 

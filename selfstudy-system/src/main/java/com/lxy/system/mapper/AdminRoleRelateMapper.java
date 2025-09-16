@@ -1,7 +1,7 @@
 package com.lxy.system.mapper;
 
-import com.lxy.system.po.AdminRoleRelate;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lxy.system.po.AdminRoleRelate;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

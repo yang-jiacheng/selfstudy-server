@@ -2,18 +2,18 @@ package com.lxy.system.engine;
 
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
+import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.Properties;
-
-import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * TODO
@@ -38,11 +38,11 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     public @NotNull VelocityTemplateEngine init(@NotNull ConfigBuilder configBuilder) {
         if (null == this.velocityEngine) {
             Properties p = new Properties();
-            p.setProperty("resource.loader.file.class",  "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+            p.setProperty("resource.loader.file.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
             p.setProperty("resource.loader.file.path", "");
             p.setProperty("UTF-8", ConstVal.UTF8);
             p.setProperty("resource.default_encoding", ConstVal.UTF8);
-            p.setProperty("resource.loader.file.unicode",  "true");
+            p.setProperty("resource.loader.file.unicode", "true");
             this.velocityEngine = new VelocityEngine(p);
         }
 

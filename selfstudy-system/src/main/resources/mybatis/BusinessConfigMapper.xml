@@ -4,16 +4,17 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lxy.system.po.BusinessConfig">
-        <id column="id" property="id" />
-        <result column="bkey" property="bkey" />
-        <result column="bvalue" property="bvalue" />
-        <result column="description" property="description" />
-        <result column="show_status" property="showStatus" />
+        <id column="id" property="id"/>
+        <result column="bkey" property="bkey"/>
+        <result column="bvalue" property="bvalue"/>
+        <result column="description" property="description"/>
+        <result column="show_status" property="showStatus"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, bkey, bvalue, description ,showStatus
+        id
+        , bkey, bvalue, description ,showStatus
     </sql>
 
 </mapper>

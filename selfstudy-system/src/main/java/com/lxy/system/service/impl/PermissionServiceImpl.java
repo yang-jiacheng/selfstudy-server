@@ -2,17 +2,21 @@ package com.lxy.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.lxy.system.po.Permission;
-import com.lxy.system.mapper.PermissionMapper;
-import com.lxy.system.service.PermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.domain.R;
+import com.lxy.system.mapper.PermissionMapper;
+import com.lxy.system.po.Permission;
+import com.lxy.system.service.PermissionService;
 import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -26,7 +30,7 @@ import java.util.*;
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
 
     @Resource
-    private  PermissionMapper permissionMapper;
+    private PermissionMapper permissionMapper;
 
     @Override
     public List<Permission> getRolePermission(Integer roleId) {
@@ -41,14 +45,14 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         if (permission.getId() == null) {
             // 新增
             permission.setCreateTime(now);
-            if (permission.getLevel() == 1){
+            if (permission.getLevel() == 1) {
                 permission.setParentId(-1);
             }
             this.save(permission);
             //维护节点的 nodePath
             updateNodePathInfo(permission);
             this.updateById(permission);
-        }else {
+        } else {
             // 修改
             permission.setUpdateTime(now);
             this.updateById(permission);
@@ -58,6 +62,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     /**
      * 维护节点的 nodePath, namePath, idPath
+     *
      * @author jiacheng yang.
      * @since 2025/4/20 1:31
      */
@@ -99,11 +104,11 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Override
     public List<PermissionTreeVO> getPermissionTree() {
-        List<PermissionTreeVO> list =permissionMapper.getPermissionTree();
+        List<PermissionTreeVO> list = permissionMapper.getPermissionTree();
         if (CollUtil.isEmpty(list)) {
             return List.of();
         }
-        list =  PermissionTreeVO.buildTree(list);
+        list = PermissionTreeVO.buildTree(list);
         return list;
     }
 
@@ -130,11 +135,11 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Override
     public List<PermissionTreeVO> getMinePermissionTree(int userId) {
-        List<PermissionTreeVO> list =permissionMapper.getMinePermissionTree(userId);
+        List<PermissionTreeVO> list = permissionMapper.getMinePermissionTree(userId);
         if (CollUtil.isEmpty(list)) {
             return List.of();
         }
-        list =  PermissionTreeVO.buildTree(list);
+        list = PermissionTreeVO.buildTree(list);
         return list;
     }
 

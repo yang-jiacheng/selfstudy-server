@@ -1,34 +1,32 @@
 package com.lxy.app.security.filter;
 
-import com.lxy.common.domain.R;
 import com.lxy.common.constant.CommonConstant;
 import com.lxy.common.constant.ConfigConstant;
-import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.framework.security.service.LoginStatusService;
-import com.lxy.framework.security.wrapper.CustomHttpServletRequestWrapper;
-import com.lxy.system.service.BusinessConfigService;
-import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.util.LogUtil;
+import com.lxy.framework.security.domain.StatelessUser;
+import com.lxy.framework.security.service.LoginStatusService;
+import com.lxy.system.service.BusinessConfigService;
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since  2023/02/22 17:56
- * @version  1.0
+ * @version 1.0
+ * @since 2023/02/22 17:56
  */
 public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
 
@@ -38,7 +36,7 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
 
     private final LoginStatusService loginStatusService;
 
-    public StatelessAuthenticationFilterUser(BusinessConfigService businessConfigService,LoginStatusService loginStatusService) {
+    public StatelessAuthenticationFilterUser(BusinessConfigService businessConfigService, LoginStatusService loginStatusService) {
         this.businessConfigService = businessConfigService;
         this.loginStatusService = loginStatusService;
     }
@@ -49,7 +47,7 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         //获取token
         String msg = "";
         String accessToken = JsonWebTokenUtil.getAccessToken(request, CommonConstant.TOKEN_NAME_APP);
-        if (accessToken == null){
+        if (accessToken == null) {
             logger.error("token未获取到");
             filterChain.doFilter(request, response);
             return;
@@ -59,8 +57,8 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         try {
             Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
             userId = (Integer) claims.get("userId");
-        }catch (Exception e){
-            logger.error("token解析失败",e);
+        } catch (Exception e) {
+            logger.error("token解析失败", e);
             filterChain.doFilter(request, response);
             return;
         }
@@ -70,18 +68,18 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         int endDay = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.APP_LOGIN_TIME));
         String key = RedisKeyConstant.getLoginStatus(userId);
         //控制一个账号在线数
-        StatelessUser loginStatus  = loginStatusService.controlLoginNum(key,  onlineNum, endDay,accessToken);
-        if (loginStatus == null){
+        StatelessUser loginStatus = loginStatusService.controlLoginNum(key, onlineNum, endDay, accessToken);
+        if (loginStatus == null) {
             logger.error("无法识别的登录状态");
             filterChain.doFilter(request, response);
             return;
         }
         //存入SecurityContextHolder
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginStatus,null,loginStatus.getAuthorities());
+                new UsernamePasswordAuthenticationToken(loginStatus, null, loginStatus.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-        msg = LogUtil.logOperation(userId, request,"");
+        msg = LogUtil.logOperation(userId, request, "");
         logger.info(msg);
         //放行
         filterChain.doFilter(request, response);

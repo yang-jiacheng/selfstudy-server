@@ -3,9 +3,10 @@ package com.lxy.app.controller.appmanage;
 import com.lxy.common.domain.R;
 import com.lxy.system.po.Version;
 import com.lxy.system.service.VersionService;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class VersionController {
      * Param: []
      */
     @PostMapping("/checkVersion")
-    public R<Version> checkVersion(){
+    public R<Version> checkVersion() {
         List<Version> list = versionService.list();
         return R.ok(list.get(0));
     }

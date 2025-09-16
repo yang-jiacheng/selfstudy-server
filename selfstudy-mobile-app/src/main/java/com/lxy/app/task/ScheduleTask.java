@@ -15,9 +15,10 @@ import java.util.List;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/23 17:39
  * @version 1.0
+ * @since 2022/12/23 17:39
  */
 
 @Component
@@ -38,7 +39,7 @@ public class ScheduleTask {
      */
     @Scheduled(cron = CronConstant.DAY)
     private void getRankingsTotalDuration() {
-        String msg = "执行了定时任务 getRankingsTotalDuration 时间："+ DateUtil.now();
+        String msg = "执行了定时任务 getRankingsTotalDuration 时间：" + DateUtil.now();
         LOG.error(msg);
         List<UserRankVO> users = userService.getRankingsTotalDurationInDb();
         userService.insertRankingsCache(users);

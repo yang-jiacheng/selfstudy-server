@@ -3,12 +3,11 @@ package com.lxy.system.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lxy.common.dto.PageDTO;
-import com.lxy.system.dto.RolePageDTO;
-import com.lxy.system.po.Role;
-import com.lxy.system.mapper.RoleMapper;
-import com.lxy.system.service.RoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lxy.system.dto.RolePageDTO;
+import com.lxy.system.mapper.RoleMapper;
+import com.lxy.system.po.Role;
+import com.lxy.system.service.RoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,15 +29,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Integer limit = pageDTO.getLimit();
         String name = pageDTO.getName();
         LambdaQueryWrapper<Role> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderByDesc(Role::getCreateTime,Role::getId);
+        wrapper.orderByDesc(Role::getCreateTime, Role::getId);
         if (StrUtil.isNotEmpty(name)) {
-            wrapper.like(Role::getName,name);
+            wrapper.like(Role::getName, name);
         }
-        if (StrUtil.isNotEmpty(pageDTO.getStartTime())){
-            wrapper.ge(Role::getCreateTime,pageDTO.getStartTime());
+        if (StrUtil.isNotEmpty(pageDTO.getStartTime())) {
+            wrapper.ge(Role::getCreateTime, pageDTO.getStartTime());
         }
-        if (StrUtil.isNotEmpty(pageDTO.getEndTime())){
-            wrapper.le(Role::getCreateTime,pageDTO.getEndTime());
+        if (StrUtil.isNotEmpty(pageDTO.getEndTime())) {
+            wrapper.le(Role::getCreateTime, pageDTO.getEndTime());
         }
         if (page == null && limit == null) {
             List<Role> list = this.list(wrapper);

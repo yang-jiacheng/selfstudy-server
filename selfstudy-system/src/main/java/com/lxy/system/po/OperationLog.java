@@ -1,9 +1,9 @@
 package com.lxy.system.po;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -19,9 +19,9 @@ import java.util.Date;
 @TableName("operation_log")
 public class OperationLog implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     //模块标题
@@ -55,15 +55,15 @@ public class OperationLog implements Serializable {
     private Integer status;
 
     //请求时间
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
-    private String  durationStr;
+    private String durationStr;
 
     public OperationLog() {
     }
 
-    public OperationLog(String title, Integer businessType, Integer userType, Integer userId,  String requestUrl,
+    public OperationLog(String title, Integer businessType, Integer userType, Integer userId, String requestUrl,
                         String requestMethod, String requestParams, String requestResult, String clientIp, Integer status,
                         String durationStr) {
         this.title = title;

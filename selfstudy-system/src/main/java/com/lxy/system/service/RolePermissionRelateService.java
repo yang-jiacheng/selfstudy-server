@@ -1,7 +1,7 @@
 package com.lxy.system.service;
 
-import com.lxy.system.po.RolePermissionRelate;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lxy.system.po.RolePermissionRelate;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import java.util.List;
 public interface RolePermissionRelateService extends IService<RolePermissionRelate> {
     /**
      * 获取角色权限
+     *
      * @param roleId 角色id
      * @return 角色权限集合
      */

@@ -1,17 +1,18 @@
 package com.lxy.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.system.mapper.RolePermissionRelateMapper;
+import com.lxy.system.po.RolePermissionRelate;
 import com.lxy.system.service.RedisService;
 import com.lxy.system.service.RolePermissionRelateService;
-import com.lxy.system.po.RolePermissionRelate;
-import com.lxy.system.mapper.RolePermissionRelateMapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.Resource;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -43,7 +44,7 @@ public class RolePermissionRelateServiceImpl extends ServiceImpl<RolePermissionR
     @Override
     public void removeCachePermissionInRole(List<Integer> roleIds) {
         Set<Integer> adminIds = rolePermissionRelateMapper.getAdminIdsByRoles(roleIds);
-        if (CollUtil.isEmpty(adminIds)){
+        if (CollUtil.isEmpty(adminIds)) {
             return;
         }
         List<String> keys = adminIds.stream()

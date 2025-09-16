@@ -72,17 +72,19 @@
 <div class="container">
     <h1>403</h1>
     <p>Access to this resource is forbidden.</p>
-    <a id="backHome" target="_blank"  class="button">Go back home</a>
+    <a class="button" id="backHome" target="_blank">Go back home</a>
 </div>
 
-<script src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/layui_v2.6.8/layui.js"></script>
-<script src="./js/common.js" type="text/javascript" charset="utf-8"></script>
+<script charset="utf-8" src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/js/jquery.min.js"
+        type="text/javascript"></script>
+<script src="https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/static/layui_v2.6.8/layui.js"
+        type="text/javascript"></script>
+<script charset="utf-8" src="./js/common.js" type="text/javascript"></script>
 <script>
-    ajaxPost('./resources/getAccessUrl',{},function (data) {
+    ajaxPost('./resources/getAccessUrl', {}, function (data) {
         var uri = data.result
         uri += "/home/index"
-        $("#backHome").attr("href",uri)
+        $("#backHome").attr("href", uri)
     })
 </script>
 </body>

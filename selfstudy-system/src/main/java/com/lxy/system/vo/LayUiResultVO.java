@@ -2,17 +2,27 @@ package com.lxy.system.vo;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/11/12 14:48
  * @version 1.0
+ * @since 2022/11/12 14:48
  */
 public class LayUiResultVO {
 
-    private  Integer code =0;
-    private  String msg ="调用成功";
+    private Integer code = 0;
+    private String msg = "调用成功";
 
     private Integer count;
     private Object data;
+
+    private LayUiResultVO() {
+
+    }
+
+    public LayUiResultVO(Integer count, Object data) {
+        this.count = count;
+        this.data = data;
+    }
 
     public Integer getCode() {
         return code;
@@ -43,15 +53,6 @@ public class LayUiResultVO {
     }
 
     public void setData(Object data) {
-        this.data = data;
-    }
-
-    private LayUiResultVO (){
-
-    }
-
-    public LayUiResultVO(Integer count, Object data) {
-        this.count = count;
         this.data = data;
     }
 }

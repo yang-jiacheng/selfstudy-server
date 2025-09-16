@@ -1,23 +1,20 @@
 package com.lxy.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.lxy.common.domain.R;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.enums.StudyStatus;
+import com.lxy.common.util.ImgConfigUtil;
+import com.lxy.system.mapper.ClassifyMapper;
 import com.lxy.system.po.Catalog;
 import com.lxy.system.po.Classify;
-import com.lxy.system.mapper.ClassifyMapper;
 import com.lxy.system.po.StudyRecord;
 import com.lxy.system.service.CatalogService;
 import com.lxy.system.service.ClassifyService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.system.service.RedisService;
 import com.lxy.system.service.StudyRecordService;
-import com.lxy.common.util.ImgConfigUtil;
-import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.system.vo.ClassifyVO;
-
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +57,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
     public Integer updateClassify(Classify classify) {
         Integer id = classify.getId();
         classify.setUpdateTime(new Date());
-        if (id == null){
+        if (id == null) {
             classify.setCreateTime(new Date());
         }
         this.saveOrUpdate(classify);
@@ -72,7 +69,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
     public List<ClassifyVO> getClassifyList() {
         //查缓存
         List<ClassifyVO> list = this.getClassifyListCache();
-        if (list != null){
+        if (list != null) {
             return list;
         }
         //自习中的记录
@@ -81,18 +78,18 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
         list = classifyMapper.queryList();
         for (ClassifyVO vo : list) {
             Integer id = vo.getId();
-            int studyCount = 0 ;
+            int studyCount = 0;
             for (StudyRecord record : records) {
                 Integer classifyId = record.getClassifyId();
-                if (id.equals(classifyId)){
-                    studyCount ++;
+                if (id.equals(classifyId)) {
+                    studyCount++;
                 }
             }
             vo.setStudyCount(studyCount);
             vo.setIconPath(ImgConfigUtil.joinUploadUrl(vo.getIconPath()));
         }
 
-        if (CollUtil.isNotEmpty(list)){
+        if (CollUtil.isNotEmpty(list)) {
             this.insertClassifyCache(list);
         }
 
@@ -101,7 +98,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
 
     @Override
     public void insertClassifyCache(List<ClassifyVO> list) {
-        redisService.setObject(RedisKeyConstant.getClassify(),list,60L * 5L, TimeUnit.SECONDS);
+        redisService.setObject(RedisKeyConstant.getClassify(), list, 60L * 5L, TimeUnit.SECONDS);
     }
 
     @Override
@@ -110,7 +107,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
     }
 
     @Override
-    public List<ClassifyVO> getClassifyListCache(){
+    public List<ClassifyVO> getClassifyListCache() {
         List<ClassifyVO> list = redisService.getObject(RedisKeyConstant.getClassify(), ArrayList.class);
         return list;
     }
@@ -119,7 +116,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
     @Transactional(rollbackFor = Exception.class)
     public void removeClassify(Integer id) {
         this.removeById(id);
-        catalogService.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getClassifyId,id));
+        catalogService.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getClassifyId, id));
         this.removeClassifyCache();
     }
 

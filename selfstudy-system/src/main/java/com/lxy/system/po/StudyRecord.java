@@ -1,11 +1,12 @@
 package com.lxy.system.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Description: 学习记录
@@ -16,9 +17,9 @@ import java.io.Serializable;
 @TableName(value = "study_record", autoResultMap = true)
 public class StudyRecord implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     //用户id
@@ -58,153 +59,153 @@ public class StudyRecord implements Serializable {
     private Integer noteStatus;
 
     //开始时间
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date startTime;
 
     //修改时间
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date updateTime;
 
     public Integer getId() {
-    	return id;
+        return id;
     }
 
     public void setId(Integer id) {
-    	this.id = id;
+        this.id = id;
     }
 
     public Integer getUserId() {
-    	return userId;
+        return userId;
     }
 
     public void setUserId(Integer userId) {
-    	this.userId = userId;
+        this.userId = userId;
     }
 
     public Integer getClassifyId() {
-    	return classifyId;
+        return classifyId;
     }
 
     public void setClassifyId(Integer classifyId) {
-    	this.classifyId = classifyId;
+        this.classifyId = classifyId;
     }
 
     public Integer getCatalogId() {
-    	return catalogId;
+        return catalogId;
     }
 
     public void setCatalogId(Integer catalogId) {
-    	this.catalogId = catalogId;
+        this.catalogId = catalogId;
     }
 
     public String getTag() {
-    	return tag;
+        return tag;
     }
 
     public void setTag(String tag) {
-    	this.tag = tag;
+        this.tag = tag;
     }
 
     public Integer getSeat() {
-    	return seat;
+        return seat;
     }
 
     public void setSeat(Integer seat) {
-    	this.seat = seat;
+        this.seat = seat;
     }
 
     public Integer getTimingMode() {
-    	return timingMode;
+        return timingMode;
     }
 
     public void setTimingMode(Integer timingMode) {
-    	this.timingMode = timingMode;
+        this.timingMode = timingMode;
     }
 
     public Integer getSettingDuration() {
-    	return settingDuration;
+        return settingDuration;
     }
 
     public void setSettingDuration(Integer settingDuration) {
-    	this.settingDuration = settingDuration;
+        this.settingDuration = settingDuration;
     }
 
     public Integer getActualDuration() {
-    	return actualDuration;
+        return actualDuration;
     }
 
     public void setActualDuration(Integer actualDuration) {
-    	this.actualDuration = actualDuration;
+        this.actualDuration = actualDuration;
     }
 
     public Integer getStatus() {
-    	return status;
+        return status;
     }
 
     public void setStatus(Integer status) {
-    	this.status = status;
+        this.status = status;
     }
 
     public String getNoteContent() {
-    	return noteContent;
+        return noteContent;
     }
 
     public void setNoteContent(String noteContent) {
-    	this.noteContent = noteContent;
+        this.noteContent = noteContent;
     }
 
     public String getNotePath() {
-    	return notePath;
+        return notePath;
     }
 
     public void setNotePath(String notePath) {
-    	this.notePath = notePath;
+        this.notePath = notePath;
     }
 
     public Integer getNoteStatus() {
-    	return noteStatus;
+        return noteStatus;
     }
 
     public void setNoteStatus(Integer noteStatus) {
-    	this.noteStatus = noteStatus;
+        this.noteStatus = noteStatus;
     }
 
     public Date getStartTime() {
-    	return startTime;
+        return startTime;
     }
 
     public void setStartTime(Date startTime) {
-    	this.startTime = startTime;
+        this.startTime = startTime;
     }
 
     public Date getUpdateTime() {
-    	return updateTime;
+        return updateTime;
     }
 
     public void setUpdateTime(Date updateTime) {
-    	this.updateTime = updateTime;
+        this.updateTime = updateTime;
     }
 
 
     @Override
     public String toString() {
-	    return "StudyRecord{" +
-	            ", id=" + id +
-	            ", userId=" + userId +
-	            ", classifyId=" + classifyId +
-	            ", catalogId=" + catalogId +
-	            ", tag=" + tag +
-	            ", seat=" + seat +
-	            ", timingMode=" + timingMode +
-	            ", settingDuration=" + settingDuration +
-	            ", actualDuration=" + actualDuration +
-	            ", status=" + status +
-	            ", noteContent=" + noteContent +
-	            ", notePath=" + notePath +
-	            ", noteStatus=" + noteStatus +
-	            ", startTime=" + startTime +
-	            ", updateTime=" + updateTime +
-	    "}";
+        return "StudyRecord{" +
+                ", id=" + id +
+                ", userId=" + userId +
+                ", classifyId=" + classifyId +
+                ", catalogId=" + catalogId +
+                ", tag=" + tag +
+                ", seat=" + seat +
+                ", timingMode=" + timingMode +
+                ", settingDuration=" + settingDuration +
+                ", actualDuration=" + actualDuration +
+                ", status=" + status +
+                ", noteContent=" + noteContent +
+                ", notePath=" + notePath +
+                ", noteStatus=" + noteStatus +
+                ", startTime=" + startTime +
+                ", updateTime=" + updateTime +
+                "}";
     }
 
 }

@@ -4,36 +4,33 @@ import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.enums.LogUserType;
 import com.lxy.common.util.DualTokenUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
-import com.lxy.common.util.LogUtil;
-import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.framework.security.service.LoginStatusService;
-import com.lxy.framework.security.wrapper.CustomHttpServletRequestWrapper;
 import io.jsonwebtoken.Claims;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.OncePerRequestFilter;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
-import static com.lxy.common.util.DualTokenUtil.*;
+import static com.lxy.common.util.DualTokenUtil.TOKEN_NAME_ADMIN;
+import static com.lxy.common.util.DualTokenUtil.TOKEN_NAME_APP;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2024/08/30 16:52
  * @version 1.0
+ * @since 2024/08/30 16:52
  */
 public class StatelessPermitFilter extends OncePerRequestFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(StatelessPermitFilter.class);
 
-    private final Integer loginUserType ;
+    private final Integer loginUserType;
 
     private final LoginStatusService loginStatusService;
 
@@ -49,7 +46,7 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
 
         // 访问的地址
         String accessToken = DualTokenUtil.getToken(request, tokenKey);
-        if (accessToken == null){
+        if (accessToken == null) {
             //放行
             filterChain.doFilter(request, response);
             return;
@@ -59,7 +56,7 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
         try {
             Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
             userId = (Integer) claims.get("userId");
-        }catch (Exception e) {
+        } catch (Exception e) {
             LOG.error("解析token失败", e);
             //放行
             filterChain.doFilter(request, response);

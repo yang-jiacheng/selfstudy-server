@@ -32,8 +32,8 @@ public class UserStatisticsService {
         userService.removeByIds(ids);
         userService.removeUserInfoCacheByIds(ids);
         //删用户其他关联数据...
-        statisticsService.remove(new LambdaQueryWrapper<StudyStatistics>().in(StudyStatistics::getUserId,ids));
-        studyRecordService.remove(new LambdaQueryWrapper<StudyRecord>().in(StudyRecord::getUserId,ids));
+        statisticsService.remove(new LambdaQueryWrapper<StudyStatistics>().in(StudyStatistics::getUserId, ids));
+        studyRecordService.remove(new LambdaQueryWrapper<StudyRecord>().in(StudyRecord::getUserId, ids));
     }
 
 }

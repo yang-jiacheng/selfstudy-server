@@ -1,13 +1,9 @@
 package com.lxy.admin.task;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * TODO
@@ -23,11 +19,12 @@ public class AdminTask {
 
     /**
      * 测试admin任务
+     *
      * @author jiacheng yang.
      * @since 2025/5/9 15:08
      */
     @XxlJob("testAdminTask")
-    public void testAdminTask(){
+    public void testAdminTask() {
         log.info("测试admin任务开始");
         ThreadUtil.sleep(3000);
         log.info("测试admin任务结束");

@@ -4,15 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lxy.system.po.StudyStatistics">
-        <id column="id" property="id" />
-        <result column="user_id" property="userId" />
-        <result column="study_day" property="studyDay" />
-        <result column="duration" property="duration" />
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="study_day" property="studyDay"/>
+        <result column="duration" property="duration"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, study_day, duration
+        id
+        , user_id, study_day, duration
     </sql>
 
 </mapper>

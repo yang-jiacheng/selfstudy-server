@@ -2,14 +2,16 @@ package com.lxy.system.dto;
 
 
 import jakarta.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2024/12/14 16:19
  * @version 1.0
+ * @since 2024/12/14 16:19
  */
 public class ObjectStorageDTO implements Serializable {
     private static final long serialVersionUID = -6584352603005168007L;

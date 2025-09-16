@@ -4,13 +4,13 @@ import cn.hutool.http.HttpStatus;
 import com.lxy.common.domain.R;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.WebUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -26,7 +26,7 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
         R<Object> result = R.fail(HttpStatus.HTTP_FORBIDDEN, "您的权限不足");
         String json = JsonUtil.toJson(result);
         //处理异常
-        WebUtil.renderString(response,json);
+        WebUtil.renderString(response, json);
     }
 
 }

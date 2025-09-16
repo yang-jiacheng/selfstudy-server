@@ -1,12 +1,12 @@
 package com.lxy.system.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
 import com.lxy.common.domain.PageResult;
 import com.lxy.system.dto.StudyRecordDTO;
 import com.lxy.system.dto.StudyRecordPageDTO;
 import com.lxy.system.po.Catalog;
 import com.lxy.system.po.StudyRecord;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.lxy.system.vo.StudyRecordVO;
 
 import java.util.List;
@@ -34,17 +34,17 @@ public interface StudyRecordService extends IService<StudyRecord> {
     /**
      * 获取自习笔记
      */
-    PageInfo<StudyRecord> getStudyNotePageList(Integer userId,Integer page,Integer limit);
+    PageInfo<StudyRecord> getStudyNotePageList(Integer userId, Integer page, Integer limit);
 
     /**
      * 获取自习记录
      */
-    PageInfo<StudyRecordVO> getStudyRecord(Integer userId,Integer classifyId,Integer status,Integer page,Integer limit);
+    PageInfo<StudyRecordVO> getStudyRecord(Integer userId, Integer classifyId, Integer status, Integer page, Integer limit);
 
     /**
      * 编辑自习笔记
      */
-    boolean saveStudyNote(Integer recordId,String content,String pic);
+    boolean saveStudyNote(Integer recordId, String content, String pic);
 
     /**
      * 删除自习笔记
@@ -64,12 +64,12 @@ public interface StudyRecordService extends IService<StudyRecord> {
     /**
      * 开始自习
      */
-    Integer startStudy(StudyRecordDTO studyRecordDTO, Catalog catalog,Integer userId);
+    Integer startStudy(StudyRecordDTO studyRecordDTO, Catalog catalog, Integer userId);
 
     /**
      * 结束自习
      */
-    StudyRecord stopStudy(Integer recordId,Integer userId);
+    StudyRecord stopStudy(Integer recordId, Integer userId);
 
     /**
      * 把正在自习的或者离开的记录变为已完成

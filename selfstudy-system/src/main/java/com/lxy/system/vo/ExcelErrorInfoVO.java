@@ -2,9 +2,10 @@ package com.lxy.system.vo;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2023/02/20 17:48
  * @version 1.0
+ * @since 2023/02/20 17:48
  */
 public class ExcelErrorInfoVO {
 
@@ -20,6 +21,15 @@ public class ExcelErrorInfoVO {
      * 描述
      */
     private String dispose;
+
+    public ExcelErrorInfoVO() {
+    }
+
+    public ExcelErrorInfoVO(String position, String reason, String dispose) {
+        this.position = position;
+        this.reason = reason;
+        this.dispose = dispose;
+    }
 
     public String getPosition() {
         return position;
@@ -42,15 +52,6 @@ public class ExcelErrorInfoVO {
     }
 
     public void setDispose(String dispose) {
-        this.dispose = dispose;
-    }
-
-    public ExcelErrorInfoVO() {
-    }
-
-    public ExcelErrorInfoVO(String position, String reason, String dispose) {
-        this.position = position;
-        this.reason = reason;
         this.dispose = dispose;
     }
 

@@ -21,21 +21,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RedissonConfig {
 
-    @Value("${spring.data.redis.host}")
-    private String host;
-
-    @Value("${spring.data.redis.port}")
-    private Integer port;
-
-    @Value("${spring.data.redis.password}")
-    private String password;
-
-    @Value("${spring.data.redis.database}")
-    private Integer database;
-
-    @Value("${spring.application.name}")
-    private String clientName;
-
     private static final int CORE_THREAD_SIZE;
 
     // 静态代码块初始化线程池的核心线程数和最大线程数
@@ -45,6 +30,17 @@ public class RedissonConfig {
         // 至少4个线程
         CORE_THREAD_SIZE = Math.max(4, availableProcessors);
     }
+
+    @Value("${spring.data.redis.host}")
+    private String host;
+    @Value("${spring.data.redis.port}")
+    private Integer port;
+    @Value("${spring.data.redis.password}")
+    private String password;
+    @Value("${spring.data.redis.database}")
+    private Integer database;
+    @Value("${spring.application.name}")
+    private String clientName;
 
     @PostConstruct
     public void validate() {

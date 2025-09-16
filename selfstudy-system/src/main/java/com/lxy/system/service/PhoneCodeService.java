@@ -1,11 +1,11 @@
 package com.lxy.system.service;
 
-import com.lxy.system.po.PhoneCode;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lxy.system.po.PhoneCode;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author jiacheng yang.
@@ -26,11 +26,11 @@ public interface PhoneCodeService extends IService<PhoneCode> {
     /**
      * 验证码是否可用
      */
-    boolean checkVerificationCode(String phone,String verificationCode);
+    boolean checkVerificationCode(String phone, String verificationCode);
 
     /**
      * 修改验证码为已使用
      */
-    boolean updateVerificationCodeStatus(String phone,String verificationCode);
+    boolean updateVerificationCodeStatus(String phone, String verificationCode);
 
 }

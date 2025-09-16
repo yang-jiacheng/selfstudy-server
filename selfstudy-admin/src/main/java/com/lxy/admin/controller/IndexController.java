@@ -1,38 +1,37 @@
 package com.lxy.admin.controller;
 
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Producer;
-import com.lxy.common.domain.R;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.util.JsonUtil;
+import com.lxy.common.domain.R;
 import com.lxy.common.util.SmsUtil;
 import com.lxy.common.vo.SmsSendVO;
-import com.lxy.framework.security.util.UserIdUtil;
-import com.lxy.system.po.User;
 import com.lxy.system.service.PermissionService;
 import com.lxy.system.service.RedisService;
-import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FastByteArrayOutputStream;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
  * index
+ *
  * @author jiacheng yang.
- * @since 2022/10/08 18:50
  * @version 1.0
+ * @since 2022/10/08 18:50
  */
 
 @Slf4j
@@ -88,15 +87,15 @@ public class IndexController {
     }
 
 
-
     /**
      * 验证码生成
+     *
      * @author jiacheng yang.
      * @since 2025/03/07 15:14
      */
     @PostMapping("/Kaptcha")
     @ResponseBody
-    public R<Map<String, Object>> getKaptchaImage()  {
+    public R<Map<String, Object>> getKaptchaImage() {
         Map<String, Object> map = new HashMap<>(2);
         String uuid = IdUtil.simpleUUID();
         String verifyKey = RedisKeyConstant.getMathCodeKey(uuid);

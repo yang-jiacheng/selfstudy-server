@@ -28,7 +28,7 @@ public class OperationLogEventListener {
     public void saveOperationLog(OperationLogEvent event) {
         OperationLog operationLog = event.getOperationLog();
         ThreadPoolUtil.execute(() -> {
-            try{
+            try {
                 operationLogService.save(operationLog);
                 log.info("异步保存操作日志成功");
             } catch (Exception e) {

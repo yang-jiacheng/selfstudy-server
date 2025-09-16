@@ -1,7 +1,7 @@
 package com.lxy.system.service;
 
-import com.lxy.system.po.StudyStatistics;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lxy.system.po.StudyStatistics;
 
 import java.util.Date;
 
@@ -18,7 +18,7 @@ public interface StudyStatisticsService extends IService<StudyStatistics> {
     /**
      * 保存统计数据
      */
-    boolean saveStatistics(Integer userId, Date day,Integer duration);
+    boolean saveStatistics(Integer userId, Date day, Integer duration);
 
     /**
      * 根据日期获取统计数据

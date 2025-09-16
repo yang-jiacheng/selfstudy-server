@@ -15,9 +15,9 @@ import java.io.Serializable;
 @TableName(value = "business_config", autoResultMap = true)
 public class BusinessConfig implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private String bkey;
@@ -31,55 +31,55 @@ public class BusinessConfig implements Serializable {
     private Integer showStatus;
 
     public Integer getId() {
-    	return id;
+        return id;
     }
 
     public void setId(Integer id) {
-    	this.id = id;
+        this.id = id;
     }
 
     public String getBkey() {
-    	return bkey;
+        return bkey;
     }
 
     public void setBkey(String bkey) {
-    	this.bkey = bkey;
+        this.bkey = bkey;
     }
 
     public String getBvalue() {
-    	return bvalue;
+        return bvalue;
     }
 
     public void setBvalue(String bvalue) {
-    	this.bvalue = bvalue;
+        this.bvalue = bvalue;
     }
 
     public String getDescription() {
-    	return description;
+        return description;
     }
 
     public void setDescription(String description) {
-    	this.description = description;
+        this.description = description;
     }
 
     public Integer getShowStatus() {
-    	return showStatus;
+        return showStatus;
     }
 
     public void setShowStatus(Integer showStatus) {
-    	this.showStatus = showStatus;
+        this.showStatus = showStatus;
     }
 
 
     @Override
     public String toString() {
-	    return "BusinessConfig{" +
-	            ", id=" + id +
-	            ", bkey=" + bkey +
-	            ", bvalue=" + bvalue +
-	            ", description=" + description +
-	            ", showStatus=" + showStatus +
-	    "}";
+        return "BusinessConfig{" +
+                ", id=" + id +
+                ", bkey=" + bkey +
+                ", bvalue=" + bvalue +
+                ", description=" + description +
+                ", showStatus=" + showStatus +
+                "}";
     }
 
 }

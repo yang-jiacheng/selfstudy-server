@@ -1,11 +1,12 @@
 package com.lxy.system.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Description: 验证码
@@ -16,9 +17,9 @@ import java.io.Serializable;
 @TableName(value = "phone_code", autoResultMap = true)
 public class PhoneCode implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private String phone;
@@ -28,17 +29,17 @@ public class PhoneCode implements Serializable {
     //1已使用
     private Integer useStatus;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     //过期时间
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date endTime;
 
     public PhoneCode() {
     }
 
-    public PhoneCode(String phone, String code,Integer useStatus, Date createTime, Date endTime) {
+    public PhoneCode(String phone, String code, Integer useStatus, Date createTime, Date endTime) {
         this.phone = phone;
         this.code = code;
         this.useStatus = useStatus;
@@ -47,64 +48,64 @@ public class PhoneCode implements Serializable {
     }
 
     public Integer getId() {
-    	return id;
+        return id;
     }
 
     public void setId(Integer id) {
-    	this.id = id;
+        this.id = id;
     }
 
     public String getPhone() {
-    	return phone;
+        return phone;
     }
 
     public void setPhone(String phone) {
-    	this.phone = phone;
+        this.phone = phone;
     }
 
     public String getCode() {
-    	return code;
+        return code;
     }
 
     public void setCode(String code) {
-    	this.code = code;
+        this.code = code;
     }
 
     public Integer getUseStatus() {
-    	return useStatus;
+        return useStatus;
     }
 
     public void setUseStatus(Integer useStatus) {
-    	this.useStatus = useStatus;
+        this.useStatus = useStatus;
     }
 
     public Date getCreateTime() {
-    	return createTime;
+        return createTime;
     }
 
     public void setCreateTime(Date createTime) {
-    	this.createTime = createTime;
+        this.createTime = createTime;
     }
 
     public Date getEndTime() {
-    	return endTime;
+        return endTime;
     }
 
     public void setEndTime(Date endTime) {
-    	this.endTime = endTime;
+        this.endTime = endTime;
     }
 
 
     @Override
     public String toString() {
-	    return "PhoneCode{" +
-	            ", id=" + id +
-	            ", phone=" + phone +
-	            ", code=" + code +
-	            ", useStatus=" + useStatus +
-	            ", createTime=" + createTime +
-	            ", endTime=" + endTime +
-	    "}";
+        return "PhoneCode{" +
+                ", id=" + id +
+                ", phone=" + phone +
+                ", code=" + code +
+                ", useStatus=" + useStatus +
+                ", createTime=" + createTime +
+                ", endTime=" + endTime +
+                "}";
     }
 
 }

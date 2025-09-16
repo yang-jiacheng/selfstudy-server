@@ -8,17 +8,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * 获取用户id工具类
- * @author  jiacheng yang.
- * @since  2023/02/13 12:27
- * @version  1.0
+ *
+ * @author jiacheng yang.
+ * @version 1.0
+ * @since 2023/02/13 12:27
  */
 public class UserIdUtil {
 
-    public static int getUserId(){
+    public static int getUserId() {
         int userId = -1;
         //获取SecurityContextHolder中的用户id
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null ) {
+        if (authentication == null) {
             return userId;
         }
         if (authentication instanceof UsernamePasswordAuthenticationToken authenticationToken) {

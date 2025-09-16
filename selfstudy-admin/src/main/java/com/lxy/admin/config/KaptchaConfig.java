@@ -7,7 +7,19 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
 
-import static com.google.code.kaptcha.Constants.*;
+import static com.google.code.kaptcha.Constants.KAPTCHA_BORDER;
+import static com.google.code.kaptcha.Constants.KAPTCHA_IMAGE_HEIGHT;
+import static com.google.code.kaptcha.Constants.KAPTCHA_IMAGE_WIDTH;
+import static com.google.code.kaptcha.Constants.KAPTCHA_NOISE_COLOR;
+import static com.google.code.kaptcha.Constants.KAPTCHA_NOISE_IMPL;
+import static com.google.code.kaptcha.Constants.KAPTCHA_OBSCURIFICATOR_IMPL;
+import static com.google.code.kaptcha.Constants.KAPTCHA_SESSION_CONFIG_KEY;
+import static com.google.code.kaptcha.Constants.KAPTCHA_TEXTPRODUCER_CHAR_LENGTH;
+import static com.google.code.kaptcha.Constants.KAPTCHA_TEXTPRODUCER_CHAR_SPACE;
+import static com.google.code.kaptcha.Constants.KAPTCHA_TEXTPRODUCER_CHAR_STRING;
+import static com.google.code.kaptcha.Constants.KAPTCHA_TEXTPRODUCER_FONT_COLOR;
+import static com.google.code.kaptcha.Constants.KAPTCHA_TEXTPRODUCER_FONT_SIZE;
+import static com.google.code.kaptcha.Constants.KAPTCHA_TEXTPRODUCER_IMPL;
 
 @Configuration
 public class KaptchaConfig {
@@ -18,52 +30,51 @@ public class KaptchaConfig {
      */
 
     @Bean(name = "defaultProducer")
-    public DefaultKaptcha defaultKaptcha(){
+    public DefaultKaptcha defaultKaptcha() {
         DefaultKaptcha captchaProducer = new DefaultKaptcha();
         Properties props = new Properties();
         //取消图片边框
-        props.put(KAPTCHA_BORDER,"no");
+        props.put(KAPTCHA_BORDER, "no");
         //字体黑色
-        props.put(KAPTCHA_TEXTPRODUCER_FONT_COLOR,"black");
+        props.put(KAPTCHA_TEXTPRODUCER_FONT_COLOR, "black");
         //宽度
-        props.put(KAPTCHA_IMAGE_WIDTH,"120");
+        props.put(KAPTCHA_IMAGE_WIDTH, "120");
         //高度
-        props.put(KAPTCHA_IMAGE_HEIGHT,"38");
+        props.put(KAPTCHA_IMAGE_HEIGHT, "38");
         // KAPTCHA_SESSION_KEY
         props.setProperty(KAPTCHA_SESSION_CONFIG_KEY, "kaptchaCode");
 
         //文本集合，验证码值从此集合中获取
-        props.put(KAPTCHA_TEXTPRODUCER_CHAR_STRING,"abkvptnmfGACDTyVNM1234679");
+        props.put(KAPTCHA_TEXTPRODUCER_CHAR_STRING, "abkvptnmfGACDTyVNM1234679");
         //验证码长度
-        props.put(KAPTCHA_TEXTPRODUCER_CHAR_LENGTH,"4");
+        props.put(KAPTCHA_TEXTPRODUCER_CHAR_LENGTH, "4");
         // 验证码噪点颜色 默认为Color.BLACK
         props.setProperty(KAPTCHA_NOISE_COLOR, "white");
         //图片样式：水纹
-        props.put(KAPTCHA_OBSCURIFICATOR_IMPL,"com.google.code.kaptcha.impl.ShadowGimpy");
+        props.put(KAPTCHA_OBSCURIFICATOR_IMPL, "com.google.code.kaptcha.impl.ShadowGimpy");
         //文字间隔
-        props.put("kaptcha.textproducer.char.space","3");
+        props.put("kaptcha.textproducer.char.space", "3");
         //干扰实现类 有 com.google.code.kaptcha.impl.DefaultNoise 无com.google.code.kaptcha.impl.NoNoise
-        props.put(KAPTCHA_NOISE_IMPL,"com.google.code.kaptcha.impl.NoNoise");
+        props.put(KAPTCHA_NOISE_IMPL, "com.google.code.kaptcha.impl.NoNoise");
         // 验证码文本字符大小 默认为40
-        props.put(KAPTCHA_TEXTPRODUCER_FONT_SIZE,"30");
+        props.put(KAPTCHA_TEXTPRODUCER_FONT_SIZE, "30");
         Config config = new Config(props);
         captchaProducer.setConfig(config);
         return captchaProducer;
     }
 
     @Bean(name = "captchaProducerMath")
-    public DefaultKaptcha captchaProducerMath()
-    {
+    public DefaultKaptcha captchaProducerMath() {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
         Properties properties = new Properties();
         //取消图片边框
-        properties.put(KAPTCHA_BORDER,"no");
+        properties.put(KAPTCHA_BORDER, "no");
         //字体黑色
-        properties.put(KAPTCHA_TEXTPRODUCER_FONT_COLOR,"black");
+        properties.put(KAPTCHA_TEXTPRODUCER_FONT_COLOR, "black");
         //宽度
-        properties.put(KAPTCHA_IMAGE_WIDTH,"120");
+        properties.put(KAPTCHA_IMAGE_WIDTH, "120");
         //高度
-        properties.put(KAPTCHA_IMAGE_HEIGHT,"38");
+        properties.put(KAPTCHA_IMAGE_HEIGHT, "38");
         // KAPTCHA_SESSION_KEY
         properties.setProperty(KAPTCHA_SESSION_CONFIG_KEY, "kaptchaCodeMath");
         // 验证码文本生成器

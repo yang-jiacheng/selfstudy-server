@@ -1,9 +1,9 @@
 package com.lxy.system.service.impl;
 
-import com.lxy.system.po.UserAgreement;
-import com.lxy.system.mapper.UserAgreementMapper;
-import com.lxy.system.service.UserAgreementService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lxy.system.mapper.UserAgreementMapper;
+import com.lxy.system.po.UserAgreement;
+import com.lxy.system.service.UserAgreementService;
 import org.springframework.stereotype.Service;
 
 /**

@@ -39,9 +39,9 @@ public class HomeController {
      * Date: 2025/02/20 10:28
      * Param: []
      */
-    @PostMapping(value = "/getClassify" , produces = "application/json")
+    @PostMapping(value = "/getClassify", produces = "application/json")
     @ResponseBody
-    public R<List<ClassifyVO>> getClassify(){
+    public R<List<ClassifyVO>> getClassify() {
         List<ClassifyVO> list = classifyService.getClassifyList();
         return R.ok(list);
     }

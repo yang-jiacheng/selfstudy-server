@@ -1,17 +1,21 @@
 package com.lxy.app.controller.core;
 
 import com.lxy.common.domain.R;
+import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.dto.StudyRecordDTO;
 import com.lxy.system.po.Catalog;
 import com.lxy.system.po.StudyRecord;
 import com.lxy.system.service.CatalogService;
 import com.lxy.system.service.StudyRecordService;
-import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.vo.ClassifyDetailVO;
 import com.lxy.system.vo.RoomVO;
 import com.lxy.system.vo.StudyRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -31,7 +35,7 @@ public class CatalogController {
     private final StudyRecordService studyRecordService;
 
     @Autowired
-    public CatalogController(CatalogService catalogService,StudyRecordService studyRecordService) {
+    public CatalogController(CatalogService catalogService, StudyRecordService studyRecordService) {
         this.catalogService = catalogService;
         this.studyRecordService = studyRecordService;
     }
@@ -42,8 +46,8 @@ public class CatalogController {
      * Date: 2025/02/20 10:30
      * Param: [classifyId 图书馆id]
      */
-    @PostMapping(value = "/getClassifyDetail" , produces = "application/json")
-    public R<ClassifyDetailVO> getClassifyDetail(@RequestParam(value = "classifyId") Integer classifyId){
+    @PostMapping(value = "/getClassifyDetail", produces = "application/json")
+    public R<ClassifyDetailVO> getClassifyDetail(@RequestParam(value = "classifyId") Integer classifyId) {
         ClassifyDetailVO detail = catalogService.getCatalogByClassify(classifyId);
         return R.ok(detail);
     }
@@ -54,8 +58,8 @@ public class CatalogController {
      * Date: 2025/02/20 10:30
      * Param: [roomId 自习室id]
      */
-    @PostMapping(value = "/getRoomDetail" , produces = "application/json")
-    public R<RoomVO> getRoomDetail(@RequestParam(value = "roomId") Integer roomId){
+    @PostMapping(value = "/getRoomDetail", produces = "application/json")
+    public R<RoomVO> getRoomDetail(@RequestParam(value = "roomId") Integer roomId) {
         RoomVO detail = catalogService.getRoomDetail(roomId);
         return R.ok(detail);
     }
@@ -66,8 +70,8 @@ public class CatalogController {
      * Date: 2025/02/20 10:30
      * Param: [catalogId 自习室id]
      */
-    @PostMapping(value = "/getLearningRecords" , produces = "application/json")
-    public R<List<StudyRecordVO>> getLearningRecords(@RequestParam(value = "catalogId") Integer catalogId){
+    @PostMapping(value = "/getLearningRecords", produces = "application/json")
+    public R<List<StudyRecordVO>> getLearningRecords(@RequestParam(value = "catalogId") Integer catalogId) {
         List<StudyRecordVO> records = studyRecordService.getLearningRecords(catalogId);
         return R.ok(records);
     }
@@ -78,8 +82,8 @@ public class CatalogController {
      * Date: 2025/02/20 10:31
      * Param: [recordId]
      */
-    @PostMapping(value = "/getLearningRecordDetail" , produces = "application/json")
-    public R<StudyRecordVO> getLearningRecordDetail(@RequestParam(value = "recordId") Integer recordId){
+    @PostMapping(value = "/getLearningRecordDetail", produces = "application/json")
+    public R<StudyRecordVO> getLearningRecordDetail(@RequestParam(value = "recordId") Integer recordId) {
         StudyRecordVO detail = studyRecordService.getLearningRecordDetail(recordId);
         return R.ok(detail);
     }
@@ -90,12 +94,12 @@ public class CatalogController {
      * Date: 2025/02/20 10:31
      * Param: [studyRecordDTO]
      */
-    @PostMapping(value = "/startStudy" , produces = "application/json")
-    public R<Integer> startStudy(@RequestBody StudyRecordDTO studyRecordDTO){
+    @PostMapping(value = "/startStudy", produces = "application/json")
+    public R<Integer> startStudy(@RequestBody StudyRecordDTO studyRecordDTO) {
         int userId = UserIdUtil.getUserId();
         Catalog catalog = catalogService.getById(studyRecordDTO.getCatalogId());
         Integer recordId = null;
-        if (catalog != null){
+        if (catalog != null) {
             recordId = studyRecordService.startStudy(studyRecordDTO, catalog, userId);
         }
         return R.ok(recordId);
@@ -107,15 +111,15 @@ public class CatalogController {
      * Date: 2025/02/20 10:31
      * Param: [recordId]
      */
-    @PostMapping(value = "/stopStudy" , produces = "application/json")
-    public R<Integer> stopStudy(@RequestParam(value = "recordId") Integer recordId){
+    @PostMapping(value = "/stopStudy", produces = "application/json")
+    public R<Integer> stopStudy(@RequestParam(value = "recordId") Integer recordId) {
         int userId = UserIdUtil.getUserId();
         StudyRecord studyRecord = studyRecordService.stopStudy(recordId, userId);
         return R.ok(studyRecord.getActualDuration());
     }
 
-    @PostMapping(value = "/updateRecordToFinish" , produces = "application/json")
-    public R<Object> updateRecordToFinish(){
+    @PostMapping(value = "/updateRecordToFinish", produces = "application/json")
+    public R<Object> updateRecordToFinish() {
         int userId = UserIdUtil.getUserId();
         studyRecordService.updateRecordToFinish(userId);
         return R.ok();

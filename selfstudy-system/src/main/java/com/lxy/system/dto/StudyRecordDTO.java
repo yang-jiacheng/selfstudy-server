@@ -2,13 +2,15 @@ package com.lxy.system.dto;
 
 
 import jakarta.validation.constraints.NotNull;
+
 import java.io.Serializable;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/24 16:36
  * @version 1.0
+ * @since 2022/12/24 16:36
  */
 
 public class StudyRecordDTO implements Serializable {

@@ -1,18 +1,30 @@
 package com.lxy.system.service;
 
 
-import com.lxy.common.domain.R;
-import com.lxy.system.po.User;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -38,8 +50,9 @@ public class RedisService {
 
     /**
      * 扫描 Redis 中匹配的 key
+     *
      * @param pattern 通配符，如 "user:*"
-     * @param count 每次扫描数量建议值，非限制
+     * @param count   每次扫描数量建议值，非限制
      * @return 所有匹配的 key 列表
      */
     public Set<String> scanKeys(String pattern, Integer count) {
@@ -73,7 +86,6 @@ public class RedisService {
     }
 
 
-
     /**
      * 判断 key是否存在
      *
@@ -86,14 +98,15 @@ public class RedisService {
 
     /**
      * 缓存基本的对象
+     *
+     * @param key      缓存的键值
+     * @param value    缓存的值
+     * @param timeout  超时时间 -1表示永久
+     * @param timeUnit 超时时间单位
      * @author jiacheng yang.
      * @since 2025/03/06 14:58
-     * @param key   缓存的键值
-     * @param value 缓存的值
-     * @param timeout 超时时间 -1表示永久
-     * @param timeUnit 超时时间单位
      */
-    public <T> void setObject(final String key, final T value,final Long timeout, final TimeUnit timeUnit) {
+    public <T> void setObject(final String key, final T value, final Long timeout, final TimeUnit timeUnit) {
         if (timeout == null || timeout <= 0) {
             redisTemplate.opsForValue().set(key, value);
         } else {
@@ -132,19 +145,19 @@ public class RedisService {
         RedisSerializer keySerializer = redisTemplate.getKeySerializer();
         RedisSerializer valueSerializer = redisTemplate.getValueSerializer();
 
-        for (int i = 0; i < keys.size();  i += batchSize) {
-            List<String> batchKeys = keys.subList(i,  Math.min(i  + batchSize, keys.size()));
+        for (int i = 0; i < keys.size(); i += batchSize) {
+            List<String> batchKeys = keys.subList(i, Math.min(i + batchSize, keys.size()));
             Map<String, T> batchMap = batchKeys.stream()
-                    .collect(Collectors.toMap(k  -> k, map::get));
+                    .collect(Collectors.toMap(k -> k, map::get));
 
-            redisTemplate.executePipelined((RedisCallback<Object>)  connection -> {
-                for (Map.Entry<String, T> entry : batchMap.entrySet())  {
+            redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+                for (Map.Entry<String, T> entry : batchMap.entrySet()) {
                     byte[] keyBytes = keySerializer.serialize(entry.getKey());
                     byte[] valueBytes = valueSerializer.serialize(entry.getValue());
-                    connection.set(keyBytes,  valueBytes);
+                    connection.set(keyBytes, valueBytes);
                     if (timeout != null && timeout > 0) {
                         long timeoutSeconds = timeUnit.toSeconds(timeout);
-                        connection.expire(keyBytes,  timeoutSeconds);
+                        connection.expire(keyBytes, timeoutSeconds);
                     }
                 }
                 return null;
@@ -191,7 +204,7 @@ public class RedisService {
      * @param hKey Hash键
      * @return Hash中的对象
      */
-    public <T> T getHashValue(final String key, final String hKey,Class<T> clazz) {
+    public <T> T getHashValue(final String key, final String hKey, Class<T> clazz) {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
         return clazz.cast(opsForHash.get(key, hKey));
     }
@@ -233,13 +246,13 @@ public class RedisService {
     /**
      * Redisson 分布式锁
      *
-     * @param lockKey      锁的 key
-     * @param waitTime     尝试获取锁的最大等待时间
-     * @param leaseTime    锁自动释放时间
-     * @param timeUnit     时间单位
-     * @param action       要执行的业务逻辑
-     * @param <T>          返回类型
-     * @return             执行结果
+     * @param lockKey   锁的 key
+     * @param waitTime  尝试获取锁的最大等待时间
+     * @param leaseTime 锁自动释放时间
+     * @param timeUnit  时间单位
+     * @param action    要执行的业务逻辑
+     * @param <T>       返回类型
+     * @return 执行结果
      */
     public <T> T tryLock(String lockKey, long waitTime, long leaseTime, TimeUnit timeUnit, Supplier<T> action) {
         RLock lock = redissonClient.getLock(lockKey);
@@ -255,9 +268,9 @@ public class RedisService {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             log.error("操作被中断", e);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("操作失败", e);
-        }finally {
+        } finally {
             if (isLocked && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
@@ -267,11 +280,12 @@ public class RedisService {
 
     /**
      * 添加元素到有序集合
-     * @author jiacheng yang.
-     * @since 2025/01/21 16:00
-     * @param key 缓存的键值
+     *
+     * @param key   缓存的键值
      * @param value 要添加的值
      * @param score 分数
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
      */
     public void addToSortedSet(final String key, final Object value, final double score) {
         redisTemplate.opsForZSet().add(key, value, score);
@@ -280,10 +294,11 @@ public class RedisService {
 
     /**
      * 批量添加元素到有序集合
+     *
+     * @param key    缓存的键值
+     * @param tuples 元素和分数的集合
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 缓存的键值
-     * @param tuples 元素和分数的集合
      */
     public void addToSortedSetBatch(final String key, final Set<ZSetOperations.TypedTuple<Object>> tuples) {
         redisTemplate.opsForZSet().add(key, tuples);
@@ -292,11 +307,12 @@ public class RedisService {
 
     /**
      * 获取有序集合指定范围的元素（按分数从低到高）
+     *
+     * @param key   缓存的键值
+     * @param start 开始位置
+     * @param end   结束位置
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 缓存的键值
-     * @param start 开始位置
-     * @param end 结束位置
      */
     @SuppressWarnings("unchecked")
     public <T> Set<T> getSortedSetRange(final String key, final long start, final long end) {
@@ -305,11 +321,12 @@ public class RedisService {
 
     /**
      * 获取有序集合指定范围的元素（按分数从高到低）
+     *
+     * @param key   缓存的键值
+     * @param start 开始位置
+     * @param end   结束位置
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 缓存的键值
-     * @param start 开始位置
-     * @param end 结束位置
      */
     @SuppressWarnings("unchecked")
     public <T> Set<T> getSortedSetReverseRange(final String key, final long start, final long end) {
@@ -318,11 +335,12 @@ public class RedisService {
 
     /**
      * 获取有序集合指定分数范围的元素
-     * @author jiacheng yang.
-     * @since 2025/01/21 16:00
+     *
      * @param key 缓存的键值
      * @param min 最小分数
      * @param max 最大分数
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
      */
     @SuppressWarnings("unchecked")
     public <T> Set<T> getSortedSetRangeByScore(final String key, final double min, final double max) {
@@ -331,11 +349,12 @@ public class RedisService {
 
     /**
      * 获取有序集合指定分数范围的元素（带分数）
-     * @author jiacheng yang.
-     * @since 2025/01/21 16:00
+     *
      * @param key 缓存的键值
      * @param min 最小分数
      * @param max 最大分数
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
      */
     public Set<ZSetOperations.TypedTuple<Object>> getSortedSetRangeByScoreWithScores(final String key, final double min, final double max) {
         return redisTemplate.opsForZSet().rangeByScoreWithScores(key, min, max);
@@ -343,10 +362,11 @@ public class RedisService {
 
     /**
      * 获取有序集合元素的分数
+     *
+     * @param key   缓存的键值
+     * @param value 元素值
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 缓存的键值
-     * @param value 元素值
      */
     public Double getSortedSetScore(final String key, final Object value) {
         return redisTemplate.opsForZSet().score(key, value);
@@ -354,10 +374,11 @@ public class RedisService {
 
     /**
      * 获取有序集合元素的排名（从小到大）
+     *
+     * @param key   缓存的键值
+     * @param value 元素值
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 缓存的键值
-     * @param value 元素值
      */
     public Long getSortedSetRank(final String key, final Object value) {
         return redisTemplate.opsForZSet().rank(key, value);
@@ -365,10 +386,11 @@ public class RedisService {
 
     /**
      * 获取有序集合元素的排名（从大到小）
+     *
+     * @param key   缓存的键值
+     * @param value 元素值
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 缓存的键值
-     * @param value 元素值
      */
     public Long getSortedSetReverseRank(final String key, final Object value) {
         return redisTemplate.opsForZSet().reverseRank(key, value);
@@ -376,9 +398,10 @@ public class RedisService {
 
     /**
      * 获取有序集合的元素数量
+     *
+     * @param key 缓存的键值
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 缓存的键值
      */
     public Long getSortedSetSize(final String key) {
         return redisTemplate.opsForZSet().size(key);
@@ -386,11 +409,12 @@ public class RedisService {
 
     /**
      * 获取有序集合指定分数范围内的元素数量
-     * @author jiacheng yang.
-     * @since 2025/01/21 16:00
+     *
      * @param key 缓存的键值
      * @param min 最小分数
      * @param max 最大分数
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
      */
     public Long getSortedSetCount(final String key, final double min, final double max) {
         return redisTemplate.opsForZSet().count(key, min, max);
@@ -398,10 +422,11 @@ public class RedisService {
 
     /**
      * 删除有序集合中的元素
+     *
+     * @param key    缓存的键值
+     * @param values 要删除的元素
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 缓存的键值
-     * @param values 要删除的元素
      */
     public Long removeFromSortedSet(final String key, final Object... values) {
         Long count = redisTemplate.opsForZSet().remove(key, values);
@@ -411,11 +436,12 @@ public class RedisService {
 
     /**
      * 删除有序集合指定排名范围的元素
+     *
+     * @param key   缓存的键值
+     * @param start 开始位置
+     * @param end   结束位置
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 缓存的键值
-     * @param start 开始位置
-     * @param end 结束位置
      */
     public Long removeFromSortedSetByRange(final String key, final long start, final long end) {
         Long count = redisTemplate.opsForZSet().removeRange(key, start, end);
@@ -425,11 +451,12 @@ public class RedisService {
 
     /**
      * 删除有序集合指定分数范围的元素
-     * @author jiacheng yang.
-     * @since 2025/01/21 16:00
+     *
      * @param key 缓存的键值
      * @param min 最小分数
      * @param max 最大分数
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
      */
     public Long removeFromSortedSetByScore(final String key, final double min, final double max) {
         Long count = redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
@@ -439,11 +466,12 @@ public class RedisService {
 
     /**
      * 增加有序集合元素的分数
-     * @author jiacheng yang.
-     * @since 2025/01/21 16:00
-     * @param key 缓存的键值
+     *
+     * @param key   缓存的键值
      * @param value 元素值
      * @param delta 增加的分数
+     * @author jiacheng yang.
+     * @since 2025/01/21 16:00
      */
     public Double incrementSortedSetScore(final String key, final Object value, final double delta) {
         Double newScore = redisTemplate.opsForZSet().incrementScore(key, value, delta);
@@ -453,11 +481,12 @@ public class RedisService {
 
     /**
      * 有序集合交集操作
+     *
+     * @param key      目标键
+     * @param otherKey 其他键
+     * @param destKey  结果存储键
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 目标键
-     * @param otherKey 其他键
-     * @param destKey 结果存储键
      */
     public Long intersectSortedSet(final String key, final String otherKey, final String destKey) {
         Long count = redisTemplate.opsForZSet().intersectAndStore(key, otherKey, destKey);
@@ -467,11 +496,12 @@ public class RedisService {
 
     /**
      * 有序集合并集操作
+     *
+     * @param key      目标键
+     * @param otherKey 其他键
+     * @param destKey  结果存储键
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 目标键
-     * @param otherKey 其他键
-     * @param destKey 结果存储键
      */
     public Long unionSortedSet(final String key, final String otherKey, final String destKey) {
         Long count = redisTemplate.opsForZSet().unionAndStore(key, otherKey, destKey);
@@ -481,10 +511,11 @@ public class RedisService {
 
     /**
      * 判断有序集合是否包含指定元素
+     *
+     * @param key   缓存的键值
+     * @param value 元素值
      * @author jiacheng yang.
      * @since 2025/01/21 16:00
-     * @param key 缓存的键值
-     * @param value 元素值
      */
     public boolean isSortedSetMember(final String key, final Object value) {
         Double score = redisTemplate.opsForZSet().score(key, value);

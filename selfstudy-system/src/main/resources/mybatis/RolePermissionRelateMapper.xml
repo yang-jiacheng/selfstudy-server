@@ -4,27 +4,25 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lxy.system.po.RolePermissionRelate">
-        <id column="id" property="id" />
-        <result column="role_id" property="roleId" />
-        <result column="permission_id" property="permissionId" />
+        <id column="id" property="id"/>
+        <result column="role_id" property="roleId"/>
+        <result column="permission_id" property="permissionId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, role_id, permission_id
+        id
+        , role_id, permission_id
     </sql>
 
     <select id="getPermissionByRole" resultType="com.lxy.system.po.RolePermissionRelate">
-        SELECT
-            r.id,
-            r.role_id,
-            r.permission_id
-        FROM
-            role_permission_relate r
-                INNER JOIN permission p
-                           on r.permission_id = p.id
-        WHERE
-            role_id = #{roleId}
+        SELECT r.id,
+               r.role_id,
+               r.permission_id
+        FROM role_permission_relate r
+                 INNER JOIN permission p
+                            on r.permission_id = p.id
+        WHERE role_id = #{roleId}
     </select>
 
     <select id="getAdminIdsByRoles" resultType="java.lang.Integer">

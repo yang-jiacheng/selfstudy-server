@@ -2,23 +2,21 @@ package com.lxy.admin.task;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
-import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.framework.security.service.LoginStatusService;
 import com.lxy.system.service.RedisService;
 import com.xxl.job.core.handler.annotation.XxlJob;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.Resource;
 import java.util.Set;
 
 /**
  * 双令牌会话清理定时任务
+ *
  * @author jiacheng yang.
- * @since 2025/01/18 16:00
  * @version 1.0
+ * @since 2025/01/18 16:00
  */
 @Slf4j
 @Component

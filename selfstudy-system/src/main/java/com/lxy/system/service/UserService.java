@@ -1,9 +1,9 @@
 package com.lxy.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.lxy.system.dto.UserPageDTO;
 import com.lxy.system.po.User;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.lxy.system.vo.ExcelErrorInfoVO;
 import com.lxy.system.vo.user.UserExportVO;
 import com.lxy.system.vo.user.UserImportVO;
@@ -32,12 +32,12 @@ public interface UserService extends IService<User> {
      */
     boolean saveUser(User user);
 
-    User getUserByPhoneAndPassword(String phone,String password);
+    User getUserByPhoneAndPassword(String phone, String password);
 
     /**
      * 提交学习时长
      */
-    boolean submitStudyDuration(Integer userId,Integer duration);
+    boolean submitStudyDuration(Integer userId, Integer duration);
 
     /**
      * 获取用户信息

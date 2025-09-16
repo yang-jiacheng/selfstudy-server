@@ -17,7 +17,7 @@ public class FeedBackReplyDTO implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = 1728135602314542737L;
 
-    private  Integer id;
-    private  String reply;
+    private Integer id;
+    private String reply;
 
 }

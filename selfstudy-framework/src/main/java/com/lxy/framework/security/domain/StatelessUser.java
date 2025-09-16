@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2023/02/22 17:33
  * @version 1.0
+ * @since 2023/02/22 17:33
  */
 public class StatelessUser implements UserDetails {
 
@@ -37,10 +38,10 @@ public class StatelessUser implements UserDetails {
 
     private String token;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date loginTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",locale="zh", timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date endTime;
 
     public StatelessUser() {
@@ -58,11 +59,11 @@ public class StatelessUser implements UserDetails {
 
     public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
-        if (CollUtil.isNotEmpty(this.permissions)){
+        if (CollUtil.isNotEmpty(this.permissions)) {
             this.authorities = this.permissions.stream()
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
-        }else {
+        } else {
             this.authorities = null;
         }
     }
@@ -73,14 +74,6 @@ public class StatelessUser implements UserDetails {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getToken() {
@@ -109,10 +102,10 @@ public class StatelessUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.authorities!=null){
+        if (this.authorities != null) {
             return this.authorities;
         }
-        if (CollUtil.isNotEmpty(this.permissions)){
+        if (CollUtil.isNotEmpty(this.permissions)) {
             this.authorities = this.permissions.stream()
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
@@ -129,9 +122,17 @@ public class StatelessUser implements UserDetails {
         return this.password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String getUsername() {
         return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

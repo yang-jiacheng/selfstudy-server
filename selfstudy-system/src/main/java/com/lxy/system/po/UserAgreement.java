@@ -15,9 +15,9 @@ import java.io.Serializable;
 @TableName(value = "user_agreement", autoResultMap = true)
 public class UserAgreement implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     //1 隐私政策 2用户协议
@@ -29,46 +29,46 @@ public class UserAgreement implements Serializable {
     private String content;
 
     public Integer getId() {
-    	return id;
+        return id;
     }
 
     public void setId(Integer id) {
-    	this.id = id;
+        this.id = id;
     }
 
     public Integer getType() {
-    	return type;
+        return type;
     }
 
     public void setType(Integer type) {
-    	this.type = type;
+        this.type = type;
     }
 
     public String getTitle() {
-    	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-    	this.title = title;
+        this.title = title;
     }
 
     public String getContent() {
-    	return content;
+        return content;
     }
 
     public void setContent(String content) {
-    	this.content = content;
+        this.content = content;
     }
 
 
     @Override
     public String toString() {
-	    return "UserAgreement{" +
-	            ", id=" + id +
-	            ", type=" + type +
-	            ", title=" + title +
-	            ", content=" + content +
-	    "}";
+        return "UserAgreement{" +
+                ", id=" + id +
+                ", type=" + type +
+                ", title=" + title +
+                ", content=" + content +
+                "}";
     }
 
 }

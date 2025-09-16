@@ -1,10 +1,8 @@
 package com.lxy.system.service;
 
-import com.lxy.common.domain.R;
-import com.lxy.system.po.Classify;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lxy.system.po.Classify;
 import com.lxy.system.vo.ClassifyVO;
-
 
 import java.util.List;
 
@@ -50,6 +48,7 @@ public interface ClassifyService extends IService<Classify> {
 
     /**
      * 删除图书馆
+     *
      * @author jiacheng yang.
      * @since 2025/6/30 16:48
      */

@@ -2,14 +2,17 @@ package com.lxy.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.lxy.system.po.Catalog;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.system.mapper.CatalogMapper;
+import com.lxy.system.po.Catalog;
 import com.lxy.system.po.StudyRecord;
 import com.lxy.system.service.CatalogService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.system.service.StudyRecordService;
-import com.lxy.common.util.ImgConfigUtil;
-import com.lxy.system.vo.*;
+import com.lxy.system.vo.CatalogTreeVO;
+import com.lxy.system.vo.CatalogVO;
+import com.lxy.system.vo.ClassifyDetailVO;
+import com.lxy.system.vo.RoomVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +36,7 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     private final StudyRecordService studyRecordService;
 
     @Autowired
-    public CatalogServiceImpl(CatalogMapper catalogMapper,StudyRecordService studyRecordService) {
+    public CatalogServiceImpl(CatalogMapper catalogMapper, StudyRecordService studyRecordService) {
         this.catalogMapper = catalogMapper;
         this.studyRecordService = studyRecordService;
     }
@@ -55,16 +58,16 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     @Override
     public Integer saveCatalog(Catalog catalog) {
         Integer level = catalog.getLevel();
-        if (level == 1){
+        if (level == 1) {
             catalog.setParentId(-1);
             catalog.setPersonCount(0);
-        }else {
+        } else {
             Integer parentId = catalog.getParentId();
             Catalog parent = this.getById(parentId);
             catalog.setClassifyId(parent.getClassifyId());
         }
         Integer id = catalog.getId();
-        if (id == null){
+        if (id == null) {
             catalog.setCreateTime(new Date());
         }
         catalog.setUpdateTime(new Date());
@@ -80,7 +83,7 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
         classify.setCoverPath(ImgConfigUtil.joinUploadUrl(classify.getCoverPath()));
         //设置正在自习的人数
         List<CatalogVO> rooms = classify.getRooms();
-        if (CollUtil.isNotEmpty(rooms)){
+        if (CollUtil.isNotEmpty(rooms)) {
             //排序
             rooms.sort(Comparator.comparing(CatalogVO::getSort));
 //                questions.sort((a, b) -> {
@@ -88,7 +91,7 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
 //                    Integer sortB = b.getpId() == null ? 0 : b.getpId();
 //                    return sortA.compareTo(sortB);
 //                });
-            this.updateCurrCount(classifyId,rooms);
+            this.updateCurrCount(classifyId, rooms);
             classify.setRooms(rooms);
         }
 
@@ -103,24 +106,24 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     @Override
     public void removeCatalog(Integer id) {
         this.removeById(id);
-        this.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getParentId,id));
+        this.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getParentId, id));
     }
 
     /**
      * 设置自习室当前人数
      */
-    private void updateCurrCount(Integer classifyId,List<CatalogVO> rooms){
+    private void updateCurrCount(Integer classifyId, List<CatalogVO> rooms) {
         //正在自习的记录
         List<StudyRecord> records = studyRecordService.getRecordsByStatusAndClassIfy(classifyId);
         for (CatalogVO room : rooms) {
             //层级为2的是自习室
-            if (room.getLevel() == 2){
+            if (room.getLevel() == 2) {
                 Integer catalogId = room.getCatalogId();
                 //正在自习的人数
                 int count = 0;
                 for (StudyRecord record : records) {
-                    if (catalogId.equals(record.getCatalogId())){
-                        count ++;
+                    if (catalogId.equals(record.getCatalogId())) {
+                        count++;
                     }
                 }
                 room.setCurrCount(count);

@@ -23,8 +23,8 @@ public class LettuceConnectionValidConfig implements InitializingBean {
     private RedisConnectionFactory redisConnectionFactory;
 
     @Override
-    public void afterPropertiesSet()  {
-        if(redisConnectionFactory instanceof LettuceConnectionFactory c){
+    public void afterPropertiesSet() {
+        if (redisConnectionFactory instanceof LettuceConnectionFactory c) {
             c.setValidateConnection(true);
             log.info("启用Lettuce连接池的物理连接验证 ");
         }

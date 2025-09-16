@@ -4,71 +4,69 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lxy.system.po.User">
-        <id column="id" property="id" />
-        <result column="password" property="password" />
-        <result column="name" property="name" />
-        <result column="phone" property="phone" />
-        <result column="profile_path" property="profilePath" />
-        <result column="cover_path" property="coverPath" />
-        <result column="gender" property="gender" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-        <result column="regist_type" property="registType" />
-        <result column="address" property="address" />
-        <result column="balance" property="balance" />
-        <result column="total_duration" property="totalDuration" />
+        <id column="id" property="id"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="profile_path" property="profilePath"/>
+        <result column="cover_path" property="coverPath"/>
+        <result column="gender" property="gender"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="regist_type" property="registType"/>
+        <result column="address" property="address"/>
+        <result column="balance" property="balance"/>
+        <result column="total_duration" property="totalDuration"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, password, name, phone, profile_path,cover_path, gender, create_time, update_time, regist_type, address, balance,total_duration
+        id
+        , password, name, phone, profile_path,cover_path, gender, create_time, update_time, regist_type, address, balance,total_duration
     </sql>
     <insert id="insertBatchUser" keyProperty="id" useGeneratedKeys="true">
-        insert into user(password, name, phone, profile_path, cover_path,gender,create_time, update_time,regist_type,address,total_duration)
+        insert into user(password, name, phone, profile_path, cover_path,gender,create_time,
+        update_time,regist_type,address,total_duration)
         values
         <foreach collection="list" item="entity" separator=",">
             (#{entity.password}, #{entity.name}, #{entity.phone}, #{entity.profilePath}, #{entity.coverPath},
-            #{entity.gender}, #{entity.createTime},  #{entity.updateTime}, #{entity.registType}, #{entity.address}, #{entity.totalDuration})
+            #{entity.gender}, #{entity.createTime}, #{entity.updateTime}, #{entity.registType}, #{entity.address},
+            #{entity.totalDuration})
         </foreach>
 
     </insert>
 
     <select id="getRankingsTotalDuration" resultType="com.lxy.system.vo.user.UserRankVO">
-        SELECT
-            u.id,
-            name,
-            profile_path,
-            total_duration
-        FROM
-            user u
-        ORDER BY
-            u.total_duration DESC
-        LIMIT 0,100
+        SELECT u.id,
+               name,
+               profile_path,
+               total_duration
+        FROM user u
+        ORDER BY u.total_duration DESC LIMIT 0,100
     </select>
 
     <select id="getUserRankingById" resultType="com.lxy.system.vo.user.UserRankVO">
-        SELECT
-            u.id,
-            u.profile_path,
-            u.total_duration,
-            ss.duration as todayDuration,
-            (select count(1) from user us where us.total_duration > u.total_duration) + 1 as ranking
+        SELECT u.id,
+               u.profile_path,
+               u.total_duration,
+               ss.duration                                                                   as todayDuration,
+               (select count(1) from user us where us.total_duration > u.total_duration) + 1 as ranking
         from user u
                  LEFT JOIN study_statistics ss on ss.user_id = #{userId} and ss.study_day = #{studyDay}
         where u.id = #{userId}
     </select>
     <select id="exportUserInExcel" resultType="com.lxy.system.vo.user.UserExportVO">
         SELECT
-            u.id,
-            u.name,
-            u.phone,
-            u.gender,
-            u.address,
-            u.total_duration,
-            u.create_time,
-            u.regist_type
+        u.id,
+        u.name,
+        u.phone,
+        u.gender,
+        u.address,
+        u.total_duration,
+        u.create_time,
+        u.regist_type
         FROM
-            user u
+        user u
         <where>
             <if test="dto.name != null and dto.name != ''">
                 and u.name like concat('%',#{dto.name},'%')
@@ -84,7 +82,7 @@
             </if>
         </where>
         ORDER BY
-            u.create_time DESC,u.id DESC
+        u.create_time DESC,u.id DESC
     </select>
 
 </mapper>

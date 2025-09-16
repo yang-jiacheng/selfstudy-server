@@ -1,16 +1,17 @@
 package com.lxy.system.dto;
 
 import com.lxy.common.domain.GraphicsTextParameter;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import java.util.List;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2024/12/17 10:52
  * @version 1.0
+ * @since 2024/12/17 10:52
  */
 public class GenerateImageDTO implements java.io.Serializable {
     private static final long serialVersionUID = 2435298421128860208L;

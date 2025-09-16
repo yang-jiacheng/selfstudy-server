@@ -2,11 +2,11 @@ package com.lxy.system.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.system.mapper.BusinessConfigMapper;
 import com.lxy.system.po.BusinessConfig;
 import com.lxy.system.service.BusinessConfigService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.system.service.RedisService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -30,11 +30,11 @@ public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper,
     @Override
     public String getBusinessConfigValue(String key) {
         String value = getBusinessConfigCacheByKey(key);
-        if (StrUtil.isEmpty(value)){
+        if (StrUtil.isEmpty(value)) {
             BusinessConfig businessConfig = getBusinessConfigByKey(key);
-            if (businessConfig!=null){
+            if (businessConfig != null) {
                 value = businessConfig.getBvalue();
-                updateBusinessConfigCacheByKey(key,value);
+                updateBusinessConfigCacheByKey(key, value);
             }
         }
         return value;
@@ -48,40 +48,40 @@ public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper,
     @Override
     public BusinessConfig updateBusinessConfigByKey(String key, String value, String description) {
         BusinessConfig config = getBusinessConfigByKey(key);
-        if (config==null){
+        if (config == null) {
             config = new BusinessConfig();
         }
         config.setBkey(key);
         config.setBvalue(value);
         config.setDescription(description);
         this.saveOrUpdate(config);
-        updateBusinessConfigCacheByKey(key,value);
+        updateBusinessConfigCacheByKey(key, value);
         return config;
     }
 
     @Override
     public void updateBusinessConfigById(Integer id, String value) {
         BusinessConfig con = this.getById(id);
-        if (con == null){
+        if (con == null) {
             return;
         }
         BusinessConfig config = new BusinessConfig();
         config.setId(id);
         config.setBvalue(value);
         this.updateById(config);
-        updateBusinessConfigCacheByKey(con.getBkey(),value);
+        updateBusinessConfigCacheByKey(con.getBkey(), value);
     }
 
-    private String getBusinessConfigCacheByKey(String key){
+    private String getBusinessConfigCacheByKey(String key) {
         String cacheKey = RedisKeyConstant.getBusinessConfig(key);
-        return redisService.getObject(cacheKey,String.class);
+        return redisService.getObject(cacheKey, String.class);
     }
 
-    private void updateBusinessConfigCacheByKey(String key,String value){
-        if(StrUtil.isEmpty(key) || StrUtil.isEmpty(value)){
-            return ;
+    private void updateBusinessConfigCacheByKey(String key, String value) {
+        if (StrUtil.isEmpty(key) || StrUtil.isEmpty(value)) {
+            return;
         }
         String cacheKey = RedisKeyConstant.getBusinessConfig(key);
-        redisService.setObject(cacheKey,value, 7L, TimeUnit.DAYS);
+        redisService.setObject(cacheKey, value, 7L, TimeUnit.DAYS);
     }
 }

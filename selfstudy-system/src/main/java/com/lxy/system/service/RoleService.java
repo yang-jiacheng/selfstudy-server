@@ -1,10 +1,9 @@
 package com.lxy.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lxy.common.dto.PageDTO;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.lxy.system.dto.RolePageDTO;
 import com.lxy.system.po.Role;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -18,6 +17,7 @@ public interface RoleService extends IService<Role> {
 
     /**
      * 角色分页列表
+     *
      * @author jiacheng yang.
      * @since 2025/6/13 10:26
      */

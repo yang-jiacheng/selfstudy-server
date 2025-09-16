@@ -9,30 +9,36 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lxy.common.util.*;
-import com.lxy.system.dto.UserPageDTO;
-import com.lxy.system.po.User;
-import com.lxy.system.mapper.UserMapper;
-import com.lxy.system.service.OperationLogService;
-import com.lxy.system.service.RedisService;
-import com.lxy.system.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.util.DateCusUtil;
+import com.lxy.common.util.EncryptUtil;
+import com.lxy.common.util.ExcelUtil;
+import com.lxy.common.util.ImgConfigUtil;
+import com.lxy.common.util.SheetHandlerResult;
+import com.lxy.common.util.ThreadPoolUtil;
+import com.lxy.system.dto.UserPageDTO;
+import com.lxy.system.mapper.UserMapper;
+import com.lxy.system.po.User;
+import com.lxy.system.service.RedisService;
+import com.lxy.system.service.UserService;
 import com.lxy.system.vo.ExcelErrorInfoVO;
 import com.lxy.system.vo.user.UserExportVO;
 import com.lxy.system.vo.user.UserImportVO;
 import com.lxy.system.vo.user.UserRankVO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
 import org.apache.poi.xssf.usermodel.XSSFComment;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,30 +60,60 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private UserMapper userMapper;
 
+    /**
+     * 校验解析的用户数据是否正确
+     */
+    private static List<ExcelErrorInfoVO> checkUserList(List<UserImportVO> userList) {
+        List<ExcelErrorInfoVO> errorList = new ArrayList<>();
+        if (CollUtil.isEmpty(userList)) {
+            errorList.add(new ExcelErrorInfoVO("sheet", "数据为空", "请检查文件内容是否正确"));
+            return errorList;
+        }
+        for (UserImportVO user : userList) {
+            //具体哪一行
+            int rowIndex = user.getRowIndex() + 1;
+            //当前sheet编号
+            int sheetIndex = user.getSheetIndex() != null ? user.getSheetIndex() : 1;
+            //判断昵称是否为空
+            if (StrUtil.isEmpty(user.getName())) {
+                errorList.add(new ExcelErrorInfoVO("第" + sheetIndex + "sheet ,第" + rowIndex + "行", "昵称为空", "此行略过"));
+            }
+            //判断手机号是否为空,校验手机号
+            if (StrUtil.isEmpty(user.getPhone())) {
+                errorList.add(new ExcelErrorInfoVO("第" + sheetIndex + "sheet 第" + rowIndex + "行", "手机号为空", "此行略过"));
+            } else {
+                if (!PhoneUtil.isMobile(user.getPhone())) {
+                    errorList.add(new ExcelErrorInfoVO("第" + sheetIndex + "sheet ,第" + rowIndex + "行", "手机号格式不正确", "此行略过"));
+                }
+            }
+        }
+
+        return errorList;
+    }
 
     @Override
     public Page<User> getUserPageList(UserPageDTO dto) {
         Integer page = dto.getPage();
         Integer limit = dto.getLimit();
-        Page<User> pg = new Page<>(page,limit);
+        Page<User> pg = new Page<>(page, limit);
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByDesc(User::getId);
-        if (StrUtil.isNotBlank(dto.getName())){
-            wrapper.like(User::getName,dto.getName());
+        if (StrUtil.isNotBlank(dto.getName())) {
+            wrapper.like(User::getName, dto.getName());
         }
-        if (StrUtil.isNotBlank(dto.getPhone())){
-            wrapper.like(User::getPhone,dto.getPhone());
-        }
-
-        if (StrUtil.isNotEmpty(dto.getStartTime())){
-            wrapper.ge(User::getCreateTime,dto.getStartTime());
+        if (StrUtil.isNotBlank(dto.getPhone())) {
+            wrapper.like(User::getPhone, dto.getPhone());
         }
 
-        if (StrUtil.isNotEmpty(dto.getEndTime())){
-            wrapper.le(User::getCreateTime,dto.getEndTime());
+        if (StrUtil.isNotEmpty(dto.getStartTime())) {
+            wrapper.ge(User::getCreateTime, dto.getStartTime());
         }
 
-        pg = this.page(pg,wrapper);
+        if (StrUtil.isNotEmpty(dto.getEndTime())) {
+            wrapper.le(User::getCreateTime, dto.getEndTime());
+        }
+
+        pg = this.page(pg, wrapper);
 
         List<User> records = pg.getRecords();
         for (User user : records) {
@@ -92,16 +128,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public boolean saveUser(User user) {
         boolean flag = false;
         Integer id = user.getId();
-        if (id == null){
+        if (id == null) {
             User user2 = this.getOne(new LambdaQueryWrapper<User>().eq(User::getPhone, user.getPhone()));
-            if (user2 !=null ){
+            if (user2 != null) {
                 return false;
             }
             user.setRegistType(2);
             flag = this.save(user);
-        }else {
-            User user2 = this.getOne(new LambdaQueryWrapper<User>().eq(User::getPhone, user.getPhone()).ne(User::getId,user.getId()));
-            if (user2 !=null ){
+        } else {
+            User user2 = this.getOne(new LambdaQueryWrapper<User>().eq(User::getPhone, user.getPhone()).ne(User::getId, user.getId()));
+            if (user2 != null) {
                 return false;
             }
             user.setUpdateTime(new Date());
@@ -115,7 +151,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getUserByPhoneAndPassword(String phone, String password) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getPhone,phone).eq(User::getPassword,password);
+        wrapper.eq(User::getPhone, phone).eq(User::getPassword, password);
         return this.getOne(wrapper);
     }
 
@@ -123,16 +159,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public boolean submitStudyDuration(Integer userId, Integer duration) {
         boolean flag = false;
         User user = this.getById(userId);
-        if (user != null){
+        if (user != null) {
             //总时长累加
             Integer totalDuration = user.getTotalDuration() == null ? 0 : user.getTotalDuration();
             totalDuration += duration;
             user.setTotalDuration(totalDuration);
             //更新用户
             LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
-            wrapper.eq(User::getId,user.getId())
-                    .set(User::getTotalDuration,totalDuration)
-                    .set(User::getUpdateTime,new Date());
+            wrapper.eq(User::getId, user.getId())
+                    .set(User::getTotalDuration, totalDuration)
+                    .set(User::getUpdateTime, new Date());
             flag = this.update(wrapper);
             //删缓存
             this.removeUserInfoCache(userId);
@@ -143,11 +179,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getUserInfo(Integer userId) {
         User user = this.getUserInfoCache(userId);
-        if (user != null){
+        if (user != null) {
             return user;
         }
         user = this.getById(userId);
-        if (user != null){
+        if (user != null) {
             user.setPassword("");
             user.setProfilePath(ImgConfigUtil.joinUploadUrl(user.getProfilePath()));
             user.setCoverPath(ImgConfigUtil.joinUploadUrl(user.getCoverPath()));
@@ -174,7 +210,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void removeUserInfoCacheByIds(List<Integer> ids) {
-        if (CollUtil.isNotEmpty(ids)){
+        if (CollUtil.isNotEmpty(ids)) {
             Set<String> keys = new HashSet<>(ids.size());
 
             ids.forEach(id -> {
@@ -190,13 +226,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void insertUserInfoCache(User user) {
         String key = RedisKeyConstant.getUserInfo(user.getId());
         //缓存 7天
-        redisService.setObject(key, user,604800L, TimeUnit.SECONDS);
+        redisService.setObject(key, user, 604800L, TimeUnit.SECONDS);
     }
 
     @Override
     public List<UserRankVO> getRankingsTotalDuration() {
         List<UserRankVO> list = this.getRankingsTotalDurationCache();
-        if (CollUtil.isNotEmpty(list)){
+        if (CollUtil.isNotEmpty(list)) {
             return list;
         }
         list = this.getRankingsTotalDurationInDb();
@@ -206,29 +242,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public List<UserRankVO> getRankingsTotalDurationInDb() {
         List<UserRankVO> list = userMapper.getRankingsTotalDuration();
-        if (CollUtil.isNotEmpty(list)){
+        if (CollUtil.isNotEmpty(list)) {
             //移除0学习时长
             list.removeIf(user -> user.getTotalDuration() == null || user.getTotalDuration() == 0);
             //按时长倒序
-            list.sort((t1,t2) -> t2.getTotalDuration().compareTo(t1.getTotalDuration()));
+            list.sort((t1, t2) -> t2.getTotalDuration().compareTo(t1.getTotalDuration()));
             //设置用户头像和排名
             UserRankVO rankVO = null;
             for (int i = 0; i < list.size(); i++) {
                 rankVO = list.get(i);
                 rankVO.setProfilePath(ImgConfigUtil.joinUploadUrl(rankVO.getProfilePath()));
-                rankVO.setRanking(i+1);
-                list.set(i,rankVO);
+                rankVO.setRanking(i + 1);
+                list.set(i, rankVO);
             }
         }
         return list;
     }
 
     @Override
-    public void insertRankingsCache(List<UserRankVO> users){
+    public void insertRankingsCache(List<UserRankVO> users) {
         //缓存到今天结束
         long endByDay = DateCusUtil.getEndByDay();
         String key = RedisKeyConstant.getRankings();
-        redisService.setObject(key,users,endByDay,TimeUnit.SECONDS);
+        redisService.setObject(key, users, endByDay, TimeUnit.SECONDS);
     }
 
     @Override
@@ -257,31 +293,87 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public List<ExcelErrorInfoVO> importUsersInExcel(MultipartFile file) {
         List<UserImportVO> users = ExcelUtil.importExcel(file, UserSheetHandler::new);
         List<ExcelErrorInfoVO> errorList = checkUserList(users);
-        if (CollUtil.isNotEmpty(errorList)){
+        if (CollUtil.isNotEmpty(errorList)) {
             return errorList;
         }
-        UserServiceImpl proxy =  (UserServiceImpl) AopContext.currentProxy();
+        UserServiceImpl proxy = (UserServiceImpl) AopContext.currentProxy();
         proxy.insertBatchUser(users);
         return errorList;
     }
 
-
-
-    private List<UserRankVO> getRankingsTotalDurationCache(){
+    private List<UserRankVO> getRankingsTotalDurationCache() {
         String key = RedisKeyConstant.getRankings();
         List<UserRankVO> list = redisService.getObject(key, ArrayList.class);
         return list;
     }
 
+    @Override
+    public void test() {
+        UserServiceImpl proxy = (UserServiceImpl) AopContext.currentProxy();
+        ThreadPoolUtil.execute(() -> {
+//            transactionTemplate.execute(status -> {
+//                c();
+//                return null;
+//            });
+
+            int attempt = 0;
+            int maxRetries = 2;
+            int maxDelay = 5000;
+            String methodName = "test";
+            boolean success = false;
+
+            while (attempt <= maxRetries && !success) {
+                try {
+                    if (attempt > 0) {
+                        log.error("{}：第{}次重试", methodName, attempt);
+                    }
+                    attempt++;
+                    proxy.c();
+                    success = true;  // 如果没有抛异常，表示操作成功
+                } catch (Exception e) {
+                    log.error("{}：操作异常,数据：{}", methodName, "11");
+                    log.error(e.getMessage(), e);
+                    if (attempt <= maxRetries) {
+                        long delay = (long) (Math.pow(2, attempt) * 1000);  // 指数退避
+                        long finalDelay = Math.min(delay, maxDelay);
+                        log.error("{}：延迟{}毫秒后重试", methodName, finalDelay);
+                        ThreadUtil.sleep(finalDelay, TimeUnit.MILLISECONDS);
+                    }
+                }
+            }
+
+            log.error("{}：重试{}次, 执行结果：{}", methodName, (attempt - 1), success);
+
+//            RetryUtil.retryOperation(3,5000,() -> {
+//                proxy.c();
+//                return null;
+//            },"test","11");
+
+        });
+
+
+    }
+
+    //    @Transactional(rollbackFor = Exception.class)
+    public void c() {
+        User user = new User();
+        user.setId(108);
+        user.setName("test");
+        this.updateById(user);
+        throw new RuntimeException("test");
+    }
+
+    public void b(UserServiceImpl proxy) {
+        proxy.c();
+    }
+
     /**
-     *  用户excel处理器
+     * 用户excel处理器
      */
     public static class UserSheetHandler implements SheetHandlerResult<UserImportVO> {
 
-        private UserImportVO user = null;
-
         private final List<UserImportVO> userList = new ArrayList<>();
-
+        private UserImportVO user = null;
         private Integer sheetIndex = 1;
 
         public UserSheetHandler() {
@@ -298,13 +390,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         /**
          * 每一行的开始
+         *
          * @param rowIndex 代表的是每一个sheet的行索引
          */
         @Override
         public void startRow(int rowIndex) {
-            if (rowIndex == 0){
+            if (rowIndex == 0) {
                 user = null;
-            }else {
+            } else {
                 user = new UserImportVO();
             }
         }
@@ -314,45 +407,45 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
          */
         @Override
         public void cell(String cellName, String cellValue, XSSFComment xssfComment) {
-            if (StrUtil.isEmpty(cellValue)){
+            if (StrUtil.isEmpty(cellValue)) {
                 return;
             }
-            if (cellValue.contains("\n")){
+            if (cellValue.contains("\n")) {
                 cellValue = cellValue.replace("\n", "<br>");
             }
-            if (cellValue.contains("\r")){
-                cellValue=cellValue.replace("\r","<br>");
+            if (cellValue.contains("\r")) {
+                cellValue = cellValue.replace("\r", "<br>");
             }
-            if (user !=null ){
+            if (user != null) {
                 //每个单元名称的首字母 A  B  C
                 String letter = cellName.substring(0, 1);
                 switch (letter) {
                     //手机号
-                    case "A":{
+                    case "A": {
                         user.setPhone(cellValue);
                         break;
                     }
                     //密码
-                    case "B":{
+                    case "B": {
                         user.setPassword(EncryptUtil.encryptSha256(cellValue));
                         break;
                     }
                     //昵称
-                    case "C":{
+                    case "C": {
                         user.setName(cellValue);
                         break;
                     }
                     //性别
-                    case "D":{
+                    case "D": {
                         user.setGender(cellValue);
                         break;
                     }
                     //地址
-                    case "E":{
+                    case "E": {
                         user.setAddress(cellValue);
                         break;
                     }
-                    default:{
+                    default: {
                         break;
                     }
                 }
@@ -361,11 +454,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         /**
          * 每一行的结束
+         *
          * @param rowIndex 代表的是每一个sheet的行索引
          */
         @Override
         public void endRow(int rowIndex) {
-            if (rowIndex!=0){
+            if (rowIndex != 0) {
                 String defPath = "/upload/defPath.jpg";
                 String defCover = "/upload/defCover.jpg";
                 user.setRowIndex(rowIndex);
@@ -386,97 +480,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
 
-    }
-
-    /**
-     * 校验解析的用户数据是否正确
-     */
-    private static List<ExcelErrorInfoVO> checkUserList(List<UserImportVO> userList){
-        List<ExcelErrorInfoVO> errorList = new ArrayList<>();
-        if (CollUtil.isEmpty(userList)){
-            errorList.add(new ExcelErrorInfoVO("sheet","数据为空","请检查文件内容是否正确"));
-            return errorList;
-        }
-        for (UserImportVO user : userList) {
-            //具体哪一行
-            int rowIndex = user.getRowIndex() + 1;
-            //当前sheet编号
-            int sheetIndex = user.getSheetIndex() != null ? user.getSheetIndex() : 1;
-            //判断昵称是否为空
-            if (StrUtil.isEmpty(user.getName())){
-                errorList.add(new ExcelErrorInfoVO("第"+sheetIndex+"sheet ,第"+rowIndex+"行","昵称为空","此行略过"));
-            }
-            //判断手机号是否为空,校验手机号
-            if (StrUtil.isEmpty(user.getPhone())){
-                errorList.add(new ExcelErrorInfoVO("第"+sheetIndex+"sheet 第"+rowIndex+"行","手机号为空","此行略过"));
-            }else {
-                if (!PhoneUtil.isMobile(user.getPhone())){
-                    errorList.add(new ExcelErrorInfoVO("第"+sheetIndex+"sheet ,第"+rowIndex+"行","手机号格式不正确","此行略过"));
-                }
-            }
-        }
-
-        return errorList;
-    }
-
-    @Override
-    public void test() {
-        UserServiceImpl proxy = (UserServiceImpl)AopContext.currentProxy();
-        ThreadPoolUtil.execute(() -> {
-//            transactionTemplate.execute(status -> {
-//                c();
-//                return null;
-//            });
-
-            int attempt = 0;
-            int maxRetries = 2;
-            int maxDelay = 5000;
-            String methodName = "test";
-            boolean success = false;
-
-            while (attempt <= maxRetries && !success) {
-                try {
-                    if (attempt > 0){
-                        log.error("{}：第{}次重试", methodName, attempt);
-                    }
-                    attempt++;
-                    proxy.c();
-                    success = true;  // 如果没有抛异常，表示操作成功
-                } catch (Exception e) {
-                    log.error("{}：操作异常,数据：{}", methodName, "11");
-                    log.error(e.getMessage(), e);
-                    if (attempt <= maxRetries) {
-                        long delay = (long) (Math.pow(2, attempt) * 1000);  // 指数退避
-                        long finalDelay = Math.min(delay, maxDelay);
-                        log.error("{}：延迟{}毫秒后重试", methodName,finalDelay);
-                        ThreadUtil.sleep(finalDelay, TimeUnit.MILLISECONDS);
-                    }
-                }
-            }
-
-            log.error("{}：重试{}次, 执行结果：{}", methodName, (attempt - 1), success);
-
-//            RetryUtil.retryOperation(3,5000,() -> {
-//                proxy.c();
-//                return null;
-//            },"test","11");
-
-        });
-
-
-    }
-
-    //    @Transactional(rollbackFor = Exception.class)
-    public void c(){
-        User user = new User();
-        user.setId(108);
-        user.setName("test");
-        this.updateById(user);
-        throw new RuntimeException("test");
-    }
-
-    public void b(UserServiceImpl proxy){
-        proxy.c();
     }
 
 }

@@ -1,7 +1,7 @@
 package com.lxy.system.mapper;
 
-import com.lxy.system.po.UserAgreement;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lxy.system.po.UserAgreement;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

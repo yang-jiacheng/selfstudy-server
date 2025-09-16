@@ -5,16 +5,17 @@ import java.util.List;
 
 /**
  * TODO
+ *
  * @author jiacheng yang.
- * @since 2022/12/24 11:08
  * @version 1.0
+ * @since 2022/12/24 11:08
  */
 public class ClassifyDetailVO implements Serializable {
 
     private static final long serialVersionUID = 7065295037862538696L;
 
     /**
-     *  图书馆id
+     * 图书馆id
      */
     private Integer id;
 

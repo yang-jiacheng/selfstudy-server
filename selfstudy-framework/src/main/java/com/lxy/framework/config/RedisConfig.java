@@ -27,9 +27,10 @@ import java.util.Set;
 
 /**
  * redis配置
+ *
  * @author jiacheng yang.
- * @since 2021/8/4 0:22
  * @version 1.0
+ * @since 2021/8/4 0:22
  */
 @Configuration
 public class RedisConfig {
@@ -56,7 +57,7 @@ public class RedisConfig {
         // 启用默认类型处理，使得在序列化和反序列化时能够处理多态类型。
         objectMapper.activateDefaultTyping(
                 //允许任意子类型
-                LaissezFaireSubTypeValidator.instance ,
+                LaissezFaireSubTypeValidator.instance,
                 //对非 final 类型的属性进行类型信息处理
                 ObjectMapper.DefaultTyping.NON_FINAL,
                 //将类型信息作为属性添加到 JSON 中
@@ -68,7 +69,7 @@ public class RedisConfig {
         // 反序列化时忽略未知属性
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 使用JSON格式序列化对象，对缓存数据key和value进行转换
-        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(objectMapper,Object.class);
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(objectMapper, Object.class);
         return jackson2JsonRedisSerializer;
     }
 

@@ -4,15 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lxy.system.po.UserAgreement">
-        <id column="id" property="id" />
-        <result column="type" property="type" />
-        <result column="title" property="title" />
-        <result column="content" property="content" />
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, type, title, content
+        id
+        , type, title, content
     </sql>
 
 </mapper>

@@ -10,12 +10,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * 程序入口
- * -Xms:初始堆大小 默认为物理内存的1/64 , -Xmx:最大堆大小 默认为物理内存的1/4
- * -Xms1g -Xmx1g 把两者设置为一致,是为了避免频繁扩容和GC释放堆内存造成的系统开销/压力
+ *
  * @author jiacheng yang.
- * @since 2022/10/08 18:40
  * @version 1.0
- * nohup java -jar -Xms500m -Xmx500m selfstudy-admin.jar --spring.profiles.active=prod > /dev/null 2>&1 &
+ * @since 2022/10/08 18:40
  */
 
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)

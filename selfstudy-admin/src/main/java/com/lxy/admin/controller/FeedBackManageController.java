@@ -1,28 +1,29 @@
 package com.lxy.admin.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.lxy.common.domain.PageResult;
 import com.lxy.common.domain.R;
+import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.dto.FeedBackReplyDTO;
 import com.lxy.system.dto.FeedbackPageDTO;
 import com.lxy.system.po.Feedback;
-import com.lxy.framework.security.util.UserIdUtil;
-import com.lxy.system.vo.FeedbackVO;
 import com.lxy.system.service.FeedbackService;
-import com.lxy.system.vo.LayUiResultVO;
-
+import com.lxy.system.vo.FeedbackVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
 /**
  * 意见反馈
+ *
  * @author jiacheng yang.
- * @since 2022/12/20 10:49
  * @version 1.0
+ * @since 2022/12/20 10:49
  */
 
 @RequestMapping("/feedBackManage")
@@ -37,20 +38,20 @@ public class FeedBackManageController {
         this.feedbackService = feedbackService;
     }
 
-    @PostMapping(value = "/getFeedBackPageList" , produces = "application/json")
-    public R<PageResult<FeedbackVO>> getFeedBackPageList(@RequestBody FeedbackPageDTO dto){
+    @PostMapping(value = "/getFeedBackPageList", produces = "application/json")
+    public R<PageResult<FeedbackVO>> getFeedBackPageList(@RequestBody FeedbackPageDTO dto) {
         PageResult<FeedbackVO> pg = feedbackService.getFeedBackList(dto);
         return R.ok(pg);
     }
 
-    @PostMapping(value = "/removeFeedBackById" , produces = "application/json")
-    public R<Object> removeFeedBackById(@RequestParam("id") Integer id){
+    @PostMapping(value = "/removeFeedBackById", produces = "application/json")
+    public R<Object> removeFeedBackById(@RequestParam("id") Integer id) {
         feedbackService.removeById(id);
         return R.ok();
     }
 
-    @PostMapping(value = "/replyFeedBackById" , produces = "application/json")
-    public R<Object> replyFeedBackById(@RequestBody FeedBackReplyDTO dto){
+    @PostMapping(value = "/replyFeedBackById", produces = "application/json")
+    public R<Object> replyFeedBackById(@RequestBody FeedBackReplyDTO dto) {
         int userId = UserIdUtil.getUserId();
         Feedback feedback = new Feedback();
         feedback.setId(dto.getId());

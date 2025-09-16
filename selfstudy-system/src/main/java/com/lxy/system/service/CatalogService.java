@@ -1,11 +1,10 @@
 package com.lxy.system.service;
 
-import com.lxy.system.po.Catalog;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lxy.system.po.Catalog;
 import com.lxy.system.vo.CatalogTreeVO;
 import com.lxy.system.vo.ClassifyDetailVO;
 import com.lxy.system.vo.RoomVO;
-import com.lxy.system.vo.ZtreeVO;
 
 import java.util.List;
 
@@ -38,6 +37,7 @@ public interface CatalogService extends IService<Catalog> {
 
     /**
      * 删除节点
+     *
      * @author jiacheng yang.
      * @since 2025/6/30 16:49
      */
