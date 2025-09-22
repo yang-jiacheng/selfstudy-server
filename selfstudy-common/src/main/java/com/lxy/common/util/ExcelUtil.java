@@ -226,7 +226,7 @@ public class ExcelUtil {
             //告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
             response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
             //类型为xlsx
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setContentType("application/octet-stream");
             output = response.getOutputStream();
             wb.write(output);
             output.flush();
