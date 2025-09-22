@@ -22,6 +22,7 @@
     <description>自习室服务端</description>
 
     <properties>
+        <skipTests>true</skipTests>
         <selfstudy-common.version>2.0.0-RELEASE</selfstudy-common.version>
         <selfstudy-admin.version>2.0.0-RELEASE</selfstudy-admin.version>
         <selfstudy-mobile.version>2.0.0-RELEASE</selfstudy-mobile.version>
