@@ -10,6 +10,7 @@ import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.po.OperationLog;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -91,23 +92,11 @@ public class OperationLogAspect {
     protected void handleOperationLog(final JoinPoint joinPoint, final Exception e, Log operationLog, Object jsonResult) {
         try {
             Object[] args = joinPoint.getArgs();
-            StringBuilder params = new StringBuilder();
-            String param = "";
-            if (args != null) {
-                for (Object arg : args) {
-                    if (arg instanceof String) {
-                        param = (String) arg;
-                    } else {
-                        param = JsonUtil.toJson(arg);
-                    }
-                    params.append(param).append(", ");
-                }
-            }
-
+            String param = buildParamString(args);
             //返回结果
-            String resultJson;
+            String resultJson = null;
             if (jsonResult == null) {
-                resultJson = e.getMessage();
+                resultJson = (e != null ? e.getMessage() : "");
             } else if (jsonResult instanceof String) {
                 resultJson = (String) jsonResult;
             } else {
@@ -135,7 +124,7 @@ public class OperationLogAspect {
             String durationStr = DateUtil.formatBetween(endTime - startTime, BetweenFormatter.Level.MILLISECOND);
             //操作日志对象
             OperationLog operLog = new OperationLog(
-                    title, businessType, userType, userId, requestURI, method, params.toString(), resultJson, clientIP, status, durationStr
+                    title, businessType, userType, userId, requestURI, method, param, resultJson, clientIP, status, durationStr
             );
             //发布事件
             eventPublisher.publishEvent(new OperationLogEvent(this, operLog));
@@ -147,6 +136,39 @@ public class OperationLogAspect {
             timeHolder.remove();
         }
 
+    }
+
+    /**
+     * 将方法参数拼接成可用于日志的字符串
+     */
+    public static String buildParamString(Object[] args) {
+        if (args == null || args.length == 0) {
+            return "";
+        }
+
+        StringBuilder params = new StringBuilder();
+        for (Object arg : args) {
+            String param = "";
+
+            if (arg instanceof String || arg instanceof Number || arg instanceof Boolean) {
+                param = arg.toString();
+            } else if (arg instanceof HttpServletRequest) {
+                param = "HttpServletRequest";
+            } else if (arg instanceof HttpServletResponse) {
+                param = "HttpServletResponse";
+            } else {
+                JsonUtil.toJson(arg);
+            }
+
+            params.append(param).append(", ");
+        }
+
+        // 去掉最后多余的逗号和空格
+        if (params.length() >= 2) {
+            params.setLength(params.length() - 2);
+        }
+
+        return params.toString();
     }
 
 }
