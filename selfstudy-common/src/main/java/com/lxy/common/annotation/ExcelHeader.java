@@ -22,7 +22,4 @@ public @interface ExcelHeader {
     //表头
     String title() default "";
 
-    //是否输出到excel
-    boolean required() default true;
-
 }

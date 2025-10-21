@@ -1,5 +1,6 @@
 package com.lxy.system.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
@@ -11,12 +12,13 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.exception.ServiceException;
 import com.lxy.common.util.DateCusUtil;
 import com.lxy.common.util.EncryptUtil;
-import com.lxy.common.util.ExcelUtil;
 import com.lxy.common.util.ImgConfigUtil;
-import com.lxy.common.util.SheetHandlerResult;
 import com.lxy.common.util.ThreadPoolUtil;
+import com.lxy.common.util.excel.BaseSheetHandler;
+import com.lxy.common.util.excel.ExcelUtil;
 import com.lxy.system.dto.UserPageDTO;
 import com.lxy.system.mapper.UserMapper;
 import com.lxy.system.po.User;
@@ -28,12 +30,12 @@ import com.lxy.system.vo.user.UserImportVO;
 import com.lxy.system.vo.user.UserRankVO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.xssf.usermodel.XSSFComment;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -277,9 +279,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertBatchUser(List<UserImportVO> userList) {
-        List<List<UserImportVO>> batchList = CollUtil.split(userList, 2000);
-        for (List<UserImportVO> batch : batchList) {
+    public void insertBatchUser(List<User> userList) {
+        List<List<User>> batchList = CollUtil.split(userList, 2000);
+        for (List<User> batch : batchList) {
             userMapper.insertBatchUser(batch);
         }
     }
@@ -291,11 +293,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public List<ExcelErrorInfoVO> importUsersInExcel(MultipartFile file) {
-        List<UserImportVO> users = ExcelUtil.importExcel(file, UserSheetHandler::new);
-        List<ExcelErrorInfoVO> errorList = checkUserList(users);
+        // 方式1：使用注解驱动（推荐）
+//        List<UserImportVO> usersVo = ExcelUtil.importExcel(file, UserImportVO.class);
+
+        // 方式2：使用自定义处理器（兼容原有方式）
+        List<UserImportVO> usersVo = ExcelUtil.importExcel(file, UserSheetHandler::new);
+
+        List<ExcelErrorInfoVO> errorList = checkUserList(usersVo);
         if (CollUtil.isNotEmpty(errorList)) {
             return errorList;
         }
+        List<User> users = BeanUtil.copyToList(usersVo, User.class);
         UserServiceImpl proxy = (UserServiceImpl) AopContext.currentProxy();
         proxy.insertBatchUser(users);
         return errorList;
@@ -368,118 +376,74 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
-     * 用户excel处理器
+     * 用户excel处理器 - 使用BaseSheetHandler
+     * 展示如何使用注解驱动的方式处理Excel导入
      */
-    public static class UserSheetHandler implements SheetHandlerResult<UserImportVO> {
+    public static class UserSheetHandler extends BaseSheetHandler<UserImportVO> {
 
-        private final List<UserImportVO> userList = new ArrayList<>();
-        private UserImportVO user = null;
-        private Integer sheetIndex = 1;
-
-        public UserSheetHandler() {
-        }
-
-        public UserSheetHandler(Integer sheetIndex) {
-            this.sheetIndex = sheetIndex;
-        }
-
-        @Override
-        public List<UserImportVO> getResultList() {
-            return userList;
+        public UserSheetHandler(int sheetIndex) {
+            super(UserImportVO.class, sheetIndex);
         }
 
         /**
-         * 每一行的开始
-         *
-         * @param rowIndex 代表的是每一个sheet的行索引
+         * 重写单元格处理逻辑
+         * 处理密码加密等特殊逻辑
          */
         @Override
-        public void startRow(int rowIndex) {
-            if (rowIndex == 0) {
-                user = null;
-            } else {
-                user = new UserImportVO();
-            }
-        }
+        protected void handleCell(UserImportVO obj, Field field, String cellValue) {
+            try {
+                String fieldName = field.getName();
 
-        /**
-         * 处理每一行的所有单元格
-         */
-        @Override
-        public void cell(String cellName, String cellValue, XSSFComment xssfComment) {
-            if (StrUtil.isEmpty(cellValue)) {
-                return;
-            }
-            if (cellValue.contains("\n")) {
-                cellValue = cellValue.replace("\n", "<br>");
-            }
-            if (cellValue.contains("\r")) {
-                cellValue = cellValue.replace("\r", "<br>");
-            }
-            if (user != null) {
-                //每个单元名称的首字母 A  B  C
-                String letter = cellName.substring(0, 1);
-                switch (letter) {
-                    //手机号
-                    case "A": {
-                        user.setPhone(cellValue);
-                        break;
-                    }
-                    //密码
-                    case "B": {
-                        user.setPassword(EncryptUtil.encryptSha256(cellValue));
-                        break;
-                    }
-                    //昵称
-                    case "C": {
-                        user.setName(cellValue);
-                        break;
-                    }
-                    //性别
-                    case "D": {
-                        user.setGender(cellValue);
-                        break;
-                    }
-                    //地址
-                    case "E": {
-                        user.setAddress(cellValue);
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
+                // 处理换行符
+                if (StrUtil.isNotEmpty(cellValue)) {
+                    cellValue = cellValue.replace("\n", "<br>").replace("\r", "<br>");
                 }
+
+                // 密码字段需要加密
+                if ("password".equals(fieldName)) {
+                    if (StrUtil.isNotEmpty(cellValue)) {
+                        field.set(obj, EncryptUtil.encryptSha256(cellValue));
+                    }
+                } else {
+                    // 其他字段直接赋值
+                    field.set(obj, cellValue);
+                }
+            } catch (IllegalAccessException e) {
+                throw new ServiceException("设置字段值失败: " + field.getName());
             }
         }
 
         /**
-         * 每一行的结束
-         *
-         * @param rowIndex 代表的是每一个sheet的行索引
+         * 重写行结束处理逻辑
+         * 设置默认值、时间戳等
          */
         @Override
-        public void endRow(int rowIndex) {
-            if (rowIndex != 0) {
-                String defPath = "/upload/defPath.jpg";
-                String defCover = "/upload/defCover.jpg";
-                user.setRowIndex(rowIndex);
-                user.setCreateTime(new Date());
-                user.setUpdateTime(new Date());
-                user.setProfilePath(defPath);
-                user.setRegistType(2);
-                user.setTotalDuration(0);
-                user.setCoverPath(defCover);
+        protected void handleRowEnd(UserImportVO obj) {
+            // 设置默认头像和封面
+            String defPath = "/upload/defPath.jpg";
+            String defCover = "/upload/defCover.jpg";
+            obj.setProfilePath(defPath);
+            obj.setCoverPath(defCover);
 
-                String password = user.getPassword();
-                if (StrUtil.isEmpty(password)) {
-                    user.setPassword(EncryptUtil.encryptSha256("123456"));
-                }
-                user.setSheetIndex(sheetIndex);
-                userList.add(user);
+            // 设置注册类型为后台添加
+            obj.setRegistType(2);
+
+            // 设置总学习时长
+            obj.setTotalDuration(0);
+
+            // 设置时间戳
+            Date now = new Date();
+            obj.setCreateTime(now);
+            obj.setUpdateTime(now);
+
+            // 设置Sheet索引
+            obj.setSheetIndex(sheetIndex);
+
+            // 如果密码为空，设置默认密码
+            if (StrUtil.isEmpty(obj.getPassword())) {
+                obj.setPassword(EncryptUtil.encryptSha256("123456"));
             }
         }
-
-
     }
 
 }

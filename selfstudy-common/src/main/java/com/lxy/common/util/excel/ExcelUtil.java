@@ -1,4 +1,4 @@
-package com.lxy.common.util;
+package com.lxy.common.util.excel;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
@@ -261,10 +261,8 @@ public class ExcelUtil {
         Sheet sheet = wb.createSheet(sheetName);
         // ExcelHeader注解的字段
         List<Field> exportFields = Arrays.stream(ReflectUtil.getFields(clazz))
-                .filter(field -> {
-                    ExcelHeader annotation = field.getAnnotation(ExcelHeader.class);
-                    return annotation != null && annotation.required();
-                })
+                // 过滤掉没有ExcelHeader注解的字段
+                .filter(field -> field.isAnnotationPresent(ExcelHeader.class))
                 .toList();
         //设置动态列宽（按实际导出字段数量）
         for (int i = 0; i < exportFields.size(); i++) {
@@ -307,10 +305,22 @@ public class ExcelUtil {
     }
 
     /**
-     * Excel导入方法
+     * Excel导入方法 - 使用BaseSheetHandler的注解驱动方式
+     *
+     * @param file  Excel文件
+     * @param clazz 要解析的实体类
+     * @return 解析结果列表
+     */
+    public static <T> List<T> importExcel(MultipartFile file, Class<T> clazz) {
+        return importExcel(file, sheetIndex -> new BaseSheetHandler<T>(clazz, sheetIndex) {
+        });
+    }
+
+    /**
+     * Excel导入方法 - 兼容原有方式
      *
      * @param file            Excel文件
-     * @param handlerSupplier 处理器供应商，接收sheet编号参数
+     * @param handlerSupplier sheet处理器Supplier，用于接收sheet编号参数
      * @return 解析结果列表
      */
     public static <T> List<T> importExcel(MultipartFile file, Function<Integer, SheetHandlerResult<T>> handlerSupplier) {

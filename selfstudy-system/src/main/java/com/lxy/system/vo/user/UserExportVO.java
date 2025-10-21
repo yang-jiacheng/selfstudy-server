@@ -20,8 +20,8 @@ import java.util.Date;
 
 @Data
 public class UserExportVO implements Serializable {
+
     @Serial
-    @ExcelHeader(required = false)
     private static final long serialVersionUID = 5375333544880309688L;
 
     @ExcelHeader(title = "昵称")
@@ -36,19 +36,19 @@ public class UserExportVO implements Serializable {
     @ExcelHeader(title = "地址")
     private String address;
 
-    @ExcelHeader(required = false)
     private Integer totalDuration;
 
     @ExcelHeader(title = "总学习时长")
     private String totalDurationStr;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
-    @ExcelHeader(required = false)
     private Date createTime;
+
     @ExcelHeader(title = "加入时间")
     private String createTimeStr;
     //注册类型 1。用户注册 2.后台添加
-    @ExcelHeader(required = false)
     private Integer registType;
+
     @ExcelHeader(title = "注册类型")
     private String registTypeStr;
 

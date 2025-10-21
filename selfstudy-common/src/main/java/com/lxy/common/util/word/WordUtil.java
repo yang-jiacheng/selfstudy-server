@@ -1,10 +1,12 @@
-package com.lxy.common.util;
+package com.lxy.common.util.word;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.lxy.common.properties.AliYunProperties;
+import com.lxy.common.util.OssUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.BodyElementType;
 import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -21,8 +23,6 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.xml.transform.Result;
@@ -55,9 +55,10 @@ import java.util.regex.Pattern;
  * @version 1.0
  * @since 2024/11/16 16:38
  */
+
+@Slf4j
 public class WordUtil {
 
-    private final static Logger LOG = LoggerFactory.getLogger(WordUtil.class);
 
     private static final String CONVERT_PATH = "/opt/convert/OMML2MML.XSL";
     private static final String MML2TEX_PATH = "/opt/convert/mml2tex/";
@@ -201,7 +202,7 @@ public class WordUtil {
             // 返回HTML标签
             imgStr = "<img src=\"" + realPath + "\" />";
         } catch (Exception e) {
-            LOG.error("上传图片到OSS失败", e);
+            log.error("上传图片到OSS失败", e);
         }
 
         return imgStr;
@@ -244,7 +245,7 @@ public class WordUtil {
                 imgStr = "<img src=\"" + realPath + "\" data-latex=\"" + latex + "\" />";
             }
         } catch (IOException e) {
-            LOG.error(StrUtil.format("latex转图片失败: {}", latex), e);
+            log.error(StrUtil.format("latex转图片失败: {}", latex), e);
         }
 
         return imgStr;
@@ -265,7 +266,7 @@ public class WordUtil {
             try (InputStream inputStream = Files.newInputStream(Paths.get(MML2TEX_PATH, href))) {
                 return new StreamSource(inputStream);
             } catch (Exception e) {
-                LOG.error("设置服务器上的 XSLT 依赖文件路径失败", e);
+                log.error("设置服务器上的 XSLT 依赖文件路径失败", e);
                 throw new RuntimeException(e);
             }
         };
@@ -315,7 +316,7 @@ public class WordUtil {
             return writer.getBuffer().toString();
         } catch (Exception e) {
             e.printStackTrace();
-            LOG.error("xsl转换失败", e);
+            log.error("xsl转换失败", e);
             return "";
         }
 

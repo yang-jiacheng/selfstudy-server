@@ -6,7 +6,6 @@ import com.lxy.system.dto.UserPageDTO;
 import com.lxy.system.po.User;
 import com.lxy.system.vo.ExcelErrorInfoVO;
 import com.lxy.system.vo.user.UserExportVO;
-import com.lxy.system.vo.user.UserImportVO;
 import com.lxy.system.vo.user.UserRankVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -81,7 +80,7 @@ public interface UserService extends IService<User> {
 
     UserRankVO getUserRankingById(Integer userId);
 
-    void insertBatchUser(List<UserImportVO> userList);
+    void insertBatchUser(List<User> userList);
 
     void test();
 

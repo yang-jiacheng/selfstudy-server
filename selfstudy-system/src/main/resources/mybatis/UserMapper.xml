@@ -26,12 +26,12 @@
     </sql>
     <insert id="insertBatchUser" keyProperty="id" useGeneratedKeys="true">
         insert into user(password, name, phone, profile_path, cover_path,gender,create_time,
-        update_time,regist_type,address,total_duration)
+        update_time,regist_type,address,total_duration,balance)
         values
         <foreach collection="list" item="entity" separator=",">
             (#{entity.password}, #{entity.name}, #{entity.phone}, #{entity.profilePath}, #{entity.coverPath},
             #{entity.gender}, #{entity.createTime}, #{entity.updateTime}, #{entity.registType}, #{entity.address},
-            #{entity.totalDuration})
+            #{entity.totalDuration},#{entity.balance})
         </foreach>
 
     </insert>
