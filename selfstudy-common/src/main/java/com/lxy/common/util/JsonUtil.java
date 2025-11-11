@@ -54,20 +54,6 @@ public class JsonUtil {
         }
     }
 
-//	public static <TYPE> TYPE getObj(String json, TypeReference<?> typeReference) {
-//		if (StrUtil.isEmpty(json)) {
-//			return null;
-//		} else {
-//			try {
-//				//Map<Integer, QuestionResultVO> answers = JsonUtils.getObj(detailJson,new TypeReference<HashMap<Integer,QuestionResultVO>>(){});
-//				return (TYPE)objectMapper.readValue(json, typeReference);
-//			} catch (Exception e) {
-//				logger.error("json to type error", e);
-//				return null;
-//			}
-//		}
-//	}
-
     public static <T> T getObj(String json, TypeReference<T> typeReference) {
         if (StrUtil.isEmpty(json)) {
             return null;
