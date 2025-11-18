@@ -85,10 +85,11 @@ public class TokenController {
     }
 
     /**
-     * Description: 获取验证码
-     * author: jiacheng yang.
-     * Date: 2025/02/20 10:11
-     * Param: [phone 手机号]
+     * 获取验证码
+     *
+     * @author jiacheng yang.
+     * @since 2025/11/18 18:13
+     * @param phone 手机号
      */
     @PostMapping("/getVerificationCode")
     public R<Object> getVerificationCode(@RequestParam(value = "phone") String phone) {

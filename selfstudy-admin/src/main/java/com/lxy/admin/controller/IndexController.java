@@ -6,7 +6,8 @@ import com.google.code.kaptcha.Producer;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.domain.R;
 import com.lxy.common.util.SmsUtil;
-import com.lxy.common.vo.SmsSendVO;
+import com.lxy.common.dto.SmsSendDTO;
+import com.lxy.common.util.SmsVerifyCodeUtil;
 import com.lxy.system.service.PermissionService;
 import com.lxy.system.service.RedisService;
 import jakarta.annotation.Resource;
@@ -51,36 +52,30 @@ public class IndexController {
         return "hello selfstudy-admin !";
     }
 
-    @RequestMapping("/hello")
-    @ResponseBody
-    public void hello() {
-
-
-    }
-
-    @RequestMapping("/world")
-    @ResponseBody
-    public void world() {
-        String phoneNumbers = "15607150562";
-        SmsSendVO smsDTO = new SmsSendVO();
-        smsDTO.setTemplateCode(SmsUtil.TEMPLATE_CODE);
-        List<SmsSendVO.TemplateParam> params = new ArrayList<>();
-        params.add(new SmsSendVO.TemplateParam("code", SmsUtil.getRandomCode()));
-        smsDTO.setTemplateParams(params);
-        boolean b = SmsUtil.sendMessage(phoneNumbers, smsDTO);
-        log.info("短信发送结果：{}", b);
-    }
+//    @RequestMapping("/test")
+//    @ResponseBody
+//    public void test() {
+//        String phoneNumbers = "15607150562";
+//        SmsSendDTO smsDTO = new SmsSendDTO();
+//        smsDTO.setTemplateCode(SmsVerifyCodeUtil.TEMPLATE_CODE);
+//        List<SmsSendDTO.TemplateParam> params = new ArrayList<>();
+//        params.add(new SmsSendDTO.TemplateParam("code", SmsUtil.getRandomCode()));
+//        params.add(new SmsSendDTO.TemplateParam("min", "5"));
+//        smsDTO.setTemplateParams(params);
+//        boolean b = SmsVerifyCodeUtil.sendMessage(phoneNumbers, smsDTO);
+//        log.info("短信发送结果：{}", b);
+//    }
 
     @RequestMapping("/login")
     public String login() {
         return "login2";
     }
 
-    @RequestMapping("/error403")
-    public String error403() {
-        return "error403two";
-    }
-
+//    @RequestMapping("/error403")
+//    public String error403() {
+//        return "error403two";
+//    }
+//
     @RequestMapping("/404")
     public String error404() {
         return "error/404";

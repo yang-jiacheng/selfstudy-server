@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.dto.SmsSendDTO;
 import com.lxy.common.util.DateCusUtil;
 import com.lxy.common.util.SmsUtil;
+import com.lxy.common.util.SmsVerifyCodeUtil;
 import com.lxy.system.mapper.PhoneCodeMapper;
 import com.lxy.system.po.PhoneCode;
 import com.lxy.system.service.BusinessConfigService;
@@ -17,9 +19,9 @@ import com.lxy.system.service.RedisService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,7 +39,6 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
     private RedisService redisService;
     @Resource
     private BusinessConfigService businessConfigService;
-
 
     @Override
     public boolean checkPhone(String phone) {
@@ -59,15 +60,18 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
     @Override
     public boolean sendVerificationCode(String phone) {
         String code = SmsUtil.getRandomCode();
-        Map<String, Object> map = new HashMap<>(1);
-        map.put("code", code);
-        boolean flag = SmsUtil.sendSmsByTemplate(SmsUtil.TEMPLATE_CODE, phone, map);
+        List<SmsSendDTO.TemplateParam> params = new ArrayList<>();
+        params.add(new SmsSendDTO.TemplateParam(SmsVerifyCodeUtil.TEMP_CODE, code));
+        params
+            .add(new SmsSendDTO.TemplateParam(SmsVerifyCodeUtil.TEMP_MIN, SmsVerifyCodeUtil.EXPIRE_MINUTES.toString()));
+        SmsSendDTO smsSendDTO = new SmsSendDTO(null, params);
+        boolean flag = SmsVerifyCodeUtil.sendMessage(phone, smsSendDTO);
         if (flag) {
             Date now = new Date();
-            DateTime offsetMinute = DateUtil.offsetMinute(now, 10);
+            DateTime offsetMinute = DateUtil.offsetMinute(now, SmsVerifyCodeUtil.EXPIRE_MINUTES);
             PhoneCode phoneCode = new PhoneCode(phone, code, 0, now, offsetMinute);
             this.save(phoneCode);
-            //添加发送次数
+            // 添加发送次数
             String key = RedisKeyConstant.getPhoneSms(phone);
             String value = redisService.getObject(key, String.class);
             int num = 0;

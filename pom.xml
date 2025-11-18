@@ -54,6 +54,7 @@
         <thumbnailator.version>0.4.8</thumbnailator.version>
         <aliyun-core.version>4.5.16</aliyun-core.version>
         <aliyun-dysmsapi.version>3.1.1</aliyun-dysmsapi.version>
+        <aliyun-dypnsapi.version>2.0.0</aliyun-dypnsapi.version>
         <aliyun-oss.version>3.15.1</aliyun-oss.version>
         <google-zxing.version>3.3.3</google-zxing.version>
         <jlatexmath.version>1.0.7</jlatexmath.version>
@@ -287,6 +288,12 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>dysmsapi20170525</artifactId>
                 <version>${aliyun-dysmsapi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>dypnsapi20170525</artifactId>
+                <version>${aliyun-dypnsapi.version}</version>
             </dependency>
             <!--   阿里云OSS   -->
             <dependency>

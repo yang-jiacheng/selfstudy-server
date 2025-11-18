@@ -12,7 +12,7 @@ import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
 import com.aliyun.teaopenapi.models.Config;
 import com.aliyun.teautil.models.RuntimeOptions;
-import com.lxy.common.vo.SmsSendVO;
+import com.lxy.common.dto.SmsSendDTO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -37,8 +37,7 @@ public class SmsUtil {
 
 
     public final static String TEMPLATE_CODE = "SMS_269495080";
-    private final static String REGION = "cn-hangzhouo";
-
+    private final static String REGION = "cn-hangzhou";
     private final static String ENDPOINT = "dysmsapi.aliyuncs.com";
     private final static String SIGN_NAME = "团团云自习";
     private final static String SUCCESS_CODE = "OK";
@@ -74,14 +73,14 @@ public class SmsUtil {
      */
     public static <T> boolean sendSmsByTemplate(String smsCode, String phoneNumbers, T record) {
         String content = getTemplateContent(smsCode);
-        SmsSendVO smsDTO = new SmsSendVO();
+        SmsSendDTO smsDTO = new SmsSendDTO();
         smsDTO.setTemplateCode(smsCode);
         //正则提取所有 ${xxx} 中的 xxx
         List<String> variableNames = ReUtil.findAll("\\$\\{(.*?)\\}", content, 1);
         // 如果模板里有参数
         if (CollUtil.isNotEmpty(variableNames)) {
             //遍历取值、校验、组装
-            List<SmsSendVO.TemplateParam> params = new ArrayList<>();
+            List<SmsSendDTO.TemplateParam> params = new ArrayList<>();
             for (String varName : variableNames) {
                 // 从 record 中通过 getter 拿到对应属性值
                 Object raw = BeanUtil.getProperty(record, varName);
@@ -89,7 +88,7 @@ public class SmsUtil {
                 if (value == null) {
                     value = "";
                 }
-                params.add(new SmsSendVO.TemplateParam(varName, value));
+                params.add(new SmsSendDTO.TemplateParam(varName, value));
             }
             smsDTO.setTemplateParams(params);
         }
@@ -103,20 +102,20 @@ public class SmsUtil {
      * @author jiacheng yang.
      * @since 2025/4/17 11:03
      */
-    public static boolean sendMessage(String phoneNumbers, SmsSendVO smsSendVO) {
+    public static boolean sendMessage(String phoneNumbers, SmsSendDTO smsSendDTO) {
         boolean flag = false;
         Client client = getClient();
         SendSmsRequest request = new SendSmsRequest();
         request.setPhoneNumbers(phoneNumbers);
         request.setSignName(SIGN_NAME);
-        String templateCode = smsSendVO.getTemplateCode();
+        String templateCode = smsSendDTO.getTemplateCode();
         request.setTemplateCode(templateCode);
         //如果有模板参数，则设置模板参数
         String json = "";
-        List<SmsSendVO.TemplateParam> templateParams = smsSendVO.getTemplateParams();
+        List<SmsSendDTO.TemplateParam> templateParams = smsSendDTO.getTemplateParams();
         if (CollUtil.isNotEmpty(templateParams)) {
             Map<String, Object> params = new HashMap<>(templateParams.size());
-            for (SmsSendVO.TemplateParam templateParam : templateParams) {
+            for (SmsSendDTO.TemplateParam templateParam : templateParams) {
                 params.put(templateParam.getName(), templateParam.getValue());
             }
             json = JsonUtil.toJson(params);
