@@ -31,13 +31,13 @@ public interface BusinessConfigService extends IService<BusinessConfig> {
     /**
      * 更新或修改
      *
-     * @param key         键
-     * @param value       值
+     * @param key 键
+     * @param value 值
      * @param description 描述
      * @return BusinessConfig
      */
     BusinessConfig updateBusinessConfigByKey(String key, String value, String description);
 
-    void updateBusinessConfigById(Integer id, String value);
+    void updateBusinessConfigById(Long id, String value);
 
 }

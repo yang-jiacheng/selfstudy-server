@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * TODO
+ * 角色修改DTO
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -17,17 +17,17 @@ import java.util.List;
 @Data
 public class RoleEditDTO {
 
-    private Integer id;
+    private Long id;
 
-    //角色名称
+    // 角色名称
     @NotNull(message = "角色名称不能为空")
     private String name;
 
-    //角色描述
+    // 角色描述
     private String description;
 
-    //角色权限
+    // 角色权限
     @NotEmpty(message = "菜单权限不能为空")
-    private List<Integer> permissionIds;
+    private List<Long> permissionIds;
 
 }

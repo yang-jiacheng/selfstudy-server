@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * TODO
+ * 无状态用户
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -25,7 +25,7 @@ public class StatelessUser implements UserDetails {
     @Serial
     private static final long serialVersionUID = 6565570798263006714L;
 
-    private Integer userId;
+    private Long userId;
 
     private String password;
 
@@ -44,10 +44,9 @@ public class StatelessUser implements UserDetails {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date endTime;
 
-    public StatelessUser() {
-    }
+    public StatelessUser() {}
 
-    public StatelessUser(Integer userId, String password, String username) {
+    public StatelessUser(Long userId, String password, String username) {
         this.userId = userId;
         this.password = password;
         this.username = username;
@@ -60,19 +59,17 @@ public class StatelessUser implements UserDetails {
     public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
         if (CollUtil.isNotEmpty(this.permissions)) {
-            this.authorities = this.permissions.stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
+            this.authorities = this.permissions.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         } else {
             this.authorities = null;
         }
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -106,9 +103,7 @@ public class StatelessUser implements UserDetails {
             return this.authorities;
         }
         if (CollUtil.isNotEmpty(this.permissions)) {
-            this.authorities = this.permissions.stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
+            this.authorities = this.permissions.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         }
         return this.authorities;
     }

@@ -21,7 +21,7 @@ public interface PhoneCodeService extends IService<PhoneCode> {
     /**
      * 发送验证码
      */
-    boolean sendVerificationCode(String phone);
+    void sendVerificationCode(String phone);
 
     /**
      * 验证码是否可用
@@ -31,6 +31,6 @@ public interface PhoneCodeService extends IService<PhoneCode> {
     /**
      * 修改验证码为已使用
      */
-    boolean updateVerificationCodeStatus(String phone, String verificationCode);
+    void updateVerificationCodeStatus(String phone, String verificationCode);
 
 }

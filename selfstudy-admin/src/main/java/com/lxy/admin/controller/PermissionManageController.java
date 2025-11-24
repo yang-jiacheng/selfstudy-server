@@ -51,7 +51,6 @@ public class PermissionManageController {
         return R.ok(tree);
     }
 
-
     @Log(title = "编辑菜单", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/saveOrUpdatePermission", produces = "application/json")
     public R<Object> saveOrUpdatePermission(@RequestBody Permission permission) {
@@ -61,7 +60,7 @@ public class PermissionManageController {
 
     @Log(title = "删除菜单", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/removePermission", produces = "application/json")
-    public R<Object> removePermission(@RequestParam("id") Integer id) {
+    public R<Object> removePermission(@RequestParam("id") Long id) {
         permissionService.removePermission(id);
         return R.ok();
     }

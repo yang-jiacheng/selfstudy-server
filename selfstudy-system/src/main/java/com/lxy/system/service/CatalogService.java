@@ -23,17 +23,17 @@ public interface CatalogService extends IService<Catalog> {
      */
     List<CatalogTreeVO> getCatalogTree();
 
-    Integer saveCatalog(Catalog catalog);
+    Long saveCatalog(Catalog catalog);
 
     /**
      * 获取某图书馆下的自习室
      */
-    ClassifyDetailVO getCatalogByClassify(Integer classifyId);
+    ClassifyDetailVO getCatalogByClassify(Long classifyId);
 
     /**
      * 自习室详情
      */
-    RoomVO getRoomDetail(Integer roomId);
+    RoomVO getRoomDetail(Long roomId);
 
     /**
      * 删除节点
@@ -41,5 +41,5 @@ public interface CatalogService extends IService<Catalog> {
      * @author jiacheng yang.
      * @since 2025/6/30 16:49
      */
-    void removeCatalog(Integer id);
+    void removeCatalog(Long id);
 }

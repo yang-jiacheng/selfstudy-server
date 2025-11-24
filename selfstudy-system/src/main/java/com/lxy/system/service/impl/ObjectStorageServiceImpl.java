@@ -28,21 +28,22 @@ import java.util.List;
  * @since 2024-12-14
  */
 @Service
-public class ObjectStorageServiceImpl extends ServiceImpl<ObjectStorageMapper, ObjectStorage> implements ObjectStorageService {
+public class ObjectStorageServiceImpl extends ServiceImpl<ObjectStorageMapper, ObjectStorage>
+    implements ObjectStorageService {
 
     @Resource
     private ObjectStorageMapper objectStorageMapper;
 
     @Override
     public PageResult<ObjectStorageVO> getObjectStoragePageList(PageDTO pageDTO) {
-        //开始分页
+        // 开始分页
         PageHelper.startPage(pageDTO.getPage(), pageDTO.getLimit(), "id desc");
         List<ObjectStorageVO> list = objectStorageMapper.getObjectStorageList(pageDTO);
         return PageResult.convert(new PageInfo<>(list));
     }
 
     @Override
-    public void deleteObjectStorage(Integer id) {
+    public void deleteObjectStorage(Long id) {
         ObjectStorage objectStorage = this.getById(id);
         if (objectStorage == null) {
             return;
@@ -56,7 +57,7 @@ public class ObjectStorageServiceImpl extends ServiceImpl<ObjectStorageMapper, O
     }
 
     @Override
-    public void saveObjectStorage(ObjectStorageDTO objectStorageDTO, Integer adminId) {
+    public void saveObjectStorage(ObjectStorageDTO objectStorageDTO, Long adminId) {
         ObjectStorage objectStorage = new ObjectStorage();
         BeanUtil.copyProperties(objectStorageDTO, objectStorage);
         objectStorage.setCreateTime(new Date());

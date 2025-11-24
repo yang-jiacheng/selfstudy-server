@@ -7,6 +7,7 @@ import com.aliyun.dypnsapi20170525.models.SendSmsVerifyCodeRequest;
 import com.aliyun.dypnsapi20170525.models.SendSmsVerifyCodeResponse;
 import com.aliyun.teaopenapi.models.Config;
 import com.aliyun.teautil.models.RuntimeOptions;
+import com.lxy.common.constant.SmsConstant;
 import com.lxy.common.dto.SmsSendDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,15 +30,11 @@ import static com.lxy.common.properties.AliYunProperties.accessKeySecret;
 public class SmsVerifyCodeUtil {
 
     public final static String TEMPLATE_CODE = "100001";
+    public final static String TEMP_CODE = "code";
+    public final static String TEMP_MIN = "min";
     private final static String REGION = "cn-hangzhou";
     private final static String ENDPOINT = "dypnsapi.aliyuncs.com";
     private final static String SIGN_NAME = "速通互联验证服务";
-    private final static String SUCCESS_CODE = "OK";
-    public final static String TEMP_CODE = "code";
-    public final static String TEMP_MIN = "min";
-    //有效期，分钟
-    public final static Integer EXPIRE_MINUTES = 5;
-
     private static volatile Client clientInstance = null;
 
     public static Client getClient() {
@@ -68,9 +65,9 @@ public class SmsVerifyCodeUtil {
         request.setPhoneNumber(phone);
         request.setSignName(SIGN_NAME);
         String templateCode = smsSendDTO.getTemplateCode();
-        if (StrUtil.isEmpty(templateCode)){
+        if (StrUtil.isEmpty(templateCode)) {
             request.setTemplateCode(TEMPLATE_CODE);
-        }else {
+        } else {
             request.setTemplateCode(templateCode);
         }
         // 如果有模板参数，则设置模板参数
@@ -88,7 +85,7 @@ public class SmsVerifyCodeUtil {
             RuntimeOptions runtime = new RuntimeOptions();
             SendSmsVerifyCodeResponse response = client.sendSmsVerifyCodeWithOptions(request, runtime);
             String code = response.getBody().getCode();
-            if (code.equals(SUCCESS_CODE)) {
+            if (code.equals(SmsConstant.SUCCESS_CODE)) {
                 flag = true;
                 log.info("短信发送成功，手机号：{},模板：{},参数：{}", phone, templateCode, json);
             } else {

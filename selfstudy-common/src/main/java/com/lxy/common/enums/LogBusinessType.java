@@ -1,11 +1,5 @@
 package com.lxy.common.enums;
 
-import com.lxy.common.vo.EnumVO;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * 操作日志业务类型
  *
@@ -16,12 +10,7 @@ import java.util.stream.Collectors;
 
 public enum LogBusinessType {
 
-    OTHER(0, "其他"),
-    INSERT(1, "新增"),
-    UPDATE(2, "修改"),
-    DELETE(3, "删除"),
-    IMPORT(4, "导入"),
-    EXPORT(5, "导出");
+    OTHER(0, "其他"), INSERT(1, "新增"), UPDATE(2, "修改"), DELETE(3, "删除"), IMPORT(4, "导入"), EXPORT(5, "导出");
 
     public final Integer type;
     public final String name;
@@ -39,12 +28,5 @@ public enum LogBusinessType {
         }
         return "-";
     }
-
-    public static List<EnumVO> getAllBusinessType() {
-        return Arrays.stream(LogBusinessType.values())
-                .map(businessType -> new EnumVO(businessType.type, businessType.name))
-                .collect(Collectors.toList());
-    }
-
 
 }

@@ -3,7 +3,7 @@ package com.lxy.admin.task;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import com.lxy.framework.security.service.LoginStatusService;
-import com.lxy.system.service.RedisService;
+import com.lxy.system.service.redis.RedisService;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +29,7 @@ public class TokenCleanupTask {
     private RedisService redisService;
 
     /**
-     * 每天凌晨1点05分执行一次深度清理
-     * 清理可能遗留的无效数据
+     * 每天凌晨1点05分执行一次深度清理 清理可能遗留的无效数据
      */
     @XxlJob("deepCleanupAdminLoginStatus")
     public void deepCleanupAdminLoginStatus() {

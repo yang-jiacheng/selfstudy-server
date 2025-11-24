@@ -1,16 +1,53 @@
 package com.lxy.system.vo;
 
-import com.lxy.system.po.Feedback;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
- * TODO
+ * 意见反馈 VO
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2022/12/21 17:37
  */
-public class FeedbackVO extends Feedback {
+
+@Data
+public class FeedbackVO implements Serializable {
     private static final long serialVersionUID = -6416486320539350938L;
+
+    private Long id;
+
+    // 用户id
+    private Long userId;
+
+    // 反馈内容
+    private String content;
+
+    // 反馈图片
+    private String pic;
+
+    // 回复内容
+    private String reply;
+
+    // 回复人
+    private Long adminId;
+
+    // 创建时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date createTime;
+
+    // 回复时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date replyTime;
+
+    // 用户是否可见 1可见 2不可见
+    private Integer status;
+
+    // 回复状态 0未回复 1已回复
+    private Integer replyStatus;
 
     private String name;
 
@@ -19,36 +56,4 @@ public class FeedbackVO extends Feedback {
     private String profilePath;
 
     private String adminName;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAdminName() {
-        return adminName;
-    }
-
-    public void setAdminName(String adminName) {
-        this.adminName = adminName;
-    }
-
-    public String getProfilePath() {
-        return profilePath;
-    }
-
-    public void setProfilePath(String profilePath) {
-        this.profilePath = profilePath;
-    }
 }

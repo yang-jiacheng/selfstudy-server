@@ -24,6 +24,6 @@ public interface FeedbackService extends IService<Feedback> {
     /**
      * 反馈详情
      */
-    FeedbackVO getFeedBackDetail(Integer id);
+    FeedbackVO getFeedBackDetail(Long id);
 
 }

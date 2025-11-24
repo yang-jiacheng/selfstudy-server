@@ -19,7 +19,7 @@ public interface ObjectStorageService extends IService<ObjectStorage> {
 
     PageResult<ObjectStorageVO> getObjectStoragePageList(PageDTO pageDTO);
 
-    void deleteObjectStorage(Integer id);
+    void deleteObjectStorage(Long id);
 
-    void saveObjectStorage(ObjectStorageDTO objectStorageDTO, Integer adminId);
+    void saveObjectStorage(ObjectStorageDTO objectStorageDTO, Long adminId);
 }

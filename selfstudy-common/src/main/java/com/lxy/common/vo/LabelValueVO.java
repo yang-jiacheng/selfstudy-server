@@ -8,21 +8,21 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * TODO
+ * Label和Value VO
  *
  * @author jiacheng yang.
  * @version 1.0
- * @since 2022/12/20 10:49
+ * @since 2025/11/24 17:47
  */
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnumVO implements Serializable {
+public class LabelValueVO implements Serializable {
     @Serial
-    private static final long serialVersionUID = -3057394247976898396L;
+    private static final long serialVersionUID = -7712076390127092258L;
 
-    private Integer value;
+    private Long value;
 
     private String label;
 

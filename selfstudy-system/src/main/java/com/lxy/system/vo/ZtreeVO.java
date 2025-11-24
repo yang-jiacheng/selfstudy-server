@@ -3,7 +3,7 @@ package com.lxy.system.vo;
 import java.io.Serializable;
 
 /**
- * TODO
+ * ztree
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -120,8 +120,8 @@ public class ZtreeVO implements Serializable {
 
     @Override
     public String toString() {
-        return "{id:" + id + ", pId:" + pId + ", name:'" + name + "', open:" + open + ", nocheck:" + nocheck + ", checked:" + checked
-                + ",icon:" + icon + ",level:" + level + "}";
+        return "{id:" + id + ", pId:" + pId + ", name:'" + name + "', open:" + open + ", nocheck:" + nocheck
+            + ", checked:" + checked + ",icon:" + icon + ",level:" + level + "}";
     }
 
     public Integer getSort() {

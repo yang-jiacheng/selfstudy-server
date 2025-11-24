@@ -12,7 +12,7 @@ import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.framework.security.service.LoginStatusService;
 import com.lxy.system.dto.LoginVerifyCodeDTO;
 import com.lxy.system.service.BusinessConfigService;
-import com.lxy.system.service.RedisService;
+import com.lxy.system.service.redis.RedisService;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -55,9 +55,11 @@ public class DualTokenLoginServiceImpl implements LoginService {
         if (!flag) {
             return R.fail("验证码错误或已失效！");
         }
-        //AuthenticationManager authenticate进行用户认证
-        // 会去调用UserDetailsService.loadUserByUsername方法。AdminDetailsServiceImpl 实现了 UserDetailsService接口的 loadUserByUsername方法
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
+        // AuthenticationManager authenticate进行用户认证
+        // 会去调用UserDetailsService.loadUserByUsername方法。AdminDetailsServiceImpl 实现了 UserDetailsService接口的
+        // loadUserByUsername方法
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
         Authentication authenticate = null;
         try {
             authenticate = authenticationManager.authenticate(authenticationToken);
@@ -65,9 +67,9 @@ public class DualTokenLoginServiceImpl implements LoginService {
             log.error("用户名或密码错误", e);
             return R.fail("用户名或密码错误！");
         }
-        //如果认证通过了，使用userid生成jwt
-        StatelessUser principal = (StatelessUser) authenticate.getPrincipal();
-        Integer userId = principal.getUserId();
+        // 如果认证通过了，使用userid生成jwt
+        StatelessUser principal = (StatelessUser)authenticate.getPrincipal();
+        Long userId = principal.getUserId();
         // 生成双Token
         TokenPair tokenPair = DualTokenUtil.generateTokenPair(userId, LogUserType.ADMIN.type);
         // 设置ip
@@ -85,16 +87,16 @@ public class DualTokenLoginServiceImpl implements LoginService {
 
     @Override
     public void logout(String token, HttpServletRequest request, HttpServletResponse response) {
-        Integer userId = -1;
+        Long userId;
         try {
             boolean isValid = DualTokenUtil.validateRefreshToken(token);
             if (!isValid) {
                 return;
             }
             Claims claims = DualTokenUtil.parseToken(token);
-            userId = (Integer) claims.get(PARAM_NAME_USER_ID);
-            String refreshId = (String) claims.get(PARAM_NAME_JID);
-            if (userId != -1) {
+            userId = (Long)claims.get(PARAM_NAME_USER_ID);
+            String refreshId = (String)claims.get(PARAM_NAME_JID);
+            if (userId != -1L) {
                 String sessionKey = RedisKeyConstant.getAdminDualTokenSessions(userId);
                 // 移除会话
                 loginStatusService.removeSessionByRefreshId(sessionKey, refreshId);
@@ -121,9 +123,9 @@ public class DualTokenLoginServiceImpl implements LoginService {
 
         // 解析刷新令牌获取用户信息
         Claims claims = DualTokenUtil.parseToken(refreshToken);
-        Integer userId = (Integer) claims.get(PARAM_NAME_USER_ID);
-        Integer userType = (Integer) claims.get(PARAM_NAME_USER_TYPE);
-        String refreshId = (String) claims.get(PARAM_NAME_JID);
+        Long userId = (Long)claims.get(PARAM_NAME_USER_ID);
+        Integer userType = (Integer)claims.get(PARAM_NAME_USER_TYPE);
+        String refreshId = (String)claims.get(PARAM_NAME_JID);
 
         // 检查会话是否存在
         String sessionKey = RedisKeyConstant.getAdminDualTokenSessions(userId);

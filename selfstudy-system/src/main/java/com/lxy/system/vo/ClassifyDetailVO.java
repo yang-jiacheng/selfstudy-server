@@ -1,15 +1,19 @@
 package com.lxy.system.vo;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * TODO
+ * 图书馆详情 vo
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2022/12/24 11:08
  */
+
+@Data
 public class ClassifyDetailVO implements Serializable {
 
     private static final long serialVersionUID = 7065295037862538696L;
@@ -17,7 +21,7 @@ public class ClassifyDetailVO implements Serializable {
     /**
      * 图书馆id
      */
-    private Integer id;
+    private Long id;
 
     /**
      * 图书馆昵称
@@ -44,63 +48,4 @@ public class ClassifyDetailVO implements Serializable {
      */
     private List<CatalogVO> rooms;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getIconPath() {
-        return iconPath;
-    }
-
-    public void setIconPath(String iconPath) {
-        this.iconPath = iconPath;
-    }
-
-    public String getCoverPath() {
-        return coverPath;
-    }
-
-    public void setCoverPath(String coverPath) {
-        this.coverPath = coverPath;
-    }
-
-    public List<CatalogVO> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(List<CatalogVO> rooms) {
-        this.rooms = rooms;
-    }
-
-    @Override
-    public String toString() {
-        return "ClassifyDetailVO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", iconPath='" + iconPath + '\'' +
-                ", coverPath='" + coverPath + '\'' +
-                ", rooms=" + rooms +
-                '}';
-    }
 }

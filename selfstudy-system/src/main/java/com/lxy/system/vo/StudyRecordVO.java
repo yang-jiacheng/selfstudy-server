@@ -1,18 +1,68 @@
 package com.lxy.system.vo;
 
-import com.lxy.system.po.StudyRecord;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
- * TODO
+ * 学习记录vo
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2022/12/24 16:10
  */
-public class StudyRecordVO extends StudyRecord implements Serializable {
+
+@Data
+public class StudyRecordVO implements Serializable {
     private static final long serialVersionUID = -559230604195324125L;
+
+    private Long id;
+
+    // 用户id
+    private Long userId;
+
+    // 图书馆id
+    private Long classifyId;
+
+    // 节点id
+    private Long catalogId;
+
+    // 学习标签
+    private String tag;
+
+    // 座位号
+    private Integer seat;
+
+    // 计时方式：1正计时 2倒计时
+    private Integer timingMode;
+
+    // 设置的自习时长，单位分钟（仅在倒计时有）
+    private Integer settingDuration;
+
+    // 实际学习时长，单位分钟
+    private Integer actualDuration;
+
+    // 状态（1自习中 2离开 3已完成）
+    private Integer status;
+
+    // 学习笔记文字
+    private String noteContent;
+
+    // 学习笔记图片
+    private String notePath;
+
+    // 是否有笔记 0否 1是
+    private Integer noteStatus;
+
+    // 开始时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date startTime;
+
+    // 修改时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date updateTime;
 
     /**
      * 用户昵称
@@ -38,51 +88,4 @@ public class StudyRecordVO extends StudyRecord implements Serializable {
 
     private String parentCatalogName;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getProfilePath() {
-        return profilePath;
-    }
-
-    public void setProfilePath(String profilePath) {
-        this.profilePath = profilePath;
-    }
-
-    public String getClassifyName() {
-        return classifyName;
-    }
-
-    public void setClassifyName(String classifyName) {
-        this.classifyName = classifyName;
-    }
-
-    public String getCatalogName() {
-        return catalogName;
-    }
-
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
-    }
-
-    public String getParentCatalogName() {
-        return parentCatalogName;
-    }
-
-    public void setParentCatalogName(String parentCatalogName) {
-        this.parentCatalogName = parentCatalogName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 }

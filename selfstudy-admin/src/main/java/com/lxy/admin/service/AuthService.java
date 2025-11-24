@@ -59,13 +59,13 @@ public class AuthService {
      * @since 2025/6/13 10:48
      */
     @Transactional(rollbackFor = Exception.class)
-    public void removeRoleById(Integer id) {
+    public void removeRoleById(Long id) {
         rolePermissionRelateService.removeCachePermissionInRole(Collections.singletonList(id));
         roleService.removeById(id);
-        rolePermissionRelateService.remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId, id));
+        rolePermissionRelateService
+            .remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId, id));
         adminRoleRelateService.remove(new LambdaUpdateWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getRoleId, id));
     }
-
 
     /**
      * 获取角色和权限
@@ -73,12 +73,12 @@ public class AuthService {
      * @author jiacheng yang.
      * @since 2025/6/13 10:50
      */
-    public Map<String, Object> getRoleDetail(Integer id) {
+    public Map<String, Object> getRoleDetail(Long id) {
         Role role = roleService.getById(id);
-        //角色权限
+        // 角色权限
         List<Permission> rolePermission = permissionService.getRolePermission(id);
-        List<Integer> ids = rolePermission.stream().map(Permission::getId).toList();
-        //所有权限
+        List<Long> ids = rolePermission.stream().map(Permission::getId).toList();
+        // 所有权限
         List<PermissionTreeVO> permissions = permissionService.getPermissionTree();
         Map<String, Object> map = new HashMap<>(3);
         map.put("role", role);
@@ -95,12 +95,12 @@ public class AuthService {
      * @since 2025/6/13 10:54
      */
     @Transactional(rollbackFor = Exception.class)
-    public Integer addOrUpdateRole(RoleEditDTO roleEditDTO) {
-        List<Integer> permissionIds = roleEditDTO.getPermissionIds();
+    public Long addOrUpdateRole(RoleEditDTO roleEditDTO) {
+        List<Long> permissionIds = roleEditDTO.getPermissionIds();
         Role role = new Role();
         BeanUtil.copyProperties(roleEditDTO, role);
 
-        //移除缓存中角色对应的用户的登录状态
+        // 移除缓存中角色对应的用户的登录状态
         if (role.getId() != null) {
             role.setUpdateTime(new Date());
             rolePermissionRelateService.removeCachePermissionInRole(Collections.singletonList(role.getId()));
@@ -108,13 +108,14 @@ public class AuthService {
 
         roleService.saveOrUpdate(role);
 
-        //先删
-        Integer roleId = role.getId();
-        rolePermissionRelateService.remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId, roleId));
-        //再新增
+        // 先删
+        Long roleId = role.getId();
+        rolePermissionRelateService
+            .remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId, roleId));
+        // 再新增
         List<RolePermissionRelate> list = new ArrayList<>(permissionIds.size());
         RolePermissionRelate relate = null;
-        for (Integer id : permissionIds) {
+        for (Long id : permissionIds) {
             relate = new RolePermissionRelate();
             relate.setRoleId(roleId);
             relate.setPermissionId(id);
@@ -134,15 +135,11 @@ public class AuthService {
     @Transactional(rollbackFor = Exception.class)
     public R<Object> editAdminInfo(AdminEditDTO adminEditDTO) {
         AdminInfo adminInfo = adminEditDTO.getAdminInfo();
-        List<Integer> roleIds = adminEditDTO.getRoleIds();
+        List<Long> roleIds = adminEditDTO.getRoleIds();
         LambdaQueryWrapper<AdminInfo> wrapper = new LambdaQueryWrapper<>();
-        wrapper.nested(
-                w ->
-                        w.eq(AdminInfo::getPhone, adminInfo.getPhone())
-                                .or()
-                                .eq(AdminInfo::getUsername, adminInfo.getUsername())
-        );
-        //是修改
+        wrapper.nested(w -> w.eq(AdminInfo::getPhone, adminInfo.getPhone()).or().eq(AdminInfo::getUsername,
+            adminInfo.getUsername()));
+        // 是修改
         if (adminInfo.getId() != null) {
             wrapper.ne(AdminInfo::getId, adminInfo.getId());
             adminInfo.setUpdateTime(new Date());
@@ -154,13 +151,13 @@ public class AuthService {
             return R.fail("用户名或手机号已被使用！");
         }
         adminInfoService.updateAdmin(adminInfo);
-        Integer id = adminInfo.getId();
-        //先把记录干掉
+        Long id = adminInfo.getId();
+        // 先把记录干掉
         adminRoleRelateService.remove(new LambdaUpdateWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId, id));
-        //再新增
+        // 再新增
         List<AdminRoleRelate> relates = new ArrayList<>(roleIds.size());
         AdminRoleRelate relate = null;
-        for (Integer roleId : roleIds) {
+        for (Long roleId : roleIds) {
             relate = new AdminRoleRelate();
             relate.setAdminId(id);
             relate.setRoleId(roleId);
@@ -181,7 +178,7 @@ public class AuthService {
         LambdaUpdateWrapper<AdminInfo> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(AdminInfo::getId, dto.getId()).set(AdminInfo::getStatus, dto.getStatus());
         adminInfoService.update(wrapper);
-        adminInfoService.removeCachePermissionInAdminIds(Arrays.asList(dto.getId()));
+        adminInfoService.removeCachePermissionInAdminIds(Collections.singletonList(dto.getId()));
         adminInfoService.updateAdminInfoCache(dto.getId());
     }
 
@@ -192,9 +189,10 @@ public class AuthService {
      * @since 2025/6/17 19:34
      */
     @Transactional(rollbackFor = Exception.class)
-    public void removeAdminInfoByIds(List<Integer> userIds) {
+    public void removeAdminInfoByIds(List<Long> userIds) {
         adminInfoService.removeByIds(userIds);
-        adminRoleRelateService.remove(new LambdaQueryWrapper<AdminRoleRelate>().in(AdminRoleRelate::getAdminId, userIds));
+        adminRoleRelateService
+            .remove(new LambdaQueryWrapper<AdminRoleRelate>().in(AdminRoleRelate::getAdminId, userIds));
         adminInfoService.removeCachePermissionInAdminIds(userIds);
     }
 

@@ -26,13 +26,13 @@ public interface AdminInfoService extends IService<AdminInfo> {
      * @param userId 用户id
      * @return 权限列表
      */
-    List<String> getPermissionsById(Integer userId);
+    List<String> getPermissionsById(Long userId);
 
-    AdminInfoVO getAdminInfoById(Integer id);
+    AdminInfoVO getAdminInfoById(Long id);
 
     void updateAdmin(AdminInfo adminInfo);
 
-    AdminInfoVO updateAdminInfoCache(Integer id);
+    AdminInfoVO updateAdminInfoCache(Long id);
 
     /**
      * 根据用户名和密码查询
@@ -51,9 +51,8 @@ public interface AdminInfoService extends IService<AdminInfo> {
      */
     Page<AdminInfo> getAdminInfoPageList(AdminInfoPageDTO pageDTO);
 
-    void removeCachePermissionInAdminIds(List<Integer> adminIds);
+    void removeCachePermissionInAdminIds(List<Long> adminIds);
 
     R<Object> updatePersonal(PersonalEditDTO dto);
-
 
 }

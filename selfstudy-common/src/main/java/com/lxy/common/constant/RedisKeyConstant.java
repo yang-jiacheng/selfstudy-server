@@ -54,23 +54,22 @@ public class RedisKeyConstant {
      */
     private static final String RANKINGS = "Rankings";
 
-
     private static final String CODE_KEY = "kaptchaCode:";
 
     private static final String MATH_CODE_KEY = "kaptchaCodeMath:";
 
-    public static String getLoginStatus(Integer userId) {
+    public static String getLoginStatus(Long userId) {
         return LOGIN_STATUS + ":user_" + userId;
     }
 
-    public static String getAdminLoginStatus(Integer adminId) {
+    public static String getAdminLoginStatus(Long adminId) {
         return ADMIN_LOGIN_STATUS + ":admin_" + adminId;
     }
 
     /**
      * 获取管理员双令牌会话Redis键
      */
-    public static String getAdminDualTokenSessions(Integer adminId) {
+    public static String getAdminDualTokenSessions(Long adminId) {
         return ADMIN_DUAL_TOKEN_SESSIONS + ":admin_" + adminId;
     }
 
@@ -86,7 +85,7 @@ public class RedisKeyConstant {
         return CLASSIFY_LIST;
     }
 
-    public static String getUserInfo(Integer userId) {
+    public static String getUserInfo(Long userId) {
         return USER_INFO + "userId_" + userId;
     }
 
@@ -102,7 +101,7 @@ public class RedisKeyConstant {
         return MATH_CODE_KEY + "uuid_" + uuid;
     }
 
-    public static String getAdminInfo(Integer adminId) {
+    public static String getAdminInfo(Long adminId) {
         return ADMIN_INFO + "admin_" + adminId;
     }
 }

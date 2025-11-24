@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * TODO
+ * 个人信息修改DTO
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -15,7 +15,7 @@ import lombok.Data;
 public class PersonalEditDTO implements java.io.Serializable {
 
     @NotNull
-    private Integer id;
+    private Long id;
 
     @NotNull
     private String name;

@@ -3,13 +3,13 @@ package com.lxy.framework.controller;
 import com.aliyuncs.auth.sts.AssumeRoleResponse;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.domain.R;
+import com.lxy.common.dto.GenerateImageDTO;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.util.FileUtil;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.OssUtil;
-import com.lxy.system.dto.GenerateImageDTO;
 import com.lxy.system.service.BusinessConfigService;
-import com.lxy.system.service.ResourcesService;
+import com.lxy.system.service.resources.ResourcesService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,7 +63,7 @@ public class ResourcesController {
             return R.fail(-1, "获取凭证失败");
         }
         AssumeRoleResponse.Credentials credentials = assumeRoleResponse.getCredentials();
-        //压缩大小
+        // 压缩大小
         int size = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.COMPRESSION_SIZE));
         Map<String, Object> map = new HashMap<>(1);
         map.put("credentials", credentials);
@@ -86,7 +86,7 @@ public class ResourcesController {
 
     @GetMapping("/downloadFile")
     public void downloadFile(HttpServletResponse response, String fileName) {
-        //是否开启OSS
+        // 是否开启OSS
         boolean flag = AliYunProperties.ossEnabled;
         if (flag) {
             OssUtil.downloadOssFile(response, fileName);

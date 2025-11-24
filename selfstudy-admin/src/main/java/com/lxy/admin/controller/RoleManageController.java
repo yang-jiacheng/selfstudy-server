@@ -7,7 +7,7 @@ import com.lxy.common.domain.CollResult;
 import com.lxy.common.domain.R;
 import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
-import com.lxy.common.vo.EnumVO;
+import com.lxy.common.vo.LabelValueVO;
 import com.lxy.system.dto.RoleEditDTO;
 import com.lxy.system.dto.RolePageDTO;
 import com.lxy.system.po.Role;
@@ -43,7 +43,6 @@ public class RoleManageController {
     @Resource
     private AuthService authService;
 
-
     /**
      * 角色分页列表
      *
@@ -57,11 +56,11 @@ public class RoleManageController {
     }
 
     @PostMapping(value = "/getRoleRecords", produces = "application/json")
-    public R<CollResult<EnumVO>> getRoleRecords() {
+    public R<CollResult<LabelValueVO>> getRoleRecords() {
         List<Role> list = roleService.list();
-        List<EnumVO> vos = new ArrayList<>();
+        List<LabelValueVO> vos = new ArrayList<>();
         for (Role role : list) {
-            vos.add(new EnumVO(role.getId(), role.getName()));
+            vos.add(new LabelValueVO(role.getId(), role.getName()));
         }
         return R.ok(new CollResult<>(vos));
     }
@@ -74,7 +73,7 @@ public class RoleManageController {
      */
     @Log(title = "删除角色", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/removeRoleById", produces = "application/json")
-    public R<Object> removeRoleById(@RequestParam("id") Integer id) {
+    public R<Object> removeRoleById(@RequestParam("id") Long id) {
         authService.removeRoleById(id);
         return R.ok();
     }
@@ -86,7 +85,7 @@ public class RoleManageController {
      * @since 2025/6/13 10:44
      */
     @PostMapping(value = "/getRoleById", produces = "application/json")
-    public R<Map<String, Object>> getRoleById(@RequestParam("id") Integer id) {
+    public R<Map<String, Object>> getRoleById(@RequestParam("id") Long id) {
         Map<String, Object> map = authService.getRoleDetail(id);
         return R.ok(map);
     }
@@ -99,10 +98,9 @@ public class RoleManageController {
      */
     @Log(title = "编辑角色", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/addOrUpdateRole", produces = "application/json")
-    public R<Integer> addOrUpdateRole(@RequestBody @Valid RoleEditDTO roleEditDTO) {
-        Integer roleId = authService.addOrUpdateRole(roleEditDTO);
+    public R<Long> addOrUpdateRole(@RequestBody @Valid RoleEditDTO roleEditDTO) {
+        Long roleId = authService.addOrUpdateRole(roleEditDTO);
         return R.ok(roleId);
     }
-
 
 }

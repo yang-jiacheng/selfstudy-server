@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Description: 自习记录
- * author: jiacheng yang.
- * Date: 2022/12/23 11:19
- * Version: 1.0
+ * Description: 自习记录 author: jiacheng yang. Date: 2022/12/23 11:19 Version: 1.0
  */
 
 @RequestMapping("/studyRecord")
@@ -35,24 +32,19 @@ public class StudyRecordController {
     }
 
     /**
-     * Description: 获取自习笔记列表
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:25
-     * Param: [page, limit]
+     * Description: 获取自习笔记列表 Author: jiacheng yang. Date: 2025/02/20 10:25 Param: [page, limit]
      */
     @PostMapping(value = "/getStudyNotes", produces = "application/json")
-    public R<List<StudyRecord>> getStudyNotes(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                                              @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
-        int userId = UserIdUtil.getUserId();
+    public R<List<StudyRecord>> getStudyNotes(
+        @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+        @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
+        long userId = UserIdUtil.getUserId();
         PageInfo<StudyRecord> pg = studyRecordService.getStudyNotePageList(userId, page, limit);
         return R.ok(pg.getList());
     }
 
     /**
-     * Description: 获取自习笔记详情
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:26
-     * Param: [recordId]
+     * Description: 获取自习笔记详情 Author: jiacheng yang. Date: 2025/02/20 10:26 Param: [recordId]
      */
     @PostMapping(value = "/getStudyNoteDetail", produces = "application/json")
     public R<StudyRecord> getStudyNoteDetail(@RequestParam(value = "recordId") Integer recordId) {
@@ -62,24 +54,17 @@ public class StudyRecordController {
     }
 
     /**
-     * Description: 编辑自习笔记
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:26
-     * Param: [recordId, content, pic]
+     * Description: 编辑自习笔记 Author: jiacheng yang. Date: 2025/02/20 10:26 Param: [recordId, content, pic]
      */
     @PostMapping(value = "/saveStudyNote", produces = "application/json")
     public R<Object> saveStudyNote(@RequestParam(value = "recordId") Integer recordId,
-                                   @RequestParam(value = "content") String content,
-                                   @RequestParam(value = "pic", required = false) String pic) {
+        @RequestParam(value = "content") String content, @RequestParam(value = "pic", required = false) String pic) {
         studyRecordService.saveStudyNote(recordId, content, pic);
         return R.ok();
     }
 
     /**
-     * Description: 删除自习笔记
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:26
-     * Param: [recordId]
+     * Description: 删除自习笔记 Author: jiacheng yang. Date: 2025/02/20 10:26 Param: [recordId]
      */
     @PostMapping(value = "/removeStudyNote", produces = "application/json")
     public R<Object> removeStudyNote(@RequestParam(value = "recordId") Integer recordId) {
@@ -88,17 +73,16 @@ public class StudyRecordController {
     }
 
     /**
-     * Description: 获取自习记录
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:26
-     * Param: [page, limit]
+     * Description: 获取自习记录 Author: jiacheng yang. Date: 2025/02/20 10:26 Param: [page, limit]
      */
     @PostMapping(value = "/getStudyRecord", produces = "application/json")
-    public R<List<StudyRecordVO>> getStudyRecord(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                                                 @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
-        int userId = UserIdUtil.getUserId();
-        //已完成的记录
-        PageInfo<StudyRecordVO> pg = studyRecordService.getStudyRecord(userId, null, StudyStatus.FINISH.type, page, limit);
+    public R<List<StudyRecordVO>> getStudyRecord(
+        @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+        @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
+        long userId = UserIdUtil.getUserId();
+        // 已完成的记录
+        PageInfo<StudyRecordVO> pg =
+            studyRecordService.getStudyRecord(userId, null, StudyStatus.FINISH.type, page, limit);
         return R.ok(pg.getList());
     }
 

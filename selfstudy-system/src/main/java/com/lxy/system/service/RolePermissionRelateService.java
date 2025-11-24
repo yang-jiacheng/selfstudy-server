@@ -20,11 +20,11 @@ public interface RolePermissionRelateService extends IService<RolePermissionRela
      * @param roleId 角色id
      * @return 角色权限集合
      */
-    List<RolePermissionRelate> getPermissionByRole(Integer roleId);
+    List<RolePermissionRelate> getPermissionByRole(Long roleId);
 
     /**
      * 移除缓存中角色对应的用户的登录状态
      */
-    void removeCachePermissionInRole(List<Integer> roleIds);
+    void removeCachePermissionInRole(List<Long> roleIds);
 
 }

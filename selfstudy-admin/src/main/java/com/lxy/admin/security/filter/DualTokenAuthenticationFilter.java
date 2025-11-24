@@ -24,8 +24,7 @@ import static com.lxy.common.util.DualTokenUtil.PARAM_NAME_USER_ID;
 import static com.lxy.common.util.DualTokenUtil.TOKEN_NAME_ADMIN;
 
 /**
- * 双令牌认证过滤器
- * 基于Access Token + Refresh Token的无状态认证
+ * 双令牌认证过滤器 基于Access Token + Refresh Token的无状态认证
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -41,12 +40,13 @@ public class DualTokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
         // 获取Access Token
         String accessToken = DualTokenUtil.getToken(request, TOKEN_NAME_ADMIN);
 
         if (accessToken == null) {
-            //未获取到就放行，交给Spring Security处理，最终会进入 AuthenticationEntryPointAdminImpl 处理
+            // 未获取到就放行，交给Spring Security处理，最终会进入 AuthenticationEntryPointAdminImpl 处理
             logger.error("token未获取到");
             filterChain.doFilter(request, response);
             return;
@@ -61,11 +61,11 @@ public class DualTokenAuthenticationFilter extends OncePerRequestFilter {
         }
         // 解析Access Token
         Claims claims = DualTokenUtil.parseToken(accessToken);
-        Integer userId = (Integer) claims.get(PARAM_NAME_USER_ID);
+        Long userId = (Long)claims.get(PARAM_NAME_USER_ID);
 
         // 创建认证用户对象
         StatelessUser statelessUser = new StatelessUser(userId, null, null);
-        //设置权限
+        // 设置权限
         AdminInfoVO adminInfo = adminInfoService.getAdminInfoById(userId);
         if (adminInfo == null) {
             // 用户不存在，也放行，交给Spring Security处理
@@ -76,7 +76,7 @@ public class DualTokenAuthenticationFilter extends OncePerRequestFilter {
         statelessUser.setPermissions(adminInfo.getPermissions());
         // 存入SecurityContextHolder
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(statelessUser, null, statelessUser.getAuthorities());
+            new UsernamePasswordAuthenticationToken(statelessUser, null, statelessUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         // 输出日志

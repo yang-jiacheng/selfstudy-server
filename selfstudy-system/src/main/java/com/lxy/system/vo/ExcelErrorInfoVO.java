@@ -1,12 +1,16 @@
 package com.lxy.system.vo;
 
+import lombok.Data;
+
 /**
- * TODO
+ * Excel错误信息VO
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2023/02/20 17:48
  */
+
+@Data
 public class ExcelErrorInfoVO {
 
     /**
@@ -22,46 +26,12 @@ public class ExcelErrorInfoVO {
      */
     private String dispose;
 
-    public ExcelErrorInfoVO() {
-    }
+    public ExcelErrorInfoVO() {}
 
     public ExcelErrorInfoVO(String position, String reason, String dispose) {
         this.position = position;
         this.reason = reason;
         this.dispose = dispose;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public String getDispose() {
-        return dispose;
-    }
-
-    public void setDispose(String dispose) {
-        this.dispose = dispose;
-    }
-
-    @Override
-    public String toString() {
-        return "ExcelErrorInfoVO{" +
-                "position='" + position + '\'' +
-                ", reason='" + reason + '\'' +
-                ", dispose='" + dispose + '\'' +
-                '}';
     }
 
 }

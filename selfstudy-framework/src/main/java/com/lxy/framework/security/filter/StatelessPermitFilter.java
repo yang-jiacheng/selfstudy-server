@@ -40,38 +40,40 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
 
         String tokenKey = loginUserType.equals(LogUserType.ADMIN.type) ? TOKEN_NAME_ADMIN : TOKEN_NAME_APP;
 
         // 访问的地址
         String accessToken = DualTokenUtil.getToken(request, tokenKey);
         if (accessToken == null) {
-            //放行
+            // 放行
             filterChain.doFilter(request, response);
             return;
         }
-        //解析token
-        Integer userId = null;
+        // 解析token
+        Long userId = null;
         try {
             Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
-            userId = (Integer) claims.get("userId");
+            userId = (Integer)claims.get("userId");
         } catch (Exception e) {
             LOG.error("解析token失败", e);
-            //放行
+            // 放行
             filterChain.doFilter(request, response);
             return;
         }
-        String loginStatusKey = loginUserType.equals(LogUserType.ADMIN.type) ? RedisKeyConstant.getAdminInfo(userId) : RedisKeyConstant.getLoginStatus(userId);
+        String loginStatusKey = loginUserType.equals(LogUserType.ADMIN.type) ? RedisKeyConstant.getAdminInfo(userId)
+            : RedisKeyConstant.getLoginStatus(userId);
 
-//        //存入SecurityContextHolder
-//        UsernamePasswordAuthenticationToken authenticationToken =
-//                new UsernamePasswordAuthenticationToken(loginStatus,null,loginStatus.getAuthorities());
-//        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-//        //输出日志
-//        String msg  = LogUtil.logOperation(userId, request,"");
-//        logger.warn(msg);
-        //放行
+        // //存入SecurityContextHolder
+        // UsernamePasswordAuthenticationToken authenticationToken =
+        // new UsernamePasswordAuthenticationToken(loginStatus,null,loginStatus.getAuthorities());
+        // SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        // //输出日志
+        // String msg = LogUtil.logOperation(userId, request,"");
+        // logger.warn(msg);
+        // 放行
         filterChain.doFilter(request, response);
 
     }

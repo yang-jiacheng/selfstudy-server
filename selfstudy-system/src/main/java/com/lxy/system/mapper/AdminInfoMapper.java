@@ -23,6 +23,6 @@ public interface AdminInfoMapper extends BaseMapper<AdminInfo> {
      * @param userId 用户id
      * @return 权限集合
      */
-    List<String> getPermissionsById(@Param("userId") Integer userId);
+    List<String> getPermissionsById(@Param("userId") Long userId);
 
 }

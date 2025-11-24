@@ -19,12 +19,12 @@ public interface ClassifyService extends IService<Classify> {
     /**
      * 根据id获取图书馆信息
      */
-    Classify getClassifyById(Integer id);
+    Classify getClassifyById(Long id);
 
     /**
      * 更新图书馆信息
      */
-    Integer updateClassify(Classify classify);
+    Long updateClassify(Classify classify);
 
     /**
      * 获取图书馆
@@ -52,5 +52,5 @@ public interface ClassifyService extends IService<Classify> {
      * @author jiacheng yang.
      * @since 2025/6/30 16:48
      */
-    void removeClassify(Integer id);
+    void removeClassify(Long id);
 }

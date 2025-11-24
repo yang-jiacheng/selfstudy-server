@@ -35,7 +35,7 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback> i
 
     @Override
     public PageResult<FeedbackVO> getFeedBackList(FeedbackPageDTO dto) {
-        //开始分页
+        // 开始分页
         PageHelper.startPage(dto.getPage(), dto.getLimit(), "id desc");
         List<FeedbackVO> list = feedbackMapper.getFeedBackList(dto);
         list.forEach(vo -> {
@@ -46,7 +46,7 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback> i
     }
 
     @Override
-    public FeedbackVO getFeedBackDetail(Integer id) {
+    public FeedbackVO getFeedBackDetail(Long id) {
         FeedbackVO feedback = feedbackMapper.getFeedBackDetail(id);
         feedback.setPic(ImgConfigUtil.joinUploadUrl(feedback.getPic()));
         feedback.setProfilePath(ImgConfigUtil.joinUploadUrl(feedback.getProfilePath()));

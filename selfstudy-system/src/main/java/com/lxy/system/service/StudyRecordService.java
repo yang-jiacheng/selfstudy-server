@@ -29,52 +29,52 @@ public interface StudyRecordService extends IService<StudyRecord> {
     /**
      * 获取某图书馆正在自习的记录
      */
-    List<StudyRecord> getRecordsByStatusAndClassIfy(Integer classifyId);
+    List<StudyRecord> getRecordsByStatusAndClassIfy(Long classifyId);
 
     /**
      * 获取自习笔记
      */
-    PageInfo<StudyRecord> getStudyNotePageList(Integer userId, Integer page, Integer limit);
+    PageInfo<StudyRecord> getStudyNotePageList(Long userId, Integer page, Integer limit);
 
     /**
      * 获取自习记录
      */
-    PageInfo<StudyRecordVO> getStudyRecord(Integer userId, Integer classifyId, Integer status, Integer page, Integer limit);
+    PageInfo<StudyRecordVO> getStudyRecord(Long userId, Long classifyId, Integer status, Integer page, Integer limit);
 
     /**
      * 编辑自习笔记
      */
-    boolean saveStudyNote(Integer recordId, String content, String pic);
+    boolean saveStudyNote(Long recordId, String content, String pic);
 
     /**
      * 删除自习笔记
      */
-    boolean removeStudyNote(Integer recordId);
+    boolean removeStudyNote(Long recordId);
 
     /**
      * 根据自习室id获取自习中的记录，连表查用户信息
      */
-    List<StudyRecordVO> getLearningRecords(Integer catalogId);
+    List<StudyRecordVO> getLearningRecords(Long catalogId);
 
     /**
      * 获取记录根据id
      */
-    StudyRecordVO getLearningRecordDetail(Integer recordId);
+    StudyRecordVO getLearningRecordDetail(Long recordId);
 
     /**
      * 开始自习
      */
-    Integer startStudy(StudyRecordDTO studyRecordDTO, Catalog catalog, Integer userId);
+    Long startStudy(StudyRecordDTO studyRecordDTO, Catalog catalog, Long userId);
 
     /**
      * 结束自习
      */
-    StudyRecord stopStudy(Integer recordId, Integer userId);
+    StudyRecord stopStudy(Long recordId, Long userId);
 
     /**
      * 把正在自习的或者离开的记录变为已完成
      */
-    void updateRecordToFinish(Integer userId);
+    void updateRecordToFinish(Long userId);
 
     /**
      * 获取自习记录,后台查询用

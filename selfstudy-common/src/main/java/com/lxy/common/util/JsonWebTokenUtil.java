@@ -3,7 +3,7 @@ package com.lxy.common.util;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lxy.common.constant.CommonConstant;
+import com.lxy.common.constant.AuthConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -44,33 +44,32 @@ public class JsonWebTokenUtil {
     /**
      * 产生JWT字符串
      *
-     * @param userId   用户id
-     * @param device   设备类型 android、ios、web
+     * @param userId 用户id
+     * @param device 设备类型 android、ios、web
      * @param userType 用户类型 学生2，管理员1
      * @return JWT字符串
      */
-    public static String getJwtStr(Integer userId, String device, String userType) {
+    public static String getJwtStr(Long userId, String device, String userType) {
         if (userId == null) {
             logger.error("userId is null");
             return null;
         }
-        //获取密钥
+        // 获取密钥
         String secretKey = getSecretKey(userId);
-        //过期时间
-        //long expiredTime = DateUtil.offsetDay(new Date(), EXPIRED_DAYS).getTime();
-        //自定义载荷属性
+        // 过期时间
+        // long expiredTime = DateUtil.offsetDay(new Date(), EXPIRED_DAYS).getTime();
+        // 自定义载荷属性
         Map<String, Object> claimsMap = new HashMap<String, Object>();
-        claimsMap.put(CommonConstant.PARAM_NAME_DEVICE, device);
-        claimsMap.put(CommonConstant.PARAM_NAME_USER_ID, userId);
-        claimsMap.put(CommonConstant.PARAM_NAME_USER_TYPE, userType);
-        //产生JWT
+        claimsMap.put(AuthConstant.PARAM_NAME_DEVICE, device);
+        claimsMap.put(AuthConstant.PARAM_NAME_USER_ID, userId);
+        claimsMap.put(AuthConstant.PARAM_NAME_USER_TYPE, userType);
+        // 产生JWT
         JwtBuilder jwtBuilder = Jwts.builder();
         jwtBuilder.setClaims(claimsMap)
-                // .setId(UUID) //唯一id
-                .setSubject("jiacheng yang.")
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                //.setExpiration(expiredTime)
-                .signWith(SignatureAlgorithm.HS512, secretKey);
+            // .setId(UUID) //唯一id
+            .setSubject("jiacheng yang.").setIssuedAt(new Date(System.currentTimeMillis()))
+            // .setExpiration(expiredTime)
+            .signWith(SignatureAlgorithm.HS512, secretKey);
         return jwtBuilder.compact();
     }
 
@@ -90,20 +89,19 @@ public class JsonWebTokenUtil {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> claimsUnSign = null;
         try {
-            claimsUnSign = objectMapper.readValue(payload, new TypeReference<HashMap<String, Object>>() {
-            });
+            claimsUnSign = objectMapper.readValue(payload, new TypeReference<HashMap<String, Object>>() {});
         } catch (Exception e) {
             log.error("解析JWT失败", e);
             return null;
         }
 
-        int userId = 0;
-        Object value = claimsUnSign.get(CommonConstant.PARAM_NAME_USER_ID);
+        long userId = 0;
+        Object value = claimsUnSign.get(AuthConstant.PARAM_NAME_USER_ID);
         if (value != null) {
             if (value instanceof Integer) {
-                userId = (int) value;
+                userId = (int)value;
             } else if (value instanceof String) {
-                userId = Integer.parseInt((String) value);
+                userId = Integer.parseInt((String)value);
             }
         }
 
@@ -123,7 +121,6 @@ public class JsonWebTokenUtil {
         return claimsSign;
 
     }
-
 
     /**
      * 读取载荷属性
@@ -166,14 +163,13 @@ public class JsonWebTokenUtil {
     /**
      * 根据userId获取密钥
      */
-    public static String getSecretKey(Integer userId) {
-        int index = userId % SECRET_KEY_POOL.length;
+    public static String getSecretKey(Long userId) {
+        int index = Math.toIntExact(userId % SECRET_KEY_POOL.length);
         String baseKey = SECRET_KEY_POOL[index];
         String base64SecretKey;
         base64SecretKey = Base64.getEncoder().encodeToString(baseKey.getBytes(StandardCharsets.UTF_8));
         return base64SecretKey;
     }
-
 
     /**
      * 获取access_token
@@ -191,18 +187,18 @@ public class JsonWebTokenUtil {
         return accessToken;
     }
 
-
     public static void main(String[] args) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(new Date());
-//        calendar.add(Calendar.DATE, EXPIRED_DAYS);
-//        Date expiredTime = calendar.getTime();
-//        System.out.println(expiredTime);
-        Claims claimsSign = getClaimsSign("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWFjaGVuZyB5YW5nLiIsInVzZXJUeXBlIjoiMSIsImRldmljZSI6IndlYiIsInVzZXJJZCI6MSwiaWF0IjoxNzUwNzUyNTIyfQ.Ovo3GlXpzLf2ZrVNTkOPkZ1UGCVsCvH5q19IeCFiK3eo5525pEFkgA2nz7SCfbe88z4I3ETbH1q-yBT7SdDXwA");
+        // Calendar calendar = Calendar.getInstance();
+        // calendar.setTime(new Date());
+        // calendar.add(Calendar.DATE, EXPIRED_DAYS);
+        // Date expiredTime = calendar.getTime();
+        // System.out.println(expiredTime);
+        Claims claimsSign = getClaimsSign(
+            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWFjaGVuZyB5YW5nLiIsInVzZXJUeXBlIjoiMSIsImRldmljZSI6IndlYiIsInVzZXJJZCI6MSwiaWF0IjoxNzUwNzUyNTIyfQ.Ovo3GlXpzLf2ZrVNTkOPkZ1UGCVsCvH5q19IeCFiK3eo5525pEFkgA2nz7SCfbe88z4I3ETbH1q-yBT7SdDXwA");
         System.out.println(claimsSign);
         claimsSign.get("");
-//        System.out.println(getJwtStr(1,"ios","2"));
-        //eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ4aXV5dSBMaS4iLCJ1c2VyVHlwZSI6IjIiLCJkZXZpY2UiOiJpb3MiLCJ1c2VySWQiOjEsImlhdCI6MTY2NjQzMzg2OH0.ifJYZX2H1gV2H2a0CTgXB3yE7jK-5B1_fBJaMzOQ-9wntYr3MhMVsdJ0d9YZiLLoC8lrr7FDiX01MmV283AmQA
+        // System.out.println(getJwtStr(1,"ios","2"));
+        // eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ4aXV5dSBMaS4iLCJ1c2VyVHlwZSI6IjIiLCJkZXZpY2UiOiJpb3MiLCJ1c2VySWQiOjEsImlhdCI6MTY2NjQzMzg2OH0.ifJYZX2H1gV2H2a0CTgXB3yE7jK-5B1_fBJaMzOQ-9wntYr3MhMVsdJ0d9YZiLLoC8lrr7FDiX01MmV283AmQA
     }
 
 }

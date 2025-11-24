@@ -8,7 +8,7 @@
         <result column="parent_id" property="parentId"/>
         <result column="level" property="level"/>
         <result column="node_path" property="nodePath"
-                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+                typeHandler="com.lxy.system.handler.ListLongTypeHandler"/>
         <result column="name_path" property="namePath"/>
         <result column="id_path" property="idPath"/>
         <result column="title" property="title"/>

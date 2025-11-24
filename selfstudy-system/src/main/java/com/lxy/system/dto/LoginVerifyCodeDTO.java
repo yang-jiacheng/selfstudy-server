@@ -1,6 +1,5 @@
 package com.lxy.system.dto;
 
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -8,7 +7,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * TODO
+ * 验证码登录DTO
  *
  * @author jiacheng yang.
  * @version 1.0

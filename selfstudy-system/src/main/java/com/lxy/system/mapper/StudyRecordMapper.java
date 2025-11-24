@@ -19,19 +19,23 @@ import java.util.List;
 @Mapper
 public interface StudyRecordMapper extends BaseMapper<StudyRecord> {
 
-    List<StudyRecord> getStudyNoteList(@Param("userId") Integer userId);
+    List<StudyRecord> getStudyNoteList(@Param("userId") Long userId);
 
-    Integer getStudyNoteList_COUNT(@Param("userId") Integer userId);
+    Integer getStudyNoteList_COUNT(@Param("userId") Long userId);
 
-    List<StudyRecordVO> getLearningRecords(@Param("catalogId") Integer catalogId);
+    List<StudyRecordVO> getLearningRecords(@Param("catalogId") Long catalogId);
 
-    StudyRecordVO getLearningRecordDetail(@Param("recordId") Integer recordId);
+    StudyRecordVO getLearningRecordDetail(@Param("recordId") Long recordId);
 
-    List<StudyRecordVO> getStudyRecordList(@Param("userId") Integer userId, @Param("classifyId") Integer classifyId, @Param("status") Integer status);
+    List<StudyRecordVO> getStudyRecordList(@Param("userId") Long userId, @Param("classifyId") Long classifyId,
+        @Param("status") Integer status);
 
-    Integer getStudyRecordList_COUNT(@Param("userId") Integer userId, @Param("classifyId") Integer classifyId, @Param("status") Integer status);
+    Integer getStudyRecordList_COUNT(@Param("userId") Long userId, @Param("classifyId") Long classifyId,
+        @Param("status") Integer status);
 
-    List<StudyRecordVO> getStudyRecordByAdmin(@Param("phone") String phone, @Param("classifyId") Integer classifyId, @Param("status") Integer status);
+    List<StudyRecordVO> getStudyRecordByAdmin(@Param("phone") String phone, @Param("classifyId") Long classifyId,
+        @Param("status") Integer status);
 
-    Integer getStudyRecordByAdmin_COUNT(@Param("phone") String phone, @Param("classifyId") Integer classifyId, @Param("status") Integer status);
+    Integer getStudyRecordByAdmin_COUNT(@Param("phone") String phone, @Param("classifyId") Long classifyId,
+        @Param("status") Integer status);
 }

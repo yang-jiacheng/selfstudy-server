@@ -24,5 +24,5 @@ public interface FeedbackMapper extends BaseMapper<Feedback> {
 
     Integer getFeedBackList_COUNT(@Param("dto") FeedbackPageDTO dto);
 
-    FeedbackVO getFeedBackDetail(@Param("id") Integer id);
+    FeedbackVO getFeedBackDetail(@Param("id") Long id);
 }

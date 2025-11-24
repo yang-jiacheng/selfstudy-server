@@ -1,19 +1,19 @@
 package com.lxy.common.domain;
 
 /**
- * TODO
+ * 图片模板参数DTO
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2024/12/17 10:27
  */
-public class GraphicsTextParameter implements java.io.Serializable {
+public class GraphicsTextParameterDTO implements java.io.Serializable {
     private static final long serialVersionUID = -9095058999894233263L;
 
-    //字段名
+    // 字段名
     private String key;
 
-    //字段值
+    // 字段值
     private String value;
 
     /*
@@ -30,20 +30,19 @@ public class GraphicsTextParameter implements java.io.Serializable {
      */
     private String fontWeight;
 
-    //字体名称 例：微软雅黑
+    // 字体名称 例：微软雅黑
     private String fontKey;
 
-    //字体值 例：Microsoft Yahei
+    // 字体值 例：Microsoft Yahei
     private String fontValue;
 
-    //字体颜色 例：rgb(0,0,0)
+    // 字体颜色 例：rgb(0,0,0)
     private String fontColor;
 
-    public GraphicsTextParameter() {
-    }
+    public GraphicsTextParameterDTO() {}
 
     // 构造函数：深拷贝构造函数
-    public GraphicsTextParameter(GraphicsTextParameter other) {
+    public GraphicsTextParameterDTO(GraphicsTextParameterDTO other) {
         if (other != null) {
             this.key = other.key;
             this.value = other.value;

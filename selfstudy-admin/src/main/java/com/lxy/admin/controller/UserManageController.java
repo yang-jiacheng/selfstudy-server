@@ -48,7 +48,6 @@ public class UserManageController {
     @Resource
     private UserStatisticsService userStatisticsService;
 
-
     /**
      * 获取用户列表
      *
@@ -60,7 +59,6 @@ public class UserManageController {
         Page<User> pg = userService.getUserPageList(dto);
         return R.ok(pg);
     }
-
 
     @PostMapping(value = "/saveUser", produces = "application/json")
     @Log(title = "保存用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
@@ -78,11 +76,10 @@ public class UserManageController {
 
     @PostMapping(value = "/removeUserByIds", produces = "application/json")
     @Log(title = "批量删除用户", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
-    public R<Object> removeUserByIds(@RequestBody @NotEmpty List<Integer> ids) {
+    public R<Object> removeUserByIds(@RequestBody @NotEmpty List<Long> ids) {
         userStatisticsService.removeUserByIds(ids);
         return R.ok();
     }
-
 
     @PostMapping(value = "/exportUserInExcel")
     @Log(title = "导出用户信息", businessType = LogBusinessType.EXPORT, userType = LogUserType.ADMIN)
@@ -108,6 +105,5 @@ public class UserManageController {
         }
         return R.ok();
     }
-
 
 }

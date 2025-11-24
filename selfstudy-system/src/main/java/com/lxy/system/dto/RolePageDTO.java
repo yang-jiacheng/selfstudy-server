@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * TODO
+ * 角色分页查询DTO
  *
  * @author jiacheng yang.
  * @version 1.0

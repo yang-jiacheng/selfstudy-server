@@ -45,14 +45,14 @@ public class FeedBackManageController {
     }
 
     @PostMapping(value = "/removeFeedBackById", produces = "application/json")
-    public R<Object> removeFeedBackById(@RequestParam("id") Integer id) {
+    public R<Object> removeFeedBackById(@RequestParam("id") Long id) {
         feedbackService.removeById(id);
         return R.ok();
     }
 
     @PostMapping(value = "/replyFeedBackById", produces = "application/json")
     public R<Object> replyFeedBackById(@RequestBody FeedBackReplyDTO dto) {
-        int userId = UserIdUtil.getUserId();
+        long userId = UserIdUtil.getUserId();
         Feedback feedback = new Feedback();
         feedback.setId(dto.getId());
         feedback.setAdminId(userId);
@@ -62,6 +62,5 @@ public class FeedBackManageController {
         feedbackService.updateById(feedback);
         return R.ok();
     }
-
 
 }

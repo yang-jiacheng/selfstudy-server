@@ -23,7 +23,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     List<UserRankVO> getRankingsTotalDuration();
 
-    UserRankVO getUserRankingById(@Param("userId") Integer userId, @Param("studyDay") String studyDay);
+    UserRankVO getUserRankingById(@Param("userId") Long userId, @Param("studyDay") String studyDay);
 
     void insertBatchUser(List<User> userList);
 

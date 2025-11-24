@@ -1,18 +1,19 @@
 package com.lxy.system.dto;
 
-
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.io.Serializable;
 
 /**
- * TODO
+ * 学习记录DTO
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2022/12/24 16:36
  */
 
+@Data
 public class StudyRecordDTO implements Serializable {
     private static final long serialVersionUID = 2247994618565339738L;
 
@@ -20,7 +21,7 @@ public class StudyRecordDTO implements Serializable {
      * 自习室id
      */
     @NotNull
-    private Integer catalogId;
+    private Long catalogId;
 
     /*
      * 标签
@@ -45,54 +46,4 @@ public class StudyRecordDTO implements Serializable {
      */
     private Integer settingDuration;
 
-    public Integer getCatalogId() {
-        return catalogId;
-    }
-
-    public void setCatalogId(Integer catalogId) {
-        this.catalogId = catalogId;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
-    public Integer getSeat() {
-        return seat;
-    }
-
-    public void setSeat(Integer seat) {
-        this.seat = seat;
-    }
-
-    public Integer getTimingMode() {
-        return timingMode;
-    }
-
-    public void setTimingMode(Integer timingMode) {
-        this.timingMode = timingMode;
-    }
-
-    public Integer getSettingDuration() {
-        return settingDuration;
-    }
-
-    public void setSettingDuration(Integer settingDuration) {
-        this.settingDuration = settingDuration;
-    }
-
-    @Override
-    public String toString() {
-        return "StudyRecordDTO{" +
-                "catalogId=" + catalogId +
-                ", tag='" + tag + '\'' +
-                ", seat=" + seat +
-                ", timingMode=" + timingMode +
-                ", settingDuration=" + settingDuration +
-                '}';
-    }
 }

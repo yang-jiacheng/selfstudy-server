@@ -37,7 +37,6 @@ public class ClassifyManageController {
     @Resource
     private ClassifyService classifyService;
 
-
     @PostMapping(value = "/getClassifyTree", produces = "application/json")
     public R<List<CatalogTreeVO>> getClassifyTree() {
         List<CatalogTreeVO> tree = catalogService.getCatalogTree();
@@ -45,40 +44,40 @@ public class ClassifyManageController {
     }
 
     @PostMapping(value = "/getClassifyById", produces = "application/json")
-    public R<Classify> getClassifyById(@RequestParam("id") Integer id) {
+    public R<Classify> getClassifyById(@RequestParam("id") Long id) {
         Classify classify = classifyService.getClassifyById(id);
         return R.ok(classify);
     }
 
     @PostMapping(value = "/updateClassify", produces = "application/json")
     @Log(title = "修改图书馆", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
-    public R<Integer> updateClassify(@RequestBody Classify classify) {
+    public R<Long> updateClassify(@RequestBody Classify classify) {
         return R.ok(classifyService.updateClassify(classify));
     }
 
     @PostMapping(value = "/removeClassify", produces = "application/json")
     @Log(title = "删除图书馆", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
-    public R<Object> removeClassify(@RequestParam("id") Integer id) {
+    public R<Object> removeClassify(@RequestParam("id") Long id) {
         classifyService.removeClassify(id);
         return R.ok();
     }
 
     @PostMapping(value = "/removeCatalog", produces = "application/json")
     @Log(title = "删除节点", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
-    public R<Object> removeCatalog(@RequestParam("id") Integer id) {
+    public R<Object> removeCatalog(@RequestParam("id") Long id) {
         catalogService.removeCatalog(id);
         return R.ok();
     }
 
     @PostMapping(value = "/getCatalogById", produces = "application/json")
-    public R<Catalog> getCatalogById(@RequestParam("id") Integer id) {
+    public R<Catalog> getCatalogById(@RequestParam("id") Long id) {
         Catalog catalog = catalogService.getById(id);
         return R.ok(catalog);
     }
 
     @PostMapping(value = "/saveCatalog", produces = "application/json")
     @Log(title = "保存节点", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
-    public R<Integer> saveCatalog(@RequestBody Catalog catalog) {
+    public R<Long> saveCatalog(@RequestBody Catalog catalog) {
         return R.ok(catalogService.saveCatalog(catalog));
     }
 

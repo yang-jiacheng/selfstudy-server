@@ -16,6 +16,7 @@ import com.lxy.system.po.AdminInfo;
 import com.lxy.system.po.AdminRoleRelate;
 import com.lxy.system.service.AdminInfoService;
 import com.lxy.system.service.AdminRoleRelateService;
+import com.lxy.system.vo.AdminInfoVO;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -51,7 +52,6 @@ public class AdminManageController {
     @Resource
     private AuthService authService;
 
-
     /**
      * 获取后管用户
      *
@@ -60,7 +60,7 @@ public class AdminManageController {
      */
     @PostMapping(value = "/getAdminInfoPageList", produces = "application/json")
     public R<Page<AdminInfo>> getAdminInfoList(@RequestBody AdminInfoPageDTO pageDTO) {
-        int userId = UserIdUtil.getUserId();
+        long userId = UserIdUtil.getUserId();
         pageDTO.setUserId(userId);
         Page<AdminInfo> pg = adminInfoService.getAdminInfoPageList(pageDTO);
         return R.ok(pg);
@@ -73,11 +73,12 @@ public class AdminManageController {
      * @since 2025/6/17 19:13
      */
     @PostMapping(value = "/getAdminInfoById", produces = "application/json")
-    public R<Map<String, Object>> getAdminInfoById(@RequestParam("id") Integer id) {
-        AdminInfo adminInfo = adminInfoService.getAdminInfoById(id);
+    public R<Map<String, Object>> getAdminInfoById(@RequestParam("id") Long id) {
+        AdminInfoVO adminInfo = adminInfoService.getAdminInfoById(id);
         adminInfo.setPassword(null);
-        List<AdminRoleRelate> roleRelates = adminRoleRelateService.list(new LambdaQueryWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId, id));
-        List<Integer> roles = new ArrayList<>();
+        List<AdminRoleRelate> roleRelates =
+            adminRoleRelateService.list(new LambdaQueryWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId, id));
+        List<Long> roles = new ArrayList<>();
         if (CollUtil.isNotEmpty(roleRelates)) {
             roleRelates.forEach(roleRelate -> roles.add(roleRelate.getRoleId()));
         }
@@ -102,7 +103,7 @@ public class AdminManageController {
 
     @Log(title = "删除后管用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/removeAdminInfoByIds", produces = "application/json")
-    public R<Object> removeAdminInfoByIds(@RequestBody @NotEmpty List<Integer> userIds) {
+    public R<Object> removeAdminInfoByIds(@RequestBody @NotEmpty List<Long> userIds) {
         authService.removeAdminInfoByIds(userIds);
         return R.ok();
     }

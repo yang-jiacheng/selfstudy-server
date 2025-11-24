@@ -20,10 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Description: 学情统计
- * author: jiacheng yang.
- * Date: 2022/12/23 11:37
- * Version: 1.0
+ * Description: 学情统计 author: jiacheng yang. Date: 2022/12/23 11:37 Version: 1.0
  */
 
 @RequestMapping("/studyStatistics")
@@ -39,8 +36,8 @@ public class StudyStatisticsController {
     private final BusinessConfigService businessConfigService;
 
     @Autowired
-    public StudyStatisticsController(UserService userService, StudyStatisticsService statisticsService
-            , StudyRecordService studyRecordService, BusinessConfigService businessConfigService) {
+    public StudyStatisticsController(UserService userService, StudyStatisticsService statisticsService,
+        StudyRecordService studyRecordService, BusinessConfigService businessConfigService) {
         this.userService = userService;
         this.statisticsService = statisticsService;
         this.studyRecordService = studyRecordService;
@@ -48,15 +45,12 @@ public class StudyStatisticsController {
     }
 
     /**
-     * Description: 提交学习时长
-     * author: jiacheng yang.
-     * Date: 2025/02/20 10:21
-     * Param: [duration 学习时长 分钟, recordId 学习记录id]
+     * Description: 提交学习时长 author: jiacheng yang. Date: 2025/02/20 10:21 Param: [duration 学习时长 分钟, recordId 学习记录id]
      */
     @PostMapping(value = "/submitStudyDuration", produces = "application/json")
     public R<Object> submitStudyDuration(@RequestParam(value = "duration") Integer duration,
-                                         @RequestParam(value = "recordId") Integer recordId) {
-        int userId = UserIdUtil.getUserId();
+        @RequestParam(value = "recordId") Integer recordId) {
+        long userId = UserIdUtil.getUserId();
         StudyRecord record = studyRecordService.getById(recordId);
         if (record != null) {
             Date startTime = record.getStartTime();
@@ -67,10 +61,7 @@ public class StudyStatisticsController {
     }
 
     /**
-     * Description: 获取总排行榜
-     * author: jiacheng yang.
-     * Date: 2025/02/20 10:23
-     * Param: []
+     * Description: 获取总排行榜 author: jiacheng yang. Date: 2025/02/20 10:23 Param: []
      */
     @PostMapping(value = "/getRankings", produces = "application/json")
     public R<List<UserRankVO>> getRankings() {
@@ -79,10 +70,7 @@ public class StudyStatisticsController {
     }
 
     /**
-     * Description: 获取总排行榜更新规则
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:24
-     * Param: []
+     * Description: 获取总排行榜更新规则 Author: jiacheng yang. Date: 2025/02/20 10:24 Param: []
      */
     @PostMapping(value = "/getRankingsRules", produces = "application/json")
     public R<String> getRankingsRules() {
@@ -91,14 +79,11 @@ public class StudyStatisticsController {
     }
 
     /**
-     * Description: 获取自己的排名和信息
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:24
-     * Param: []
+     * Description: 获取自己的排名和信息 Author: jiacheng yang. Date: 2025/02/20 10:24 Param: []
      */
     @GetMapping(value = "/getSelfRankings", produces = "application/json")
     public R<UserRankVO> getSelfRankings() {
-        int userId = UserIdUtil.getUserId();
+        long userId = UserIdUtil.getUserId();
         UserRankVO user = userService.getUserRankingById(userId);
         return R.ok(user);
     }

@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * TODO
+ * 后管分页查询DTO
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -20,6 +20,6 @@ public class AdminInfoPageDTO extends PageDTO {
     @Serial
     private static final long serialVersionUID = 7688513498743720400L;
 
-    private Integer userId;
+    private Long userId;
 
 }

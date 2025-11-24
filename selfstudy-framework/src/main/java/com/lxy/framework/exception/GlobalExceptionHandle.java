@@ -7,13 +7,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * TODO
+ * 全局异常处理
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -34,20 +37,39 @@ public class GlobalExceptionHandle {
 
     @ExceptionHandler({MissingServletRequestParameterException.class})
     public R<Object> requestParameterException(MissingServletRequestParameterException e, HttpServletRequest request) {
-        String msg = StrUtil.format("发生异常_请求参数错误,参数类型为 {} 的必需请求参数 {} 不存在, 请求地址为 {}", e.getParameterType(), e.getParameterName(), request.getRequestURI());
+        String msg = StrUtil.format("请求参数错误,参数类型为 {} 的必需请求参数 {} 不存在, 请求地址为 {}", e.getParameterType(),
+            e.getParameterName(), request.getRequestURI());
+        LOG.error(msg, e);
+        return R.fail(msg);
+    }
+
+    /**
+     * 请求体验证异常处理（JSR303校验失败）
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public R<Object> methodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
+        // 获取校验错误信息
+        BindingResult bindingResult = e.getBindingResult();
+        StringBuilder sb = new StringBuilder("参数校验失败：");
+        for (FieldError error : bindingResult.getFieldErrors()) {
+            sb.append(StrUtil.format("[字段: {} 错误信息: {}] ", error.getField(), error.getDefaultMessage()));
+        }
+        String msg = StrUtil.format("{}，请求地址为 {}", sb.toString(), request.getRequestURI());
+
         LOG.error(msg, e);
         return R.fail(msg);
     }
 
     @ExceptionHandler({NullPointerException.class})
     public R<Object> handleNullPointerException(NullPointerException e, HttpServletRequest request) {
-        String msg = StrUtil.format("后端服务空指针,请求地址为 {}", request.getRequestURI());
+        String msg = StrUtil.format("空指针错误,请求地址为 {}", request.getRequestURI());
         LOG.error(msg, e);
         return R.fail(msg);
     }
 
     @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
-    public R<Object> handleAuthCredentialsMissing(AuthenticationCredentialsNotFoundException ex, HttpServletRequest request) {
+    public R<Object> handleAuthCredentialsMissing(AuthenticationCredentialsNotFoundException ex,
+        HttpServletRequest request) {
         String msg = StrUtil.format("未认证访问受权限保护的资源 {}", request.getRequestURI());
         LOG.error(msg, ex);
         return R.fail("禁止访问此资源!");

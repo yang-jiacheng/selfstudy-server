@@ -36,27 +36,27 @@ public interface UserService extends IService<User> {
     /**
      * 提交学习时长
      */
-    boolean submitStudyDuration(Integer userId, Integer duration);
+    boolean submitStudyDuration(Long userId, Integer duration);
 
     /**
      * 获取用户信息
      */
-    User getUserInfo(Integer userId);
+    User getUserInfo(Long userId);
 
     /**
      * 获取用户信息缓存
      */
-    User getUserInfoCache(Integer userId);
+    User getUserInfoCache(Long userId);
 
     /**
      * 删除用户信息缓存和登录状态
      */
-    void removeUserInfoCache(Integer userId);
+    void removeUserInfoCache(Long userId);
 
     /**
      * 批量删除用户信息缓存和登录状态
      */
-    void removeUserInfoCacheByIds(List<Integer> ids);
+    void removeUserInfoCacheByIds(List<Long> ids);
 
     /**
      * 新增用户信息缓存
@@ -78,11 +78,15 @@ public interface UserService extends IService<User> {
      */
     void insertRankingsCache(List<UserRankVO> users);
 
-    UserRankVO getUserRankingById(Integer userId);
+    UserRankVO getUserRankingById(Long userId);
 
+    /**
+     * 批量新增用户
+     *
+     * @author jiacheng yang.
+     * @since 2025/11/19 17:17
+     */
     void insertBatchUser(List<User> userList);
-
-    void test();
 
     List<UserExportVO> exportUserInExcel(UserPageDTO dto);
 

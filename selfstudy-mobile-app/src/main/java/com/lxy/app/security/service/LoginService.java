@@ -1,10 +1,10 @@
 package com.lxy.app.security.service;
 
-
-import com.lxy.common.domain.R;
+import com.lxy.common.dto.LoginPasswordDTO;
+import com.lxy.common.dto.LoginVerificationCodeDTO;
 
 /**
- * TODO
+ * app登录服务
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -12,7 +12,24 @@ import com.lxy.common.domain.R;
  */
 public interface LoginService {
 
-    R<Object> login(String username, String password, String device);
+    /**
+     * 密码登录
+     *
+     * @author jiacheng yang.
+     * @since 2025/11/19 16:13
+     * @return token 令牌
+     */
+    String login(LoginPasswordDTO dto);
+
+    /**
+     * 验证码登录
+     *
+     * @author jiacheng yang.
+     * @since 2025/11/19 16:17
+     * @param dto 验证码登录DTO
+     * @return token 令牌
+     */
+    String loginByVerificationCode(LoginVerificationCodeDTO dto);
 
     void logout(String token);
 

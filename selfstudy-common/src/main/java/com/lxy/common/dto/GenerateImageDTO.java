@@ -1,13 +1,13 @@
-package com.lxy.system.dto;
+package com.lxy.common.dto;
 
-import com.lxy.common.domain.GraphicsTextParameter;
+import com.lxy.common.domain.GraphicsTextParameterDTO;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
 /**
- * TODO
+ * 生成图片DTO
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -21,7 +21,7 @@ public class GenerateImageDTO implements java.io.Serializable {
 
     @NotNull(message = "模板参数不能为空")
     @Size(min = 1, message = "模板参数不能为空")
-    private List<GraphicsTextParameter> parameters;
+    private List<GraphicsTextParameterDTO> parameters;
 
     public String getUrl() {
         return url;
@@ -31,11 +31,11 @@ public class GenerateImageDTO implements java.io.Serializable {
         this.url = url;
     }
 
-    public List<GraphicsTextParameter> getParameters() {
+    public List<GraphicsTextParameterDTO> getParameters() {
         return parameters;
     }
 
-    public void setParameters(List<GraphicsTextParameter> parameters) {
+    public void setParameters(List<GraphicsTextParameterDTO> parameters) {
         this.parameters = parameters;
     }
 }

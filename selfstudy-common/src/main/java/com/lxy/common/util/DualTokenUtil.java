@@ -29,7 +29,7 @@ import java.util.Map;
 public class DualTokenUtil {
 
     /**
-     * JWT中userType参数的key名称  LogUserType
+     * JWT中userType参数的key名称 LogUserType
      */
     public static final String PARAM_NAME_USER_TYPE = "userType";
     /**
@@ -91,11 +91,11 @@ public class DualTokenUtil {
     /**
      * 生成双Token
      *
-     * @param userId   用户ID
+     * @param userId 用户ID
      * @param userType 用户类型
      * @return TokenPair
      */
-    public static TokenPair generateTokenPair(Integer userId, Integer userType) {
+    public static TokenPair generateTokenPair(Long userId, Integer userType) {
         Date now = new Date();
         Date accessExpires = DateUtil.offsetMinute(now, ACCESS_TOKEN_EXPIRE_MINUTES);
         Date refreshExpires = DateUtil.offsetDay(now, REFRESH_TOKEN_EXPIRE_DAYS);
@@ -118,7 +118,8 @@ public class DualTokenUtil {
     /**
      * 生成单个Token
      */
-    private static String generateToken(String jwtId, Integer userId, Integer userType, String tokenType, Date expiration) {
+    private static String generateToken(String jwtId, Long userId, Integer userType, String tokenType,
+        Date expiration) {
         String secretKey = getSecretKey(userId);
 
         Map<String, Object> claimsMap = new HashMap<>();
@@ -127,13 +128,8 @@ public class DualTokenUtil {
         claimsMap.put(PARAM_NAME_TOKEN_TYPE, tokenType);
         claimsMap.put(PARAM_NAME_JID, jwtId);
 
-        return Jwts.builder()
-                .setClaims(claimsMap)
-                .setSubject("jiacheng yang.")
-                .setIssuedAt(new Date())
-                .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .compact();
+        return Jwts.builder().setClaims(claimsMap).setSubject("jiacheng yang.").setIssuedAt(new Date())
+            .setExpiration(expiration).signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
     /**
@@ -148,7 +144,7 @@ public class DualTokenUtil {
             return false;
         }
 
-        String tokenType = (String) claims.get(PARAM_NAME_TOKEN_TYPE);
+        String tokenType = (String)claims.get(PARAM_NAME_TOKEN_TYPE);
         return TOKEN_TYPE_ACCESS.equals(tokenType);
     }
 
@@ -164,7 +160,7 @@ public class DualTokenUtil {
             return false;
         }
 
-        String tokenType = (String) claims.get(PARAM_NAME_TOKEN_TYPE);
+        String tokenType = (String)claims.get(PARAM_NAME_TOKEN_TYPE);
         return TOKEN_TYPE_REFRESH.equals(tokenType);
     }
 
@@ -190,7 +186,6 @@ public class DualTokenUtil {
         }
     }
 
-
     /**
      * 解析Token
      *
@@ -205,9 +200,8 @@ public class DualTokenUtil {
         try {
             // 先解析获取用户ID
             String payload = getPayload(token);
-            Map<String, Object> claimsMap = JsonUtil.getObj(payload, new TypeReference<HashMap<String, Object>>() {
-            });
-            Integer userId = (Integer) claimsMap.get(PARAM_NAME_USER_ID);
+            Map<String, Object> claimsMap = JsonUtil.getObj(payload, new TypeReference<HashMap<String, Object>>() {});
+            Long userId = (Long)claimsMap.get(PARAM_NAME_USER_ID);
 
             if (userId == null) {
                 log.error("token中未获取到userId：{}", token);
@@ -216,10 +210,7 @@ public class DualTokenUtil {
 
             // 获取密钥并解析
             String secretKey = getSecretKey(userId);
-            return Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(token)
-                    .getBody();
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
             log.error("token已过期: {}", token);
             return null;
@@ -232,8 +223,8 @@ public class DualTokenUtil {
     /**
      * 根据userId获取密钥
      */
-    private static String getSecretKey(Integer userId) {
-        int index = userId % SECRET_KEY_POOL.length;
+    private static String getSecretKey(Long userId) {
+        int index = Math.toIntExact(userId % SECRET_KEY_POOL.length);
         String baseKey = SECRET_KEY_POOL[index];
         return Base64.getEncoder().encodeToString(baseKey.getBytes(StandardCharsets.UTF_8));
     }

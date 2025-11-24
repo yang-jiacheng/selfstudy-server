@@ -19,13 +19,13 @@ import java.util.List;
  */
 @Mapper
 public interface PermissionMapper extends BaseMapper<Permission> {
-    List<Permission> getRolePermission(Integer roleId);
+    List<Permission> getRolePermission(Long roleId);
 
     List<PermissionTreeVO> getPermissionTree();
 
-    List<Permission> getPermissionListAndChildren(@Param("ids") Collection<Integer> ids);
+    List<Permission> getPermissionListAndChildren(@Param("ids") Collection<Long> ids);
 
-    List<Permission> getPermissionListAndParent(@Param("ids") Collection<Integer> ids);
+    List<Permission> getPermissionListAndParent(@Param("ids") Collection<Long> ids);
 
-    List<PermissionTreeVO> getMinePermissionTree(@Param("userId") Integer userId);
+    List<PermissionTreeVO> getMinePermissionTree(@Param("userId") Long userId);
 }

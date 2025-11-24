@@ -1,18 +1,20 @@
 package com.lxy.system.dto;
 
-
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * TODO
+ * 对象存储DTO
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2024/12/14 16:19
  */
+
+@Data
 public class ObjectStorageDTO implements Serializable {
     private static final long serialVersionUID = -6584352603005168007L;
 
@@ -25,27 +27,4 @@ public class ObjectStorageDTO implements Serializable {
     @NotNull(message = "文件大小不能为空")
     private BigDecimal fileSize;
 
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getDownloadUrl() {
-        return downloadUrl;
-    }
-
-    public void setDownloadUrl(String downloadUrl) {
-        this.downloadUrl = downloadUrl;
-    }
-
-    public BigDecimal getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(BigDecimal fileSize) {
-        this.fileSize = fileSize;
-    }
 }

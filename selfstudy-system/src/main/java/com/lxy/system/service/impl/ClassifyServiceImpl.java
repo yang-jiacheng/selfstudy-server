@@ -12,8 +12,8 @@ import com.lxy.system.po.Classify;
 import com.lxy.system.po.StudyRecord;
 import com.lxy.system.service.CatalogService;
 import com.lxy.system.service.ClassifyService;
-import com.lxy.system.service.RedisService;
 import com.lxy.system.service.StudyRecordService;
+import com.lxy.system.service.redis.RedisService;
 import com.lxy.system.vo.ClassifyVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
     private CatalogService catalogService;
 
     @Override
-    public Classify getClassifyById(Integer id) {
+    public Classify getClassifyById(Long id) {
         Classify classify = this.getById(id);
         classify.setIconPath(ImgConfigUtil.joinUploadUrl(classify.getIconPath()));
         classify.setCoverPath(ImgConfigUtil.joinUploadUrl(classify.getCoverPath()));
@@ -54,8 +54,8 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer updateClassify(Classify classify) {
-        Integer id = classify.getId();
+    public Long updateClassify(Classify classify) {
+        Long id = classify.getId();
         classify.setUpdateTime(new Date());
         if (id == null) {
             classify.setCreateTime(new Date());
@@ -67,20 +67,20 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
 
     @Override
     public List<ClassifyVO> getClassifyList() {
-        //查缓存
+        // 查缓存
         List<ClassifyVO> list = this.getClassifyListCache();
         if (list != null) {
             return list;
         }
-        //自习中的记录
+        // 自习中的记录
         List<StudyRecord> records = studyRecordService.getRecordByStatus(StudyStatus.LEARNING.type);
-        //图书馆
+        // 图书馆
         list = classifyMapper.queryList();
         for (ClassifyVO vo : list) {
-            Integer id = vo.getId();
+            Long id = vo.getId();
             int studyCount = 0;
             for (StudyRecord record : records) {
-                Integer classifyId = record.getClassifyId();
+                Long classifyId = record.getClassifyId();
                 if (id.equals(classifyId)) {
                     studyCount++;
                 }
@@ -114,7 +114,7 @@ public class ClassifyServiceImpl extends ServiceImpl<ClassifyMapper, Classify> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void removeClassify(Integer id) {
+    public void removeClassify(Long id) {
         this.removeById(id);
         catalogService.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getClassifyId, id));
         this.removeClassifyCache();

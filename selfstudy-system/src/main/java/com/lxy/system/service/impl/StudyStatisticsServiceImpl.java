@@ -21,10 +21,11 @@ import java.util.Date;
  * @since 2022-12-23
  */
 @Service
-public class StudyStatisticsServiceImpl extends ServiceImpl<StudyStatisticsMapper, StudyStatistics> implements StudyStatisticsService {
+public class StudyStatisticsServiceImpl extends ServiceImpl<StudyStatisticsMapper, StudyStatistics>
+    implements StudyStatisticsService {
 
     @Override
-    public boolean saveStatistics(Integer userId, Date day, Integer duration) {
+    public boolean saveStatistics(Long userId, Date day, Integer duration) {
         StudyStatistics statistics = this.getStatisticsByDay(userId, day);
         if (statistics == null) {
             statistics = new StudyStatistics(userId, day, duration);
@@ -38,9 +39,10 @@ public class StudyStatisticsServiceImpl extends ServiceImpl<StudyStatisticsMappe
     }
 
     @Override
-    public StudyStatistics getStatisticsByDay(Integer userId, Date day) {
+    public StudyStatistics getStatisticsByDay(Long userId, Date day) {
         LambdaQueryWrapper<StudyStatistics> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(StudyStatistics::getUserId, userId).eq(StudyStatistics::getStudyDay, DateUtil.format(day, DatePattern.NORM_DATE_PATTERN));
+        wrapper.eq(StudyStatistics::getUserId, userId).eq(StudyStatistics::getStudyDay,
+            DateUtil.format(day, DatePattern.NORM_DATE_PATTERN));
 
         return this.getOne(wrapper);
     }

@@ -24,7 +24,7 @@ public interface PermissionService extends IService<Permission> {
      * @param roleId 角色id
      * @return 权限集合
      */
-    List<Permission> getRolePermission(Integer roleId);
+    List<Permission> getRolePermission(Long roleId);
 
     /**
      * 修改菜单权限
@@ -43,20 +43,20 @@ public interface PermissionService extends IService<Permission> {
     List<PermissionTreeVO> getPermissionTree();
 
     /**
-     * 根据 `id`  集合查询所有子级及自身
+     * 根据 `id` 集合查询所有子级及自身
      *
      * @author jiacheng yang.
      * @since 2025/5/16 16:06
      */
-    List<Permission> getPermissionListAndChildren(Collection<Integer> ids);
+    List<Permission> getPermissionListAndChildren(Collection<Long> ids);
 
     /**
-     * 根据 `id`  集合查询所有父级及自身
+     * 根据 `id` 集合查询所有父级及自身
      *
      * @author jiacheng yang.
      * @since 2025/5/16 16:07
      */
-    List<Permission> getPermissionListAndParent(Collection<Integer> ids);
+    List<Permission> getPermissionListAndParent(Collection<Long> ids);
 
     /**
      * 删除菜单
@@ -64,7 +64,7 @@ public interface PermissionService extends IService<Permission> {
      * @author jiacheng yang.
      * @since 2025/5/16 16:07
      */
-    void removePermission(Integer id);
+    void removePermission(Long id);
 
     /**
      * 根据登录用户获取菜单
@@ -72,5 +72,5 @@ public interface PermissionService extends IService<Permission> {
      * @author jiacheng yang.
      * @since 2025/6/21 18:33
      */
-    List<PermissionTreeVO> getMinePermissionTree(int userId);
+    List<PermissionTreeVO> getMinePermissionTree(Long userId);
 }

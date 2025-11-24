@@ -48,7 +48,7 @@ public class TokenPair implements Serializable {
     /**
      * 用户ID
      */
-    private Integer userId;
+    private Long userId;
 
     /**
      * 用户类型
@@ -77,7 +77,8 @@ public class TokenPair implements Serializable {
         this.lastActiveTime = new Date();
     }
 
-    public TokenPair(String refreshId, String accessToken, String refreshToken, Date accessExpires, Date refreshExpires) {
+    public TokenPair(String refreshId, String accessToken, String refreshToken, Date accessExpires,
+        Date refreshExpires) {
         this();
         this.refreshId = refreshId;
         this.accessToken = accessToken;

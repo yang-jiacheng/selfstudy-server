@@ -23,7 +23,7 @@ public interface CatalogMapper extends BaseMapper<Catalog> {
 
     List<CatalogTreeVO> getTree();
 
-    ClassifyDetailVO getCatalogByClassify(@Param("classifyId") Integer classifyId);
+    ClassifyDetailVO getCatalogByClassify(@Param("classifyId") Long classifyId);
 
-    RoomVO getRoomDetail(@Param("roomId") Integer roomId);
+    RoomVO getRoomDetail(@Param("roomId") Long roomId);
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 
 /**
- * TODO
+ * 意见反馈分页查询DTO
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -31,7 +31,7 @@ public class FeedbackPageDTO extends PageDTO {
 
     private Integer replyStatus;
 
-    private Integer userId;
+    private Long userId;
 
     private Integer status;
 

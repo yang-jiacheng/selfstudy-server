@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * TODO
+ * 学习记录分页查询DTO
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -20,13 +20,13 @@ public class StudyRecordPageDTO extends PageDTO {
     @Serial
     private static final long serialVersionUID = 3826989770979060513L;
 
-    //手机号
+    // 手机号
     private String phone;
 
-    //图书馆
-    private Integer classifyId;
+    // 图书馆
+    private Long classifyId;
 
-    //状态（1自习中 3已完成）
+    // 状态（1自习中 3已完成）
     private Integer status;
 
 }

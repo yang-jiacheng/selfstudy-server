@@ -7,7 +7,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * TODO
+ * 隐私政策修改DTO
  *
  * @author jiacheng yang.
  * @version 1.0

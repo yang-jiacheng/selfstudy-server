@@ -40,16 +40,15 @@ public class ObjectStorageManageController {
 
     @PostMapping(value = "/saveObjectStorage", produces = "application/json")
     public R<Object> saveObjectStorage(@RequestBody @Valid ObjectStorageDTO objectStorageDTO) {
-        int adminId = UserIdUtil.getUserId();
+        long adminId = UserIdUtil.getUserId();
         objectStorageService.saveObjectStorage(objectStorageDTO, adminId);
         return R.ok();
     }
 
     @PostMapping(value = "/deleteObjectStorage", produces = "application/json")
-    public R<Object> deleteObjectStorage(@RequestParam("id") Integer id) {
+    public R<Object> deleteObjectStorage(@RequestParam("id") Long id) {
         objectStorageService.deleteObjectStorage(id);
         return R.ok();
     }
-
 
 }

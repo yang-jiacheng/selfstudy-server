@@ -42,7 +42,7 @@ public class VersionManageController {
     }
 
     @PostMapping("/getVersionById")
-    public R<Version> getVersionById(@RequestParam(value = "id") Integer id) {
+    public R<Version> getVersionById(@RequestParam(value = "id") Long id) {
         Version version = versionService.getById(id);
         return R.ok(version);
     }

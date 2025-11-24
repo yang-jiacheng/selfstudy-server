@@ -1,7 +1,5 @@
 package com.lxy.system.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -23,26 +21,24 @@ public class Version implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
-    //版本号
+    // 版本号
     private Integer versionCode;
 
-    //版本名称
+    // 版本名称
     private String versionName;
 
-    //下载地址
+    // 下载地址
     private String downloadUrl;
 
-    //是否强制更新 1是 0 否
+    // 是否强制更新 1是 0 否
     private Integer status;
 
-    //是否检测更新 1是 0 否
+    // 是否检测更新 1是 0 否
     private Integer checkUpdate;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date updateTime;
-
 
 }

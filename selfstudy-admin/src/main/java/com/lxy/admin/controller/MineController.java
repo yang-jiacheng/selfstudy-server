@@ -39,11 +39,10 @@ public class MineController {
      */
     @PostMapping(value = "/getMinePermissionTree", produces = "application/json")
     public R<List<PermissionTreeVO>> getMinePermissionTree() {
-        int userId = UserIdUtil.getUserId();
+        long userId = UserIdUtil.getUserId();
         List<PermissionTreeVO> tree = permissionService.getMinePermissionTree(userId);
         return R.ok(tree);
     }
-
 
     /**
      * 获取当前登录用户信息
@@ -53,7 +52,7 @@ public class MineController {
      */
     @PostMapping(value = "/getMineInfo", produces = "application/json")
     public R<AdminInfo> getMineInfo() {
-        int userId = UserIdUtil.getUserId();
+        long userId = UserIdUtil.getUserId();
         AdminInfo info = adminInfoService.getById(userId);
         if (info == null) {
             return R.fail("获取当前登录用户信息失败");

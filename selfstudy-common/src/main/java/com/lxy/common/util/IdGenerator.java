@@ -1,21 +1,17 @@
 package com.lxy.common.util;
 
-import cn.hutool.core.util.IdUtil;
-
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.LockSupport;
 
 /**
- * 分布式ID生成器（优化版）
- * 核心特性：
- * 1. 10ms时间粒度 | 2. 机器ID隔离 | 3. 无锁CAS并发控制
+ * 分布式ID生成器（优化版） 核心特性： 1. 10ms时间粒度 | 2. 机器ID隔离 | 3. 无锁CAS并发控制
  */
 public class IdGenerator {
 
     // 常量定义（按业务需求调整）
-    private static final long MACHINE_BIT = 5;    // 最大支持31台机器
-    private static final long SEQUENCE_BIT = 8;  // 每10ms 256个序列
+    private static final long MACHINE_BIT = 5; // 最大支持31台机器
+    private static final long SEQUENCE_BIT = 8; // 每10ms 256个序列
     private static final long MAX_MACHINE_NUM = ~(-1L << MACHINE_BIT);
     private static final long MAX_SEQUENCE = ~(-1L << SEQUENCE_BIT);
     private static final long MACHINE_LEFT = SEQUENCE_BIT;
@@ -42,6 +38,12 @@ public class IdGenerator {
         return instance;
     }
 
+    /**
+     * 生成id
+     *
+     * @author jiacheng yang.
+     * @since 2025/11/19 17:16
+     */
     public static long generateId() {
         return instance.nextId();
     }
@@ -51,13 +53,6 @@ public class IdGenerator {
      */
     public static Date parseIdTimestamp(long id) {
         return new Date((id >>> TIMESTMP_LEFT) * 10);
-    }
-
-    /**
-     * 生成简化的UUID
-     */
-    public static String uuid() {
-        return IdUtil.simpleUUID();
     }
 
     /**
@@ -101,9 +96,9 @@ public class IdGenerator {
             // 分层优化：短时自旋 -> 微秒级休眠
             if (spinCount < 1000) {
                 spinCount++;
-                Thread.onSpinWait();   // JDK9+ 自旋优化提示
+                Thread.onSpinWait(); // JDK9+ 自旋优化提示
             } else {
-                LockSupport.parkNanos(1000);   // 1微秒级等待
+                LockSupport.parkNanos(1000); // 1微秒级等待
             }
             mill = getTimestamp();
         }

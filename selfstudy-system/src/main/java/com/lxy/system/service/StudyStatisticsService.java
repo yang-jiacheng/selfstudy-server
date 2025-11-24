@@ -18,11 +18,11 @@ public interface StudyStatisticsService extends IService<StudyStatistics> {
     /**
      * 保存统计数据
      */
-    boolean saveStatistics(Integer userId, Date day, Integer duration);
+    boolean saveStatistics(Long userId, Date day, Integer duration);
 
     /**
      * 根据日期获取统计数据
      */
-    StudyStatistics getStatisticsByDay(Integer userId, Date day);
+    StudyStatistics getStatisticsByDay(Long userId, Date day);
 
 }

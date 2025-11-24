@@ -44,9 +44,9 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     @Override
     public List<CatalogTreeVO> getCatalogTree() {
         List<CatalogTreeVO> tree = catalogMapper.getTree();
-        tree = CatalogTreeVO.buildTree(tree);//按时间倒序
-        //details.sort((t1,t2) -> t2.getUpdateTime().compareTo(t1.getUpdateTime()));
-        //tree.sort(Comparator.comparing(CatalogTreeVO::getSort));
+        tree = CatalogTreeVO.buildTree(tree);// 按时间倒序
+        // details.sort((t1,t2) -> t2.getUpdateTime().compareTo(t1.getUpdateTime()));
+        // tree.sort(Comparator.comparing(CatalogTreeVO::getSort));
         tree.sort((a, b) -> {
             Integer sortA = a.getSort() == null ? 0 : a.getSort();
             Integer sortB = b.getSort() == null ? 0 : b.getSort();
@@ -56,17 +56,17 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     }
 
     @Override
-    public Integer saveCatalog(Catalog catalog) {
+    public Long saveCatalog(Catalog catalog) {
         Integer level = catalog.getLevel();
         if (level == 1) {
-            catalog.setParentId(-1);
+            catalog.setParentId(-1L);
             catalog.setPersonCount(0);
         } else {
-            Integer parentId = catalog.getParentId();
+            Long parentId = catalog.getParentId();
             Catalog parent = this.getById(parentId);
             catalog.setClassifyId(parent.getClassifyId());
         }
-        Integer id = catalog.getId();
+        Long id = catalog.getId();
         if (id == null) {
             catalog.setCreateTime(new Date());
         }
@@ -76,21 +76,21 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     }
 
     @Override
-    public ClassifyDetailVO getCatalogByClassify(Integer classifyId) {
+    public ClassifyDetailVO getCatalogByClassify(Long classifyId) {
         ClassifyDetailVO classify = catalogMapper.getCatalogByClassify(classifyId);
-        //设置头像和封面
+        // 设置头像和封面
         classify.setIconPath(ImgConfigUtil.joinUploadUrl(classify.getIconPath()));
         classify.setCoverPath(ImgConfigUtil.joinUploadUrl(classify.getCoverPath()));
-        //设置正在自习的人数
+        // 设置正在自习的人数
         List<CatalogVO> rooms = classify.getRooms();
         if (CollUtil.isNotEmpty(rooms)) {
-            //排序
+            // 排序
             rooms.sort(Comparator.comparing(CatalogVO::getSort));
-//                questions.sort((a, b) -> {
-//                    Integer sortA = a.getpId() == null ? 0 : a.getpId();
-//                    Integer sortB = b.getpId() == null ? 0 : b.getpId();
-//                    return sortA.compareTo(sortB);
-//                });
+            // questions.sort((a, b) -> {
+            // Integer sortA = a.getpId() == null ? 0 : a.getpId();
+            // Integer sortB = b.getpId() == null ? 0 : b.getpId();
+            // return sortA.compareTo(sortB);
+            // });
             this.updateCurrCount(classifyId, rooms);
             classify.setRooms(rooms);
         }
@@ -99,12 +99,12 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     }
 
     @Override
-    public RoomVO getRoomDetail(Integer roomId) {
+    public RoomVO getRoomDetail(Long roomId) {
         return catalogMapper.getRoomDetail(roomId);
     }
 
     @Override
-    public void removeCatalog(Integer id) {
+    public void removeCatalog(Long id) {
         this.removeById(id);
         this.remove(new LambdaUpdateWrapper<Catalog>().eq(Catalog::getParentId, id));
     }
@@ -112,14 +112,14 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     /**
      * 设置自习室当前人数
      */
-    private void updateCurrCount(Integer classifyId, List<CatalogVO> rooms) {
-        //正在自习的记录
+    private void updateCurrCount(Long classifyId, List<CatalogVO> rooms) {
+        // 正在自习的记录
         List<StudyRecord> records = studyRecordService.getRecordsByStatusAndClassIfy(classifyId);
         for (CatalogVO room : rooms) {
-            //层级为2的是自习室
+            // 层级为2的是自习室
             if (room.getLevel() == 2) {
-                Integer catalogId = room.getCatalogId();
-                //正在自习的人数
+                Long catalogId = room.getCatalogId();
+                // 正在自习的人数
                 int count = 0;
                 for (StudyRecord record : records) {
                     if (catalogId.equals(record.getCatalogId())) {

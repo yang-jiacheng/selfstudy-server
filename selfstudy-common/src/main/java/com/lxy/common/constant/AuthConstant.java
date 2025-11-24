@@ -1,9 +1,9 @@
 package com.lxy.common.constant;
 
 /**
- * 基本不会改动的 系统自定义的常量类
+ * 登录认证常量
  */
-public class CommonConstant {
+public class AuthConstant {
 
     /**
      * token的名称(客户端)
@@ -14,13 +14,24 @@ public class CommonConstant {
      */
     public static String PARAM_NAME_DEVICE = "device";
     /**
-     * JWT中userType参数的key名称  LogUserType
+     * android设备
+     */
+    public static String DEVICE_ANDROID = "android";
+    /**
+     * ios设备
+     */
+    public static String DEVICE_IOS = "ios";
+    /**
+     * web设备
+     */
+    public static String DEVICE_WEB = "web";
+    /**
+     * JWT中userType参数的key名称 LogUserType
      */
     public static String PARAM_NAME_USER_TYPE = "userType";
     /**
      * JWT中userId参数的key名称
      */
     public static String PARAM_NAME_USER_ID = "userId";
-
 
 }

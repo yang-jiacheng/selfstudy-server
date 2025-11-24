@@ -7,7 +7,10 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.constant.SmsConstant;
+import com.lxy.common.constant.dict.UseStatusConstant;
 import com.lxy.common.dto.SmsSendDTO;
+import com.lxy.common.exception.ServiceException;
 import com.lxy.common.util.DateCusUtil;
 import com.lxy.common.util.SmsUtil;
 import com.lxy.common.util.SmsVerifyCodeUtil;
@@ -15,7 +18,7 @@ import com.lxy.system.mapper.PhoneCodeMapper;
 import com.lxy.system.po.PhoneCode;
 import com.lxy.system.service.BusinessConfigService;
 import com.lxy.system.service.PhoneCodeService;
-import com.lxy.system.service.RedisService;
+import com.lxy.system.service.redis.RedisService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -58,18 +61,21 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
     }
 
     @Override
-    public boolean sendVerificationCode(String phone) {
+    public void sendVerificationCode(String phone) {
+        boolean checkFlag = this.checkPhone(phone);
+        if (!checkFlag) {
+            throw new ServiceException("今日验证码次数已到上限 5条！");
+        }
         String code = SmsUtil.getRandomCode();
         List<SmsSendDTO.TemplateParam> params = new ArrayList<>();
         params.add(new SmsSendDTO.TemplateParam(SmsVerifyCodeUtil.TEMP_CODE, code));
-        params
-            .add(new SmsSendDTO.TemplateParam(SmsVerifyCodeUtil.TEMP_MIN, SmsVerifyCodeUtil.EXPIRE_MINUTES.toString()));
+        params.add(new SmsSendDTO.TemplateParam(SmsVerifyCodeUtil.TEMP_MIN, SmsConstant.EXPIRE_MINUTES.toString()));
         SmsSendDTO smsSendDTO = new SmsSendDTO(null, params);
         boolean flag = SmsVerifyCodeUtil.sendMessage(phone, smsSendDTO);
         if (flag) {
             Date now = new Date();
-            DateTime offsetMinute = DateUtil.offsetMinute(now, SmsVerifyCodeUtil.EXPIRE_MINUTES);
-            PhoneCode phoneCode = new PhoneCode(phone, code, 0, now, offsetMinute);
+            DateTime offsetMinute = DateUtil.offsetMinute(now, SmsConstant.EXPIRE_MINUTES);
+            PhoneCode phoneCode = new PhoneCode(phone, code, UseStatusConstant.UNUSED, now, offsetMinute);
             this.save(phoneCode);
             // 添加发送次数
             String key = RedisKeyConstant.getPhoneSms(phone);
@@ -80,15 +86,17 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
             }
             num += 1;
             redisService.setObject(key, String.valueOf(num), DateCusUtil.getEndByDay(), TimeUnit.SECONDS);
+        } else {
+            throw new ServiceException("短信发送失败，请稍后重试");
         }
-        return flag;
     }
 
     @Override
     public boolean checkVerificationCode(String phone, String verificationCode) {
         boolean flag = true;
         LambdaQueryWrapper<PhoneCode> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(PhoneCode::getPhone, phone).eq(PhoneCode::getCode, verificationCode).ne(PhoneCode::getUseStatus, 1);
+        wrapper.eq(PhoneCode::getPhone, phone).eq(PhoneCode::getCode, verificationCode).ne(PhoneCode::getUseStatus,
+            UseStatusConstant.USED);
         PhoneCode phoneCode = this.getOne(wrapper);
         Date now = new Date();
         if (phoneCode == null || DateUtil.compare(now, phoneCode.getEndTime()) > 0) {
@@ -98,9 +106,10 @@ public class PhoneCodeServiceImpl extends ServiceImpl<PhoneCodeMapper, PhoneCode
     }
 
     @Override
-    public boolean updateVerificationCodeStatus(String phone, String verificationCode) {
+    public void updateVerificationCodeStatus(String phone, String verificationCode) {
         LambdaUpdateWrapper<PhoneCode> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(PhoneCode::getCode, verificationCode).eq(PhoneCode::getPhone, phone).set(PhoneCode::getUseStatus, 1);
-        return this.update(wrapper);
+        wrapper.eq(PhoneCode::getCode, verificationCode).eq(PhoneCode::getPhone, phone).set(PhoneCode::getUseStatus,
+            UseStatusConstant.USED);
+        this.update(wrapper);
     }
 }

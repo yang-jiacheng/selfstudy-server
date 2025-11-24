@@ -7,7 +7,7 @@ import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.system.mapper.BusinessConfigMapper;
 import com.lxy.system.po.BusinessConfig;
 import com.lxy.system.service.BusinessConfigService;
-import com.lxy.system.service.RedisService;
+import com.lxy.system.service.redis.RedisService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,8 @@ import java.util.concurrent.TimeUnit;
  * @since 2022-10-08
  */
 @Service
-public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper, BusinessConfig> implements BusinessConfigService {
+public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper, BusinessConfig>
+    implements BusinessConfigService {
 
     @Resource
     private RedisService redisService;
@@ -60,7 +61,7 @@ public class BusinessConfigServiceImpl extends ServiceImpl<BusinessConfigMapper,
     }
 
     @Override
-    public void updateBusinessConfigById(Integer id, String value) {
+    public void updateBusinessConfigById(Long id, String value) {
         BusinessConfig con = this.getById(id);
         if (con == null) {
             return;

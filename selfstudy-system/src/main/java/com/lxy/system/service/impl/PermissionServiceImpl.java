@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -33,10 +34,9 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     private PermissionMapper permissionMapper;
 
     @Override
-    public List<Permission> getRolePermission(Integer roleId) {
+    public List<Permission> getRolePermission(Long roleId) {
         return permissionMapper.getRolePermission(roleId);
     }
-
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -46,10 +46,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             // 新增
             permission.setCreateTime(now);
             if (permission.getLevel() == 1) {
-                permission.setParentId(-1);
+                permission.setParentId(-1L);
             }
             this.save(permission);
-            //维护节点的 nodePath
+            // 维护节点的 nodePath
             updateNodePathInfo(permission);
             this.updateById(permission);
         } else {
@@ -67,7 +67,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
      * @since 2025/4/20 1:31
      */
     private void updateNodePathInfo(Permission permission) {
-        List<Integer> nodePath = new ArrayList<>();
+        List<Long> nodePath = new ArrayList<>();
         nodePath.add(permission.getId());
 
         StringBuilder namePath = new StringBuilder(permission.getTitle());
@@ -76,7 +76,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         if (permission.getParentId() != -1) {
             Permission parentNode = this.getById(permission.getParentId());
             if (parentNode != null) {
-                List<Integer> parentNodePathList = parentNode.getNodePath();
+                List<Long> parentNodePathList = parentNode.getNodePath();
                 if (parentNodePathList != null) {
                     nodePath = new ArrayList<>(parentNodePathList); // 避免污染原数据
                     nodePath.add(permission.getId());
@@ -113,28 +113,27 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public List<Permission> getPermissionListAndChildren(Collection<Integer> ids) {
+    public List<Permission> getPermissionListAndChildren(Collection<Long> ids) {
         return permissionMapper.getPermissionListAndChildren(ids);
     }
 
     @Override
-    public List<Permission> getPermissionListAndParent(Collection<Integer> ids) {
+    public List<Permission> getPermissionListAndParent(Collection<Long> ids) {
         return permissionMapper.getPermissionListAndParent(ids);
     }
 
     @Override
-    public void removePermission(Integer id) {
-        List<Permission> list = this.getPermissionListAndChildren(Arrays.asList(id));
+    public void removePermission(Long id) {
+        List<Permission> list = this.getPermissionListAndChildren(Collections.singletonList(id));
         if (CollUtil.isEmpty(list)) {
             return;
         }
-        List<Integer> ids = list.stream()
-                .map(Permission::getId).toList();
+        List<Long> ids = list.stream().map(Permission::getId).toList();
         this.removeByIds(ids);
     }
 
     @Override
-    public List<PermissionTreeVO> getMinePermissionTree(int userId) {
+    public List<PermissionTreeVO> getMinePermissionTree(Long userId) {
         List<PermissionTreeVO> list = permissionMapper.getMinePermissionTree(userId);
         if (CollUtil.isEmpty(list)) {
             return List.of();

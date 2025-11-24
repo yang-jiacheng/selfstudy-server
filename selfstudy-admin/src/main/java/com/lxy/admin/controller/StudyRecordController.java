@@ -3,7 +3,7 @@ package com.lxy.admin.controller;
 import com.lxy.common.domain.CollResult;
 import com.lxy.common.domain.PageResult;
 import com.lxy.common.domain.R;
-import com.lxy.common.vo.EnumVO;
+import com.lxy.common.vo.LabelValueVO;
 import com.lxy.system.dto.StudyRecordPageDTO;
 import com.lxy.system.po.Classify;
 import com.lxy.system.service.ClassifyService;
@@ -39,11 +39,11 @@ public class StudyRecordController {
 
     @PostMapping(value = "/getAllLibrary", produces = "application/json")
 
-    public R<CollResult<EnumVO>> getAllLibrary() {
+    public R<CollResult<LabelValueVO>> getAllLibrary() {
         List<Classify> list = classifyService.list();
-        List<EnumVO> vos = new ArrayList<>();
+        List<LabelValueVO> vos = new ArrayList<>();
         for (Classify classify : list) {
-            vos.add(new EnumVO(classify.getId(), classify.getName()));
+            vos.add(new LabelValueVO(classify.getId(), classify.getName()));
         }
         return R.ok(new CollResult<>(vos));
     }

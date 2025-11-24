@@ -55,55 +55,55 @@ public class StudyRecordServiceImpl extends ServiceImpl<StudyRecordMapper, Study
     }
 
     @Override
-    public List<StudyRecord> getRecordsByStatusAndClassIfy(Integer classifyId) {
+    public List<StudyRecord> getRecordsByStatusAndClassIfy(Long classifyId) {
         LambdaQueryWrapper<StudyRecord> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(StudyRecord::getClassifyId, classifyId)
-                .ne(StudyRecord::getStatus, StudyStatus.FINISH.type);
+        wrapper.eq(StudyRecord::getClassifyId, classifyId).ne(StudyRecord::getStatus, StudyStatus.FINISH.type);
 
         return this.list(wrapper);
     }
 
     @Override
-    public PageInfo<StudyRecord> getStudyNotePageList(Integer userId, Integer page, Integer limit) {
+    public PageInfo<StudyRecord> getStudyNotePageList(Long userId, Integer page, Integer limit) {
         PageHelper.startPage(page, limit, "start_time desc");
-        com.github.pagehelper.Page<StudyRecord> pg = (com.github.pagehelper.Page<StudyRecord>) getStudyNoteList(userId);
+        com.github.pagehelper.Page<StudyRecord> pg = (com.github.pagehelper.Page<StudyRecord>)getStudyNoteList(userId);
         return new PageInfo<>(pg);
     }
 
     @Override
-    public PageInfo<StudyRecordVO> getStudyRecord(Integer userId, Integer classifyId, Integer status, Integer page, Integer limit) {
-//        Page<StudyRecord> pg = new Page<>(page,limit);
-//        LambdaQueryWrapper<StudyRecord> wrapper = new LambdaQueryWrapper<>();
-//        //开始时间倒序
-//        wrapper.orderByDesc(StudyRecord::getStartTime);
-//        if (userId != null){
-//            wrapper.eq(StudyRecord::getUserId,userId);
-//        }
-//        if (classifyId != null){
-//            wrapper.eq(StudyRecord::getClassifyId,classifyId);
-//        }
-//        if (status != null){
-//            wrapper.eq(StudyRecord::getStatus,status);
-//        }
-//        pg = this.page(pg);
+    public PageInfo<StudyRecordVO> getStudyRecord(Long userId, Long classifyId, Integer status, Integer page,
+        Integer limit) {
+        // Page<StudyRecord> pg = new Page<>(page,limit);
+        // LambdaQueryWrapper<StudyRecord> wrapper = new LambdaQueryWrapper<>();
+        // //开始时间倒序
+        // wrapper.orderByDesc(StudyRecord::getStartTime);
+        // if (userId != null){
+        // wrapper.eq(StudyRecord::getUserId,userId);
+        // }
+        // if (classifyId != null){
+        // wrapper.eq(StudyRecord::getClassifyId,classifyId);
+        // }
+        // if (status != null){
+        // wrapper.eq(StudyRecord::getStatus,status);
+        // }
+        // pg = this.page(pg);
         PageHelper.startPage(page, limit, "start_time desc");
-        com.github.pagehelper.Page<StudyRecordVO> pg = (com.github.pagehelper.Page<StudyRecordVO>) getStudyRecordList(userId, classifyId, status);
+        com.github.pagehelper.Page<StudyRecordVO> pg =
+            (com.github.pagehelper.Page<StudyRecordVO>)getStudyRecordList(userId, classifyId, status);
         return new PageInfo<>(pg);
     }
 
     @Override
-    public boolean saveStudyNote(Integer recordId, String content, String pic) {
+    public boolean saveStudyNote(Long recordId, String content, String pic) {
         boolean flag = false;
         StudyRecord record = this.getById(recordId);
         if (record != null) {
             LambdaUpdateWrapper<StudyRecord> wrapper = new LambdaUpdateWrapper<>();
-            wrapper.eq(StudyRecord::getId, recordId)
-                    .set(StudyRecord::getNoteStatus, 1)
-                    .set(StudyRecord::getNoteContent, content);
+            wrapper.eq(StudyRecord::getId, recordId).set(StudyRecord::getNoteStatus, 1).set(StudyRecord::getNoteContent,
+                content);
             if (StrUtil.isNotEmpty(pic)) {
                 wrapper.set(StudyRecord::getNotePath, pic);
             } else {
-                //删除自习笔记图片
+                // 删除自习笔记图片
                 wrapper.set(StudyRecord::getNotePath, "");
             }
             flag = this.update(wrapper);
@@ -112,44 +112,42 @@ public class StudyRecordServiceImpl extends ServiceImpl<StudyRecordMapper, Study
     }
 
     @Override
-    public boolean removeStudyNote(Integer recordId) {
+    public boolean removeStudyNote(Long recordId) {
         boolean flag = false;
         StudyRecord record = this.getById(recordId);
         if (record != null) {
             LambdaUpdateWrapper<StudyRecord> wrapper = new LambdaUpdateWrapper<>();
-            wrapper.eq(StudyRecord::getId, recordId)
-                    .set(StudyRecord::getNoteStatus, 0)
-                    .set(StudyRecord::getNoteContent, "")
-                    .set(StudyRecord::getNotePath, "");
+            wrapper.eq(StudyRecord::getId, recordId).set(StudyRecord::getNoteStatus, 0)
+                .set(StudyRecord::getNoteContent, "").set(StudyRecord::getNotePath, "");
             flag = this.update(wrapper);
         }
         return flag;
     }
 
     @Override
-    public List<StudyRecordVO> getLearningRecords(Integer catalogId) {
+    public List<StudyRecordVO> getLearningRecords(Long catalogId) {
         List<StudyRecordVO> records = studyRecordMapper.getLearningRecords(catalogId);
         if (CollUtil.isNotEmpty(records)) {
-            //座位号排序
+            // 座位号排序
             records.sort(Comparator.comparing(StudyRecordVO::getSeat));
-            //设置用户头像
+            // 设置用户头像
             records.forEach(record -> record.setProfilePath(ImgConfigUtil.joinUploadUrl(record.getProfilePath())));
         }
         return records;
     }
 
     @Override
-    public StudyRecordVO getLearningRecordDetail(Integer recordId) {
+    public StudyRecordVO getLearningRecordDetail(Long recordId) {
         return studyRecordMapper.getLearningRecordDetail(recordId);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer startStudy(StudyRecordDTO studyRecordDTO, Catalog catalog, Integer userId) {
-        //把正在自习的或者离开的记录变为已完成
+    public Long startStudy(StudyRecordDTO studyRecordDTO, Catalog catalog, Long userId) {
+        // 把正在自习的或者离开的记录变为已完成
         this.updateRecordToFinish(userId);
         Integer timingMode = studyRecordDTO.getTimingMode();
-        //正计时把设置时长去掉
+        // 正计时把设置时长去掉
         if (timingMode == 1) {
             studyRecordDTO.setSettingDuration(null);
         }
@@ -165,7 +163,7 @@ public class StudyRecordServiceImpl extends ServiceImpl<StudyRecordMapper, Study
     }
 
     @Override
-    public StudyRecord stopStudy(Integer recordId, Integer userId) {
+    public StudyRecord stopStudy(Long recordId, Long userId) {
         StudyRecord record = this.getById(recordId);
         if (!userId.equals(record.getUserId())) {
             return null;
@@ -181,7 +179,7 @@ public class StudyRecordServiceImpl extends ServiceImpl<StudyRecordMapper, Study
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateRecordToFinish(Integer userId) {
+    public void updateRecordToFinish(Long userId) {
         LambdaQueryWrapper<StudyRecord> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(StudyRecord::getUserId, userId).ne(StudyRecord::getStatus, StudyStatus.FINISH.type);
         List<StudyRecord> records = this.list(wrapper);
@@ -196,10 +194,11 @@ public class StudyRecordServiceImpl extends ServiceImpl<StudyRecordMapper, Study
     @Override
     public PageResult<StudyRecordVO> getStudyRecordByAdmin(StudyRecordPageDTO dto) {
         PageHelper.startPage(dto.getPage(), dto.getLimit(), "start_time desc");
-        List<StudyRecordVO> list = studyRecordMapper.getStudyRecordByAdmin(dto.getPhone(), dto.getClassifyId(), dto.getStatus());
+        List<StudyRecordVO> list =
+            studyRecordMapper.getStudyRecordByAdmin(dto.getPhone(), dto.getClassifyId(), dto.getStatus());
         list.forEach(record -> record.setNotePath(ImgConfigUtil.joinUploadUrl(record.getNotePath())));
-//        com.github.pagehelper.Page<StudyRecordVO> pg = (com.github.pagehelper.Page<StudyRecordVO>)
-//                studyRecordMapper.getStudyRecordByAdmin(dto.getPhone(), dto.getClassifyId(), dto.getStatus());
+        // com.github.pagehelper.Page<StudyRecordVO> pg = (com.github.pagehelper.Page<StudyRecordVO>)
+        // studyRecordMapper.getStudyRecordByAdmin(dto.getPhone(), dto.getClassifyId(), dto.getStatus());
         return PageResult.convert(new PageInfo<>(list));
     }
 
@@ -208,20 +207,20 @@ public class StudyRecordServiceImpl extends ServiceImpl<StudyRecordMapper, Study
      */
     private void makeRecordToFinish(StudyRecord record) {
         Date now = new Date();
-        //设置为已完成
+        // 设置为已完成
         record.setStatus(StudyStatus.FINISH.type);
         record.setUpdateTime(now);
         Integer timingMode = record.getTimingMode();
-        //根据计时方式设置实际学习时长
+        // 根据计时方式设置实际学习时长
         int actualDuration = 0;
-//        if (timingMode == 2){
-//            //倒计时
-//            actualDuration = record.getSettingDuration();
-//        }else {
-//            //正计时，当前时间 - 开始时间就是实际时长
-//            actualDuration = (int) DateUtil.between(record.getStartTime(), now, DateUnit.MINUTE);
-//        }
-        actualDuration = (int) DateUtil.between(record.getStartTime(), now, DateUnit.MINUTE);
+        // if (timingMode == 2){
+        // //倒计时
+        // actualDuration = record.getSettingDuration();
+        // }else {
+        // //正计时，当前时间 - 开始时间就是实际时长
+        // actualDuration = (int) DateUtil.between(record.getStartTime(), now, DateUnit.MINUTE);
+        // }
+        actualDuration = (int)DateUtil.between(record.getStartTime(), now, DateUnit.MINUTE);
         actualDuration = actualDuration == 0 ? 1 : actualDuration;
         record.setActualDuration(actualDuration);
     }
@@ -229,7 +228,7 @@ public class StudyRecordServiceImpl extends ServiceImpl<StudyRecordMapper, Study
     /**
      * 获取自习笔记
      */
-    private List<StudyRecord> getStudyNoteList(Integer userId) {
+    private List<StudyRecord> getStudyNoteList(Long userId) {
         List<StudyRecord> records = studyRecordMapper.getStudyNoteList(userId);
         records.forEach(record -> record.setNotePath(ImgConfigUtil.joinUploadUrl(record.getNotePath())));
         return records;
@@ -238,7 +237,7 @@ public class StudyRecordServiceImpl extends ServiceImpl<StudyRecordMapper, Study
     /**
      * 获取自习记录
      */
-    private List<StudyRecordVO> getStudyRecordList(Integer userId, Integer classifyId, Integer status) {
+    private List<StudyRecordVO> getStudyRecordList(Long userId, Long classifyId, Integer status) {
         return studyRecordMapper.getStudyRecordList(userId, classifyId, status);
     }
 

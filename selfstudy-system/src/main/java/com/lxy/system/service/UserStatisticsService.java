@@ -28,10 +28,10 @@ public class UserStatisticsService {
     private StudyRecordService studyRecordService;
 
     @Transactional(rollbackFor = Exception.class)
-    public void removeUserByIds(List<Integer> ids) {
+    public void removeUserByIds(List<Long> ids) {
         userService.removeByIds(ids);
         userService.removeUserInfoCacheByIds(ids);
-        //删用户其他关联数据...
+        // 删用户其他关联数据...
         statisticsService.remove(new LambdaQueryWrapper<StudyStatistics>().in(StudyStatistics::getUserId, ids));
         studyRecordService.remove(new LambdaQueryWrapper<StudyRecord>().in(StudyRecord::getUserId, ids));
     }

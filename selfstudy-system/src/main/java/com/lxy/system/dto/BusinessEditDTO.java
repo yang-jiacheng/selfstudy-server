@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serial;
 
 /**
- * TODO
+ * 系统配置修改DTO
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -19,10 +19,9 @@ public class BusinessEditDTO implements java.io.Serializable {
     private static final long serialVersionUID = 4021168379752040334L;
 
     @NotNull
-    private Integer id;
+    private Long id;
 
     @NotNull
     private String value;
-
 
 }

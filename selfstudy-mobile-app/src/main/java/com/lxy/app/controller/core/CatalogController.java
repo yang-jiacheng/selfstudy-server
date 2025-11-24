@@ -20,10 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Description: 自习室
- * author: jiacheng yang.
- * Date: 2022/12/24 11:06
- * Version: 1.0
+ * 自习室
+ *
+ * @author jiacheng yang. Date: 2022/12/24 11:06 Version: 1.0
  */
 
 @RequestMapping("/catalog")
@@ -41,10 +40,7 @@ public class CatalogController {
     }
 
     /**
-     * Description: 获取图书馆详情及自习室
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:30
-     * Param: [classifyId 图书馆id]
+     * Description: 获取图书馆详情及自习室 Author: jiacheng yang. Date: 2025/02/20 10:30 Param: [classifyId 图书馆id]
      */
     @PostMapping(value = "/getClassifyDetail", produces = "application/json")
     public R<ClassifyDetailVO> getClassifyDetail(@RequestParam(value = "classifyId") Integer classifyId) {
@@ -53,10 +49,7 @@ public class CatalogController {
     }
 
     /**
-     * Description: 获取自习室详情
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:30
-     * Param: [roomId 自习室id]
+     * Description: 获取自习室详情 Author: jiacheng yang. Date: 2025/02/20 10:30 Param: [roomId 自习室id]
      */
     @PostMapping(value = "/getRoomDetail", produces = "application/json")
     public R<RoomVO> getRoomDetail(@RequestParam(value = "roomId") Integer roomId) {
@@ -65,10 +58,7 @@ public class CatalogController {
     }
 
     /**
-     * Description: 获取自习中的用户记录
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:30
-     * Param: [catalogId 自习室id]
+     * Description: 获取自习中的用户记录 Author: jiacheng yang. Date: 2025/02/20 10:30 Param: [catalogId 自习室id]
      */
     @PostMapping(value = "/getLearningRecords", produces = "application/json")
     public R<List<StudyRecordVO>> getLearningRecords(@RequestParam(value = "catalogId") Integer catalogId) {
@@ -77,10 +67,7 @@ public class CatalogController {
     }
 
     /**
-     * Description: 获取自习中记录详情
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:31
-     * Param: [recordId]
+     * Description: 获取自习中记录详情 Author: jiacheng yang. Date: 2025/02/20 10:31 Param: [recordId]
      */
     @PostMapping(value = "/getLearningRecordDetail", produces = "application/json")
     public R<StudyRecordVO> getLearningRecordDetail(@RequestParam(value = "recordId") Integer recordId) {
@@ -89,14 +76,11 @@ public class CatalogController {
     }
 
     /**
-     * Description: 开始自习
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:31
-     * Param: [studyRecordDTO]
+     * Description: 开始自习 Author: jiacheng yang. Date: 2025/02/20 10:31 Param: [studyRecordDTO]
      */
     @PostMapping(value = "/startStudy", produces = "application/json")
     public R<Integer> startStudy(@RequestBody StudyRecordDTO studyRecordDTO) {
-        int userId = UserIdUtil.getUserId();
+        long userId = UserIdUtil.getUserId();
         Catalog catalog = catalogService.getById(studyRecordDTO.getCatalogId());
         Integer recordId = null;
         if (catalog != null) {
@@ -106,24 +90,20 @@ public class CatalogController {
     }
 
     /**
-     * Description: 结束自习
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:31
-     * Param: [recordId]
+     * Description: 结束自习 Author: jiacheng yang. Date: 2025/02/20 10:31 Param: [recordId]
      */
     @PostMapping(value = "/stopStudy", produces = "application/json")
     public R<Integer> stopStudy(@RequestParam(value = "recordId") Integer recordId) {
-        int userId = UserIdUtil.getUserId();
+        long userId = UserIdUtil.getUserId();
         StudyRecord studyRecord = studyRecordService.stopStudy(recordId, userId);
         return R.ok(studyRecord.getActualDuration());
     }
 
     @PostMapping(value = "/updateRecordToFinish", produces = "application/json")
     public R<Object> updateRecordToFinish() {
-        int userId = UserIdUtil.getUserId();
+        long userId = UserIdUtil.getUserId();
         studyRecordService.updateRecordToFinish(userId);
         return R.ok();
     }
-
 
 }

@@ -9,7 +9,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.lxy.common.domain.GraphicsTextParameter;
+import com.lxy.common.domain.GraphicsTextParameterDTO;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.properties.CustomProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +44,8 @@ public class ImgConfigUtil {
     public final static String UPLOAD_FOLDER = "/upload";
 
     // 图片格式
-    private final static List<String> IMG_FORMAT = Arrays.asList(".BMP", ".JPEG", ".GIF", ".PSD", ".PNG", ".TIFF", ".TGA",
-            ".EPS", ".JPG", ".PCX", ".EXIF", ".FPX", ".CDR", ".PCD", ".DXF", ".UFO", ".EPS", ".AI", ".RAW");
+    private final static List<String> IMG_FORMAT = Arrays.asList(".BMP", ".JPEG", ".GIF", ".PSD", ".PNG", ".TIFF",
+        ".TGA", ".EPS", ".JPG", ".PCX", ".EXIF", ".FPX", ".CDR", ".PCD", ".DXF", ".UFO", ".EPS", ".AI", ".RAW");
 
     /**
      * 压缩图片并返回
@@ -54,10 +54,7 @@ public class ImgConfigUtil {
         try {
             String extension = FileNameUtil.getSuffix(fileName);
             File tempFile = File.createTempFile("compressed-", "." + extension);
-            Thumbnails.of(originalImageStream)
-                    .scale(1f)
-                    .outputQuality(0.75)
-                    .toFile(tempFile);
+            Thumbnails.of(originalImageStream).scale(1f).outputQuality(0.75).toFile(tempFile);
 
             // 自动清理临时文件的 InputStream
             return new AutoDeleteFileInputStream(tempFile);
@@ -93,7 +90,7 @@ public class ImgConfigUtil {
     }
 
     public static String generateDimensionalCode(String uniCode) {
-        //文件名
+        // 文件名
         String fileName = generateRandomString() + ".jpg";
         fileName = FileUtil.getRandomFileName(fileName);
         QrConfig config = new QrConfig();
@@ -103,13 +100,13 @@ public class ImgConfigUtil {
         ByteArrayInputStream inputStream = null;
         try {
             os = new ByteArrayOutputStream();
-            //生成二维码到输出流
+            // 生成二维码到输出流
             QrCodeUtil.generate(uniCode, config, ImgUtil.IMAGE_TYPE_JPG, os);
             byte[] bytes = os.toByteArray();
             inputStream = new ByteArrayInputStream(bytes);
             String prefix = "/upload/DimensionalCode/";
             String ossUrl = prefix + fileName;
-            //传到oss
+            // 传到oss
             OssUtil.uploadFileToOss(ossUrl, inputStream);
             return ossUrl;
         } catch (Exception e) {
@@ -130,7 +127,7 @@ public class ImgConfigUtil {
      * 获取图片前缀
      */
     public static String getPrefix() {
-        //开启了OSS
+        // 开启了OSS
         if (AliYunProperties.ossEnabled) {
             return AliYunProperties.ossPath;
         }
@@ -150,11 +147,11 @@ public class ImgConfigUtil {
     /**
      * 处理图片模板
      *
-     * @param url        图片路径
+     * @param url 图片路径
      * @param parameters 模板参数
      * @return 处理后的图片路径
      */
-    public static String processImage(String url, List<GraphicsTextParameter> parameters) {
+    public static String processImage(String url, List<GraphicsTextParameterDTO> parameters) {
         String imgStr = "";
         BufferedImage bufferedImage = null;
         BufferedImage newBufferedImage = null;
@@ -162,15 +159,15 @@ public class ImgConfigUtil {
             // 加载背景图片
             bufferedImage = ImgUtil.read(new URL(url));
 
-
-            //处理模板参数
-            for (GraphicsTextParameter parameter : parameters) {
+            // 处理模板参数
+            for (GraphicsTextParameterDTO parameter : parameters) {
                 drawTextOnImage(parameter, bufferedImage);
             }
-            //png出红色背景解决
-            newBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+            // png出红色背景解决
+            newBufferedImage =
+                new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
             newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
-            //图片传oss
+            // 图片传oss
             imgStr = readBufferedImageToOSS(newBufferedImage);
         } catch (Exception e) {
             log.error("生成图片失败：" + url, e);
@@ -195,10 +192,7 @@ public class ImgConfigUtil {
     }
 
     /**
-     * Description: 上传图片到oss
-     * author: jiacheng yang.
-     * Date: 2024/11/16 17:35
-     * Param: [data]
+     * Description: 上传图片到oss author: jiacheng yang. Date: 2024/11/16 17:35 Param: [data]
      */
     public static String readBufferedImageToOSS(BufferedImage image) {
         String imgStr = "";
@@ -210,7 +204,8 @@ public class ImgConfigUtil {
             ImageIO.write(image, "jpg", outputStream);
             try (InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())) {
                 // 随机文件名
-                String path = StrUtil.format("/upload/{}/{}_{}.jpg", DateUtil.today(), DateUtil.current(), RandomUtil.randomInt(1000000, 10000000));
+                String path = StrUtil.format("/upload/{}/{}_{}.jpg", DateUtil.today(), DateUtil.current(),
+                    RandomUtil.randomInt(1000000, 10000000));
                 String realPath = AliYunProperties.ossPath + path;
                 // 上传到OSS
                 OssUtil.uploadFileToOss(path.substring(1), inputStream);
@@ -229,9 +224,9 @@ public class ImgConfigUtil {
      * 绘制文本到图片上
      *
      * @param parameter 文本内容和样式的参数
-     * @param image     背景图片
+     * @param image 背景图片
      */
-    public static void drawTextOnImage(GraphicsTextParameter parameter, BufferedImage image) {
+    public static void drawTextOnImage(GraphicsTextParameterDTO parameter, BufferedImage image) {
         String text = parameter.getValue();
         // 获取样式参数
         String fontFamily = parameter.getFontKey();
@@ -275,6 +270,5 @@ public class ImgConfigUtil {
 
         return Color.BLACK; // 默认返回黑色
     }
-
 
 }

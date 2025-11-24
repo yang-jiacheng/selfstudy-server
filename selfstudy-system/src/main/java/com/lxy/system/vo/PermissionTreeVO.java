@@ -26,26 +26,26 @@ public class PermissionTreeVO implements Serializable {
     @Serial
     private static final long serialVersionUID = -3269124634376924194L;
 
-    private Integer id;
+    private Long id;
 
-    //父id
-    private Integer parentId;
+    // 父id
+    private Long parentId;
 
     private Integer level;
 
-    //权限名称
+    // 权限名称
     private String title;
 
-    //权限信息
+    // 权限信息
     private String permissionStr;
 
-    //路由名称
+    // 路由名称
     private String name;
 
-    //路由路径
+    // 路由路径
     private String path;
 
-    //路由组件
+    // 路由组件
     private String component;
 
     private String icon;
@@ -61,7 +61,7 @@ public class PermissionTreeVO implements Serializable {
      * 递归处理树形结构
      *
      * @param list 树形结构列表
-     * @param map  父子关系映射
+     * @param map 父子关系映射
      * @author jiacheng yang.
      * @since 2025/4/16 18:56
      */
@@ -75,19 +75,18 @@ public class PermissionTreeVO implements Serializable {
         }
     }
 
-
     public static List<PermissionTreeVO> buildTree(List<PermissionTreeVO> flatList) {
         List<PermissionTreeVO> roots = new ArrayList<>();
         if (CollUtil.isEmpty(flatList)) {
             return roots;
         }
-        Map<Integer, PermissionTreeVO> nodeMap = new HashMap<>(flatList.size());
+        Map<Long, PermissionTreeVO> nodeMap = new HashMap<>(flatList.size());
         for (PermissionTreeVO node : flatList) {
             node.setChildren(new ArrayList<>());
             nodeMap.put(node.getId(), node);
         }
         for (PermissionTreeVO node : flatList) {
-            Integer parentId = node.getParentId() == null ? 0 : node.getParentId();
+            Long parentId = node.getParentId() == null ? 0 : node.getParentId();
             PermissionTreeVO parentNode = nodeMap.get(parentId);
             if (parentNode == null) {
                 // 作为根节点

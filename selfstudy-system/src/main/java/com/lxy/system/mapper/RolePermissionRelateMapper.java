@@ -18,8 +18,8 @@ import java.util.Set;
  */
 @Mapper
 public interface RolePermissionRelateMapper extends BaseMapper<RolePermissionRelate> {
-    List<RolePermissionRelate> getPermissionByRole(Integer roleId);
+    List<RolePermissionRelate> getPermissionByRole(Long roleId);
 
-    Set<Integer> getAdminIdsByRoles(@Param("ids") List<Integer> ids);
+    Set<Long> getAdminIdsByRoles(@Param("ids") List<Long> ids);
 
 }

@@ -1,26 +1,56 @@
 package com.lxy.system.vo;
 
-import com.lxy.system.po.Classify;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
- * TODO
+ * 图书馆vo
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2022/12/19 17:59
  */
-public class ClassifyVO extends Classify {
+
+@Data
+public class ClassifyVO implements Serializable {
 
     private static final long serialVersionUID = 807766301683388704L;
 
-    //学习人数
+    private Long id;
+
+    // 名称
+    private String name;
+
+    // 描述
+    private String description;
+
+    // 头像地址
+    private String iconPath;
+
+    // 封面地址
+    private String coverPath;
+
+    // 容纳人数（冗余字段）
+    private Integer personCount;
+
+    // 是否开放使用 是否开放 (0否 1是)
+    private Integer useType;
+
+    // 排序
+    private Integer sort;
+
+    // 创建时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date createTime;
+
+    // 修改时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date updateTime;
+
+    // 学习人数
     private Integer studyCount;
 
-    public Integer getStudyCount() {
-        return studyCount;
-    }
-
-    public void setStudyCount(Integer studyCount) {
-        this.studyCount = studyCount;
-    }
 }

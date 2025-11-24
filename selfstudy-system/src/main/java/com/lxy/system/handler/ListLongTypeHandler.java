@@ -1,4 +1,4 @@
-package com.lxy.system.handle;
+package com.lxy.system.handler;
 
 import cn.hutool.core.util.StrUtil;
 import com.lxy.common.util.JsonUtil;
@@ -12,14 +12,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * TODO
+ * List<long> 类型 和 数据库字段（VARCHAR/TEXT） 之间的转换
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2025/11/4 17:21
  */
 
-public class ListIntegerToListLongTypeHandler extends BaseTypeHandler<List<Long>> {
+public class ListLongTypeHandler extends BaseTypeHandler<List<Long>> {
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, List<Long> parameter, JdbcType jdbcType)
@@ -43,7 +43,7 @@ public class ListIntegerToListLongTypeHandler extends BaseTypeHandler<List<Long>
     }
 
     private List<Long> parseJson(String json) {
-        if (StrUtil.isBlank(json)){
+        if (StrUtil.isBlank(json)) {
             return List.of();
         }
         return JsonUtil.getListType(json, Long.class);

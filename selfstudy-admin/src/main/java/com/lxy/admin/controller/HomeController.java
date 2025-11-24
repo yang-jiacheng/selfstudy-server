@@ -31,7 +31,7 @@ public class HomeController {
 
     @GetMapping("/index")
     public String index(HttpServletRequest request) {
-        int adminId = UserIdUtil.getUserId();
+        long adminId = UserIdUtil.getUserId();
         AdminInfo adminInfo = adminInfoService.getById(adminId);
         adminInfo.setProfilePath(ImgConfigUtil.joinUploadUrl(adminInfo.getProfilePath()));
         request.setAttribute("username", adminInfo.getUsername());
@@ -44,6 +44,5 @@ public class HomeController {
     public String main() {
         return "main";
     }
-
 
 }

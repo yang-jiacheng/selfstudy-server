@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * TODO
+ * 后管用户修改DTO
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -22,6 +22,6 @@ public class AdminEditDTO {
     private AdminInfo adminInfo;
 
     @NotEmpty
-    private List<Integer> roleIds;
+    private List<Long> roleIds;
 
 }

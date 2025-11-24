@@ -13,7 +13,7 @@ import com.lxy.system.dto.PersonalEditDTO;
 import com.lxy.system.mapper.AdminInfoMapper;
 import com.lxy.system.po.AdminInfo;
 import com.lxy.system.service.AdminInfoService;
-import com.lxy.system.service.RedisService;
+import com.lxy.system.service.redis.RedisService;
 import com.lxy.system.vo.AdminInfoVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -39,12 +39,12 @@ public class AdminInfoServiceImpl extends ServiceImpl<AdminInfoMapper, AdminInfo
     private RedisService redisService;
 
     @Override
-    public List<String> getPermissionsById(Integer userId) {
+    public List<String> getPermissionsById(Long userId) {
         return adminInfoMapper.getPermissionsById(userId);
     }
 
     @Override
-    public AdminInfoVO getAdminInfoById(Integer id) {
+    public AdminInfoVO getAdminInfoById(Long id) {
         String key = RedisKeyConstant.getAdminInfo(id);
         AdminInfoVO adminInfoVO = redisService.getObject(key, AdminInfoVO.class);
         if (adminInfoVO == null) {
@@ -56,12 +56,12 @@ public class AdminInfoServiceImpl extends ServiceImpl<AdminInfoMapper, AdminInfo
     @Override
     public void updateAdmin(AdminInfo adminInfo) {
         this.saveOrUpdate(adminInfo);
-        Integer id = adminInfo.getId();
+        Long id = adminInfo.getId();
         this.updateAdminInfoCache(id);
     }
 
     @Override
-    public AdminInfoVO updateAdminInfoCache(Integer id) {
+    public AdminInfoVO updateAdminInfoCache(Long id) {
         String key = RedisKeyConstant.getAdminInfo(id);
         AdminInfo adminInfo = this.getById(id);
         if (adminInfo == null) {
@@ -71,7 +71,7 @@ public class AdminInfoServiceImpl extends ServiceImpl<AdminInfoMapper, AdminInfo
         AdminInfoVO adminInfoVO = new AdminInfoVO();
         BeanUtil.copyProperties(adminInfo, adminInfoVO);
         adminInfoVO.setPermissions(permissions);
-        //热点数据永不过期
+        // 热点数据永不过期
         redisService.setObject(key, adminInfoVO, -1L, TimeUnit.DAYS);
         return adminInfoVO;
     }
@@ -82,7 +82,6 @@ public class AdminInfoServiceImpl extends ServiceImpl<AdminInfoMapper, AdminInfo
         wrapper.eq(AdminInfo::getStatus, 1).eq(AdminInfo::getUsername, username).eq(AdminInfo::getPassword, password);
         return this.getOne(wrapper);
     }
-
 
     @Override
     public Page<AdminInfo> getAdminInfoPageList(AdminInfoPageDTO pageDTO) {
@@ -99,13 +98,11 @@ public class AdminInfoServiceImpl extends ServiceImpl<AdminInfoMapper, AdminInfo
     }
 
     @Override
-    public void removeCachePermissionInAdminIds(List<Integer> adminIds) {
+    public void removeCachePermissionInAdminIds(List<Long> adminIds) {
         if (CollUtil.isEmpty(adminIds)) {
             return;
         }
-        List<String> keys = adminIds.stream()
-                .map(RedisKeyConstant::getAdminInfo)
-                .collect(Collectors.toList());
+        List<String> keys = adminIds.stream().map(RedisKeyConstant::getAdminInfo).collect(Collectors.toList());
 
         redisService.deleteKeys(keys);
     }

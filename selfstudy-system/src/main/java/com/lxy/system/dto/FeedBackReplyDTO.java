@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serial;
 
 /**
- * TODO
+ * 意见反馈回复DTO
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -17,7 +17,7 @@ public class FeedBackReplyDTO implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = 1728135602314542737L;
 
-    private Integer id;
+    private Long id;
     private String reply;
 
 }

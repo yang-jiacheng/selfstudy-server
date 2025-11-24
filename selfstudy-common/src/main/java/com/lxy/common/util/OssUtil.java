@@ -34,10 +34,7 @@ import static com.lxy.common.properties.AliYunProperties.ossEndpoint;
 @Slf4j
 public class OssUtil {
 
-    public static final String BUCKET_NAME = ossBucket;
-
     public static final String UPLOAD_FOLDER = "upload/";
-
 
     /**
      * 初始化oss客户端
@@ -54,7 +51,7 @@ public class OssUtil {
     public static void uploadFileToOss(String url, InputStream fileInputStream) {
         OSS ossClient = initOssClient();
         try {
-            ossClient.putObject(BUCKET_NAME, url, fileInputStream);
+            ossClient.putObject(ossBucket, url, fileInputStream);
         } catch (Exception e) {
             log.error(StrUtil.format("上传文件到OSS失败: {}", url), e);
         } finally {
@@ -62,19 +59,20 @@ public class OssUtil {
         }
     }
 
-
     /**
-     * <p>根据文件地址删除文件及目录</p>
+     * <p>
+     * 根据文件地址删除文件及目录
+     * </p>
      *
      * @param filePath 文件地址 不能包含Bucket名称 例子：upload/2022-12-20/1.jpg
      */
     public static void deleteFile(String filePath) {
         OSS ossClient = initOssClient();
         try {
-            //文件是否存在
-            boolean flag = ossClient.doesObjectExist(BUCKET_NAME, filePath);
+            // 文件是否存在
+            boolean flag = ossClient.doesObjectExist(ossBucket, filePath);
             if (flag) {
-                ossClient.deleteObject(BUCKET_NAME, filePath);
+                ossClient.deleteObject(ossBucket, filePath);
             }
         } catch (Exception e) {
             log.error(StrUtil.format("删除文件失败: {}", filePath), e);
@@ -103,7 +101,7 @@ public class OssUtil {
                 request.setSysEndpoint(endpoint);
                 // 设置访问协议
                 request.setSysProtocol(ProtocolType.HTTPS);
-//                request.setDurationSeconds(); 默认 3600秒
+                // request.setDurationSeconds(); 默认 3600秒
                 final AssumeRoleResponse response = client.getAcsResponse(request);
                 return response;
             } finally {
@@ -127,16 +125,17 @@ public class OssUtil {
         String path = "file/" + fileName;
         OSS ossClient = initOssClient();
         try {
-            //清空response
+            // 清空response
             response.reset();
             response.setCharacterEncoding("UTF-8");
-            //告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+            // 告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
+            response.setHeader("Content-Disposition",
+                "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
             response.setContentType("application/octet-stream");
             out = response.getOutputStream();
-            OSSObject ossObject = ossClient.getObject(BUCKET_NAME, path);
+            OSSObject ossObject = ossClient.getObject(ossBucket, path);
             in = ossObject.getObjectContent();
-            //将输入流中的数据循环写入到响应输出流中，而不是一次性读取到内存，通过响应输出流输出到前端
+            // 将输入流中的数据循环写入到响应输出流中，而不是一次性读取到内存，通过响应输出流输出到前端
             byte[] data = new byte[8192];
             int len = 0;
             while ((len = in.read(data)) != -1) {
@@ -155,7 +154,7 @@ public class OssUtil {
                     out.close();
                 }
             } catch (Exception e) {
-                //静默关闭
+                // 静默关闭
             }
             if (ossClient != null) {
                 ossClient.shutdown();
@@ -164,7 +163,9 @@ public class OssUtil {
     }
 
     /**
-     * <p>根据文件地址获取该文件的OSS对象</p>
+     * <p>
+     * 根据文件地址获取该文件的OSS对象
+     * </p>
      *
      * @param filePath 文件地址
      * @return oss对象
@@ -172,12 +173,11 @@ public class OssUtil {
     public OSSObject getOssFileObject(String filePath, OSS ossClient) {
         OSSObject ossObject = null;
         try {
-            ossObject = ossClient.getObject(BUCKET_NAME, filePath);
+            ossObject = ossClient.getObject(ossBucket, filePath);
         } catch (Exception e) {
             log.error(StrUtil.format("获取OSS对象失败: {}", filePath), filePath, e);
         }
         return ossObject;
     }
-
 
 }
