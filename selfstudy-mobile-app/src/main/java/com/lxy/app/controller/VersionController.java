@@ -1,4 +1,4 @@
-package com.lxy.app.controller.appmanage;
+package com.lxy.app.controller;
 
 import com.lxy.common.domain.R;
 import com.lxy.system.po.Version;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Description: 版本控制
- * author: jiacheng yang.
- * Date: 2023/03/10 16:19
- * Version: 1.0
+ * 版本控制
+ *
+ * @author jiacheng yang.
+ * @since 2023/03/10 16:19
  */
 
 @RequestMapping("/version")
@@ -29,10 +29,10 @@ public class VersionController {
     }
 
     /**
-     * Description: 检查版本
-     * author: jiacheng yang.
-     * Date: 2025/02/20 10:19
-     * Param: []
+     * 检查版本
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:19
      */
     @PostMapping("/checkVersion")
     public R<Version> checkVersion() {

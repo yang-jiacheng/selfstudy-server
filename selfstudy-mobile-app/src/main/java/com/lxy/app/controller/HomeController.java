@@ -1,4 +1,4 @@
-package com.lxy.app.controller.core;
+package com.lxy.app.controller;
 
 import com.lxy.common.domain.R;
 import com.lxy.system.service.ClassifyService;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Description: 主页
- * author: jiacheng yang.
- * Date: 2022/12/19 17:35
- * Version: 1.0
+ * 主页
+ *
+ * @author jiacheng yang.
+ * @since 2022/12/19 17:35
  */
 
 @RequestMapping("/home")
@@ -34,10 +34,10 @@ public class HomeController {
     }
 
     /**
-     * Description: 获取图书馆
-     * Author: jiacheng yang.
-     * Date: 2025/02/20 10:28
-     * Param: []
+     * 获取图书馆
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:28
      */
     @PostMapping(value = "/getClassify", produces = "application/json")
     @ResponseBody

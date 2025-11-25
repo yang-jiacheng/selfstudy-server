@@ -1,4 +1,4 @@
-package com.lxy.app.controller.feedback;
+package com.lxy.app.controller;
 
 import com.lxy.common.domain.PageResult;
 import com.lxy.common.domain.R;
@@ -17,7 +17,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Description: 意见反馈 author: jiacheng yang. Date: 2022/12/22 17:34 Version: 1.0
+ * 意见反馈
+ *
+ * @author jiacheng yang.
+ * @since 2022/12/22 17:34
  */
 
 @RequestMapping("/feedBack")
@@ -32,7 +35,13 @@ public class FeedBackController {
     }
 
     /**
-     * Description: 获取反馈列表 Author: jiacheng yang. Date: 2025/02/20 10:29 Param: [page, limit, mine 是否我的反馈 1是]
+     * 获取反馈列表
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:29
+     * @param page 页码
+     * @param limit 每页数量
+     * @param mine 是否我的反馈 1是
      */
     @PostMapping(value = "/getFeedBackList", produces = "application/json")
     public R<List<FeedbackVO>> getFeedBackList(
@@ -53,16 +62,25 @@ public class FeedBackController {
     }
 
     /**
-     * Description: 获取反馈详情 Author: jiacheng yang. Date: 2025/02/20 10:29 Param: [id]
+     * 获取反馈详情
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:29
+     * @param id 反馈ID
      */
     @PostMapping(value = "/getFeedBackDetail", produces = "application/json")
-    public R<FeedbackVO> getFeedBackDetail(@RequestParam(value = "id") Integer id) {
+    public R<FeedbackVO> getFeedBackDetail(@RequestParam(value = "id") Long id) {
         FeedbackVO feedback = feedbackService.getFeedBackDetail(id);
         return R.ok(feedback);
     }
 
     /**
-     * Description: 提交反馈 Author: jiacheng yang. Date: 2025/02/20 10:29 Param: [content 反馈内容, pic 反馈图片]
+     * 提交反馈
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:29
+     * @param content 反馈内容
+     * @param pic 反馈图片
      */
     @PostMapping(value = "/submitFeedBack", produces = "application/json")
     public R<Object> submitFeedBack(@RequestParam(value = "content") String content,

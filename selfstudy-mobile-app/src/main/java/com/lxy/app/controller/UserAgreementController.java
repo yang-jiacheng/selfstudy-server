@@ -1,4 +1,4 @@
-package com.lxy.app.controller.user;
+package com.lxy.app.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lxy.common.constant.ConfigConstant;
@@ -16,10 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Description: 用户协议与隐私政策
- * author: jiacheng yang.
- * Date: 2022/12/21 11:30
- * Version: 1.0
+ * 用户协议与隐私政策
+ *
+ * @author jiacheng yang.
+ * @since 2022/12/21 11:30
  */
 
 @RequestMapping("/userAgreement")
@@ -37,10 +37,12 @@ public class UserAgreementController {
     }
 
     /**
-     * Description: 用户协议或隐私政策
-     * author: jiacheng yang.
-     * Date: 2025/02/20 10:18
-     * Param: [type, model]
+     * 用户协议或隐私政策
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:18
+     * @param type 类型
+     * @param model 模型
      */
     @GetMapping("/agreementPolicyInfoPage{type}")
     public String agreementPolicyInfoPage(@PathVariable("type") Integer type, Model model) {
@@ -52,10 +54,11 @@ public class UserAgreementController {
     }
 
     /**
-     * Description: 关于软件
-     * author: jiacheng yang.
-     * Date: 2025/02/20 10:18
-     * Param: [model]
+     * 关于软件
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:18
+     * @param model 模型
      */
     @GetMapping("/aboutSoftware")
     public String callMe(Model model) {

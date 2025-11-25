@@ -1,4 +1,4 @@
-package com.lxy.app.controller.core;
+package com.lxy.app.controller;
 
 import com.lxy.common.domain.R;
 import com.lxy.framework.security.util.UserIdUtil;
@@ -22,7 +22,9 @@ import java.util.List;
 /**
  * 自习室
  *
- * @author jiacheng yang. Date: 2022/12/24 11:06 Version: 1.0
+ * @author jiacheng yang.
+ * @since 2022/12/24 11:06
+ * @version 1.0
  */
 
 @RequestMapping("/catalog")
@@ -40,49 +42,69 @@ public class CatalogController {
     }
 
     /**
-     * Description: 获取图书馆详情及自习室 Author: jiacheng yang. Date: 2025/02/20 10:30 Param: [classifyId 图书馆id]
+     * 获取图书馆详情及自习室
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:30
+     * @param classifyId 图书馆id
      */
     @PostMapping(value = "/getClassifyDetail", produces = "application/json")
-    public R<ClassifyDetailVO> getClassifyDetail(@RequestParam(value = "classifyId") Integer classifyId) {
+    public R<ClassifyDetailVO> getClassifyDetail(@RequestParam(value = "classifyId") Long classifyId) {
         ClassifyDetailVO detail = catalogService.getCatalogByClassify(classifyId);
         return R.ok(detail);
     }
 
     /**
-     * Description: 获取自习室详情 Author: jiacheng yang. Date: 2025/02/20 10:30 Param: [roomId 自习室id]
+     * 获取自习室详情
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:30
+     * @param roomId 自习室id
      */
     @PostMapping(value = "/getRoomDetail", produces = "application/json")
-    public R<RoomVO> getRoomDetail(@RequestParam(value = "roomId") Integer roomId) {
+    public R<RoomVO> getRoomDetail(@RequestParam(value = "roomId") Long roomId) {
         RoomVO detail = catalogService.getRoomDetail(roomId);
         return R.ok(detail);
     }
 
     /**
-     * Description: 获取自习中的用户记录 Author: jiacheng yang. Date: 2025/02/20 10:30 Param: [catalogId 自习室id]
+     * 获取自习中的用户记录
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:30
+     * @param catalogId 自习室id
      */
     @PostMapping(value = "/getLearningRecords", produces = "application/json")
-    public R<List<StudyRecordVO>> getLearningRecords(@RequestParam(value = "catalogId") Integer catalogId) {
+    public R<List<StudyRecordVO>> getLearningRecords(@RequestParam(value = "catalogId") Long catalogId) {
         List<StudyRecordVO> records = studyRecordService.getLearningRecords(catalogId);
         return R.ok(records);
     }
 
     /**
-     * Description: 获取自习中记录详情 Author: jiacheng yang. Date: 2025/02/20 10:31 Param: [recordId]
+     * 获取自习中记录详情
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:31
+     * @param recordId 记录ID
      */
     @PostMapping(value = "/getLearningRecordDetail", produces = "application/json")
-    public R<StudyRecordVO> getLearningRecordDetail(@RequestParam(value = "recordId") Integer recordId) {
+    public R<StudyRecordVO> getLearningRecordDetail(@RequestParam(value = "recordId") Long recordId) {
         StudyRecordVO detail = studyRecordService.getLearningRecordDetail(recordId);
         return R.ok(detail);
     }
 
     /**
-     * Description: 开始自习 Author: jiacheng yang. Date: 2025/02/20 10:31 Param: [studyRecordDTO]
+     * 开始自习
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:31
+     * @param studyRecordDTO 学习记录DTO
      */
     @PostMapping(value = "/startStudy", produces = "application/json")
-    public R<Integer> startStudy(@RequestBody StudyRecordDTO studyRecordDTO) {
+    public R<Long> startStudy(@RequestBody StudyRecordDTO studyRecordDTO) {
         long userId = UserIdUtil.getUserId();
         Catalog catalog = catalogService.getById(studyRecordDTO.getCatalogId());
-        Integer recordId = null;
+        Long recordId = null;
         if (catalog != null) {
             recordId = studyRecordService.startStudy(studyRecordDTO, catalog, userId);
         }
@@ -90,10 +112,14 @@ public class CatalogController {
     }
 
     /**
-     * Description: 结束自习 Author: jiacheng yang. Date: 2025/02/20 10:31 Param: [recordId]
+     * 结束自习
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:31
+     * @param recordId 记录ID
      */
     @PostMapping(value = "/stopStudy", produces = "application/json")
-    public R<Integer> stopStudy(@RequestParam(value = "recordId") Integer recordId) {
+    public R<Integer> stopStudy(@RequestParam(value = "recordId") Long recordId) {
         long userId = UserIdUtil.getUserId();
         StudyRecord studyRecord = studyRecordService.stopStudy(recordId, userId);
         return R.ok(studyRecord.getActualDuration());

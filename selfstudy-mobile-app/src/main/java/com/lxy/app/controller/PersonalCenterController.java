@@ -1,4 +1,4 @@
-package com.lxy.app.controller.user;
+package com.lxy.app.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 /**
- * Description: 个人中心 author: jiacheng yang. Date: 2022/12/19 17:27 Version: 1.0
+ * 个人中心
+ *
+ * @author jiacheng yang.
+ * @since 2022/12/19 17:27
+ * @version 1.0
  */
 
 @RequestMapping("/personalCenter")
@@ -35,7 +39,10 @@ public class PersonalCenterController {
     }
 
     /**
-     * Description: 获取个人信息 Author: jiacheng yang. Date: 2025/02/20 10:26 Param: []
+     * 获取个人信息
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:26
      */
     @PostMapping(value = "/getUserInfo", produces = "application/json")
     public R<User> getUserInfo() {
@@ -45,8 +52,10 @@ public class PersonalCenterController {
     }
 
     /**
-     * Description: 修改个人信息 Author: jiacheng yang. Date: 2025/02/20 10:27 Param: [name 昵称|即姓名, gender 性别, address 地址,
-     * profilePath 头像,传相对路径, coverPath 个人资料背景]
+     * 修改个人信息
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:27
      */
     @PostMapping(value = "/updateUserInfo", produces = "application/json")
     public R<Object> updateUserInfo(@RequestParam(value = "name", required = false) String name,
@@ -66,8 +75,10 @@ public class PersonalCenterController {
     }
 
     /**
-     * Description: 修改密码 Author: jiacheng yang. Date: 2025/02/20 10:27 Param: [phone 手机号, verificationCode 验证码, password
-     * 新密码 sha256加密]
+     * 修改密码
+     *
+     * @author jiacheng yang.
+     * @since  2025/02/20 10:27
      */
     @PostMapping(value = "/updatePassword", produces = "application/json")
     public R<Object> updatePassword(@RequestParam(value = "phone") String phone,
@@ -94,7 +105,10 @@ public class PersonalCenterController {
     }
 
     /**
-     * Description: 获取用户信息 Author: jiacheng yang. Date: 2025/02/20 10:28 Param: [userId]
+     * 获取用户信息
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:28
      */
     @PostMapping(value = "/getUserInfoById", produces = "application/json")
     public R<User> getUserInfoById(@RequestParam(value = "userId") Long userId) {

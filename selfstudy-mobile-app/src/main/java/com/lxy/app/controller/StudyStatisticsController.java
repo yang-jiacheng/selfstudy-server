@@ -1,4 +1,4 @@
-package com.lxy.app.controller.statistics;
+package com.lxy.app.controller;
 
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.domain.R;
@@ -20,7 +20,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Description: 学情统计 author: jiacheng yang. Date: 2022/12/23 11:37 Version: 1.0
+ * 学情统计
+ *
+ * @author jiacheng yang.
+ * @since 2022/12/23 11:37
  */
 
 @RequestMapping("/studyStatistics")
@@ -45,7 +48,12 @@ public class StudyStatisticsController {
     }
 
     /**
-     * Description: 提交学习时长 author: jiacheng yang. Date: 2025/02/20 10:21 Param: [duration 学习时长 分钟, recordId 学习记录id]
+     * 提交学习时长
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:21
+     * @param duration 学习时长 分钟
+     * @param recordId 学习记录id
      */
     @PostMapping(value = "/submitStudyDuration", produces = "application/json")
     public R<Object> submitStudyDuration(@RequestParam(value = "duration") Integer duration,
@@ -61,7 +69,10 @@ public class StudyStatisticsController {
     }
 
     /**
-     * Description: 获取总排行榜 author: jiacheng yang. Date: 2025/02/20 10:23 Param: []
+     * 获取总排行榜
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:23
      */
     @PostMapping(value = "/getRankings", produces = "application/json")
     public R<List<UserRankVO>> getRankings() {
@@ -70,7 +81,10 @@ public class StudyStatisticsController {
     }
 
     /**
-     * Description: 获取总排行榜更新规则 Author: jiacheng yang. Date: 2025/02/20 10:24 Param: []
+     * 获取总排行榜更新规则
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:24
      */
     @PostMapping(value = "/getRankingsRules", produces = "application/json")
     public R<String> getRankingsRules() {
@@ -79,7 +93,10 @@ public class StudyStatisticsController {
     }
 
     /**
-     * Description: 获取自己的排名和信息 Author: jiacheng yang. Date: 2025/02/20 10:24 Param: []
+     * 获取自己的排名和信息
+     *
+     * @author jiacheng yang.
+     * @since 2025/02/20 10:24
      */
     @GetMapping(value = "/getSelfRankings", produces = "application/json")
     public R<UserRankVO> getSelfRankings() {

@@ -1,4 +1,4 @@
-package com.lxy.app.controller.user;
+package com.lxy.app.controller;
 
 import com.lxy.app.security.service.LoginService;
 import com.lxy.common.constant.AuthConstant;
