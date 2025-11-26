@@ -1,7 +1,7 @@
 package com.lxy.common.constant;
 
 /**
- * TODO
+ * Cron表达式常量
  *
  * @author jiacheng yang.
  * @version 1.0

@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lxy.system.dto.RolePageDTO;
+import com.lxy.common.dto.RolePageDTO;
 import com.lxy.system.mapper.RoleMapper;
 import com.lxy.system.po.Role;
 import com.lxy.system.service.RoleService;

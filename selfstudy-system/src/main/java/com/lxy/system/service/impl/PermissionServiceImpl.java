@@ -7,13 +7,12 @@ import com.lxy.common.domain.R;
 import com.lxy.system.mapper.PermissionMapper;
 import com.lxy.system.po.Permission;
 import com.lxy.system.service.PermissionService;
-import com.lxy.system.vo.PermissionTreeVO;
+import com.lxy.common.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;

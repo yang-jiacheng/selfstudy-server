@@ -4,9 +4,10 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.common.domain.R;
-import com.lxy.system.dto.AdminEditDTO;
-import com.lxy.system.dto.AdminStatusDTO;
-import com.lxy.system.dto.RoleEditDTO;
+import com.lxy.common.dto.AdminInfoUpdateDTO;
+import com.lxy.common.dto.AdminEditDTO;
+import com.lxy.common.dto.AdminStatusDTO;
+import com.lxy.common.dto.RoleEditDTO;
 import com.lxy.system.po.AdminInfo;
 import com.lxy.system.po.AdminRoleRelate;
 import com.lxy.system.po.Permission;
@@ -17,13 +18,12 @@ import com.lxy.system.service.AdminRoleRelateService;
 import com.lxy.system.service.PermissionService;
 import com.lxy.system.service.RolePermissionRelateService;
 import com.lxy.system.service.RoleService;
-import com.lxy.system.vo.PermissionTreeVO;
+import com.lxy.common.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -134,7 +134,8 @@ public class AuthService {
      */
     @Transactional(rollbackFor = Exception.class)
     public R<Object> editAdminInfo(AdminEditDTO adminEditDTO) {
-        AdminInfo adminInfo = adminEditDTO.getAdminInfo();
+        AdminInfoUpdateDTO adminInfoDTO = adminEditDTO.getAdminInfo();
+        AdminInfo adminInfo = BeanUtil.copyProperties(adminInfoDTO, AdminInfo.class);
         List<Long> roleIds = adminEditDTO.getRoleIds();
         LambdaQueryWrapper<AdminInfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.nested(w -> w.eq(AdminInfo::getPhone, adminInfo.getPhone()).or().eq(AdminInfo::getUsername,

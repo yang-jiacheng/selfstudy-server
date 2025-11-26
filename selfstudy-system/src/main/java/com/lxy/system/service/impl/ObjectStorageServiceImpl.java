@@ -8,11 +8,11 @@ import com.github.pagehelper.PageInfo;
 import com.lxy.common.domain.PageResult;
 import com.lxy.common.dto.PageDTO;
 import com.lxy.common.util.OssUtil;
-import com.lxy.system.dto.ObjectStorageDTO;
+import com.lxy.common.dto.ObjectStorageDTO;
 import com.lxy.system.mapper.ObjectStorageMapper;
 import com.lxy.system.po.ObjectStorage;
 import com.lxy.system.service.ObjectStorageService;
-import com.lxy.system.vo.ObjectStorageVO;
+import com.lxy.common.vo.ObjectStorageVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

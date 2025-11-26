@@ -22,7 +22,7 @@
         , user_id, content, pic, reply, admin_id, create_time, reply_time, status, reply_status
     </sql>
 
-    <select id="getFeedBackList" resultType="com.lxy.system.vo.FeedbackVO">
+    <select id="getFeedBackList" resultType="com.lxy.common.vo.FeedbackVO">
         SELECT
         f.id,
         f.user_id,
@@ -87,7 +87,7 @@
         </where>
     </select>
 
-    <select id="getFeedBackDetail" resultType="com.lxy.system.vo.FeedbackVO">
+    <select id="getFeedBackDetail" resultType="com.lxy.common.vo.FeedbackVO">
         SELECT f.id,
                f.user_id,
                f.content,

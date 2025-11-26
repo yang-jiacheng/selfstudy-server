@@ -1,10 +1,10 @@
 package com.lxy.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lxy.system.dto.UserPageDTO;
+import com.lxy.common.dto.UserPageDTO;
 import com.lxy.system.po.User;
-import com.lxy.system.vo.user.UserExportVO;
-import com.lxy.system.vo.user.UserRankVO;
+import com.lxy.common.vo.user.UserExportVO;
+import com.lxy.common.vo.user.UserRankVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

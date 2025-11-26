@@ -5,7 +5,7 @@ import com.lxy.admin.security.service.impl.DualTokenLoginServiceImpl;
 import com.lxy.common.domain.R;
 import com.lxy.common.domain.TokenPair;
 import com.lxy.common.util.DualTokenUtil;
-import com.lxy.system.dto.LoginVerifyCodeDTO;
+import com.lxy.common.dto.LoginVerifyCodeDTO;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

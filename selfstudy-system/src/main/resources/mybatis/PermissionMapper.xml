@@ -50,7 +50,7 @@
           and rp.role_id = #{roleId}
     </select>
 
-    <select id="getPermissionTree" resultType="com.lxy.system.vo.PermissionTreeVO">
+    <select id="getPermissionTree" resultType="com.lxy.common.vo.PermissionTreeVO">
         SELECT id,
                parent_id,
                level,
@@ -103,7 +103,7 @@
         FROM ancestors;
     </select>
 
-    <select id="getMinePermissionTree" resultType="com.lxy.system.vo.PermissionTreeVO">
+    <select id="getMinePermissionTree" resultType="com.lxy.common.vo.PermissionTreeVO">
         SELECT permission.id,
                permission.parent_id,
                permission.level,

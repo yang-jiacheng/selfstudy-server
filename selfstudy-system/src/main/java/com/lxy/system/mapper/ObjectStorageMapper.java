@@ -3,7 +3,7 @@ package com.lxy.system.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lxy.common.dto.PageDTO;
 import com.lxy.system.po.ObjectStorage;
-import com.lxy.system.vo.ObjectStorageVO;
+import com.lxy.common.vo.ObjectStorageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

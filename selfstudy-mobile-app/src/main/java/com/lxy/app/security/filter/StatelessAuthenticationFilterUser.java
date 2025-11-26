@@ -57,7 +57,7 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         Long userId = null;
         try {
             Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
-            userId = (Integer)claims.get("userId");
+            userId = (Long)claims.get("userId");
         } catch (Exception e) {
             logger.error("token解析失败", e);
             filterChain.doFilter(request, response);

@@ -7,7 +7,7 @@ import com.lxy.common.util.LogUtil;
 import com.lxy.common.util.WebUtil;
 import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.system.service.AdminInfoService;
-import com.lxy.system.vo.AdminInfoVO;
+import com.lxy.common.vo.AdminInfoVO;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

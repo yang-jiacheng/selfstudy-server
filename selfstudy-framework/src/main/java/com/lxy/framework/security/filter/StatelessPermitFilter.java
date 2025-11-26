@@ -56,7 +56,7 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
         Long userId = null;
         try {
             Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
-            userId = (Integer)claims.get("userId");
+            userId = (Long)claims.get("userId");
         } catch (Exception e) {
             LOG.error("解析token失败", e);
             // 放行

@@ -8,13 +8,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.domain.R;
-import com.lxy.system.dto.AdminInfoPageDTO;
-import com.lxy.system.dto.PersonalEditDTO;
+import com.lxy.common.dto.AdminInfoPageDTO;
+import com.lxy.common.dto.PersonalEditDTO;
 import com.lxy.system.mapper.AdminInfoMapper;
 import com.lxy.system.po.AdminInfo;
 import com.lxy.system.service.AdminInfoService;
 import com.lxy.system.service.redis.RedisService;
-import com.lxy.system.vo.AdminInfoVO;
+import com.lxy.common.vo.AdminInfoVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

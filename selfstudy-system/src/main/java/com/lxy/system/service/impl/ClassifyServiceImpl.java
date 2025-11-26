@@ -14,7 +14,7 @@ import com.lxy.system.service.CatalogService;
 import com.lxy.system.service.ClassifyService;
 import com.lxy.system.service.StudyRecordService;
 import com.lxy.system.service.redis.RedisService;
-import com.lxy.system.vo.ClassifyVO;
+import com.lxy.common.vo.ClassifyVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

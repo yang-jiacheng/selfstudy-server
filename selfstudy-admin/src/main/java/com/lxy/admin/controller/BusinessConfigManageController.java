@@ -3,7 +3,7 @@ package com.lxy.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lxy.common.domain.CollResult;
 import com.lxy.common.domain.R;
-import com.lxy.system.dto.BusinessEditDTO;
+import com.lxy.common.dto.BusinessEditDTO;
 import com.lxy.system.po.BusinessConfig;
 import com.lxy.system.service.BusinessConfigService;
 import jakarta.annotation.Resource;

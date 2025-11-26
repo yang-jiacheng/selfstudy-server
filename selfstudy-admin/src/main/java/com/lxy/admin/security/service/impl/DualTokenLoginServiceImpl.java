@@ -10,7 +10,7 @@ import com.lxy.common.enums.LogUserType;
 import com.lxy.common.util.DualTokenUtil;
 import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.framework.security.service.LoginStatusService;
-import com.lxy.system.dto.LoginVerifyCodeDTO;
+import com.lxy.common.dto.LoginVerifyCodeDTO;
 import com.lxy.system.service.BusinessConfigService;
 import com.lxy.system.service.redis.RedisService;
 import io.jsonwebtoken.Claims;

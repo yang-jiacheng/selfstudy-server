@@ -3,7 +3,7 @@ package com.lxy.admin.security.service;
 
 import com.lxy.common.domain.R;
 import com.lxy.common.domain.TokenPair;
-import com.lxy.system.dto.LoginVerifyCodeDTO;
+import com.lxy.common.dto.LoginVerifyCodeDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

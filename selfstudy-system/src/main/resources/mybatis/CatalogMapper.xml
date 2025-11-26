@@ -22,13 +22,13 @@
     </sql>
 
     <!-- 图书馆详情，与自习室是一对多的关系  -->
-    <resultMap id="ClassifyDetailMap" type="com.lxy.system.vo.ClassifyDetailVO">
+    <resultMap id="ClassifyDetailMap" type="com.lxy.common.vo.ClassifyDetailVO">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="description" property="description" jdbcType="VARCHAR"/>
         <result column="icon_path" property="iconPath" jdbcType="VARCHAR"/>
         <result column="cover_path" property="coverPath" jdbcType="VARCHAR"/>
-        <collection property="rooms" ofType="com.lxy.system.vo.CatalogVO">
+        <collection property="rooms" ofType="com.lxy.common.vo.CatalogVO">
             <id column="catalogId" property="catalogId" jdbcType="INTEGER"/>
             <result column="classify_id" property="classifyId" jdbcType="INTEGER"/>
             <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
@@ -39,7 +39,7 @@
         </collection>
     </resultMap>
 
-    <select id="getTree" resultType="com.lxy.system.vo.CatalogTreeVO">
+    <select id="getTree" resultType="com.lxy.common.vo.CatalogTreeVO">
         SELECT CONCAT(aec.id, '|co') AS id,
                aec.NAME              AS name,
                -1                    AS parentId,
@@ -80,7 +80,7 @@
         where cl.id = #{classifyId}
     </select>
 
-    <select id="getRoomDetail" resultType="com.lxy.system.vo.RoomVO">
+    <select id="getRoomDetail" resultType="com.lxy.common.vo.RoomVO">
         select c.id,
                c.`name`,
                c.person_count,
