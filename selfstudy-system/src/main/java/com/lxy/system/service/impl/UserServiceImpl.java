@@ -11,7 +11,9 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.constant.UserConstant;
 import com.lxy.common.constant.dict.RegisterTypeConstant;
+import com.lxy.common.dto.UserPageDTO;
 import com.lxy.common.exception.ServiceException;
 import com.lxy.common.util.DateCusUtil;
 import com.lxy.common.util.EncryptUtil;
@@ -19,15 +21,14 @@ import com.lxy.common.util.IdGenerator;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.excel.BaseSheetHandler;
 import com.lxy.common.util.excel.ExcelUtil;
-import com.lxy.common.dto.UserPageDTO;
-import com.lxy.system.mapper.UserMapper;
-import com.lxy.system.po.User;
-import com.lxy.system.service.UserService;
-import com.lxy.system.service.redis.RedisService;
 import com.lxy.common.vo.ExcelErrorInfoVO;
 import com.lxy.common.vo.user.UserExportVO;
 import com.lxy.common.vo.user.UserImportVO;
 import com.lxy.common.vo.user.UserRankVO;
+import com.lxy.system.mapper.UserMapper;
+import com.lxy.system.po.User;
+import com.lxy.system.service.UserService;
+import com.lxy.system.service.redis.RedisService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
@@ -136,7 +137,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             if (user2 != null) {
                 return false;
             }
+            user.setPassword(EncryptUtil.encryptSha256(UserConstant.DEF_PASSWORD));
             user.setRegisterType(RegisterTypeConstant.ADMIN_ADD);
+            user.setProfilePath(UserConstant.DEF_PROFILE_PATH);
+            user.setCoverPath(UserConstant.DEF_COVER_PATH);
             flag = this.save(user);
         } else {
             User user2 = this.getOne(

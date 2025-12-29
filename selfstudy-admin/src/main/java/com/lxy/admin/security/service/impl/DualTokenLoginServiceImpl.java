@@ -1,16 +1,17 @@
 package com.lxy.admin.security.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.lxy.admin.security.service.LoginService;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.domain.R;
 import com.lxy.common.domain.TokenPair;
+import com.lxy.common.dto.LoginVerifyCodeDTO;
 import com.lxy.common.enums.LogUserType;
 import com.lxy.common.util.DualTokenUtil;
 import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.framework.security.service.LoginStatusService;
-import com.lxy.common.dto.LoginVerifyCodeDTO;
 import com.lxy.system.service.BusinessConfigService;
 import com.lxy.system.service.redis.RedisService;
 import io.jsonwebtoken.Claims;
@@ -77,7 +78,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
         // 获取最大会话数量配置
         int maxSessions = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.ADMIN_HAS_NUM));
         // 管理会话
-        String sessionKey = RedisKeyConstant.getAdminDualTokenSessions(userId);
+        String sessionKey = RedisKeyConstant.getAdminDualToken(userId);
         loginStatusService.manageUserSessions(userId, sessionKey, tokenPair, maxSessions);
         // 记录登录日志
         log.info("用户`{}`登录成功", userId);
@@ -94,10 +95,10 @@ public class DualTokenLoginServiceImpl implements LoginService {
                 return;
             }
             Claims claims = DualTokenUtil.parseToken(token);
-            userId = (Long)claims.get(PARAM_NAME_USER_ID);
+            userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
             String refreshId = (String)claims.get(PARAM_NAME_JID);
             if (userId != -1L) {
-                String sessionKey = RedisKeyConstant.getAdminDualTokenSessions(userId);
+                String sessionKey = RedisKeyConstant.getAdminDualToken(userId);
                 // 移除会话
                 loginStatusService.removeSessionByRefreshId(sessionKey, refreshId);
                 // 清除SecurityContext
@@ -123,12 +124,12 @@ public class DualTokenLoginServiceImpl implements LoginService {
 
         // 解析刷新令牌获取用户信息
         Claims claims = DualTokenUtil.parseToken(refreshToken);
-        Long userId = (Long)claims.get(PARAM_NAME_USER_ID);
+        Long userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
         Integer userType = (Integer)claims.get(PARAM_NAME_USER_TYPE);
         String refreshId = (String)claims.get(PARAM_NAME_JID);
 
         // 检查会话是否存在
-        String sessionKey = RedisKeyConstant.getAdminDualTokenSessions(userId);
+        String sessionKey = RedisKeyConstant.getAdminDualToken(userId);
         if (!loginStatusService.isSessionExists(sessionKey, refreshId)) {
             return r;
         }
@@ -154,16 +155,8 @@ public class DualTokenLoginServiceImpl implements LoginService {
         if (StrUtil.isEmpty(verifyCode) || StrUtil.isEmpty(uuid)) {
             return false;
         }
-
         String verifyKey = RedisKeyConstant.getMathCodeKey(uuid);
         String code = redisService.getObject(verifyKey, String.class);
-
-        if (code != null && code.equals(verifyCode)) {
-            // 验证成功后删除验证码
-            redisService.deleteKey(verifyKey);
-            return true;
-        }
-
-        return false;
+        return ObjectUtil.isNotNull(code) && ObjectUtil.equals(code, verifyCode);
     }
 }

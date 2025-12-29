@@ -2,6 +2,7 @@ package com.lxy.common.util;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.lxy.common.domain.TokenPair;
@@ -201,13 +202,12 @@ public class DualTokenUtil {
             // 先解析获取用户ID
             String payload = getPayload(token);
             Map<String, Object> claimsMap = JsonUtil.getObj(payload, new TypeReference<HashMap<String, Object>>() {});
-            Long userId = (Long)claimsMap.get(PARAM_NAME_USER_ID);
-
-            if (userId == null) {
+            Object userIdObj = claimsMap.get(PARAM_NAME_USER_ID);
+            if (ObjectUtil.isNull(userIdObj) || !(userIdObj instanceof Number)) {
                 log.error("token中未获取到userId：{}", token);
                 return null;
             }
-
+            Long userId = ((Number)userIdObj).longValue();
             // 获取密钥并解析
             String secretKey = getSecretKey(userId);
             return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
@@ -216,6 +216,37 @@ public class DualTokenUtil {
             return null;
         } catch (Exception e) {
             log.error("无法解析token: {}", token, e);
+            return null;
+        }
+    }
+
+    /**
+     * 获取Claims中的Long值
+     */
+    public static Long getLongFromClaims(Claims claims, String key) {
+        if (ObjectUtil.isNull(claims) || StrUtil.isEmpty(key)) {
+            return null;
+        }
+        Object value = claims.get(key);
+        if (value == null) {
+            return null;
+        }
+        try {
+            if (value instanceof Number) {
+                return ((Number)value).longValue();
+            }
+
+            if (value instanceof String) {
+                String str = ((String)value).trim();
+                if (StrUtil.isNumeric(str)) {
+                    return Long.parseLong(str);
+                }
+            }
+
+            log.error("claims中字段类型非法: key={}, value={}, type={}", key, value, value.getClass().getName());
+            return null;
+        } catch (Exception e) {
+            log.error("claims中字段转Long失败: key={}, value={}", key, value, e);
             return null;
         }
     }

@@ -5,9 +5,9 @@ import com.lxy.common.util.DualTokenUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.LogUtil;
 import com.lxy.common.util.WebUtil;
+import com.lxy.common.vo.AdminInfoVO;
 import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.system.service.AdminInfoService;
-import com.lxy.common.vo.AdminInfoVO;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -61,7 +61,7 @@ public class DualTokenAuthenticationFilter extends OncePerRequestFilter {
         }
         // 解析Access Token
         Claims claims = DualTokenUtil.parseToken(accessToken);
-        Long userId = (Long)claims.get(PARAM_NAME_USER_ID);
+        Long userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
 
         // 创建认证用户对象
         StatelessUser statelessUser = new StatelessUser(userId, null, null);
