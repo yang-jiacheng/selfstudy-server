@@ -4,11 +4,12 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.file.FileNameUtil;
-import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.lxy.common.constant.StrConstant;
 import com.lxy.common.domain.GraphicsTextParameterDTO;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.properties.CustomProperties;
@@ -26,12 +27,11 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TODO
+ * 图片配置工具类
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -43,9 +43,16 @@ public class ImgConfigUtil {
 
     public final static String UPLOAD_FOLDER = "/upload";
 
+    public final static String DIMENSIONAL_CODE_FOLDER = "/upload/dimensionalCode/";
+
+    public final static String SUFFIX_JPG = ".jpg";
+
+    public final static String AGREEMENT_HTTP = "http://";
+
+    public final static String PROD = "prod";
+
     // 图片格式
-    private final static List<String> IMG_FORMAT = Arrays.asList(".BMP", ".JPEG", ".GIF", ".PSD", ".PNG", ".TIFF",
-        ".TGA", ".EPS", ".JPG", ".PCX", ".EXIF", ".FPX", ".CDR", ".PCD", ".DXF", ".UFO", ".EPS", ".AI", ".RAW");
+    private final static List<String> IMG_FORMAT = Arrays.asList(".JPEG", ".GIF", ".PNG", ".JPG", ".WEBP");
 
     /**
      * 压缩图片并返回
@@ -55,7 +62,6 @@ public class ImgConfigUtil {
             String extension = FileNameUtil.getSuffix(fileName);
             File tempFile = File.createTempFile("compressed-", "." + extension);
             Thumbnails.of(originalImageStream).scale(1f).outputQuality(0.75).toFile(tempFile);
-
             // 自动清理临时文件的 InputStream
             return new AutoDeleteFileInputStream(tempFile);
         } catch (IOException e) {
@@ -89,9 +95,14 @@ public class ImgConfigUtil {
         return getPrefix() + url;
     }
 
+    /**
+     * 生成二维码图片上传到oss，返回相对路径
+     *
+     * @param uniCode 二维码内容
+     */
     public static String generateDimensionalCode(String uniCode) {
         // 文件名
-        String fileName = generateRandomString() + ".jpg";
+        String fileName = generateRandomString() + SUFFIX_JPG;
         fileName = FileUtil.getRandomFileName(fileName);
         QrConfig config = new QrConfig();
         // 高纠错级别
@@ -104,8 +115,7 @@ public class ImgConfigUtil {
             QrCodeUtil.generate(uniCode, config, ImgUtil.IMAGE_TYPE_JPG, os);
             byte[] bytes = os.toByteArray();
             inputStream = new ByteArrayInputStream(bytes);
-            String prefix = "/upload/DimensionalCode/";
-            String ossUrl = prefix + fileName;
+            String ossUrl = DIMENSIONAL_CODE_FOLDER + fileName;
             // 传到oss
             OssUtil.uploadFileToOss(ossUrl, inputStream);
             return ossUrl;
@@ -119,7 +129,7 @@ public class ImgConfigUtil {
     }
 
     public static String generateRandomString() {
-        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String uuid = IdUtil.simpleUUID();
         return uuid.substring(0, 10);
     }
 
@@ -131,17 +141,15 @@ public class ImgConfigUtil {
         if (AliYunProperties.ossEnabled) {
             return AliYunProperties.ossPath;
         }
-        if ("prod".equals(CustomProperties.activeProfile)) {
-            return "http://" + CustomProperties.hostName + CustomProperties.contentPath;
-        }
-        return "http://" + CustomProperties.hostName + ":" + CustomProperties.port + CustomProperties.contentPath;
+        return getAccessUrl();
     }
 
     public static String getAccessUrl() {
-        if ("prod".equals(CustomProperties.activeProfile)) {
-            return "http://" + CustomProperties.hostName + CustomProperties.contentPath;
+        if (PROD.equals(CustomProperties.activeProfile)) {
+            return AGREEMENT_HTTP + CustomProperties.hostName + CustomProperties.contentPath;
         }
-        return "http://" + CustomProperties.hostName + ":" + CustomProperties.port + CustomProperties.contentPath;
+        return AGREEMENT_HTTP + CustomProperties.hostName + StrConstant.COLON + CustomProperties.port
+            + CustomProperties.contentPath;
     }
 
     /**
@@ -170,7 +178,7 @@ public class ImgConfigUtil {
             // 图片传oss
             imgStr = readBufferedImageToOSS(newBufferedImage);
         } catch (Exception e) {
-            log.error("生成图片失败：" + url, e);
+            log.error("生成图片失败：{}", url, e);
         } finally {
             if (bufferedImage != null) {
                 try {
@@ -204,8 +212,8 @@ public class ImgConfigUtil {
             ImageIO.write(image, "jpg", outputStream);
             try (InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())) {
                 // 随机文件名
-                String path = StrUtil.format("/upload/{}/{}_{}.jpg", DateUtil.today(), DateUtil.current(),
-                    RandomUtil.randomInt(1000000, 10000000));
+                String path =
+                    StrUtil.format("/upload/{}/{}.jpg", DateUtil.today(), DateUtil.current(), IdUtil.simpleUUID());
                 String realPath = AliYunProperties.ossPath + path;
                 // 上传到OSS
                 OssUtil.uploadFileToOss(path.substring(1), inputStream);
@@ -229,7 +237,6 @@ public class ImgConfigUtil {
     public static void drawTextOnImage(GraphicsTextParameterDTO parameter, BufferedImage image) {
         String text = parameter.getValue();
         // 获取样式参数
-        String fontFamily = parameter.getFontKey();
         int fontSize = parameter.getFontSize() != null ? parameter.getFontSize() : 24;
         int x = parameter.getX() != null ? parameter.getX() : 0;
         int y = parameter.getY() != null ? parameter.getY() + fontSize : 0;

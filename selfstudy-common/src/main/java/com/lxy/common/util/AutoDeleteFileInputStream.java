@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * TODO
+ * 自动清理文件的 InputStream
  *
  * @author jiacheng yang.
  * @version 1.0

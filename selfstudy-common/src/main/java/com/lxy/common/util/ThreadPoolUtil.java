@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * TODO
+ * 线程池工具类
  *
  * @author jiacheng yang.
  * @version 1.0

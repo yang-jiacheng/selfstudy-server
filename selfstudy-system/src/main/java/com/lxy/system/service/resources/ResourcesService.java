@@ -3,6 +3,7 @@ package com.lxy.system.service.resources;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.lxy.common.constant.ConfigConstant;
+import com.lxy.common.constant.StrConstant;
 import com.lxy.common.domain.R;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.properties.CustomProperties;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO
+ * 资源服务
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -48,7 +49,7 @@ public class ResourcesService {
             // 日期路径
             String datePath = DateUtil.today();
             // 上传相对路径
-            String relativePath = "/upload/" + datePath + "/" + fileName;
+            String relativePath = "/upload/" + datePath + StrConstant.SLASH + fileName;
             int size = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.COMPRESSION_SIZE));
             try (InputStream in0 = multipartFile.getInputStream();
                 // 图片压缩
@@ -59,10 +60,10 @@ public class ResourcesService {
                     OssUtil.uploadFileToOss(relativePath.substring(1), in1);
                 } else {
                     // 确保目录存在
-                    String saveDir = CustomProperties.uploadPath + datePath + "/";
+                    String saveDir = CustomProperties.uploadPath + datePath + StrConstant.SLASH;
                     FileUtil.judeDirExists(saveDir);
                     try (FileOutputStream fos0 =
-                        new FileOutputStream(CustomProperties.uploadPath + datePath + "/" + fileName)) {
+                        new FileOutputStream(CustomProperties.uploadPath + datePath + StrConstant.SLASH + fileName)) {
                         // 将 in1 的内容写入本地文件
                         byte[] buffer = new byte[8192];
                         int len;
@@ -74,7 +75,7 @@ public class ResourcesService {
                 log.info("文件上传成功，路径：{}", ImgConfigUtil.getPrefix() + relativePath);
                 paths.add(relativePath);
             } catch (Exception e) {
-                log.error(StrUtil.format("文件上传发生异常: {}", relativePath), e);
+                log.error("文件上传发生异常: {}", relativePath, e);
                 return R.fail("文件上传失败");
             }
         }
