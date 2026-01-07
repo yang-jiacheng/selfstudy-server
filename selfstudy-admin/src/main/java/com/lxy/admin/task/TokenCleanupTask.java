@@ -39,17 +39,16 @@ public class TokenCleanupTask {
             Set<String> sessionKeys = redisService.scanKeys("ADMIN_DUAL_TOKEN_SESSIONS:admin_*", null);
             if (sessionKeys.isEmpty()) {
                 log.info("没有找到管理员会话数据");
-                log.info("深度清理双令牌会话结束，耗时：{}", DateUtil.formatBetween(timer.intervalMs()));
                 return;
             }
-
             for (String key : sessionKeys) {
                 loginStatusService.cleanExpiredSessions(key);
             }
         } catch (Exception e) {
             log.error("深度清理双令牌会话时发生异常", e);
+        }finally {
+            log.info("深度清理双令牌会话结束，耗时：{}", DateUtil.formatBetween(timer.intervalMs()));
         }
-        log.info("深度清理双令牌会话结束，耗时：{}", DateUtil.formatBetween(timer.intervalMs()));
     }
 
 }

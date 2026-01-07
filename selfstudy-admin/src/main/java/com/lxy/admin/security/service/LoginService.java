@@ -24,8 +24,9 @@ public interface LoginService {
      * 刷新访问令牌
      *
      * @param refreshToken 刷新令牌
+     * @param clientIp 客户端IP
      * @return 新的令牌对
      */
-    R<TokenPair> refreshToken(String refreshToken);
+    R<TokenPair> refreshToken(String refreshToken, String clientIp);
 
 }

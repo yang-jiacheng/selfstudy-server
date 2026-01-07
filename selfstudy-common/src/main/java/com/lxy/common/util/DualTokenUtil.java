@@ -54,7 +54,7 @@ public class DualTokenUtil {
      */
     public static final String TOKEN_NAME_APP = "studyRoomToken";
     /**
-     * token的名称(客户端)
+     * refresh token的名称
      */
     public static final String TOKEN_REFRESH = "refreshToken";
     /**
@@ -74,6 +74,8 @@ public class DualTokenUtil {
      */
     private static final String TOKEN_TYPE_ACCESS = "access";
     private static final String TOKEN_TYPE_REFRESH = "refresh";
+
+    private static final String SUBJECT = "yangjiacheng";
 
     public static String getToken(HttpServletRequest request, String name) {
         // 优先从Header获取
@@ -129,7 +131,7 @@ public class DualTokenUtil {
         claimsMap.put(PARAM_NAME_TOKEN_TYPE, tokenType);
         claimsMap.put(PARAM_NAME_JID, jwtId);
 
-        return Jwts.builder().setClaims(claimsMap).setSubject("jiacheng yang.").setIssuedAt(new Date())
+        return Jwts.builder().setClaims(claimsMap).setSubject(SUBJECT).setIssuedAt(new Date())
             .setExpiration(expiration).signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
@@ -259,4 +261,11 @@ public class DualTokenUtil {
         String baseKey = SECRET_KEY_POOL[index];
         return Base64.getEncoder().encodeToString(baseKey.getBytes(StandardCharsets.UTF_8));
     }
+
+    public static void main(String[] args) {
+        String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWFjaGVuZyB5YW5nLiIsImpJZCI6Ijg1NGZhNzE3ZWIwMzQ4ODhhYmE2ZGNjNTJkYjYzYWI4IiwidXNlclR5cGUiOjAsInRva2VuVHlwZSI6ImFjY2VzcyIsImV4cCI6MTc2Nzc2ODk1NywidXNlcklkIjoxLCJpYXQiOjE3Njc3NjgwNTd9.rnYlu4zZlZArAX5nuBLOHT4XUgKz9_eCY5RtbuUorWF-IHosc15SyeyrXy50COi4wZ5h0s9LSfepLVdC0ZRr4g";
+        Claims claims = parseToken(token);
+        System.out.println(claims);
+    }
+
 }

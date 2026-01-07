@@ -1,11 +1,11 @@
 package com.lxy.admin.controller;
 
 import cn.hutool.extra.servlet.JakartaServletUtil;
-import com.lxy.admin.security.service.impl.DualTokenLoginServiceImpl;
+import com.lxy.admin.security.service.LoginService;
 import com.lxy.common.domain.R;
 import com.lxy.common.domain.TokenPair;
-import com.lxy.common.util.DualTokenUtil;
 import com.lxy.common.dto.LoginVerifyCodeDTO;
+import com.lxy.common.util.DualTokenUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TokenController {
 
     @Resource
-    private DualTokenLoginServiceImpl loginService;
+    private LoginService loginService;
 
     /**
      * 登录
@@ -39,7 +39,8 @@ public class TokenController {
      */
     @PostMapping(value = "/login", produces = "application/json")
     @ResponseBody
-    public R<Object> login(@RequestBody @Valid LoginVerifyCodeDTO dto, HttpServletRequest request, HttpServletResponse response) {
+    public R<Object> login(@RequestBody @Valid LoginVerifyCodeDTO dto, HttpServletRequest request,
+        HttpServletResponse response) {
         String clientIP = JakartaServletUtil.getClientIP(request);
         dto.setClientIp(clientIP);
         return loginService.login(dto, response);
@@ -69,7 +70,8 @@ public class TokenController {
     @ResponseBody
     public R<TokenPair> refreshToken(HttpServletRequest request) {
         String refreshToken = DualTokenUtil.getToken(request, DualTokenUtil.TOKEN_REFRESH);
-        return loginService.refreshToken(refreshToken);
+        String clientIp = JakartaServletUtil.getClientIP(request);
+        return loginService.refreshToken(refreshToken, clientIp);
     }
 
 }

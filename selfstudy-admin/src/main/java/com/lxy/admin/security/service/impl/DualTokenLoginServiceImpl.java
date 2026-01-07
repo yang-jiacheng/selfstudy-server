@@ -111,7 +111,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
     }
 
     @Override
-    public R<TokenPair> refreshToken(String refreshToken) {
+    public R<TokenPair> refreshToken(String refreshToken, String clientIp) {
         R<TokenPair> r = R.fail(1000, "认证失败，请重新登录！");
         if (StrUtil.isEmpty(refreshToken)) {
             return r;
@@ -135,6 +135,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
         }
         // 生成新的令牌对
         TokenPair newTokenPair = DualTokenUtil.generateTokenPair(userId, userType);
+        newTokenPair.setClientIp(clientIp);
         // 获取最大会话数量配置
         int maxSessions = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.ADMIN_HAS_NUM));
         // 移除旧会话
