@@ -75,7 +75,7 @@ public class OperationLogAspect {
             } else if (arg instanceof HttpServletResponse) {
                 param = "HttpServletResponse";
             } else {
-                JsonUtil.toJson(arg);
+                param = JsonUtil.toJson(arg);
             }
 
             params.append(param).append(", ");
