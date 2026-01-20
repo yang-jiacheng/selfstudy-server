@@ -3,11 +3,12 @@ package com.lxy.system.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
+import com.lxy.common.util.TreeUtil;
+import com.lxy.common.vo.PermissionTreeVO;
 import com.lxy.system.mapper.PermissionMapper;
 import com.lxy.system.po.Permission;
 import com.lxy.system.service.PermissionService;
-import com.lxy.common.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,11 +45,11 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         if (permission.getId() == null) {
             // 新增
             permission.setCreateTime(now);
-            if (permission.getLevel() == 1) {
+            if (permission.getParentId() == null) {
                 permission.setParentId(-1L);
             }
             this.save(permission);
-            // 维护节点的 nodePath
+            // 维护节点的 nodePath, namePath, idPath
             updateNodePathInfo(permission);
             this.updateById(permission);
         } else {
@@ -107,7 +108,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         if (CollUtil.isEmpty(list)) {
             return List.of();
         }
-        list = PermissionTreeVO.buildTree(list);
+        list = TreeUtil.buildTree(list);
         return list;
     }
 
@@ -137,7 +138,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         if (CollUtil.isEmpty(list)) {
             return List.of();
         }
-        list = PermissionTreeVO.buildTree(list);
+        list = TreeUtil.buildTree(list);
         return list;
     }
 

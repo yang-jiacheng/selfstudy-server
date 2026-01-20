@@ -1,7 +1,7 @@
 package com.lxy.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lxy.common.domain.PageResult;
+import com.lxy.common.model.PageResult;
 import com.lxy.common.dto.PageDTO;
 import com.lxy.common.dto.ObjectStorageDTO;
 import com.lxy.system.po.ObjectStorage;

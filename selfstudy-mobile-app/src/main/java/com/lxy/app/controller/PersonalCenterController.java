@@ -2,7 +2,7 @@ package com.lxy.app.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.po.User;

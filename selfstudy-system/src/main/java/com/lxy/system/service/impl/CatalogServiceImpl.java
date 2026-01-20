@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.util.ImgConfigUtil;
+import com.lxy.common.util.TreeUtil;
 import com.lxy.system.mapper.CatalogMapper;
 import com.lxy.system.po.Catalog;
 import com.lxy.system.po.StudyRecord;
@@ -44,7 +45,8 @@ public class CatalogServiceImpl extends ServiceImpl<CatalogMapper, Catalog> impl
     @Override
     public List<CatalogTreeVO> getCatalogTree() {
         List<CatalogTreeVO> tree = catalogMapper.getTree();
-        tree = CatalogTreeVO.buildTree(tree);// 按时间倒序
+        tree = TreeUtil.buildTree(tree);
+        // 按时间倒序
         // details.sort((t1,t2) -> t2.getUpdateTime().compareTo(t1.getUpdateTime()));
         // tree.sort(Comparator.comparing(CatalogTreeVO::getSort));
         tree.sort((a, b) -> {

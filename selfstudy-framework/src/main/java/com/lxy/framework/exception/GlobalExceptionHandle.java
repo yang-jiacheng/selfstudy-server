@@ -1,7 +1,7 @@
 package com.lxy.framework.exception;
 
 import cn.hutool.core.util.StrUtil;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.exception.ServiceException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;

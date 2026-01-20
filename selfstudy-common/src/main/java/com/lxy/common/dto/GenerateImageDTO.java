@@ -1,6 +1,6 @@
 package com.lxy.common.dto;
 
-import com.lxy.common.domain.GraphicsTextParameterDTO;
+import com.lxy.common.model.GraphicsTextParameterDTO;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 

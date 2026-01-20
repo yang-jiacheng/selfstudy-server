@@ -198,6 +198,6 @@ public class FileUtil {
 //        System.out.println(getHash(file,"MD5"));
 //        System.out.println(getHash(file,"SHA-1"));
 //        System.out.println(getHash(file,"SHA-256"));
-        System.out.println(getRandomFileName("test你好的分成三等分.txt"));
+        System.out.println(getRandomFileName("新建文本文档.txt"));
     }
 }

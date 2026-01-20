@@ -10,7 +10,7 @@ import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.lxy.common.constant.StrConstant;
-import com.lxy.common.domain.GraphicsTextParameterDTO;
+import com.lxy.common.model.GraphicsTextParameterDTO;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.properties.CustomProperties;
 import lombok.extern.slf4j.Slf4j;

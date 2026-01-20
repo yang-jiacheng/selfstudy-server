@@ -1,6 +1,6 @@
 package com.lxy.app.controller;
 
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.system.service.ClassifyService;
 import com.lxy.system.service.StudyRecordService;
 import com.lxy.common.vo.ClassifyVO;

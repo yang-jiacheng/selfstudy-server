@@ -3,7 +3,7 @@ package com.lxy.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.common.annotation.Log;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
 import com.lxy.common.dto.AgreementEditDTO;

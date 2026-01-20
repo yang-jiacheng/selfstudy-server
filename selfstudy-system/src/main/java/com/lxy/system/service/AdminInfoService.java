@@ -2,7 +2,7 @@ package com.lxy.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.dto.AdminInfoPageDTO;
 import com.lxy.common.dto.PersonalEditDTO;
 import com.lxy.system.po.AdminInfo;

@@ -3,7 +3,7 @@ package com.lxy.admin.service;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.dto.AdminInfoUpdateDTO;
 import com.lxy.common.dto.AdminEditDTO;
 import com.lxy.common.dto.AdminStatusDTO;

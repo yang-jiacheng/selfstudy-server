@@ -1,6 +1,6 @@
 package com.lxy.admin.controller;
 
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.po.AdminInfo;

@@ -1,4 +1,4 @@
-package com.lxy.common.domain;
+package com.lxy.common.model;
 
 
 import com.github.pagehelper.PageInfo;

@@ -44,7 +44,9 @@ public class ${entity} implements Serializable {
     #if(${swagger})
     @ApiModelProperty(value = "${field.comment}")
     #else
-    //${field.comment}
+    /**
+     * ${field.comment}
+     */
     #end
 #end
 #if(${field.propertyType.equals("Date")})

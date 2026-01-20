@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lxy.common.domain.PageResult;
+import com.lxy.common.model.PageResult;
 import com.lxy.common.enums.StudyStatus;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.dto.StudyRecordDTO;

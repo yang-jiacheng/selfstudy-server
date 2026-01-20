@@ -2,7 +2,7 @@ package com.lxy.framework.controller;
 
 import com.aliyuncs.auth.sts.AssumeRoleResponse;
 import com.lxy.common.constant.ConfigConstant;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.dto.GenerateImageDTO;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.util.FileUtil;

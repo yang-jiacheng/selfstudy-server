@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lxy.common.domain.PageResult;
+import com.lxy.common.model.PageResult;
 import com.lxy.common.dto.PageDTO;
 import com.lxy.common.util.OssUtil;
 import com.lxy.common.dto.ObjectStorageDTO;

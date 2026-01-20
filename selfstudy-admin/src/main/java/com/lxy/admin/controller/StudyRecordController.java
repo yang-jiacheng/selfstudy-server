@@ -1,8 +1,8 @@
 package com.lxy.admin.controller;
 
-import com.lxy.common.domain.CollResult;
-import com.lxy.common.domain.PageResult;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.CollResult;
+import com.lxy.common.model.PageResult;
+import com.lxy.common.model.R;
 import com.lxy.common.vo.LabelValueVO;
 import com.lxy.common.dto.StudyRecordPageDTO;
 import com.lxy.system.po.Classify;

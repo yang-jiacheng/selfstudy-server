@@ -4,7 +4,7 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Producer;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.system.service.PermissionService;
 import com.lxy.system.service.redis.RedisService;
 import jakarta.annotation.Resource;

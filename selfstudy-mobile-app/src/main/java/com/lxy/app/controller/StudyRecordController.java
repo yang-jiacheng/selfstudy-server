@@ -1,7 +1,7 @@
 package com.lxy.app.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.enums.StudyStatus;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.framework.security.util.UserIdUtil;

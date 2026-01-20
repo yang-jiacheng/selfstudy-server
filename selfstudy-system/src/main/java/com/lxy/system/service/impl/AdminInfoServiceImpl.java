@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.dto.AdminInfoPageDTO;
 import com.lxy.common.dto.PersonalEditDTO;
 import com.lxy.system.mapper.AdminInfoMapper;

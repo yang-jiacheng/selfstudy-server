@@ -6,19 +6,29 @@
     <resultMap id="BaseResultMap" type="com.lxy.system.po.Permission">
         <id column="id" property="id"/>
         <result column="parent_id" property="parentId"/>
-        <result column="level" property="level"/>
         <result column="node_path" property="nodePath"
                 typeHandler="com.lxy.system.handler.ListLongTypeHandler"/>
         <result column="name_path" property="namePath"/>
         <result column="id_path" property="idPath"/>
+        <result column="type" property="type"/>
         <result column="title" property="title"/>
         <result column="permission_str" property="permissionStr"/>
-        <result column="name" property="name"/>
-        <result column="path" property="path"/>
-        <result column="component" property="component"/>
-        <result column="icon" property="icon"/>
+        <result column="ui_meta" property="uiMeta"
+                typeHandler="com.lxy.system.handler.MysqlJsonTypeHandler"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
+        <result column="sort" property="sort"/>
+    </resultMap>
+
+    <resultMap id="PermissionTreeVOMap" type="com.lxy.common.vo.PermissionTreeVO">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="type" property="type"/>
+        <result column="title" property="title"/>
+        <result column="permission_str" property="permissionStr"/>
+        <result column="ui_meta" property="uiMeta"
+                typeHandler="com.lxy.system.handler.MysqlJsonTypeHandler"/>
+        <result column="create_time" property="createTime"/>
         <result column="sort" property="sort"/>
     </resultMap>
 
@@ -31,19 +41,16 @@
     <select id="getRolePermission" resultMap="BaseResultMap">
         SELECT p.id,
                parent_id,
-               level,
                node_path,
                name_path,
                id_path,
+               type,
                title,
                permission_str,
-               name,
-               path,
-               component,
-               icon,
+               ui_meta,
+               sort,
                create_time,
-               update_time,
-               sort
+               update_time
         from permission p,
              role_permission_relate rp
         where rp.permission_id = p.id
@@ -53,23 +60,24 @@
     <select id="getPermissionTree" resultType="com.lxy.common.vo.PermissionTreeVO">
         SELECT id,
                parent_id,
-               level,
+               node_path,
+               name_path,
+               id_path,
+               type,
                title,
                permission_str,
-               name,
-               path,
-               component,
-               icon,
+               ui_meta,
                sort,
-               create_time
+               create_time,
+               update_time
         from permission
         order by sort, id
     </select>
 
     <select id="getPermissionListAndChildren" resultMap="BaseResultMap">
         SELECT
-        id, parent_id, level, node_path, name_path, id_path, title, permission_str, name, path, component, icon,
-        create_time, update_time, sort
+        id, parent_id, node_path, name_path, id_path, type, title, permission_str, ui_meta, sort, create_time,
+        update_time
         FROM
         permission
         WHERE
@@ -85,8 +93,8 @@
     <select id="getPermissionListAndParent" resultMap="BaseResultMap">
         WITH RECURSIVE ancestors AS (
         -- 初始：从这批 ID 出发
-        SELECT id, parent_id, level, node_path, name_path, id_path, title, permission_str, name, path, component, icon,
-        create_time, update_time, sort
+        SELECT id, parent_id, node_path, name_path, id_path, type, title, permission_str, ui_meta, sort, create_time,
+        update_time
         FROM permission
         WHERE id IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
@@ -94,8 +102,8 @@
         </foreach>
         UNION ALL
         -- 递归：往上找 parent
-        SELECT m.id, m.parent_id, m.level, m.node_path, m.name_path, m.id_path, m.title, m.permission_str, m.name,
-        m.path, m.component, m.icon, m.create_time, m.update_time, m.sort
+        SELECT m.id, m.parent_id, m.node_path, m.name_path, m.id_path, m.type, m.title, m.permission_str, m.ui_meta,
+        m.sort, m.create_time, m.update_time
         FROM permission m
         JOIN ancestors a ON m.id = a.parent_id
         )
@@ -103,22 +111,19 @@
         FROM ancestors;
     </select>
 
-    <select id="getMinePermissionTree" resultType="com.lxy.common.vo.PermissionTreeVO">
+    <select id="getMinePermissionTree" resultMap="PermissionTreeVOMap">
         SELECT permission.id,
                permission.parent_id,
-               permission.level,
                permission.node_path,
                permission.name_path,
                permission.id_path,
+               permission.type,
                permission.title,
                permission.permission_str,
-               permission.name,
-               permission.path,
-               permission.component,
-               permission.icon,
+               permission.ui_meta,
                permission.sort,
-               permission.update_time,
-               permission.create_time
+               permission.create_time,
+               permission.update_time
 
         FROM admin_info
                  INNER JOIN admin_role_relate ON admin_info.id = admin_role_relate.admin_id

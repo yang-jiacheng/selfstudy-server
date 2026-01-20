@@ -1,6 +1,6 @@
 package com.lxy.app.controller;
 
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.common.dto.StudyRecordDTO;
 import com.lxy.system.po.Catalog;

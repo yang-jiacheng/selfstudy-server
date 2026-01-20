@@ -1,6 +1,6 @@
 package com.lxy.app.controller;
 
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.system.po.Version;
 import com.lxy.system.service.VersionService;
 import org.springframework.beans.factory.annotation.Autowired;

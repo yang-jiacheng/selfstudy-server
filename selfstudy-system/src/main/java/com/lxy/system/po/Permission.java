@@ -3,7 +3,9 @@ package com.lxy.system.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lxy.common.model.UiMeta;
 import com.lxy.system.handler.ListLongTypeHandler;
+import com.lxy.system.handler.MysqlJsonTypeHandler;
 import lombok.Data;
 
 import java.io.Serial;
@@ -24,14 +26,11 @@ public class Permission implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    // 权限id
-
+    // 主键id
     private Long id;
 
     // 父id
     private Long parentId;
-
-    private Integer level;
 
     @TableField(typeHandler = ListLongTypeHandler.class)
     private List<Long> nodePath;
@@ -40,23 +39,17 @@ public class Permission implements Serializable {
 
     private String idPath;
 
+    //权限类型：1目录 2菜单 3按钮
+    private Integer type;
+
     // 权限名称
     private String title;
 
     // 权限信息
     private String permissionStr;
 
-    // 路由名称
-    private String name;
-
-    // 路由路径
-    private String path;
-
-    // 路由组件
-    private String component;
-
-    // 图标 例如 Element-plus 的 Plus,直接写Plus即可
-    private String icon;
+    @TableField(typeHandler = MysqlJsonTypeHandler.class)
+    private UiMeta uiMeta;
 
     // 每条记录的创建时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
@@ -67,5 +60,6 @@ public class Permission implements Serializable {
     private Date updateTime;
 
     private Integer sort;
+
 
 }

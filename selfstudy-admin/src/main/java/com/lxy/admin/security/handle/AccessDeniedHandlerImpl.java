@@ -1,6 +1,6 @@
 package com.lxy.admin.security.handle;
 
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.WebUtil;
 import jakarta.servlet.ServletException;

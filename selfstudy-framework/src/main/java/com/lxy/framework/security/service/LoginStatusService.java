@@ -2,7 +2,7 @@ package com.lxy.framework.security.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
-import com.lxy.common.domain.TokenPair;
+import com.lxy.common.model.TokenPair;
 import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.system.service.redis.RedisService;
 import jakarta.annotation.Resource;

@@ -1,7 +1,7 @@
 package com.lxy.admin.controller;
 
-import com.lxy.common.domain.PageResult;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.PageResult;
+import com.lxy.common.model.R;
 import com.lxy.common.dto.PageDTO;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.common.dto.ObjectStorageDTO;

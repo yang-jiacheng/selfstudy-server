@@ -2,7 +2,7 @@ package com.lxy.app.controller;
 
 import com.lxy.app.security.service.LoginService;
 import com.lxy.common.constant.AuthConstant;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.dto.LoginPasswordDTO;
 import com.lxy.common.dto.LoginVerificationCodeDTO;
 import com.lxy.common.util.JsonWebTokenUtil;

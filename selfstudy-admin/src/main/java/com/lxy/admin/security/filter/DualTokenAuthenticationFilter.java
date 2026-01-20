@@ -1,6 +1,6 @@
 package com.lxy.admin.security.filter;
 
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.util.DualTokenUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.LogUtil;

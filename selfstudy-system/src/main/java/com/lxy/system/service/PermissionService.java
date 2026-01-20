@@ -1,7 +1,7 @@
 package com.lxy.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.system.po.Permission;
 import com.lxy.common.vo.PermissionTreeVO;
 

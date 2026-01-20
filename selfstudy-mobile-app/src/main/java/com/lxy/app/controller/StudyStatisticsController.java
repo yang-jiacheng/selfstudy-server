@@ -1,7 +1,7 @@
 package com.lxy.app.controller;
 
 import com.lxy.common.constant.ConfigConstant;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.po.StudyRecord;
 import com.lxy.system.service.BusinessConfigService;

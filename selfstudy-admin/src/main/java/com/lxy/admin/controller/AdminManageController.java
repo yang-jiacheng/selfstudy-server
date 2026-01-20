@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.admin.service.AuthService;
 import com.lxy.common.annotation.Log;
-import com.lxy.common.domain.R;
+import com.lxy.common.model.R;
 import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
 import com.lxy.framework.security.util.UserIdUtil;
