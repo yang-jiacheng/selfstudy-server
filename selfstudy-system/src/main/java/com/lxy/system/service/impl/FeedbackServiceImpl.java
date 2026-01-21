@@ -5,11 +5,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lxy.common.model.PageResult;
 import com.lxy.common.util.ImgConfigUtil;
-import com.lxy.common.dto.FeedbackPageDTO;
+import com.lxy.system.dto.FeedbackPageDTO;
 import com.lxy.system.mapper.FeedbackMapper;
 import com.lxy.system.po.Feedback;
 import com.lxy.system.service.FeedbackService;
-import com.lxy.common.vo.FeedbackVO;
+import com.lxy.system.vo.FeedbackVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -21,9 +21,9 @@ public abstract class BaseTreeVO<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = -2975022275511378192L;
 
-    private Long id;
+    private String id;
 
-    private Long parentId;
+    private String parentId;
 
     private List<T> children = new ArrayList<>();
 

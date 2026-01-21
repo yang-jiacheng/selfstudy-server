@@ -2,11 +2,11 @@ package com.lxy.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lxy.common.dto.UserPageDTO;
+import com.lxy.system.dto.UserPageDTO;
 import com.lxy.system.po.User;
 import com.lxy.common.vo.ExcelErrorInfoVO;
-import com.lxy.common.vo.user.UserExportVO;
-import com.lxy.common.vo.user.UserRankVO;
+import com.lxy.system.vo.user.UserExportVO;
+import com.lxy.system.vo.user.UserRankVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

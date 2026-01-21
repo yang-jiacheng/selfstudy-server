@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.model.R;
 import com.lxy.common.util.TreeUtil;
-import com.lxy.common.vo.PermissionTreeVO;
+import com.lxy.system.vo.PermissionTreeVO;
 import com.lxy.system.mapper.PermissionMapper;
 import com.lxy.system.po.Permission;
 import com.lxy.system.service.PermissionService;

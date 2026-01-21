@@ -2,7 +2,7 @@ package com.lxy.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lxy.system.po.Permission;
-import com.lxy.common.vo.PermissionTreeVO;
+import com.lxy.system.vo.PermissionTreeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

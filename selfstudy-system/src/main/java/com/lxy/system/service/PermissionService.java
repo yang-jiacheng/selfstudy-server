@@ -3,7 +3,7 @@ package com.lxy.system.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lxy.common.model.R;
 import com.lxy.system.po.Permission;
-import com.lxy.common.vo.PermissionTreeVO;
+import com.lxy.system.vo.PermissionTreeVO;
 
 import java.util.Collection;
 import java.util.List;

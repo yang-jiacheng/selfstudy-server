@@ -36,7 +36,7 @@
 
     </insert>
 
-    <select id="getRankingsTotalDuration" resultType="com.lxy.common.vo.user.UserRankVO">
+    <select id="getRankingsTotalDuration" resultType="com.lxy.system.vo.user.UserRankVO">
         SELECT u.id,
                name,
                profile_path,
@@ -45,7 +45,7 @@
         ORDER BY u.total_duration DESC LIMIT 0,100
     </select>
 
-    <select id="getUserRankingById" resultType="com.lxy.common.vo.user.UserRankVO">
+    <select id="getUserRankingById" resultType="com.lxy.system.vo.user.UserRankVO">
         SELECT u.id,
                u.profile_path,
                u.total_duration,
@@ -55,7 +55,7 @@
                  LEFT JOIN study_statistics ss on ss.user_id = #{userId} and ss.study_day = #{studyDay}
         where u.id = #{userId}
     </select>
-    <select id="exportUserInExcel" resultType="com.lxy.common.vo.user.UserExportVO">
+    <select id="exportUserInExcel" resultType="com.lxy.system.vo.user.UserExportVO">
         SELECT
         u.id,
         u.name,

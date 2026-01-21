@@ -8,7 +8,7 @@ import com.lxy.system.po.Catalog;
 import com.lxy.system.po.Classify;
 import com.lxy.system.service.CatalogService;
 import com.lxy.system.service.ClassifyService;
-import com.lxy.common.vo.CatalogTreeVO;
+import com.lxy.system.vo.CatalogTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;

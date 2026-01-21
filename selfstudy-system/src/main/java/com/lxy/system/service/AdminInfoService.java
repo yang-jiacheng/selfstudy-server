@@ -3,10 +3,10 @@ package com.lxy.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lxy.common.model.R;
-import com.lxy.common.dto.AdminInfoPageDTO;
-import com.lxy.common.dto.PersonalEditDTO;
+import com.lxy.system.dto.AdminInfoPageDTO;
+import com.lxy.system.dto.PersonalEditDTO;
 import com.lxy.system.po.AdminInfo;
-import com.lxy.common.vo.AdminInfoVO;
+import com.lxy.system.vo.AdminInfoVO;
 
 import java.util.List;
 

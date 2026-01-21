@@ -3,11 +3,11 @@ package com.lxy.system.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
 import com.lxy.common.model.PageResult;
-import com.lxy.common.dto.StudyRecordDTO;
-import com.lxy.common.dto.StudyRecordPageDTO;
+import com.lxy.system.dto.StudyRecordDTO;
+import com.lxy.system.dto.StudyRecordPageDTO;
 import com.lxy.system.po.Catalog;
 import com.lxy.system.po.StudyRecord;
-import com.lxy.common.vo.StudyRecordVO;
+import com.lxy.system.vo.StudyRecordVO;
 
 import java.util.List;
 

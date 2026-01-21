@@ -3,7 +3,7 @@ package com.lxy.app.controller;
 import com.lxy.common.model.R;
 import com.lxy.system.service.ClassifyService;
 import com.lxy.system.service.StudyRecordService;
-import com.lxy.common.vo.ClassifyVO;
+import com.lxy.system.vo.ClassifyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

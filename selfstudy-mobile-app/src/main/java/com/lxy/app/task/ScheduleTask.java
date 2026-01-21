@@ -3,7 +3,7 @@ package com.lxy.app.task;
 import cn.hutool.core.date.DateUtil;
 import com.lxy.common.constant.CronConstant;
 import com.lxy.system.service.UserService;
-import com.lxy.common.vo.user.UserRankVO;
+import com.lxy.system.vo.user.UserRankVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

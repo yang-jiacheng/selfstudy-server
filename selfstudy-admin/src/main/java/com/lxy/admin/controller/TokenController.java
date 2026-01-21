@@ -4,7 +4,7 @@ import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.lxy.admin.security.service.LoginService;
 import com.lxy.common.model.R;
 import com.lxy.common.model.TokenPair;
-import com.lxy.common.dto.LoginVerifyCodeDTO;
+import com.lxy.system.dto.LoginVerifyCodeDTO;
 import com.lxy.common.util.DualTokenUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;

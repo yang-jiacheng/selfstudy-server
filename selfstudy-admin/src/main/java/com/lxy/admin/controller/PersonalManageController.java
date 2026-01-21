@@ -1,7 +1,7 @@
 package com.lxy.admin.controller;
 
 import com.lxy.common.model.R;
-import com.lxy.common.dto.PersonalEditDTO;
+import com.lxy.system.dto.PersonalEditDTO;
 import com.lxy.system.service.AdminInfoService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;

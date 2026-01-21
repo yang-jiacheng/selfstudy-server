@@ -2,7 +2,7 @@ package com.lxy.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lxy.system.po.StudyRecord;
-import com.lxy.common.vo.StudyRecordVO;
+import com.lxy.system.vo.StudyRecordVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -20,7 +20,7 @@
         <result column="sort" property="sort"/>
     </resultMap>
 
-    <resultMap id="PermissionTreeVOMap" type="com.lxy.common.vo.PermissionTreeVO">
+    <resultMap id="PermissionTreeVOMap" type="com.lxy.system.vo.PermissionTreeVO">
         <id column="id" property="id"/>
         <result column="parent_id" property="parentId"/>
         <result column="type" property="type"/>
@@ -57,7 +57,7 @@
           and rp.role_id = #{roleId}
     </select>
 
-    <select id="getPermissionTree" resultType="com.lxy.common.vo.PermissionTreeVO">
+    <select id="getPermissionTree" resultMap="PermissionTreeVOMap">
         SELECT id,
                parent_id,
                node_path,

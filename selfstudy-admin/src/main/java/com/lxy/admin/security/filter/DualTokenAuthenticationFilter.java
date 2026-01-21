@@ -5,7 +5,7 @@ import com.lxy.common.util.DualTokenUtil;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.common.util.LogUtil;
 import com.lxy.common.util.WebUtil;
-import com.lxy.common.vo.AdminInfoVO;
+import com.lxy.system.vo.AdminInfoVO;
 import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.system.service.AdminInfoService;
 import io.jsonwebtoken.Claims;

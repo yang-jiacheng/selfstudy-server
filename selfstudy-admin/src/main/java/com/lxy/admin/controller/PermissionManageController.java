@@ -6,7 +6,7 @@ import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
 import com.lxy.system.po.Permission;
 import com.lxy.system.service.PermissionService;
-import com.lxy.common.vo.PermissionTreeVO;
+import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;

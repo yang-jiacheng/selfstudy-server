@@ -1,7 +1,7 @@
 package com.lxy.app.security.service;
 
-import com.lxy.common.dto.LoginPasswordDTO;
-import com.lxy.common.dto.LoginVerificationCodeDTO;
+import com.lxy.system.dto.LoginPasswordDTO;
+import com.lxy.system.dto.LoginVerificationCodeDTO;
 
 /**
  * app登录服务

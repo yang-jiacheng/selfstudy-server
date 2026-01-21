@@ -17,7 +17,7 @@ import java.util.List;
  * 权限表
  *
  * @author jiacheng yang.
- * @since 2025-04-16
+ * @since 2026-01-21
  */
 
 @Data
@@ -26,10 +26,14 @@ public class Permission implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    // 主键id
+    /**
+     * 权限id
+     */
     private Long id;
 
-    // 父id
+    /**
+     * 父id
+     */
     private Long parentId;
 
     @TableField(typeHandler = ListLongTypeHandler.class)
@@ -39,27 +43,40 @@ public class Permission implements Serializable {
 
     private String idPath;
 
-    //权限类型：1目录 2菜单 3按钮
+    /**
+     * 权限类型：1目录 2菜单 3按钮
+     */
     private Integer type;
 
-    // 权限名称
+    /**
+     * 权限名称
+     */
     private String title;
 
-    // 权限信息
+    /**
+     * 权限信息
+     */
     private String permissionStr;
 
+    /**
+     * 前端路由元数据
+     */
     @TableField(typeHandler = MysqlJsonTypeHandler.class)
     private UiMeta uiMeta;
 
-    // 每条记录的创建时间
+    private Integer sort;
+
+    /**
+     * 每条记录的创建时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
-    // 每条记录的更新时间
+    /**
+     * 每条记录的更新时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date updateTime;
-
-    private Integer sort;
 
 
 }

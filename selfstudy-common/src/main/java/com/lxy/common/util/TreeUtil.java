@@ -23,13 +23,13 @@ public class TreeUtil {
         if (CollUtil.isEmpty(list)) {
             return roots;
         }
-        Map<Long, T> nodeMap = new HashMap<>(list.size());
+        Map<String, T> nodeMap = new HashMap<>(list.size());
         for (T node : list) {
             node.setChildren(new ArrayList<>());
             nodeMap.put(node.getId(), node);
         }
         for (T node : list) {
-            Long parentId = node.getParentId();
+            String parentId = node.getParentId();
             T parent = nodeMap.get(parentId);
             if (parent == null) {
                 roots.add(node);

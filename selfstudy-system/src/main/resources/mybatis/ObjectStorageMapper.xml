@@ -18,7 +18,7 @@
         , file_name, file_type, download_url, creator_id, create_time, file_size
     </sql>
 
-    <select id="getObjectStorageList" resultType="com.lxy.common.vo.ObjectStorageVO">
+    <select id="getObjectStorageList" resultType="com.lxy.system.vo.ObjectStorageVO">
         SELECT o.id, o.file_name, o.download_url, o.creator_id, o.create_time,o.file_size, ai.name as creator_name
         FROM object_storage o
         INNER JOIN admin_info ai on ai.id = o.creator_id

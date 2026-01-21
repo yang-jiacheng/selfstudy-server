@@ -49,7 +49,7 @@
           AND sr.user_id = #{userId}
     </select>
 
-    <select id="getLearningRecords" resultType="com.lxy.common.vo.StudyRecordVO">
+    <select id="getLearningRecords" resultType="com.lxy.system.vo.StudyRecordVO">
         select sr.id,
                sr.user_id,
                sr.classify_id,
@@ -68,7 +68,7 @@
           and sr.status != 3
     </select>
 
-    <select id="getLearningRecordDetail" resultType="com.lxy.common.vo.StudyRecordVO">
+    <select id="getLearningRecordDetail" resultType="com.lxy.system.vo.StudyRecordVO">
         select sr.id,
                sr.user_id,
                sr.classify_id,
@@ -90,7 +90,7 @@
         where sr.id = #{recordId}
     </select>
 
-    <select id="getStudyRecordList" resultType="com.lxy.common.vo.StudyRecordVO">
+    <select id="getStudyRecordList" resultType="com.lxy.system.vo.StudyRecordVO">
         SELECT
         sr.id,
         sr.start_time,
@@ -132,7 +132,7 @@
         </where>
     </select>
 
-    <select id="getStudyRecordByAdmin" resultType="com.lxy.common.vo.StudyRecordVO">
+    <select id="getStudyRecordByAdmin" resultType="com.lxy.system.vo.StudyRecordVO">
         select
         sr.id,
         sr.user_id,

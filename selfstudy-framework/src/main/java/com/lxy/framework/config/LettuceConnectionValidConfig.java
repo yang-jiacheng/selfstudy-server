@@ -8,7 +8,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 
 /**
- * TODO
+ * Lettuce 连接池的物理连接验证配置
  *
  * @author jiacheng yang.
  * @version 1.0

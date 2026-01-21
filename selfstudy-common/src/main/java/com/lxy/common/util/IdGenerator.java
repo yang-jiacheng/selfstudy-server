@@ -111,4 +111,8 @@ public class IdGenerator {
     private long getTimestamp() {
         return System.currentTimeMillis() / 10;
     }
+
+    public static void main(String[] args) {
+        System.out.println(generateId());
+    }
 }

@@ -10,10 +10,10 @@ import com.lxy.system.po.Catalog;
 import com.lxy.system.po.StudyRecord;
 import com.lxy.system.service.CatalogService;
 import com.lxy.system.service.StudyRecordService;
-import com.lxy.common.vo.CatalogTreeVO;
-import com.lxy.common.vo.CatalogVO;
-import com.lxy.common.vo.ClassifyDetailVO;
-import com.lxy.common.vo.RoomVO;
+import com.lxy.system.vo.CatalogTreeVO;
+import com.lxy.system.vo.CatalogVO;
+import com.lxy.system.vo.ClassifyDetailVO;
+import com.lxy.system.vo.RoomVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

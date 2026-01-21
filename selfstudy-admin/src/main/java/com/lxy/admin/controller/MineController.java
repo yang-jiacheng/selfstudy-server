@@ -6,7 +6,7 @@ import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.po.AdminInfo;
 import com.lxy.system.service.AdminInfoService;
 import com.lxy.system.service.PermissionService;
-import com.lxy.common.vo.PermissionTreeVO;
+import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

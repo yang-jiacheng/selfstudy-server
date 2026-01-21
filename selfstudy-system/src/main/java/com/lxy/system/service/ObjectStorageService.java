@@ -3,9 +3,9 @@ package com.lxy.system.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lxy.common.model.PageResult;
 import com.lxy.common.dto.PageDTO;
-import com.lxy.common.dto.ObjectStorageDTO;
+import com.lxy.system.dto.ObjectStorageDTO;
 import com.lxy.system.po.ObjectStorage;
-import com.lxy.common.vo.ObjectStorageVO;
+import com.lxy.system.vo.ObjectStorageVO;
 
 /**
  * <p>

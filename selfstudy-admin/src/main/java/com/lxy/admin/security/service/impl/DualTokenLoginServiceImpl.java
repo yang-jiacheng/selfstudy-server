@@ -7,7 +7,7 @@ import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.model.R;
 import com.lxy.common.model.TokenPair;
-import com.lxy.common.dto.LoginVerifyCodeDTO;
+import com.lxy.system.dto.LoginVerifyCodeDTO;
 import com.lxy.common.enums.LogUserType;
 import com.lxy.common.util.DualTokenUtil;
 import com.lxy.framework.security.domain.StatelessUser;

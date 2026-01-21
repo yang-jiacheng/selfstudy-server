@@ -6,7 +6,7 @@ import com.lxy.common.annotation.Log;
 import com.lxy.common.model.R;
 import com.lxy.common.enums.LogBusinessType;
 import com.lxy.common.enums.LogUserType;
-import com.lxy.common.dto.AgreementEditDTO;
+import com.lxy.system.dto.AgreementEditDTO;
 import com.lxy.system.po.UserAgreement;
 import com.lxy.system.service.UserAgreementService;
 import jakarta.annotation.Resource;

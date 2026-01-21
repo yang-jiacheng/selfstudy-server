@@ -28,11 +28,11 @@ public class GeneratorMybatisPlus {
     /**
      * 模块名称
      */
-    public static final String MODULE_NAME = "selfstudy-admin";
+    public static final String MODULE_NAME = "selfstudy-system";
     /**
      * 包名配置
      */
-    public static final String PARENT_PACKAGE = "com.lxy.admin";
+    public static final String PARENT_PACKAGE = "com.lxy.system";
     public static final String AUTHOR = "jiacheng yang.";
     public static final String[] TABS = {
             "permission"

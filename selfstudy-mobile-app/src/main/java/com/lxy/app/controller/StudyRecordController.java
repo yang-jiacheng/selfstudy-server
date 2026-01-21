@@ -7,7 +7,7 @@ import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.po.StudyRecord;
 import com.lxy.system.service.StudyRecordService;
-import com.lxy.common.vo.StudyRecordVO;
+import com.lxy.system.vo.StudyRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
