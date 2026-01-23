@@ -1,4 +1,4 @@
-package com.lxy.common.model;
+package com.lxy.common.dto;
 
 /**
  * 图片模板参数DTO

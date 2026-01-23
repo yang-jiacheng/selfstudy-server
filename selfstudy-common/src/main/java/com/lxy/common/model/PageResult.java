@@ -51,8 +51,7 @@ public class PageResult<T> {
         this.size = size;
         this.total = total;
         this.records = records;
-
-        this.pages = total.intValue() % size == 0 ? (total.intValue() / size) : (total.intValue() / size + 1);
+        this.pages = (int) ((total + size - 1) / size);
     }
 
     /**

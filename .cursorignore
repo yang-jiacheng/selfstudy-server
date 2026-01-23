@@ -1,3 +1,5 @@
+.idea/
+.vscode/
 static/
 target/
 xxl-job-admin/
