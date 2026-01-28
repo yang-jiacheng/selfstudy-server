@@ -5,13 +5,13 @@ import cn.hutool.core.util.StrUtil;
 import com.lxy.admin.security.service.LoginService;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.enums.dict.LogUserType;
 import com.lxy.common.model.R;
 import com.lxy.common.model.TokenPair;
-import com.lxy.system.dto.LoginVerifyCodeDTO;
-import com.lxy.common.enums.LogUserType;
 import com.lxy.common.util.DualTokenUtil;
 import com.lxy.framework.security.domain.StatelessUser;
 import com.lxy.framework.security.service.LoginStatusService;
+import com.lxy.system.dto.LoginVerifyCodeDTO;
 import com.lxy.system.service.BusinessConfigService;
 import com.lxy.system.service.redis.RedisService;
 import io.jsonwebtoken.Claims;
@@ -25,9 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import static com.lxy.common.util.DualTokenUtil.PARAM_NAME_JID;
-import static com.lxy.common.util.DualTokenUtil.PARAM_NAME_USER_ID;
-import static com.lxy.common.util.DualTokenUtil.PARAM_NAME_USER_TYPE;
+import static com.lxy.common.util.DualTokenUtil.*;
 
 /**
  * 基于双Token机制的登录服务实现
@@ -60,7 +58,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
         // 会去调用UserDetailsService.loadUserByUsername方法。AdminDetailsServiceImpl 实现了 UserDetailsService接口的
         // loadUserByUsername方法
         UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
+                new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
         Authentication authenticate = null;
         try {
             authenticate = authenticationManager.authenticate(authenticationToken);
@@ -69,7 +67,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
             return R.fail("用户名或密码错误！");
         }
         // 如果认证通过了，使用userid生成jwt
-        StatelessUser principal = (StatelessUser)authenticate.getPrincipal();
+        StatelessUser principal = (StatelessUser) authenticate.getPrincipal();
         Long userId = principal.getUserId();
         // 生成双Token
         TokenPair tokenPair = DualTokenUtil.generateTokenPair(userId, LogUserType.ADMIN.type);
@@ -96,7 +94,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
             }
             Claims claims = DualTokenUtil.parseToken(token);
             userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
-            String refreshId = (String)claims.get(PARAM_NAME_JID);
+            String refreshId = (String) claims.get(PARAM_NAME_JID);
             if (userId != -1L) {
                 String sessionKey = RedisKeyConstant.getAdminDualToken(userId);
                 // 移除会话
@@ -125,8 +123,8 @@ public class DualTokenLoginServiceImpl implements LoginService {
         // 解析刷新令牌获取用户信息
         Claims claims = DualTokenUtil.parseToken(refreshToken);
         Long userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
-        Integer userType = (Integer)claims.get(PARAM_NAME_USER_TYPE);
-        String refreshId = (String)claims.get(PARAM_NAME_JID);
+        Integer userType = (Integer) claims.get(PARAM_NAME_USER_TYPE);
+        String refreshId = (String) claims.get(PARAM_NAME_JID);
 
         // 检查会话是否存在
         String sessionKey = RedisKeyConstant.getAdminDualToken(userId);

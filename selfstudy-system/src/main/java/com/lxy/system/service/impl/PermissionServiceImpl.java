@@ -5,19 +5,16 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.model.R;
 import com.lxy.common.util.TreeUtil;
-import com.lxy.system.vo.PermissionTreeVO;
 import com.lxy.system.mapper.PermissionMapper;
 import com.lxy.system.po.Permission;
 import com.lxy.system.service.PermissionService;
+import com.lxy.system.service.RolePermissionRelateService;
+import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -32,6 +29,9 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Resource
     private PermissionMapper permissionMapper;
+
+    @Resource
+    private RolePermissionRelateService rolePermissionRelateService;
 
     @Override
     public List<Permission> getRolePermission(Long roleId) {
@@ -57,6 +57,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             permission.setUpdateTime(now);
             this.updateById(permission);
         }
+        rolePermissionRelateService.removeCachePermission(Collections.singletonList(permission.getId()));
         return R.ok();
     }
 
@@ -130,6 +131,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         }
         List<Long> ids = list.stream().map(Permission::getId).toList();
         this.removeByIds(ids);
+        rolePermissionRelateService.removeCachePermission(ids);
     }
 
     @Override

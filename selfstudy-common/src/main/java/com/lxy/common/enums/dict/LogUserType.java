@@ -1,4 +1,4 @@
-package com.lxy.common.enums;
+package com.lxy.common.enums.dict;
 
 /**
  * TODO

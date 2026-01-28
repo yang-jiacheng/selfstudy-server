@@ -1,0 +1,51 @@
+spring:
+  # database
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # redis
+  data:
+    redis:
+      database:
+      host:
+      port:
+      password:
+  # 防止多项目开启时热部署失效，故指定端口
+  devtools:
+    livereload:
+      port: 35651
+
+server:
+  # 临时文件目录
+  tomcat:
+    basedir: D:/java/res/selfstudy-mobile-app/temp/
+  # 端口，默认8080
+  port: 8072
+
+# 图片类上传到服务器路径
+sourse:
+  config:
+    upload: D:/java/res/selfstudy-mobile-app/upload/
+    # 文件上传到服务器路径
+    file: D:/java/res/selfstudy-mobile-app/file/
+
+# 域名
+host:
+  name: localhost
+
+# xxl-job
+xxl:
+  job:
+    enabled: false
+    admin:
+      addresses: http://localhost:8060/xxl-job-admin
+      accessToken:
+      timeout: 3
+    executor:
+      appname: ${spring.application.name}
+      ip: localhost
+      port: 8061
+      logpath: /java/logs/xxl-job-executor/${spring.application.name}
+      logretentiondays: 30

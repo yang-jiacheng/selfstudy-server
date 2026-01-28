@@ -4,31 +4,18 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.common.model.R;
-import com.lxy.system.dto.AdminInfoUpdateDTO;
 import com.lxy.system.dto.AdminEditDTO;
+import com.lxy.system.dto.AdminInfoUpdateDTO;
 import com.lxy.system.dto.AdminStatusDTO;
 import com.lxy.system.dto.RoleEditDTO;
-import com.lxy.system.po.AdminInfo;
-import com.lxy.system.po.AdminRoleRelate;
-import com.lxy.system.po.Permission;
-import com.lxy.system.po.Role;
-import com.lxy.system.po.RolePermissionRelate;
-import com.lxy.system.service.AdminInfoService;
-import com.lxy.system.service.AdminRoleRelateService;
-import com.lxy.system.service.PermissionService;
-import com.lxy.system.service.RolePermissionRelateService;
-import com.lxy.system.service.RoleService;
+import com.lxy.system.po.*;
+import com.lxy.system.service.*;
 import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * TODO
@@ -63,7 +50,7 @@ public class AuthService {
         rolePermissionRelateService.removeCachePermissionInRole(Collections.singletonList(id));
         roleService.removeById(id);
         rolePermissionRelateService
-            .remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId, id));
+                .remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId, id));
         adminRoleRelateService.remove(new LambdaUpdateWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getRoleId, id));
     }
 
@@ -105,13 +92,11 @@ public class AuthService {
             role.setUpdateTime(new Date());
             rolePermissionRelateService.removeCachePermissionInRole(Collections.singletonList(role.getId()));
         }
-
         roleService.saveOrUpdate(role);
-
         // 先删
         Long roleId = role.getId();
         rolePermissionRelateService
-            .remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId, roleId));
+                .remove(new LambdaUpdateWrapper<RolePermissionRelate>().eq(RolePermissionRelate::getRoleId, roleId));
         // 再新增
         List<RolePermissionRelate> list = new ArrayList<>(permissionIds.size());
         RolePermissionRelate relate = null;
@@ -122,7 +107,6 @@ public class AuthService {
             list.add(relate);
         }
         rolePermissionRelateService.saveBatch(list);
-
         return roleId;
     }
 
@@ -139,7 +123,7 @@ public class AuthService {
         List<Long> roleIds = adminEditDTO.getRoleIds();
         LambdaQueryWrapper<AdminInfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.nested(w -> w.eq(AdminInfo::getPhone, adminInfo.getPhone()).or().eq(AdminInfo::getUsername,
-            adminInfo.getUsername()));
+                adminInfo.getUsername()));
         // 是修改
         if (adminInfo.getId() != null) {
             wrapper.ne(AdminInfo::getId, adminInfo.getId());
@@ -193,7 +177,7 @@ public class AuthService {
     public void removeAdminInfoByIds(List<Long> userIds) {
         adminInfoService.removeByIds(userIds);
         adminRoleRelateService
-            .remove(new LambdaQueryWrapper<AdminRoleRelate>().in(AdminRoleRelate::getAdminId, userIds));
+                .remove(new LambdaQueryWrapper<AdminRoleRelate>().in(AdminRoleRelate::getAdminId, userIds));
         adminInfoService.removeCachePermissionInAdminIds(userIds);
     }
 

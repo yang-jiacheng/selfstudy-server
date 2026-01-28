@@ -4,6 +4,7 @@ import com.lxy.admin.security.filter.DualTokenAuthenticationFilter;
 import com.lxy.admin.security.handle.AccessDeniedHandlerImpl;
 import com.lxy.admin.security.handle.AuthenticationEntryPointAdminImpl;
 import com.lxy.admin.security.service.impl.AdminDetailsServiceImpl;
+import com.lxy.common.properties.SecurityProperties;
 import com.lxy.framework.security.encoder.MinePasswordEncoder;
 import com.lxy.system.service.AdminInfoService;
 import jakarta.annotation.Resource;
@@ -42,15 +43,8 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final static String[] AUTH_URL = {
-            "/home/**", "/adminManage/**", "/businessConfigManage/**", "/classifyManage/**", "/feedBackManage/**",
-            "/personalManage/**", "/roleManage/**", "/studyRecord/**", "/userAgreementManage/**", "/userManage/**", "/versionManage/**",
-            "/resources/upload", "/resources/uploadApp", "/resources/generateImage", "/objectStorageManage/**", "/permissionManage/**",
-            "/mine/**"
-    };
-    private final static String[] PERMIT_URL = {
-            "/druid/**", "/token/**", "/upload/**", "/hello"
-    };
+    @Resource
+    private SecurityProperties securityProperties;
     @Resource
     private AdminDetailsServiceImpl adminDetailsService;
     @Resource
@@ -67,16 +61,14 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
-                // securityMatcher 限定此过滤器链仅处理 AUTH_URL 的请求
-                .securityMatcher(AUTH_URL)
+                // securityMatcher 限定此过滤器链仅处理 authUrl 的请求
+                .securityMatcher(securityProperties.getAuthUrl())
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .addFilterBefore(
                         new DualTokenAuthenticationFilter(adminInfoService),
                         UsernamePasswordAuthenticationFilter.class
                 )
-
                 // 配置异常处理
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new AuthenticationEntryPointAdminImpl())

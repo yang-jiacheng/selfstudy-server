@@ -38,7 +38,7 @@ public class StudyRecordController {
     private StudyRecordService studyRecordService;
 
     @PostMapping(value = "/getAllLibrary", produces = "application/json")
-
+    @PreAuthorize("hasAuthority('studyRecord:list')")
     public R<CollResult<LabelValueVO>> getAllLibrary() {
         List<Classify> list = classifyService.list();
         List<LabelValueVO> vos = new ArrayList<>();
@@ -49,6 +49,7 @@ public class StudyRecordController {
     }
 
     @PostMapping(value = "/getStudyRecord", produces = "application/json")
+    @PreAuthorize("hasAuthority('studyRecord:list')")
     public R<PageResult<StudyRecordVO>> getStudyRecord(@RequestBody StudyRecordPageDTO dto) {
         PageResult<StudyRecordVO> pg = studyRecordService.getStudyRecordByAdmin(dto);
         return R.ok(pg);

@@ -1,0 +1,48 @@
+spring:
+  # database 正式环境使用内网地址连接
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # redis
+  data:
+    redis:
+      database:
+      host:
+      port:
+      password:
+
+server:
+  # 临时文件目录
+  tomcat:
+    basedir: /java/temp/selfstudy-admin
+  max-http-request-header-size: 15360
+  # 端口，默认8080
+  port: 8071
+
+# 图片类上传到服务器路径
+sourse:
+  config:
+    upload: /java/selfstudy-admin/upload/
+    # 文件下载服务器路径
+    file: /java/selfstudy-admin/file/
+
+# 域名
+host:
+  name:
+
+# xxl-job
+xxl:
+  job:
+    enabled: false
+    admin:
+      addresses:
+      accessToken:
+      timeout: 3
+    executor:
+      appname: ${spring.application.name}
+      ip:
+      port: 8062
+      logpath: /java/logs/xxl-job-executor/${spring.application.name}
+      logretentiondays: 30

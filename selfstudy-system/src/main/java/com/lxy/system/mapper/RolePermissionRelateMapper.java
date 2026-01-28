@@ -22,4 +22,5 @@ public interface RolePermissionRelateMapper extends BaseMapper<RolePermissionRel
 
     Set<Long> getAdminIdsByRoles(@Param("ids") List<Long> ids);
 
+    Set<Long> getAdminIdsByPermissionIds(@Param("permissionIds") List<Long> permissionIds);
 }

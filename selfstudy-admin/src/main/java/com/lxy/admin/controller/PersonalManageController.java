@@ -1,5 +1,8 @@
 package com.lxy.admin.controller;
 
+import com.lxy.common.annotation.Log;
+import com.lxy.common.enums.dict.LogBusinessType;
+import com.lxy.common.enums.dict.LogUserType;
 import com.lxy.common.model.R;
 import com.lxy.system.dto.PersonalEditDTO;
 import com.lxy.system.service.AdminInfoService;
@@ -27,7 +30,9 @@ public class PersonalManageController {
     @Resource
     private AdminInfoService adminInfoService;
 
+    @PreAuthorize("hasAuthority('personalManage:save')")
     @PostMapping(value = "/updatePersonal", produces = "application/json")
+    @Log(title = "修改个人信息", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     public R<Object> updatePersonal(@RequestBody @Valid PersonalEditDTO dto) {
         return adminInfoService.updatePersonal(dto);
     }

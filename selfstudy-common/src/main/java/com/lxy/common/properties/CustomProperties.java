@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * TODO
+ * 自定义配置
  *
  * @author jiacheng yang.
  * @version 1.0

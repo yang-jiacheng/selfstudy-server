@@ -3,20 +3,16 @@ package com.lxy.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.common.annotation.Log;
+import com.lxy.common.enums.dict.LogBusinessType;
+import com.lxy.common.enums.dict.LogUserType;
 import com.lxy.common.model.R;
-import com.lxy.common.enums.LogBusinessType;
-import com.lxy.common.enums.LogUserType;
 import com.lxy.system.dto.AgreementEditDTO;
 import com.lxy.system.po.UserAgreement;
 import com.lxy.system.service.UserAgreementService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户协议与隐私政策
@@ -34,6 +30,7 @@ public class UserAgreementController {
     @Resource
     private UserAgreementService agreementService;
 
+    @PreAuthorize("hasAuthority('userAgreementManage:list')")
     @PostMapping(value = "/getAgreement-{type}", produces = "application/json")
     public R<String> getAgreement(@PathVariable(value = "type") Integer type) {
         LambdaQueryWrapper<UserAgreement> wrapper = new LambdaQueryWrapper<>();
@@ -46,6 +43,7 @@ public class UserAgreementController {
         return R.ok(content);
     }
 
+    @PreAuthorize("hasAuthority('userAgreementManage:save')")
     @Log(title = "修改隐私政策与用户协议", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/saveAgreement", produces = "application/json")
     public R<Object> saveAgreement(@RequestBody @Valid AgreementEditDTO dto) {

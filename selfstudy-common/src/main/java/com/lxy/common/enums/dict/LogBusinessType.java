@@ -1,4 +1,4 @@
-package com.lxy.common.enums;
+package com.lxy.common.enums.dict;
 
 /**
  * 操作日志业务类型

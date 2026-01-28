@@ -32,4 +32,15 @@
         </foreach>
     </select>
 
+    <select id="getAdminIdsByPermissionIds" resultType="java.lang.Long">
+        select arr.admin_id
+        from role_permission_relate rpr
+        inner join admin_role_relate arr on arr.role_id = rpr.role_id
+        where rpr.permission_id in
+        <foreach collection="permissionIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY arr.admin_id
+    </select>
+
 </mapper>

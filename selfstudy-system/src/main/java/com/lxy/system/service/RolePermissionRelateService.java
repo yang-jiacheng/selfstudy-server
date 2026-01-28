@@ -24,7 +24,16 @@ public interface RolePermissionRelateService extends IService<RolePermissionRela
 
     /**
      * 移除缓存中角色对应的用户的登录状态
+     *
+     * @param roleIds 角色id集合
      */
     void removeCachePermissionInRole(List<Long> roleIds);
+
+    /**
+     * 移除缓存中有该权限的登录状态
+     *
+     * @param permissionIds 权限id集合
+     */
+    void removeCachePermission(List<Long> permissionIds);
 
 }

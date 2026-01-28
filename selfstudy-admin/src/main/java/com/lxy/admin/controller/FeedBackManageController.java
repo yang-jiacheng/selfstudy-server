@@ -1,5 +1,8 @@
 package com.lxy.admin.controller;
 
+import com.lxy.common.annotation.Log;
+import com.lxy.common.enums.dict.LogBusinessType;
+import com.lxy.common.enums.dict.LogUserType;
 import com.lxy.common.model.PageResult;
 import com.lxy.common.model.R;
 import com.lxy.framework.security.util.UserIdUtil;
@@ -10,11 +13,7 @@ import com.lxy.system.service.FeedbackService;
 import com.lxy.system.vo.FeedbackVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -38,19 +37,24 @@ public class FeedBackManageController {
         this.feedbackService = feedbackService;
     }
 
+    @PreAuthorize("hasAuthority('feedBackManage:list')")
     @PostMapping(value = "/getFeedBackPageList", produces = "application/json")
     public R<PageResult<FeedbackVO>> getFeedBackPageList(@RequestBody FeedbackPageDTO dto) {
         PageResult<FeedbackVO> pg = feedbackService.getFeedBackList(dto);
         return R.ok(pg);
     }
 
+    @PreAuthorize("hasAuthority('feedBackManage:delete')")
     @PostMapping(value = "/removeFeedBackById", produces = "application/json")
+    @Log(title = "删除意见反馈", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
     public R<Object> removeFeedBackById(@RequestParam("id") Long id) {
         feedbackService.removeById(id);
         return R.ok();
     }
 
+    @PreAuthorize("hasAuthority('feedBackManage:reply')")
     @PostMapping(value = "/replyFeedBackById", produces = "application/json")
+    @Log(title = "意见反馈-回复", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     public R<Object> replyFeedBackById(@RequestBody FeedBackReplyDTO dto) {
         long userId = UserIdUtil.getUserId();
         Feedback feedback = new Feedback();

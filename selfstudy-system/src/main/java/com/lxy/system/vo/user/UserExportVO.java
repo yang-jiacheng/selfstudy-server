@@ -47,10 +47,10 @@ public class UserExportVO implements Serializable {
     @ExcelHeader(title = "加入时间")
     private String createTimeStr;
     //注册类型 1。用户注册 2.后台添加
-    private Integer registType;
+    private Integer registerType;
 
     @ExcelHeader(title = "注册类型")
-    private String registTypeStr;
+    private String registerTypeStr;
 
     public void setTotalDuration(Integer totalDuration) {
         this.totalDuration = totalDuration;
@@ -64,13 +64,13 @@ public class UserExportVO implements Serializable {
         this.createTimeStr = DateUtil.format(createTime, DatePattern.NORM_DATETIME_MINUTE_PATTERN);
     }
 
-    public void setRegistType(Integer registType) {
-        this.registType = registType;
-        if (registType != null) {
-            if (registType == 1) {
-                this.registTypeStr = "用户注册";
-            } else if (registType == 2) {
-                this.registTypeStr = "后台添加";
+    public void setRegisterType(Integer registerType) {
+        this.registerType = registerType;
+        if (registerType != null) {
+            if (registerType == 1) {
+                this.registerTypeStr = "用户注册";
+            } else if (registerType == 2) {
+                this.registerTypeStr = "后台添加";
             }
         }
     }

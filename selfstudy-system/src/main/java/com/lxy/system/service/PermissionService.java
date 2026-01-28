@@ -59,7 +59,7 @@ public interface PermissionService extends IService<Permission> {
     List<Permission> getPermissionListAndParent(Collection<Long> ids);
 
     /**
-     * 删除菜单
+     * 删除权限
      *
      * @author jiacheng yang.
      * @since 2025/5/16 16:07
@@ -67,7 +67,7 @@ public interface PermissionService extends IService<Permission> {
     void removePermission(Long id);
 
     /**
-     * 根据登录用户获取菜单
+     * 根据登录用户获取权限
      *
      * @author jiacheng yang.
      * @since 2025/6/21 18:33

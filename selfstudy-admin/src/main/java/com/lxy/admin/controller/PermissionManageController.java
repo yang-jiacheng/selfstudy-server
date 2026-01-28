@@ -1,24 +1,20 @@
 package com.lxy.admin.controller;
 
 import com.lxy.common.annotation.Log;
+import com.lxy.common.enums.dict.LogBusinessType;
+import com.lxy.common.enums.dict.LogUserType;
 import com.lxy.common.model.R;
-import com.lxy.common.enums.LogBusinessType;
-import com.lxy.common.enums.LogUserType;
 import com.lxy.system.po.Permission;
 import com.lxy.system.service.PermissionService;
 import com.lxy.system.vo.PermissionTreeVO;
 import jakarta.annotation.Resource;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * 菜单管理
+ * 权限管理
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -40,7 +36,7 @@ public class PermissionManageController {
     }
 
     /**
-     * 获取菜单树
+     * 获取权限树
      *
      * @author jiacheng yang.
      * @since 2025/4/20 1:16
@@ -51,14 +47,14 @@ public class PermissionManageController {
         return R.ok(tree);
     }
 
-    @Log(title = "编辑菜单", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "编辑权限", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/saveOrUpdatePermission", produces = "application/json")
     public R<Object> saveOrUpdatePermission(@RequestBody Permission permission) {
         R<Object> r = permissionService.saveOrUpdatePermission(permission);
         return r;
     }
 
-    @Log(title = "删除菜单", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
+    @Log(title = "删除权限", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/removePermission", produces = "application/json")
     public R<Object> removePermission(@RequestParam("id") Long id) {
         permissionService.removePermission(id);

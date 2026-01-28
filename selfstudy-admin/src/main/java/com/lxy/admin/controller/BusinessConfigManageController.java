@@ -1,6 +1,9 @@
 package com.lxy.admin.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lxy.common.annotation.Log;
+import com.lxy.common.enums.dict.LogBusinessType;
+import com.lxy.common.enums.dict.LogUserType;
 import com.lxy.common.model.CollResult;
 import com.lxy.common.model.R;
 import com.lxy.system.dto.BusinessEditDTO;
@@ -32,14 +35,16 @@ public class BusinessConfigManageController {
     @Resource
     private BusinessConfigService businessConfigService;
 
-
+    @PreAuthorize("hasAuthority('businessConfigManage:list')")
     @PostMapping(value = "/getBusinessList", produces = "application/json")
     public R<CollResult<BusinessConfig>> getBusinessList() {
         List<BusinessConfig> list = businessConfigService.list(new LambdaQueryWrapper<BusinessConfig>().eq(BusinessConfig::getShowStatus, 1));
         return R.ok(new CollResult<>(list));
     }
 
+    @PreAuthorize("hasAuthority('businessConfigManage:update')")
     @PostMapping(value = "/updateBusiness", produces = "application/json")
+    @Log(title = "修改业务配置", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     public R<Object> updateBusiness(@RequestBody @Valid BusinessEditDTO dto) {
         businessConfigService.updateBusinessConfigById(dto.getId(), dto.getValue());
         return R.ok();

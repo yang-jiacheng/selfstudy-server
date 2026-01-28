@@ -3,6 +3,7 @@ package com.lxy.app.config;
 import com.lxy.app.security.filter.StatelessAuthenticationFilterUser;
 import com.lxy.app.security.handle.AuthenticationEntryPointUserImpl;
 import com.lxy.app.security.service.impl.UserDetailsServiceImpl;
+import com.lxy.common.properties.SecurityProperties;
 import com.lxy.framework.security.encoder.MinePasswordEncoder;
 import com.lxy.framework.security.service.LoginStatusService;
 import com.lxy.system.service.BusinessConfigService;
@@ -42,15 +43,8 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final static String[] PERMIT_URL = {
-            "/druid/**", "/", "/token/**", "/upload/**",
-            "/userAgreement/**", "/personalCenter/updatePassword", "/version/**"
-    };
-    private final static String[] AUTH_URL = {
-            "/catalog/**", "/feedBack/**", "/home/**", "/personalCenter/getUserInfo", "/personalCenter/updateUserInfo",
-            "/personalCenter/getUserInfoById", "/studyRecord/**", "/studyStatistics/**",
-            "/resources/upload", "/resources/uploadApp", "/resources/generateImage"
-    };
+    @Resource
+    private SecurityProperties securityProperties;
     @Resource
     private UserDetailsServiceImpl userDetailsService;
     @Resource
@@ -67,8 +61,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // securityMatcher 限定此过滤器链仅处理 AUTH_URL 的请求
-                .securityMatcher(AUTH_URL)
+                // securityMatcher 限定此过滤器链仅处理 authUrl 的请求
+                .securityMatcher(securityProperties.getAuthUrl())
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .addFilterBefore(

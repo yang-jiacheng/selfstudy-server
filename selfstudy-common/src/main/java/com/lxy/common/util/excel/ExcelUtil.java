@@ -9,19 +9,7 @@ import com.lxy.common.annotation.ExcelHeader;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
@@ -57,6 +45,8 @@ import java.util.function.Function;
 
 @Slf4j
 public class ExcelUtil {
+
+    private static final String XLSX_SUFFIX = ".xlsx";
 
 
     /**
@@ -301,7 +291,7 @@ public class ExcelUtil {
         }
 
         // 导出 Excel 文件
-        exportExcel(response, wb, sheetName + ".xlsx");
+        exportExcel(response, wb, sheetName + XLSX_SUFFIX);
     }
 
     /**

@@ -1,13 +1,9 @@
 package com.lxy.common.annotation;
 
-import com.lxy.common.enums.LogBusinessType;
-import com.lxy.common.enums.LogUserType;
+import com.lxy.common.enums.dict.LogBusinessType;
+import com.lxy.common.enums.dict.LogUserType;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * 操作日志注解

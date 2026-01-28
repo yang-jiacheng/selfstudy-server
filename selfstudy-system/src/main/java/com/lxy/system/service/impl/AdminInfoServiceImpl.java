@@ -94,6 +94,12 @@ public class AdminInfoServiceImpl extends ServiceImpl<AdminInfoMapper, AdminInfo
             wrapper.like(AdminInfo::getName, name);
         }
         pg = this.page(pg, wrapper);
+        List<AdminInfo> records = pg.getRecords();
+        if (CollUtil.isNotEmpty(records)) {
+            records.forEach(adminInfo -> {
+                adminInfo.setPassword(null);
+            });
+        }
         return pg;
     }
 

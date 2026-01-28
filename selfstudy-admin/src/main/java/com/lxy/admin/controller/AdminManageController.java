@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.admin.service.AuthService;
 import com.lxy.common.annotation.Log;
+import com.lxy.common.enums.dict.LogBusinessType;
+import com.lxy.common.enums.dict.LogUserType;
 import com.lxy.common.model.R;
-import com.lxy.common.enums.LogBusinessType;
-import com.lxy.common.enums.LogUserType;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.dto.AdminEditDTO;
 import com.lxy.system.dto.AdminInfoPageDTO;
@@ -21,11 +21,7 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,6 +54,7 @@ public class AdminManageController {
      * @author jiacheng yang.
      * @since 2025/6/17 19:13
      */
+    @PreAuthorize("hasAuthority('systemManage:adminManage:list')")
     @PostMapping(value = "/getAdminInfoPageList", produces = "application/json")
     public R<Page<AdminInfo>> getAdminInfoList(@RequestBody AdminInfoPageDTO pageDTO) {
         long userId = UserIdUtil.getUserId();
@@ -72,12 +69,13 @@ public class AdminManageController {
      * @author jiacheng yang.
      * @since 2025/6/17 19:13
      */
+    @PreAuthorize("hasAuthority('systemManage:adminManage:list')")
     @PostMapping(value = "/getAdminInfoById", produces = "application/json")
     public R<Map<String, Object>> getAdminInfoById(@RequestParam("id") Long id) {
         AdminInfoVO adminInfo = adminInfoService.getAdminInfoById(id);
         adminInfo.setPassword(null);
         List<AdminRoleRelate> roleRelates =
-            adminRoleRelateService.list(new LambdaQueryWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId, id));
+                adminRoleRelateService.list(new LambdaQueryWrapper<AdminRoleRelate>().eq(AdminRoleRelate::getAdminId, id));
         List<Long> roles = new ArrayList<>();
         if (CollUtil.isNotEmpty(roleRelates)) {
             roleRelates.forEach(roleRelate -> roles.add(roleRelate.getRoleId()));
@@ -88,12 +86,14 @@ public class AdminManageController {
         return R.ok(map);
     }
 
+    @PreAuthorize("hasAuthority('systemManage:adminManage:save')")
     @Log(title = "修改后管用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/editAdminInfo", produces = "application/json")
     public R<Object> editAdminInfo(@RequestBody @Valid AdminEditDTO adminEditDTO) {
         return authService.editAdminInfo(adminEditDTO);
     }
 
+    @PreAuthorize("hasAuthority('systemManage:adminManage:updateStatus')")
     @Log(title = "修改后管用户状态", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/disabledAdminInfo", produces = "application/json")
     public R<Object> disabledAdminInfo(@RequestBody @Valid AdminStatusDTO dto) {
@@ -101,7 +101,8 @@ public class AdminManageController {
         return R.ok();
     }
 
-    @Log(title = "删除后管用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @PreAuthorize("hasAuthority('systemManage:adminManage:deleteBatch')")
+    @Log(title = "批量删除后管用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/removeAdminInfoByIds", produces = "application/json")
     public R<Object> removeAdminInfoByIds(@RequestBody @NotEmpty List<Long> userIds) {
         authService.removeAdminInfoByIds(userIds);

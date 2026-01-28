@@ -1,7 +1,7 @@
 package com.lxy.common.enums.dict;
 
 /**
- * 是否枚举类
+ * 是或否 枚举类
  *
  * @author jiacheng yang.
  * @version 1.0

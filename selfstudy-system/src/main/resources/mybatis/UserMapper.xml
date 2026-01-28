@@ -42,7 +42,8 @@
                profile_path,
                total_duration
         FROM user u
-        ORDER BY u.total_duration DESC LIMIT 0,100
+        ORDER BY u.total_duration DESC
+        LIMIT 0,100
     </select>
 
     <select id="getUserRankingById" resultType="com.lxy.system.vo.user.UserRankVO">
@@ -64,7 +65,7 @@
         u.address,
         u.total_duration,
         u.create_time,
-        u.regist_type
+        u.register_type
         FROM
         user u
         <where>
