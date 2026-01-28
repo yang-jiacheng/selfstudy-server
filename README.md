@@ -166,8 +166,6 @@ selfstudy-server
 
 **Mobile Demo Account：** `17508660924` / `123456`
 
-> ⚠️ **Note:** Due to Aliyun SMS service restrictions, individual developers cannot apply for SMS signature, please use password login
-
 #### 📱 Feature Preview
 
 You can try the following features during the experience:

@@ -1,0 +1,1 @@
+INSERT INTO `version` (`id`, `version_code`, `version_name`, `download_url`, `status`, `check_update`, `update_time`) VALUES (1, 7, '1.0.6', 'https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/android/studyroom/apk/studyroom-1.0.6-7-0125.apk', 0, 1, '2025-07-03 19:02:21');
