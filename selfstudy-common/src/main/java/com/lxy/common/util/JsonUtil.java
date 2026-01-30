@@ -24,14 +24,12 @@ public class JsonUtil {
 
     private final static Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
     private static final ObjectMapper objectMapper;
 
     static {
         objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        objectMapper.setDateFormat(new SimpleDateFormat(DATE_FORMAT));
+        objectMapper.setDateFormat(new SimpleDateFormat(DateCusUtil.YYYY_MM_DD_HH_MM_SS));
         // 序列化空值失败时不抛异常
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         // 反序列化不存在的字段失败时不抛异常

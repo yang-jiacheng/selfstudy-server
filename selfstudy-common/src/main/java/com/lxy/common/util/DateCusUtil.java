@@ -25,13 +25,22 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * TODO
+ * 日期工具类
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2022/12/19 16:11
  */
 public class DateCusUtil {
+
+    public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+
+    public static final String YYYY_MM_DD = "yyyy-MM-dd";
+
+    public static final String YYYY_MM_DD_SLASH = "yyyy/MM/dd";
+
+    public static final String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
+
 
     /**
      * 获取现在到今天结束的时间,秒数

@@ -1,4 +1,4 @@
-FROM crpi-cerz1i20r7cju768.cn-hangzhou.personal.cr.aliyuncs.com/whiskey/openjdk:17.0.2
+FROM crpi-cerz1i20r7cju768.cn-hangzhou.personal.cr.aliyuncs.com/whiskey/jdk:21.0.9_10-jdk-jammy
 WORKDIR /java/xxl-job-admin
 COPY xxl-job-admin.jar xxl-job-admin.jar
 EXPOSE 8060

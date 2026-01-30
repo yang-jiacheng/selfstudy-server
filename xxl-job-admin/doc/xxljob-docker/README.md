@@ -41,6 +41,7 @@ services:
 networks:
   whiskey-network:
     external: true
+
 ```
 
 #### 3.2. 运行

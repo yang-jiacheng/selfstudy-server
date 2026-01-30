@@ -1,6 +1,7 @@
 package com.lxy.common.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lxy.common.util.DateCusUtil;
 import lombok.Data;
 
 import java.io.Serial;
@@ -36,13 +37,13 @@ public class TokenPair implements Serializable {
     /**
      * 访问Token过期时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date accessExpires;
 
     /**
      * 刷新Token过期时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date refreshExpires;
 
     /**
@@ -58,13 +59,13 @@ public class TokenPair implements Serializable {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     /**
      * 最后活跃时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date lastActiveTime;
 
     /**
