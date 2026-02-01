@@ -19,10 +19,7 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static com.lxy.common.properties.AliYunProperties.accessKeyId;
-import static com.lxy.common.properties.AliYunProperties.accessKeySecret;
-import static com.lxy.common.properties.AliYunProperties.ossBucket;
-import static com.lxy.common.properties.AliYunProperties.ossEndpoint;
+import static com.lxy.common.properties.AliYunProperties.*;
 
 /**
  * 阿里云对象存储 OSS
@@ -53,7 +50,7 @@ public class OssUtil {
         try {
             ossClient.putObject(ossBucket, url, fileInputStream);
         } catch (Exception e) {
-            log.error(StrUtil.format("上传文件到OSS失败: {}", url), e);
+            log.error("上传文件到OSS失败: {}", url, e);
         } finally {
             ossClient.shutdown();
         }
@@ -75,7 +72,7 @@ public class OssUtil {
                 ossClient.deleteObject(ossBucket, filePath);
             }
         } catch (Exception e) {
-            log.error(StrUtil.format("删除文件失败: {}", filePath), e);
+            log.error("删除文件失败: {}", filePath, e);
         } finally {
             ossClient.shutdown();
         }

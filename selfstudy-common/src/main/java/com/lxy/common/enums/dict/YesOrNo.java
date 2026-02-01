@@ -1,5 +1,7 @@
 package com.lxy.common.enums.dict;
 
+import lombok.Getter;
+
 /**
  * 是或否 枚举类
  *
@@ -8,22 +10,22 @@ package com.lxy.common.enums.dict;
  * @since 2025/11/26 11:09
  */
 
-public enum YesNoEnum {
+@Getter
+public enum YesOrNo {
 
-    YES("1", "是"),
-    NO("0", "否");
+    YES("1", "是"), NO("0", "否");
 
-    public final String value;
-    public final String name;
+    private final String value;
+    private final String name;
 
-    YesNoEnum(String value, String name) {
+    YesOrNo(String value, String name) {
         this.value = value;
         this.name = name;
     }
 
     public static String getNameByValue(String value) {
-        for (YesNoEnum e : YesNoEnum.values()) {
-            if (e.value.equals(value)) {
+        for (YesOrNo e : YesOrNo.values()) {
+            if (e.getValue().equals(value)) {
                 return e.name;
             }
         }
@@ -31,8 +33,8 @@ public enum YesNoEnum {
     }
 
     public static String getValueByName(String name) {
-        for (YesNoEnum e : YesNoEnum.values()) {
-            if (e.name.equals(name)) {
+        for (YesOrNo e : YesOrNo.values()) {
+            if (e.getName().equals(name)) {
                 return e.value;
             }
         }

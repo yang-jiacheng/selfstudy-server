@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 用户导入VO
- * 继承User实体，添加Excel导入相关字段和注解
+ * 用户导入VO 继承User实体，添加Excel导入相关字段和注解
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -40,25 +39,25 @@ public class UserImportVO extends ExcelImportVO {
     @ExcelHeader(title = "地址")
     private String address;
 
-    //头像地址
+    // 头像地址
     private String profilePath;
 
-    //个人资料背景图
+    // 个人资料背景图
     private String coverPath;
 
-    //注册类型 1。用户注册 2.后台添加
-    private Integer registType;
+    // 注册类型 ，字典：`register_type`
+    private String registerType;
 
-    //余额
+    // 余额
     private BigDecimal balance;
 
-    //总学习时长
+    // 总学习时长
     private Integer totalDuration;
 
-    //注册时间
+    // 注册时间
     private Date createTime;
 
-    //修改时间
+    // 修改时间
     private Date updateTime;
 
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxy.system.mapper.SysDictMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lxy.system.po.SysDict">
+            <id column="id" property="id" />
+            <result column="dict_type" property="dictType" />
+            <result column="dict_value" property="dictValue" />
+            <result column="dict_name" property="dictName" />
+            <result column="relation_dict_type" property="relationDictType" />
+            <result column="remark" property="remark" />
+            <result column="sort" property="sort" />
+            <result column="create_time" property="createTime" />
+            <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        dict_type,
+        dict_value,
+        dict_name,
+        relation_dict_type,
+        remark,
+        sort,
+        create_time,
+        update_time
+    </sql>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO sys_dict (
+            id,
+            dict_type,
+            dict_value,
+            dict_name,
+            relation_dict_type,
+            remark,
+            sort,
+            create_time,
+            update_time
+        ) VALUES
+        <foreach collection="entities" item="entity" separator=",">
+            (
+                #{entity.id},
+                #{entity.dictType},
+                #{entity.dictValue},
+                #{entity.dictName},
+                #{entity.relationDictType},
+                #{entity.remark},
+                #{entity.sort},
+                #{entity.createTime},
+                #{entity.updateTime}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 批量插入或更新 (MySQL语法) -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO sys_dict (
+            id,
+            dict_type,
+            dict_value,
+            dict_name,
+            relation_dict_type,
+            remark,
+            sort,
+            create_time,
+            update_time
+        ) VALUES
+        <foreach collection="entities" item="entity" separator=",">
+            (
+                #{entity.id},
+                #{entity.dictType},
+                #{entity.dictValue},
+                #{entity.dictName},
+                #{entity.relationDictType},
+                #{entity.remark},
+                #{entity.sort},
+                #{entity.createTime},
+                #{entity.updateTime}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+                dict_type = VALUES(dict_type),
+                dict_value = VALUES(dict_value),
+                dict_name = VALUES(dict_name),
+                relation_dict_type = VALUES(relation_dict_type),
+                remark = VALUES(remark),
+                sort = VALUES(sort),
+                create_time = VALUES(create_time),
+                update_time = VALUES(update_time)
+    </insert>
+
+
+</mapper>

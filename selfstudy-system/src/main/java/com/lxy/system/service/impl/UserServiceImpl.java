@@ -13,22 +13,22 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.constant.UserConstant;
 import com.lxy.common.constant.dict.RegisterTypeConstant;
-import com.lxy.system.dto.UserPageDTO;
 import com.lxy.common.exception.ServiceException;
 import com.lxy.common.util.DateCusUtil;
 import com.lxy.common.util.EncryptUtil;
-import com.lxy.common.util.IdGenerator;
+import com.lxy.common.util.IdGeneratorUtil;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.excel.BaseSheetHandler;
 import com.lxy.common.util.excel.ExcelUtil;
 import com.lxy.common.vo.ExcelErrorInfoVO;
-import com.lxy.system.vo.user.UserExportVO;
-import com.lxy.system.vo.user.UserImportVO;
-import com.lxy.system.vo.user.UserRankVO;
+import com.lxy.system.dto.UserPageDTO;
 import com.lxy.system.mapper.UserMapper;
 import com.lxy.system.po.User;
 import com.lxy.system.service.UserService;
 import com.lxy.system.service.redis.RedisService;
+import com.lxy.system.vo.user.UserExportVO;
+import com.lxy.system.vo.user.UserImportVO;
+import com.lxy.system.vo.user.UserRankVO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
@@ -37,11 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -284,7 +280,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertBatchUser(List<User> userList) {
-        userList.forEach(user -> user.setId(IdGenerator.generateId()));
+        userList.forEach(user -> user.setId(IdGeneratorUtil.generateId()));
         List<List<User>> batchList = CollUtil.split(userList, 2000);
         for (List<User> batch : batchList) {
             userMapper.insertBatchUser(batch);
@@ -362,28 +358,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         @Override
         protected void handleRowEnd(UserImportVO obj) {
             // 设置默认头像和封面
-            String defPath = "/upload/defPath.jpg";
-            String defCover = "/upload/defCover.jpg";
-            obj.setProfilePath(defPath);
-            obj.setCoverPath(defCover);
-
+            obj.setProfilePath(UserConstant.DEF_PROFILE_PATH);
+            obj.setCoverPath(UserConstant.DEF_COVER_PATH);
             // 设置注册类型为后台添加
-            obj.setRegistType(2);
-
+            obj.setRegisterType(RegisterTypeConstant.ADMIN_ADD);
             // 设置总学习时长
             obj.setTotalDuration(0);
-
             // 设置时间戳
             Date now = new Date();
             obj.setCreateTime(now);
             obj.setUpdateTime(now);
-
             // 设置Sheet索引
             obj.setSheetIndex(sheetIndex);
-
             // 如果密码为空，设置默认密码
             if (StrUtil.isEmpty(obj.getPassword())) {
-                obj.setPassword(EncryptUtil.encryptSha256("123456"));
+                obj.setPassword(EncryptUtil.encryptSha256(UserConstant.DEF_PASSWORD));
             }
         }
     }

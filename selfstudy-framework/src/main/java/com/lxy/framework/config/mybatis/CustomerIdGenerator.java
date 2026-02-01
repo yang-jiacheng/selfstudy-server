@@ -1,7 +1,7 @@
 package com.lxy.framework.config.mybatis;
 
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
-import com.lxy.common.util.IdGenerator;
+import com.lxy.common.util.IdGeneratorUtil;
 
 /**
  * 自定义id生成器
@@ -15,7 +15,7 @@ public class CustomerIdGenerator implements IdentifierGenerator {
 
     @Override
     public Long nextId(Object entity) {
-        return IdGenerator.generateId();
+        return IdGeneratorUtil.generateId();
     }
 
 }

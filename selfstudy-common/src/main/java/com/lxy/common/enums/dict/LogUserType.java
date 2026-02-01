@@ -1,20 +1,22 @@
 package com.lxy.common.enums.dict;
 
+import lombok.Getter;
+
 /**
- * TODO
+ * 操作日志用户类型
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2022/12/20 10:49
  */
 
+@Getter
 public enum LogUserType {
 
-    ADMIN(0, "后台用户"),
-    USER(1, "APP用户");
+    ADMIN(0, "后台用户"), USER(1, "APP用户");
 
-    public final Integer type;
-    public final String name;
+    private final Integer type;
+    private final String name;
 
     LogUserType(Integer type, String name) {
         this.type = type;
@@ -23,7 +25,7 @@ public enum LogUserType {
 
     public static String getName(Integer type) {
         for (LogUserType logUserType : LogUserType.values()) {
-            if (logUserType.type.equals(type)) {
+            if (logUserType.getType().equals(type)) {
                 return logUserType.name;
             }
         }

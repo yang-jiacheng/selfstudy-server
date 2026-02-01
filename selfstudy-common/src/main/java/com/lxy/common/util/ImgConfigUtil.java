@@ -9,7 +9,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.lxy.common.constant.StrConstant;
 import com.lxy.common.dto.GraphicsTextParameterDTO;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.properties.CustomProperties;
@@ -19,11 +18,7 @@ import net.coobird.thumbnailator.Thumbnails;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -148,7 +143,7 @@ public class ImgConfigUtil {
         if (PROD.equals(CustomProperties.activeProfile)) {
             return AGREEMENT_HTTP + CustomProperties.hostName + CustomProperties.contentPath;
         }
-        return AGREEMENT_HTTP + CustomProperties.hostName + StrConstant.COLON + CustomProperties.port
+        return AGREEMENT_HTTP + CustomProperties.hostName + StringUtil.COLON + CustomProperties.port
             + CustomProperties.contentPath;
     }
 
@@ -200,7 +195,7 @@ public class ImgConfigUtil {
     }
 
     /**
-     * Description: 上传图片到oss author: jiacheng yang. Date: 2024/11/16 17:35 Param: [data]
+     * 上传图片到oss
      */
     public static String readBufferedImageToOSS(BufferedImage image) {
         String imgStr = "";
@@ -219,10 +214,10 @@ public class ImgConfigUtil {
                 OssUtil.uploadFileToOss(path.substring(1), inputStream);
                 // 返回图片绝对路径
                 imgStr = realPath;
-                log.error(StrUtil.format("上传图片到oss成功: {}", imgStr));
+                log.error("上传图片到oss成功: {}", imgStr);
             }
         } catch (Exception e) {
-            log.error(StrUtil.format("上传图片到oss失败: {}", imgStr), e);
+            log.error("上传图片到oss失败: {}", imgStr, e);
         }
 
         return imgStr;

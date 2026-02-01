@@ -7,15 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.util.OssUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.xwpf.usermodel.BodyElementType;
-import org.apache.poi.xwpf.usermodel.IBodyElement;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFPicture;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.apache.poi.xwpf.usermodel.*;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -25,21 +17,12 @@ import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
 import javax.imageio.ImageIO;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
+import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -49,7 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TODO
+ * word工具类
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -59,37 +42,33 @@ import java.util.regex.Pattern;
 @Slf4j
 public class WordUtil {
 
-
     private static final String CONVERT_PATH = "/opt/convert/OMML2MML.XSL";
     private static final String MML2TEX_PATH = "/opt/convert/mml2tex/";
     private static final String MMLTEX_PATH = "/opt/convert/mml2tex/mmltex.xsl";
 
     /**
-     * Description: 解析word：文本、图片、表格、数学公式内容
-     * author: jiacheng yang.
-     * Date: 2024/11/16 16:39
-     * Param: [inputStream]
+     * Description: 解析word：文本、图片、表格、数学公式内容 author: jiacheng yang. Date: 2024/11/16 16:39 Param: [inputStream]
      */
     public static List<String> wordAnalysisAutomation(InputStream inputStream) throws Exception {
         List<String> paragraphs = new ArrayList<>();
         XWPFDocument word = new XWPFDocument(inputStream);
         for (IBodyElement ibodyelement : word.getBodyElements()) {
-            if (ibodyelement.getElementType().equals(BodyElementType.PARAGRAPH)) {  //段落
-                XWPFParagraph paragraph = (XWPFParagraph) ibodyelement;
-                //段落解析
-                //每一个段落的图片
+            if (ibodyelement.getElementType().equals(BodyElementType.PARAGRAPH)) { // 段落
+                XWPFParagraph paragraph = (XWPFParagraph)ibodyelement;
+                // 段落解析
+                // 每一个段落的图片
                 List<XWPFPicture> sortedPictures = geSortPictures(paragraph);
                 String paragraphStr = parseParagraph(paragraph, sortedPictures);
                 if (StrUtil.isNotBlank(paragraphStr)) {
                     paragraphs.add(paragraphStr);
                 }
-            } else if (ibodyelement.getElementType().equals(BodyElementType.TABLE)) {   //表格
-                XWPFTable table = (XWPFTable) ibodyelement;
-                for (XWPFTableRow row : table.getRows()) {  //行
-                    for (XWPFTableCell cell : row.getTableCells()) {    //cell
-                        for (XWPFParagraph paragraph : cell.getParagraphs()) {  //段落
-                            //cell段落解析
-                            //每一个段落的图片
+            } else if (ibodyelement.getElementType().equals(BodyElementType.TABLE)) { // 表格
+                XWPFTable table = (XWPFTable)ibodyelement;
+                for (XWPFTableRow row : table.getRows()) { // 行
+                    for (XWPFTableCell cell : row.getTableCells()) { // cell
+                        for (XWPFParagraph paragraph : cell.getParagraphs()) { // 段落
+                            // cell段落解析
+                            // 每一个段落的图片
                             List<XWPFPicture> sortedPictures = geSortPictures(paragraph);
                             String paragraphStr = parseParagraph(paragraph, sortedPictures);
                             if (StrUtil.isNotBlank(paragraphStr)) {
@@ -106,21 +85,18 @@ public class WordUtil {
     }
 
     /**
-     * Description: 段落解析
-     * author: jiacheng yang.
-     * Date: 2024/11/16 16:59
-     * Param: [paragraph, sortedPictures]
+     * Description: 段落解析 author: jiacheng yang. Date: 2024/11/16 16:59 Param: [paragraph, sortedPictures]
      */
     public static String parseParagraph(XWPFParagraph xwpfParagraph, List<XWPFPicture> allPictures) throws Exception {
         StringBuilder result = new StringBuilder();
         CTP ctp = xwpfParagraph.getCTP();
         String xmlText = ctp.xmlText();
-        //得到根节点的值
+        // 得到根节点的值
         SAXReader saxReader = new SAXReader();
-        //将String类型的字符串转换成XML文本对象
+        // 将String类型的字符串转换成XML文本对象
         Document doc = saxReader.read(new ByteArrayInputStream(xmlText.getBytes()));
         Element root = doc.getRootElement();
-        //用xpath得到OMML节点
+        // 用xpath得到OMML节点
         List<Element> elements = root.elements();
         if (elements != null && !elements.isEmpty()) {
             for (Element ele : elements) {
@@ -132,36 +108,36 @@ public class WordUtil {
                 String xml = ele.asXML();
                 String qualifiedName = ele.getQName().getQualifiedName();
                 if (qualifiedName.equals("m:oMath")) {
-                    //xml转 mathml
+                    // xml转 mathml
                     String mathml = xmlConvertMathML(xml);
-                    //mathml转latex
+                    // mathml转latex
                     String latex = mathMLConvertLatex(mathml);
-                    //latex转图片，返回img标签
+                    // latex转图片，返回img标签
                     String imgStr = lateConvertImg(latex);
                     result.append(imgStr);
                 } else if (qualifiedName.equals("w:r")) {
-                    //处理文本和图片
+                    // 处理文本和图片
                     List<Element> runElements = ele.elements();
                     for (Element runEle : runElements) {
                         String qualifiedNameChild = runEle.getQName().getQualifiedName();
 
                         switch (qualifiedNameChild) {
                             case "w:drawing":
-                                //图片
+                                // 图片
                                 XWPFPicture pictureData = allPictures.get(0);
                                 String imgStr = readImageToOSS(pictureData.getPictureData().getData());
                                 result.append(imgStr);
                                 allPictures.remove(0);
                                 break;
                             case "w:t":
-                                //文本
+                                // 文本
                                 String runStr = runEle.getStringValue();
                                 if (StrUtil.isNotEmpty(runStr)) {
                                     result.append(runStr);
                                 }
                                 break;
                             case "w:tab":
-                                //制表符 \t
+                                // 制表符 \t
                                 result.append("&nbsp; &nbsp; &nbsp; ");
                                 break;
                         }
@@ -180,10 +156,7 @@ public class WordUtil {
     }
 
     /**
-     * Description: 上传图片到oss
-     * author: jiacheng yang.
-     * Date: 2024/11/16 17:35
-     * Param: [data]
+     * Description: 上传图片到oss author: jiacheng yang. Date: 2024/11/16 17:35 Param: [data]
      */
     private static String readImageToOSS(byte[] data) {
         String imgStr = "";
@@ -193,7 +166,8 @@ public class WordUtil {
         // try-with-resources 自动关闭资源
         try (InputStream inputStream = new ByteArrayInputStream(data)) {
             // 随机文件名
-            String path = StrUtil.format("/upload/{}/{}_{}img.jpg", DateUtil.today(), DateUtil.current(), RandomUtil.randomInt(1000000, 10000000));
+            String path = StrUtil.format("/upload/{}/{}_{}img.jpg", DateUtil.today(), DateUtil.current(),
+                RandomUtil.randomInt(1000000, 10000000));
             String realPath = AliYunProperties.ossPath + path;
 
             // 上传到OSS
@@ -209,10 +183,7 @@ public class WordUtil {
     }
 
     /**
-     * Description: latex转图片
-     * author: jiacheng yang.
-     * Date: 2024/11/16 17:28
-     * Param: [latex]
+     * Description: latex转图片 author: jiacheng yang. Date: 2024/11/16 17:28 Param: [latex]
      */
     public static String lateConvertImg(String latex) {
         String imgStr = "";
@@ -221,7 +192,7 @@ public class WordUtil {
         }
         TeXFormula formula = new TeXFormula(latex);
         TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 45);
-        //黑色字体
+        // 黑色字体
         icon.setForeground(Color.BLACK);
         int width = icon.getIconWidth();
         int height = icon.getIconHeight();
@@ -237,7 +208,8 @@ public class WordUtil {
             ImageIO.write(image, "jpg", outputStream);
             try (InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())) {
                 // 随机文件名
-                String path = StrUtil.format("/latex/{}/{}_{}latex.jpg", DateUtil.today(), DateUtil.current(), RandomUtil.randomInt(1000000, 10000000));
+                String path = StrUtil.format("/latex/{}/{}_{}latex.jpg", DateUtil.today(), DateUtil.current(),
+                    RandomUtil.randomInt(1000000, 10000000));
                 String realPath = AliYunProperties.ossPath + path;
                 // 上传到OSS
                 OssUtil.uploadFileToOss(path.substring(1), inputStream);
@@ -252,10 +224,7 @@ public class WordUtil {
     }
 
     /**
-     * Description: MathML -> LaTex
-     * author: jiacheng yang.
-     * Date: 2024/11/16 17:16
-     * Param: [mathml]
+     * Description: MathML -> LaTex author: jiacheng yang. Date: 2024/11/16 17:16 Param: [mathml]
      */
     public static String mathMLConvertLatex(String mathml) {
         // 去掉 XML 头节点
@@ -284,10 +253,7 @@ public class WordUtil {
     }
 
     /**
-     * Description: XML -> MathML
-     * author: jiacheng yang.
-     * Date: 2024/11/16 17:15
-     * Param: [xml]
+     * Description: XML -> MathML author: jiacheng yang. Date: 2024/11/16 17:15 Param: [xml]
      */
     public static String xmlConvertMathML(String xml) {
         // 进行转换的过程中需要借助这个文件,一般来说本机安装office就会有这个文件,找到就可以
@@ -295,10 +261,7 @@ public class WordUtil {
     }
 
     /**
-     * Description: xsl转换器
-     * author: jiacheng yang.
-     * Date: 2024/11/16 17:11
-     * Param: [xml]
+     * Description: xsl转换器 author: jiacheng yang. Date: 2024/11/16 17:11 Param: [xml]
      */
     @SuppressWarnings("all")
     public static String xslConvert(String xml, String xslpath, URIResolver uriResolver) {
@@ -322,12 +285,8 @@ public class WordUtil {
 
     }
 
-
     /**
-     * Description: 获取段落所有图片
-     * author: jiacheng yang.
-     * Date: 2024/11/16 16:58
-     * Param: [paragraph]
+     * Description: 获取段落所有图片 author: jiacheng yang. Date: 2024/11/16 16:58 Param: [paragraph]
      */
     public static List<XWPFPicture> geSortPictures(XWPFParagraph paragraph) {
         List<XWPFPicture> sortedPictures = new LinkedList<>();
@@ -340,7 +299,6 @@ public class WordUtil {
         }
         return sortedPictures;
     }
-
 
     public static String replaceSpacesOutsideImg(String input) {
         // 正则表达式匹配单个 <img ... /> 标签

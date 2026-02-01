@@ -1,6 +1,7 @@
 package com.lxy.system.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lxy.common.util.DateCusUtil;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -36,11 +37,11 @@ public class FeedbackVO implements Serializable {
     private Long adminId;
 
     // 创建时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     // 回复时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date replyTime;
 
     // 用户是否可见 1可见 2不可见

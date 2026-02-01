@@ -58,7 +58,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
         // 会去调用UserDetailsService.loadUserByUsername方法。AdminDetailsServiceImpl 实现了 UserDetailsService接口的
         // loadUserByUsername方法
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
+            new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
         Authentication authenticate = null;
         try {
             authenticate = authenticationManager.authenticate(authenticationToken);
@@ -67,10 +67,10 @@ public class DualTokenLoginServiceImpl implements LoginService {
             return R.fail("用户名或密码错误！");
         }
         // 如果认证通过了，使用userid生成jwt
-        StatelessUser principal = (StatelessUser) authenticate.getPrincipal();
+        StatelessUser principal = (StatelessUser)authenticate.getPrincipal();
         Long userId = principal.getUserId();
         // 生成双Token
-        TokenPair tokenPair = DualTokenUtil.generateTokenPair(userId, LogUserType.ADMIN.type);
+        TokenPair tokenPair = DualTokenUtil.generateTokenPair(userId, LogUserType.ADMIN.getType());
         // 设置ip
         tokenPair.setClientIp(dto.getClientIp());
         // 获取最大会话数量配置
@@ -94,7 +94,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
             }
             Claims claims = DualTokenUtil.parseToken(token);
             userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
-            String refreshId = (String) claims.get(PARAM_NAME_JID);
+            String refreshId = (String)claims.get(PARAM_NAME_JID);
             if (userId != -1L) {
                 String sessionKey = RedisKeyConstant.getAdminDualToken(userId);
                 // 移除会话
@@ -123,8 +123,8 @@ public class DualTokenLoginServiceImpl implements LoginService {
         // 解析刷新令牌获取用户信息
         Claims claims = DualTokenUtil.parseToken(refreshToken);
         Long userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
-        Integer userType = (Integer) claims.get(PARAM_NAME_USER_TYPE);
-        String refreshId = (String) claims.get(PARAM_NAME_JID);
+        Integer userType = (Integer)claims.get(PARAM_NAME_USER_TYPE);
+        String refreshId = (String)claims.get(PARAM_NAME_JID);
 
         // 检查会话是否存在
         String sessionKey = RedisKeyConstant.getAdminDualToken(userId);

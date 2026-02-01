@@ -5,7 +5,6 @@ import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Producer;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.model.R;
-import com.lxy.system.service.PermissionService;
 import com.lxy.system.service.redis.RedisService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +35,9 @@ public class IndexController {
 
     @Resource(name = "captchaProducerMath")
     private Producer captchaProducerMath;
+
     @Resource
     private RedisService redisService;
-    @Resource
-    private PermissionService permissionService;
 
     @RequestMapping("/")
     @ResponseBody

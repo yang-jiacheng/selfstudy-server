@@ -7,7 +7,7 @@ import java.util.concurrent.locks.LockSupport;
 /**
  * 分布式ID生成器（优化版） 核心特性： 1. 10ms时间粒度 | 2. 机器ID隔离 | 3. 无锁CAS并发控制
  */
-public class IdGenerator {
+public class IdGeneratorUtil {
 
     // 常量定义（按业务需求调整）
     private static final long MACHINE_BIT = 5; // 最大支持31台机器
@@ -17,7 +17,7 @@ public class IdGenerator {
     private static final long MACHINE_LEFT = SEQUENCE_BIT;
     private static final long TIMESTMP_LEFT = MACHINE_BIT + SEQUENCE_BIT;
     // 单例模式初始化
-    private static IdGenerator instance = new IdGenerator(0);
+    private static IdGeneratorUtil instance = new IdGeneratorUtil(0);
     // 原子化状态变量
     private final long machineId;
     private final AtomicLong sequence = new AtomicLong(0);
@@ -26,15 +26,15 @@ public class IdGenerator {
     /**
      * 构造函数（机器ID校验）
      */
-    private IdGenerator(long machineId) {
+    private IdGeneratorUtil(long machineId) {
         if (machineId > MAX_MACHINE_NUM || machineId < 0) {
             throw new IllegalArgumentException("机器ID范围: 0~" + MAX_MACHINE_NUM);
         }
         this.machineId = machineId;
     }
 
-    public static IdGenerator initDefaultInstance(int machineId) {
-        instance = new IdGenerator(machineId);
+    public static IdGeneratorUtil initDefaultInstance(int machineId) {
+        instance = new IdGeneratorUtil(machineId);
         return instance;
     }
 
@@ -53,6 +53,10 @@ public class IdGenerator {
      */
     public static Date parseIdTimestamp(long id) {
         return new Date((id >>> TIMESTMP_LEFT) * 10);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(generateId());
     }
 
     /**
@@ -110,9 +114,5 @@ public class IdGenerator {
      */
     private long getTimestamp() {
         return System.currentTimeMillis() / 10;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(generateId());
     }
 }

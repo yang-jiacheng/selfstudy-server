@@ -1,7 +1,7 @@
 package com.lxy.common.constant.dict;
 
 /**
- * 使用状态常量
+ * 验证码使用状态常量
  *
  * @author jiacheng yang.
  * @version 1.0

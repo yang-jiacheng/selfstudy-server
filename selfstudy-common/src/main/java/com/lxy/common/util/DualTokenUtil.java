@@ -131,8 +131,8 @@ public class DualTokenUtil {
         claimsMap.put(PARAM_NAME_TOKEN_TYPE, tokenType);
         claimsMap.put(PARAM_NAME_JID, jwtId);
 
-        return Jwts.builder().setClaims(claimsMap).setSubject(SUBJECT).setIssuedAt(new Date())
-            .setExpiration(expiration).signWith(SignatureAlgorithm.HS512, secretKey).compact();
+        return Jwts.builder().setClaims(claimsMap).setSubject(SUBJECT).setIssuedAt(new Date()).setExpiration(expiration)
+            .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
     /**
@@ -263,9 +263,11 @@ public class DualTokenUtil {
     }
 
     public static void main(String[] args) {
-        String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWFjaGVuZyB5YW5nLiIsImpJZCI6Ijg1NGZhNzE3ZWIwMzQ4ODhhYmE2ZGNjNTJkYjYzYWI4IiwidXNlclR5cGUiOjAsInRva2VuVHlwZSI6ImFjY2VzcyIsImV4cCI6MTc2Nzc2ODk1NywidXNlcklkIjoxLCJpYXQiOjE3Njc3NjgwNTd9.rnYlu4zZlZArAX5nuBLOHT4XUgKz9_eCY5RtbuUorWF-IHosc15SyeyrXy50COi4wZ5h0s9LSfepLVdC0ZRr4g";
+        String token =
+            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWFjaGVuZyB5YW5nLiIsImpJZCI6Ijg1NGZhNzE3ZWIwMzQ4ODhhYmE2ZGNjNTJkYjYzYWI4IiwidXNlclR5cGUiOjAsInRva2VuVHlwZSI6ImFjY2VzcyIsImV4cCI6MTc2Nzc2ODk1NywidXNlcklkIjoxLCJpYXQiOjE3Njc3NjgwNTd9.rnYlu4zZlZArAX5nuBLOHT4XUgKz9_eCY5RtbuUorWF-IHosc15SyeyrXy50COi4wZ5h0s9LSfepLVdC0ZRr4g";
         Claims claims = parseToken(token);
         System.out.println(claims);
+
     }
 
 }

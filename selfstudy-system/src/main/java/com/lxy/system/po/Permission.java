@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lxy.common.model.UiMeta;
+import com.lxy.common.util.DateCusUtil;
 import com.lxy.system.handler.ListLongTypeHandler;
 import com.lxy.system.handler.MysqlJsonTypeHandler;
 import lombok.Data;
@@ -69,14 +70,13 @@ public class Permission implements Serializable {
     /**
      * 每条记录的创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     /**
      * 每条记录的更新时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date updateTime;
-
 
 }

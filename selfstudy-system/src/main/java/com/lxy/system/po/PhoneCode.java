@@ -2,6 +2,7 @@ package com.lxy.system.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lxy.common.util.DateCusUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -31,11 +32,11 @@ public class PhoneCode implements Serializable {
     // 使用状态，字典：`use_status`
     private String useStatus;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     // 过期时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date endTime;
 
     public PhoneCode(String phone, String code, String useStatus, Date createTime, Date endTime) {

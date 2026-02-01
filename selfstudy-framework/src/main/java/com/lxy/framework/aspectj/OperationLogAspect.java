@@ -4,6 +4,7 @@ import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.lxy.common.annotation.Log;
+import com.lxy.common.constant.dict.LogStatusConstant;
 import com.lxy.common.util.JsonUtil;
 import com.lxy.framework.event.OperationLogEvent;
 import com.lxy.framework.security.util.UserIdUtil;
@@ -13,11 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -144,13 +141,13 @@ public class OperationLogAspect {
             String requestURI = request.getRequestURI();
             String method = request.getMethod();
             String title = operationLog.title();
-            Integer businessType = operationLog.businessType().type;
+            Integer businessType = operationLog.businessType().getType();
             // 用户类型
-            Integer userType = operationLog.userType().type;
-            // 操作状态（0成功 1失败）
-            int status = 0;
+            Integer userType = operationLog.userType().getType();
+            // 操作状态
+            String status = LogStatusConstant.SUCCESS;
             if (e != null) {
-                status = 1;
+                status = LogStatusConstant.FAIL;
             }
             long userId = UserIdUtil.getUserId();
             Long startTime = timeHolder.get();

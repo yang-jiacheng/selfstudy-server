@@ -2,13 +2,13 @@ package com.lxy.system.service.resources;
 
 import cn.hutool.core.date.DateUtil;
 import com.lxy.common.constant.ConfigConstant;
-import com.lxy.common.constant.StrConstant;
 import com.lxy.common.model.R;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.properties.CustomProperties;
 import com.lxy.common.util.FileUtil;
 import com.lxy.common.util.ImgConfigUtil;
 import com.lxy.common.util.OssUtil;
+import com.lxy.common.util.StringUtil;
 import com.lxy.system.service.BusinessConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class ResourcesService {
             // 日期路径
             String datePath = DateUtil.today();
             // 上传相对路径
-            String relativePath = "/upload/" + datePath + StrConstant.SLASH + fileName;
+            String relativePath = "/upload/" + datePath + StringUtil.SLASH + fileName;
             int size = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.COMPRESSION_SIZE));
             try (InputStream in0 = multipartFile.getInputStream();
                 // 图片压缩
@@ -59,10 +59,10 @@ public class ResourcesService {
                     OssUtil.uploadFileToOss(relativePath.substring(1), in1);
                 } else {
                     // 确保目录存在
-                    String saveDir = CustomProperties.uploadPath + datePath + StrConstant.SLASH;
+                    String saveDir = CustomProperties.uploadPath + datePath + StringUtil.SLASH;
                     FileUtil.judeDirExists(saveDir);
                     try (FileOutputStream fos0 =
-                        new FileOutputStream(CustomProperties.uploadPath + datePath + StrConstant.SLASH + fileName)) {
+                        new FileOutputStream(CustomProperties.uploadPath + datePath + StringUtil.SLASH + fileName)) {
                         // 将 in1 的内容写入本地文件
                         byte[] buffer = new byte[8192];
                         int len;

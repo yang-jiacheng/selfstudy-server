@@ -2,8 +2,8 @@ package com.lxy.framework.controller;
 
 import com.aliyuncs.auth.sts.AssumeRoleResponse;
 import com.lxy.common.constant.ConfigConstant;
-import com.lxy.common.model.R;
 import com.lxy.common.dto.GenerateImageDTO;
+import com.lxy.common.model.R;
 import com.lxy.common.properties.AliYunProperties;
 import com.lxy.common.util.FileUtil;
 import com.lxy.common.util.ImgConfigUtil;
@@ -14,15 +14,8 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -42,9 +35,10 @@ import java.util.Map;
 public class ResourcesController {
 
     private static final String APK_PATH = "android/studyroom/apk/";
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Resource
     private ResourcesService resourcesService;
+
     @Resource
     private BusinessConfigService businessConfigService;
 

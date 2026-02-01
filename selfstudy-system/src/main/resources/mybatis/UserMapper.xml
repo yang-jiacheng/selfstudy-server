@@ -13,7 +13,7 @@
         <result column="gender" property="gender"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
-        <result column="regist_type" property="registType"/>
+        <result column="register_type" property="registerType"/>
         <result column="address" property="address"/>
         <result column="balance" property="balance"/>
         <result column="total_duration" property="totalDuration"/>
@@ -24,13 +24,13 @@
         id
         , password, name, phone, profile_path,cover_path, gender, create_time, update_time, regist_type, address, balance,total_duration
     </sql>
-    <insert id="insertBatchUser" keyProperty="id" useGeneratedKeys="true">
-        insert into user(password, name, phone, profile_path, cover_path,gender,create_time,
-        update_time,regist_type,address,total_duration,balance)
+    <insert id="insertBatchUser" >
+        insert into user(id,password, name, phone, profile_path, cover_path,gender,create_time,
+        update_time,register_type,address,total_duration,balance)
         values
         <foreach collection="list" item="entity" separator=",">
-            (#{entity.password}, #{entity.name}, #{entity.phone}, #{entity.profilePath}, #{entity.coverPath},
-            #{entity.gender}, #{entity.createTime}, #{entity.updateTime}, #{entity.registType}, #{entity.address},
+            (#{entity.id},#{entity.password}, #{entity.name}, #{entity.phone}, #{entity.profilePath}, #{entity.coverPath},
+            #{entity.gender}, #{entity.createTime}, #{entity.updateTime}, #{entity.registerType}, #{entity.address},
             #{entity.totalDuration},#{entity.balance})
         </foreach>
 
@@ -65,9 +65,11 @@
         u.address,
         u.total_duration,
         u.create_time,
-        u.register_type
+        register_type_dict.dict_name as register_type
         FROM
-        user u
+        `user` u
+        left join sys_dict register_type_dict on register_type_dict.dict_type = 'register_type' and
+        register_type_dict.dict_value = u.register_type
         <where>
             <if test="dto.name != null and dto.name != ''">
                 and u.name like concat('%',#{dto.name},'%')

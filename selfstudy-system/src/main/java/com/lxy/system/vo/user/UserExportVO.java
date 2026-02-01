@@ -1,9 +1,9 @@
 package com.lxy.system.vo.user;
 
-import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lxy.common.annotation.ExcelHeader;
+import com.lxy.common.util.DateCusUtil;
 import lombok.Data;
 
 import java.io.Serial;
@@ -41,16 +41,15 @@ public class UserExportVO implements Serializable {
     @ExcelHeader(title = "总学习时长")
     private String totalDurationStr;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     @ExcelHeader(title = "加入时间")
     private String createTimeStr;
-    //注册类型 1。用户注册 2.后台添加
-    private Integer registerType;
 
+    // 注册类型 ，字典：`register_type`
     @ExcelHeader(title = "注册类型")
-    private String registerTypeStr;
+    private String registerType;
 
     public void setTotalDuration(Integer totalDuration) {
         this.totalDuration = totalDuration;
@@ -61,17 +60,7 @@ public class UserExportVO implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-        this.createTimeStr = DateUtil.format(createTime, DatePattern.NORM_DATETIME_MINUTE_PATTERN);
+        this.createTimeStr = DateUtil.format(createTime, DateCusUtil.YYYY_MM_DD_HH_MM);
     }
 
-    public void setRegisterType(Integer registerType) {
-        this.registerType = registerType;
-        if (registerType != null) {
-            if (registerType == 1) {
-                this.registerTypeStr = "用户注册";
-            } else if (registerType == 2) {
-                this.registerTypeStr = "后台添加";
-            }
-        }
-    }
 }

@@ -19,9 +19,21 @@ public class SysDictConstant {
      */
     public static final String REGISTER_TYPE = "register_type";
     /**
-     * 使用状态
+     * 验证码使用状态
      */
     public static final String USE_STATUS = "use_status";
+    /**
+     * 操作日志业务类型
+     */
+    public static final String LOG_BUSINESS_TYPE = "log_business_type";
+    /**
+     * 操作日志用户类型
+     */
+    public static final String LOG_USER_TYPE = "log_user_type";
+    /**
+     * 操作日志状态
+     */
+    public static final String LOG_STATUS = "log_status";
 
     private SysDictConstant() {}
 

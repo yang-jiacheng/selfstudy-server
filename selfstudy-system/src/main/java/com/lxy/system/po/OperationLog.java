@@ -2,8 +2,10 @@ package com.lxy.system.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lxy.common.util.DateCusUtil;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,45 +17,68 @@ import java.util.Date;
  */
 
 @Data
-@TableName("operation_log")
+@TableName(value = "operation_log", autoResultMap = true)
 public class OperationLog implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    // 模块标题
+    /**
+     * 模块标题
+     */
     private String title;
 
-    // 业务类型（0其它 1新增 2修改 3删除 4导入 5导出）
+    /**
+     * 业务类型：字典`log_business_type`
+     */
     private Integer businessType;
 
-    // 0后台用户 1APP用户
+    /**
+     * 用户类型：字典`log_user_type`
+     */
     private Integer userType;
 
-    // 用户id
+    /**
+     * 用户id
+     */
     private Long userId;
 
-    // 请求地址
+    /**
+     * 请求地址
+     */
     private String requestUrl;
 
-    // 请求方式
+    /**
+     * 请求方式
+     */
     private String requestMethod;
 
-    // 请求参数
+    /**
+     * 请求参数
+     */
     private String requestParams;
 
-    // 请求结果
+    /**
+     * 请求结果
+     */
     private String requestResult;
 
-    // 客端ip
+    /**
+     * 客户端ip
+     */
     private String clientIp;
 
-    // 操作状态（0成功 1失败）
-    private Integer status;
+    /**
+     * 操作状态：字典`log_status`
+     */
+    private String status;
 
-    // 请求时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    /**
+     * 请求时间
+     */
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     private String durationStr;
@@ -61,7 +86,7 @@ public class OperationLog implements Serializable {
     public OperationLog() {}
 
     public OperationLog(String title, Integer businessType, Integer userType, Long userId, String requestUrl,
-        String requestMethod, String requestParams, String requestResult, String clientIp, Integer status,
+        String requestMethod, String requestParams, String requestResult, String clientIp, String status,
         String durationStr) {
         this.title = title;
         this.businessType = businessType;

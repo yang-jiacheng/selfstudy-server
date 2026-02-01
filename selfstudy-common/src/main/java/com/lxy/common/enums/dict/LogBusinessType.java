@@ -1,5 +1,7 @@
 package com.lxy.common.enums.dict;
 
+import lombok.Getter;
+
 /**
  * 操作日志业务类型
  *
@@ -8,12 +10,13 @@ package com.lxy.common.enums.dict;
  * @since 2022/12/20 10:49
  */
 
+@Getter
 public enum LogBusinessType {
 
     OTHER(0, "其他"), INSERT(1, "新增"), UPDATE(2, "修改"), DELETE(3, "删除"), IMPORT(4, "导入"), EXPORT(5, "导出");
 
-    public final Integer type;
-    public final String name;
+    private final Integer type;
+    private final String name;
 
     LogBusinessType(Integer type, String name) {
         this.type = type;
@@ -22,7 +25,7 @@ public enum LogBusinessType {
 
     public static String getName(Integer type) {
         for (LogBusinessType businessType : LogBusinessType.values()) {
-            if (businessType.type.equals(type)) {
+            if (businessType.getType().equals(type)) {
                 return businessType.name;
             }
         }

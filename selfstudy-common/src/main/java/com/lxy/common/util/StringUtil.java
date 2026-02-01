@@ -1,14 +1,14 @@
-package com.lxy.common.constant;
+package com.lxy.common.util;
 
 /**
- * 字符串常量
+ * 字符串工具
  *
  * @author jiacheng yang.
  * @version 1.0
  * @since 2025/12/30 15:54
  */
 
-public class StrConstant {
+public class StringUtil {
 
     /**
      * 空字符串

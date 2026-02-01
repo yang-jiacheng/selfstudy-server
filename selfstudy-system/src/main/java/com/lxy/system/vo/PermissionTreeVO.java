@@ -3,6 +3,7 @@ package com.lxy.system.vo;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lxy.common.model.UiMeta;
+import com.lxy.common.util.DateCusUtil;
 import com.lxy.common.vo.base.BaseTreeVO;
 import com.lxy.system.handler.MysqlJsonTypeHandler;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class PermissionTreeVO extends BaseTreeVO<PermissionTreeVO> {
     @Serial
     private static final long serialVersionUID = -3269124634376924194L;
 
-    //权限类型：1目录 2菜单 3按钮
+    // 权限类型：1目录 2菜单 3按钮
     private Integer type;
 
     // 权限名称
@@ -43,7 +44,7 @@ public class PermissionTreeVO extends BaseTreeVO<PermissionTreeVO> {
 
     private Integer sort;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
 }

@@ -2,6 +2,7 @@ package com.lxy.system.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lxy.common.util.DateCusUtil;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -37,11 +38,11 @@ public class AdminInfo implements Serializable {
     private String profilePath;
 
     // 修改时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date updateTime;
 
     // 创建时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @JsonFormat(pattern = DateCusUtil.YYYY_MM_DD_HH_MM_SS, locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
     // 状态 1正常 2禁用
