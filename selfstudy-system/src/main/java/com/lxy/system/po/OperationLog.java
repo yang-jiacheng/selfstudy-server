@@ -33,12 +33,12 @@ public class OperationLog implements Serializable {
     /**
      * 业务类型：字典`log_business_type`
      */
-    private Integer businessType;
+    private String businessType;
 
     /**
      * 用户类型：字典`log_user_type`
      */
-    private Integer userType;
+    private String userType;
 
     /**
      * 用户id
@@ -85,7 +85,7 @@ public class OperationLog implements Serializable {
 
     public OperationLog() {}
 
-    public OperationLog(String title, Integer businessType, Integer userType, Long userId, String requestUrl,
+    public OperationLog(String title, String businessType, String userType, Long userId, String requestUrl,
         String requestMethod, String requestParams, String requestResult, String clientIp, String status,
         String durationStr) {
         this.title = title;

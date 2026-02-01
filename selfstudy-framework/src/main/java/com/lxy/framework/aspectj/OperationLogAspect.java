@@ -141,9 +141,9 @@ public class OperationLogAspect {
             String requestURI = request.getRequestURI();
             String method = request.getMethod();
             String title = operationLog.title();
-            Integer businessType = operationLog.businessType().getType();
+            String businessType = operationLog.businessType().getType();
             // 用户类型
-            Integer userType = operationLog.userType().getType();
+            String userType = operationLog.userType().getType();
             // 操作状态
             String status = LogStatusConstant.SUCCESS;
             if (e != null) {

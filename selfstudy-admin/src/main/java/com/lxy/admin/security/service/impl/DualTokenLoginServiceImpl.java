@@ -123,7 +123,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
         // 解析刷新令牌获取用户信息
         Claims claims = DualTokenUtil.parseToken(refreshToken);
         Long userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
-        Integer userType = (Integer)claims.get(PARAM_NAME_USER_TYPE);
+        String userType = (String)claims.get(PARAM_NAME_USER_TYPE);
         String refreshId = (String)claims.get(PARAM_NAME_JID);
 
         // 检查会话是否存在

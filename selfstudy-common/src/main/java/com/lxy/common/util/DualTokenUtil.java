@@ -98,7 +98,7 @@ public class DualTokenUtil {
      * @param userType 用户类型
      * @return TokenPair
      */
-    public static TokenPair generateTokenPair(Long userId, Integer userType) {
+    public static TokenPair generateTokenPair(Long userId, String userType) {
         Date now = new Date();
         Date accessExpires = DateUtil.offsetMinute(now, ACCESS_TOKEN_EXPIRE_MINUTES);
         Date refreshExpires = DateUtil.offsetDay(now, REFRESH_TOKEN_EXPIRE_DAYS);
@@ -121,7 +121,7 @@ public class DualTokenUtil {
     /**
      * 生成单个Token
      */
-    private static String generateToken(String jwtId, Long userId, Integer userType, String tokenType,
+    private static String generateToken(String jwtId, Long userId, String userType, String tokenType,
         Date expiration) {
         String secretKey = getSecretKey(userId);
 

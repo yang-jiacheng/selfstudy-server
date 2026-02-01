@@ -13,17 +13,17 @@ import lombok.Getter;
 @Getter
 public enum LogUserType {
 
-    ADMIN(0, "后台用户"), USER(1, "APP用户");
+    ADMIN("0", "后台用户"), USER("1", "APP用户");
 
-    private final Integer type;
+    private final String type;
     private final String name;
 
-    LogUserType(Integer type, String name) {
+    LogUserType(String type, String name) {
         this.type = type;
         this.name = name;
     }
 
-    public static String getName(Integer type) {
+    public static String getName(String type) {
         for (LogUserType logUserType : LogUserType.values()) {
             if (logUserType.getType().equals(type)) {
                 return logUserType.name;

@@ -54,7 +54,7 @@ public class TokenPair implements Serializable {
     /**
      * 用户类型
      */
-    private Integer userType;
+    private String userType;
 
     /**
      * 创建时间

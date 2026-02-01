@@ -13,17 +13,17 @@ import lombok.Getter;
 @Getter
 public enum LogBusinessType {
 
-    OTHER(0, "其他"), INSERT(1, "新增"), UPDATE(2, "修改"), DELETE(3, "删除"), IMPORT(4, "导入"), EXPORT(5, "导出");
+    OTHER("0", "其他"), INSERT("1", "新增"), UPDATE("2", "修改"), DELETE("3", "删除"), IMPORT("4", "导入"), EXPORT("5", "导出");
 
-    private final Integer type;
+    private final String type;
     private final String name;
 
-    LogBusinessType(Integer type, String name) {
+    LogBusinessType(String type, String name) {
         this.type = type;
         this.name = name;
     }
 
-    public static String getName(Integer type) {
+    public static String getName(String type) {
         for (LogBusinessType businessType : LogBusinessType.values()) {
             if (businessType.getType().equals(type)) {
                 return businessType.name;
