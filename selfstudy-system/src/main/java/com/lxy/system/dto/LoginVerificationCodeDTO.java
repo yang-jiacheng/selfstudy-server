@@ -2,6 +2,7 @@ package com.lxy.system.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 验证码登录DTO
@@ -11,6 +12,7 @@ import lombok.Data;
  * @since 2025/11/19 16:16
  */
 
+@NoArgsConstructor
 @Data
 public class LoginVerificationCodeDTO {
 
@@ -24,5 +26,10 @@ public class LoginVerificationCodeDTO {
      * 设备类型
      */
     private String device;
+
+    public LoginVerificationCodeDTO(String verificationCode, String phone) {
+        this.verificationCode = verificationCode;
+        this.phone = phone;
+    }
 
 }

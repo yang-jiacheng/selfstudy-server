@@ -109,7 +109,7 @@ public class LoginServiceImpl implements LoginService {
             userService.save(user);
         }
         LoginPasswordDTO loginPasswordDTO =
-            new LoginPasswordDTO(UserConstant.DEF_PASSWORD, phone, AuthConstant.DEVICE_ANDROID);
+            new LoginPasswordDTO(user.getPassword(), phone, AuthConstant.DEVICE_ANDROID);
         return this.login(loginPasswordDTO);
     }
 

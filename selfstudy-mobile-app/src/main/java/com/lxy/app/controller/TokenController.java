@@ -45,8 +45,8 @@ public class TokenController {
      * @since 2025/02/20 10:17
      */
     @PostMapping("/login")
-    public R<Object> login(@RequestBody @Valid LoginPasswordDTO dto) {
-        dto.setDevice(AuthConstant.DEVICE_ANDROID);
+    public R<Object> login(@RequestParam(value = "phone") String phone, @RequestParam(value = "password") String password) {
+        LoginPasswordDTO dto = new LoginPasswordDTO(password, phone, AuthConstant.DEVICE_ANDROID);
         String token = loginService.login(dto);
         return R.ok(token);
     }
@@ -58,8 +58,9 @@ public class TokenController {
      * @since 2025/02/20 10:16
      */
     @PostMapping("/loginByVerificationCode")
-    public R<Object> loginByVerificationCode(@RequestBody @Valid LoginVerificationCodeDTO dto) {
-        String token = loginService.loginByVerificationCode(dto);
+    public R<Object> loginByVerificationCode(@RequestParam(value = "phone") String phone,
+                                             @RequestParam(value = "verificationCode") String verificationCode) {
+        String token = loginService.loginByVerificationCode(new LoginVerificationCodeDTO(verificationCode, phone));
         return R.ok(token);
     }
 
