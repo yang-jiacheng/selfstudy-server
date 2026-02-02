@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -22,9 +23,10 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     private static final Logger logger = LoggerFactory.getLogger(AccessDeniedHandlerImpl.class);
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response,
+        AccessDeniedException accessDeniedException) throws IOException, ServletException {
         logger.error("权限不足异常：{}", request.getRequestURI(), accessDeniedException);
-        String result = JsonUtil.toJson(R.fail(403, "禁止访问此资源!"));
+        String result = JsonUtil.toJson(R.fail(HttpStatus.FORBIDDEN.value(), "禁止访问此资源!"));
         WebUtil.renderString(response, result);
     }
 

@@ -14,9 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Excel导入处理器
- * 使用注解驱动字段映射（@ExcelHeader）+ 钩子方法处理特殊逻辑
- * 支持不同实体类的导入，每个实体类可重写 handleCell 和 handleRowEnd 方法
+ * Excel导入处理器 使用注解驱动字段映射（@ExcelHeader）+ 钩子方法处理特殊逻辑 支持不同实体类的导入，每个实体类可重写 handleCell 和 handleRowEnd 方法
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -83,7 +81,7 @@ public abstract class BaseSheetHandler<T> implements SheetHandlerResult<T> {
             // 每一行创建新的实体对象
             currentObj = clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            throw new ServiceException("创建对象失败");
+            throw new ServiceException("创建对象失败", e);
         }
     }
 
@@ -91,7 +89,6 @@ public abstract class BaseSheetHandler<T> implements SheetHandlerResult<T> {
     public void cell(String cellName, String cellValue, XSSFComment xssfComment) {
         // 获取列字母（例如 "A"、"B"）
         String letter = cellName.substring(0, 1);
-
         // 如果 currentObj == null，则认为是表头行（rowIndex == 0）
         if (currentObj == null) {
             // 保护：忽略空表头单元格
@@ -102,20 +99,17 @@ public abstract class BaseSheetHandler<T> implements SheetHandlerResult<T> {
             titleLetterMap.put(letter, cellValue);
             return;
         }
-
         // 数据行：根据列字母找到对应的表头名称，再找到对应的字段，最后赋值
         String title = titleLetterMap.get(letter);
         if (title == null) {
             // 无对应表头，忽略此单元格（可能是多余列）
             return;
         }
-
         Field field = headerFieldMap.get(title);
         if (field == null) {
             // 实体没有映射到这个表头，忽略
             return;
         }
-
         // 调用钩子方法，子类可以重写实现特殊逻辑
         handleCell(currentObj, field, cellValue);
     }
@@ -123,7 +117,7 @@ public abstract class BaseSheetHandler<T> implements SheetHandlerResult<T> {
     @Override
     public void endRow(int rowIndex) {
         if (currentObj != null) {
-            //导入对象必有 rowIndex 和 sheetIndex 字段，用反射赋值
+            // 导入对象必有 rowIndex 和 sheetIndex 字段，用反射赋值
             ReflectUtil.setFieldValue(currentObj, ExcelConstant.ROW_INDEX, rowIndex);
             ReflectUtil.setFieldValue(currentObj, ExcelConstant.SHEET_INDEX, sheetIndex);
             // 钩子方法，处理默认值等
@@ -134,31 +128,23 @@ public abstract class BaseSheetHandler<T> implements SheetHandlerResult<T> {
     }
 
     /**
-     * 钩子方法：处理单元格值
-     * 默认实现：直接赋值
-     * 子类可重写，如密码加密、日期格式转换等
+     * 钩子方法：处理单元格值 默认实现：直接赋值 子类可重写，如密码加密、日期格式转换等
      *
-     * @param obj       当前行对象
-     * @param field     当前字段
+     * @param obj 当前行对象
+     * @param field 当前字段
      * @param cellValue 单元格值
      */
     protected void handleCell(T obj, Field field, String cellValue) {
         try {
             field.set(obj, cellValue);
         } catch (IllegalAccessException e) {
-            throw new ServiceException("设置字段值失败: " + field.getName());
+            throw new ServiceException("设置字段值失败: " + field.getName(), e);
         }
     }
 
     /**
-     * 钩子方法：行结束处理
-     * 默认实现为空，子类可重写处理：
-     * - 默认值
-     * - sheetIndex
-     * - 时间字段填充
-     * - 特殊字段逻辑
+     * 钩子方法：行结束处理 默认实现为空，子类可重写处理： - 默认值 - sheetIndex - 时间字段填充 - 特殊字段逻辑
      */
-    protected void handleRowEnd(T obj) {
-    }
+    protected void handleRowEnd(T obj) {}
 
 }

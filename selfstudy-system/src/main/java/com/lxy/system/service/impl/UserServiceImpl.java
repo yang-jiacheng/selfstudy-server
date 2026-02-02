@@ -37,7 +37,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -332,12 +336,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         protected void handleCell(UserImportVO obj, Field field, String cellValue) {
             try {
                 String fieldName = field.getName();
-
                 // 处理换行符
                 if (StrUtil.isNotEmpty(cellValue)) {
                     cellValue = cellValue.replace("\n", "<br>").replace("\r", "<br>");
                 }
-
                 // 密码字段需要加密
                 if ("password".equals(fieldName)) {
                     if (StrUtil.isNotEmpty(cellValue)) {
@@ -348,7 +350,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     field.set(obj, cellValue);
                 }
             } catch (IllegalAccessException e) {
-                throw new ServiceException("设置字段值失败: " + field.getName());
+                throw new ServiceException("设置字段值失败: " + field.getName(), e);
             }
         }
 

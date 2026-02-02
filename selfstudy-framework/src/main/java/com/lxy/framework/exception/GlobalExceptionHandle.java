@@ -1,11 +1,11 @@
 package com.lxy.framework.exception;
 
 import cn.hutool.core.util.StrUtil;
-import com.lxy.common.model.R;
 import com.lxy.common.exception.ServiceException;
+import com.lxy.common.model.R;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -23,15 +23,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @since 2022/11/18 9:54
  */
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandle {
-
-    private final static Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandle.class);
 
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
     public R<Object> methodNotSupportedException(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
         String msg = StrUtil.format("请求方法不支持 {}, 请求地址为 {}", e.getMethod(), request.getRequestURI());
-        LOG.error(msg, e);
+        log.error(msg, e);
         return R.fail(msg);
     }
 
@@ -39,7 +38,7 @@ public class GlobalExceptionHandle {
     public R<Object> requestParameterException(MissingServletRequestParameterException e, HttpServletRequest request) {
         String msg = StrUtil.format("请求参数错误,参数类型为 {} 的必需请求参数 {} 不存在, 请求地址为 {}", e.getParameterType(),
             e.getParameterName(), request.getRequestURI());
-        LOG.error(msg, e);
+        log.error(msg, e);
         return R.fail(msg);
     }
 
@@ -55,15 +54,14 @@ public class GlobalExceptionHandle {
             sb.append(StrUtil.format("[字段: {} 错误信息: {}] ", error.getField(), error.getDefaultMessage()));
         }
         String msg = StrUtil.format("{}，请求地址为 {}", sb.toString(), request.getRequestURI());
-
-        LOG.error(msg, e);
+        log.error(msg, e);
         return R.fail(msg);
     }
 
     @ExceptionHandler({NullPointerException.class})
     public R<Object> handleNullPointerException(NullPointerException e, HttpServletRequest request) {
         String msg = StrUtil.format("空指针错误,请求地址为 {}", request.getRequestURI());
-        LOG.error(msg, e);
+        log.error(msg, e);
         return R.fail(msg);
     }
 
@@ -71,14 +69,14 @@ public class GlobalExceptionHandle {
     public R<Object> handleAuthCredentialsMissing(AuthenticationCredentialsNotFoundException ex,
         HttpServletRequest request) {
         String msg = StrUtil.format("未认证访问受权限保护的资源 {}", request.getRequestURI());
-        LOG.error(msg, ex);
-        return R.fail("禁止访问此资源!");
+        log.error(msg, ex);
+        return R.fail(HttpStatus.FORBIDDEN.value(), "禁止访问此资源!");
     }
 
     @ExceptionHandler(ServiceException.class)
     public R<Object> handleServiceException(ServiceException exception, HttpServletRequest request) {
         String msg = StrUtil.format("业务异常: {}, 请求地址为 {}", exception.getMessage(), request.getRequestURI());
-        LOG.error(msg, exception);
+        log.error(msg, exception);
         return R.fail(exception.getMessage());
     }
 
