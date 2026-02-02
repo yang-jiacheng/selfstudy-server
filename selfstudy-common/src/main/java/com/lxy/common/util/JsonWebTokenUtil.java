@@ -85,7 +85,7 @@ public class JsonWebTokenUtil {
         }
         // 对JWT进行解码后获得有效载荷
         String payload = getPayload(accessToken);
-        logger.debug("payload: " + payload);
+        logger.debug("payload: {}", payload);
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> claimsUnSign = null;
         try {
@@ -94,16 +94,8 @@ public class JsonWebTokenUtil {
             log.error("解析JWT失败", e);
             return null;
         }
-
-        long userId = 0;
         Object value = claimsUnSign.get(AuthConstant.PARAM_NAME_USER_ID);
-        if (value != null) {
-            if (value instanceof Integer) {
-                userId = (int)value;
-            } else if (value instanceof String) {
-                userId = Integer.parseInt((String)value);
-            }
-        }
+        Long userId = ((Number)value).longValue();
 
         // 获取用户的密钥
         String secretKey = getSecretKey(userId);
