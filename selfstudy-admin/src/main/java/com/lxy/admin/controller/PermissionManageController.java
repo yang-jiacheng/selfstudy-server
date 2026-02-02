@@ -29,6 +29,7 @@ public class PermissionManageController {
     @Resource
     private PermissionService permissionService;
 
+    @PreAuthorize("hasAuthority('systemManage:permissionManage:list')")
     @PostMapping(value = "/getPermissionList", produces = "application/json")
     public R<List<Permission>> getPermissionList() {
         List<Permission> list = permissionService.list();
@@ -41,12 +42,14 @@ public class PermissionManageController {
      * @author jiacheng yang.
      * @since 2025/4/20 1:16
      */
+    @PreAuthorize("hasAuthority('systemManage:permissionManage:list')")
     @PostMapping(value = "/getPermissionTree", produces = "application/json")
     public R<List<PermissionTreeVO>> getPermissionTree() {
         List<PermissionTreeVO> tree = permissionService.getPermissionTree();
         return R.ok(tree);
     }
 
+    @PreAuthorize("hasAuthority('systemManage:permissionManage:save')")
     @Log(title = "编辑权限", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/saveOrUpdatePermission", produces = "application/json")
     public R<Object> saveOrUpdatePermission(@RequestBody Permission permission) {
@@ -54,6 +57,7 @@ public class PermissionManageController {
         return r;
     }
 
+    @PreAuthorize("hasAuthority('systemManage:permissionManage:delete')")
     @Log(title = "删除权限", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/removePermission", produces = "application/json")
     public R<Object> removePermission(@RequestParam("id") Long id) {

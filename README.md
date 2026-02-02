@@ -157,14 +157,13 @@ selfstudy-server
 
 **Admin Backend：** http://115.29.185.30/studyRoomAdminWeb/#/
 
-**Demo Accounts：**
+**Demo Account：**
 
-- Administrator：`yjc123` / `123456`
-- Other Roles：`xiuyu123` / `123456`
+`test123` / `123456`
+> Note: The demo account only has query permission
 
-**Android Client Download：** https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/android/studyroom/apk/studyroom-1.0.6-7-0125.apk
+**Android Client Download：** [Click to download](https://selfstudy-server.oss-cn-hangzhou.aliyuncs.com/android/studyroom/apk/studyroom-1.0.6-7-0125.apk)
 
-**Mobile Demo Account：** `17508660924` / `123456`
 
 #### 📱 Feature Preview
 

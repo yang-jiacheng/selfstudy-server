@@ -45,12 +45,14 @@ public class RoleManageController {
      * @author jiacheng yang.
      * @since 2025/6/13 10:26
      */
+    @PreAuthorize("hasAuthority('systemManage:roleManage:list')")
     @PostMapping(value = "/getRolePageList", produces = "application/json")
     public R<Page<Role>> getRolePageList(@RequestBody RolePageDTO pageDTO) {
         Page<Role> pg = roleService.getRolePageList(pageDTO);
         return R.ok(pg);
     }
 
+    @PreAuthorize("hasAuthority('systemManage:roleManage:list')")
     @PostMapping(value = "/getRoleRecords", produces = "application/json")
     public R<CollResult<LabelValueVO>> getRoleRecords() {
         List<Role> list = roleService.list();
@@ -67,6 +69,7 @@ public class RoleManageController {
      * @author jiacheng yang.
      * @since 2025/6/13 10:47
      */
+    @PreAuthorize("hasAuthority('systemManage:roleManage:delete')")
     @Log(title = "删除角色", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/removeRoleById", produces = "application/json")
     public R<Object> removeRoleById(@RequestParam("id") Long id) {
@@ -80,6 +83,7 @@ public class RoleManageController {
      * @author jiacheng yang.
      * @since 2025/6/13 10:44
      */
+    @PreAuthorize("hasAuthority('systemManage:roleManage:list')")
     @PostMapping(value = "/getRoleById", produces = "application/json")
     public R<Map<String, Object>> getRoleById(@RequestParam("id") Long id) {
         Map<String, Object> map = authService.getRoleDetail(id);
@@ -92,6 +96,7 @@ public class RoleManageController {
      * @author jiacheng yang.
      * @since 2025/6/13 10:44
      */
+    @PreAuthorize("hasAuthority('systemManage:roleManage:save')")
     @Log(title = "编辑角色", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
     @PostMapping(value = "/addOrUpdateRole", produces = "application/json")
     public R<Long> addOrUpdateRole(@RequestBody @Valid RoleEditDTO roleEditDTO) {
