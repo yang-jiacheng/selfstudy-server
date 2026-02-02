@@ -41,12 +41,12 @@ The platform offers a variety of study modes. Students can create or join public
 
 jdk 17+
 
-- Core Framework：[Spring Boot 3.4.5](https://github.com/spring-projects/spring-boot)
+- Core Framework：[Spring Boot 3.5.7](https://github.com/spring-projects/spring-boot)
 - Security Framework：[Spring Security](https://github.com/spring-projects/spring-security)
 - ORM Framework：[Mybatis Plus 3.5.7](https://github.com/baomidou/mybatis-plus)
-- Database：[MySQL 8.0](https://github.com/mysql/mysql-server)
+- Database：[MySQL 8.0.36](https://github.com/mysql/mysql-server)
 - NoSQL Cache：[Redis 6.2](https://github.com/redis/redis)
-- Message Queue：[RabbitMQ 3.10](https://github.com/rabbitmq/rabbitmq-server)
+- Message Queue：[RabbitMQ 4.1.0](https://github.com/rabbitmq/rabbitmq-server)
 
 ### 4. Cloud Services
 

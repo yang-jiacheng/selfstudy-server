@@ -41,12 +41,12 @@
 
 jdk 17+
 
-- 核心框架：[Spring Boot 3.4.5](https://github.com/spring-projects/spring-boot)
+- 核心框架：[Spring Boot 3.5.7](https://github.com/spring-projects/spring-boot)
 - 安全框架：[Spring Security](https://github.com/spring-projects/spring-security)
 - ORM 框架：[Mybatis Plus 3.5.7](https://github.com/baomidou/mybatis-plus)
-- 数据库：[MySQL 8.0](https://github.com/mysql/mysql-server)
+- 数据库：[MySQL 8.0.36](https://github.com/mysql/mysql-server)
 - NoSQL 缓存：[Redis 6.2](https://github.com/redis/redis)
-- 消息队列：[RabbitMQ 3.10](https://github.com/rabbitmq/rabbitmq-server)
+- 消息队列：[RabbitMQ 4.1.0](https://github.com/rabbitmq/rabbitmq-server)
 
 ### 4. 云服务
 
