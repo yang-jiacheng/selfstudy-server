@@ -3,6 +3,7 @@ package com.lxy.app.security.filter;
 import com.lxy.common.constant.AuthConstant;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.constant.RedisKeyConstant;
+import com.lxy.common.util.DualTokenUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.common.util.LogUtil;
 import com.lxy.framework.security.domain.StatelessUser;
@@ -20,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+
+import static com.lxy.common.util.DualTokenUtil.PARAM_NAME_USER_ID;
 
 /**
  * TODO
@@ -54,15 +57,8 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
             return;
         }
         // 解析token
-        Long userId = null;
-        try {
-            Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
-            userId = (Long)claims.get("userId");
-        } catch (Exception e) {
-            logger.error("token解析失败", e);
-            filterChain.doFilter(request, response);
-            return;
-        }
+        Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
+        Long userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
         // 一个号在线数
         int onlineNum = Integer.parseInt(businessConfigService.getBusinessConfigValue(ConfigConstant.APP_HAS_NUM));
         // 在线时长

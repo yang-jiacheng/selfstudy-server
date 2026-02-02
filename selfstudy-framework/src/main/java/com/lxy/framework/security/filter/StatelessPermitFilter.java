@@ -16,8 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.lxy.common.util.DualTokenUtil.TOKEN_NAME_ADMIN;
-import static com.lxy.common.util.DualTokenUtil.TOKEN_NAME_APP;
+import static com.lxy.common.util.DualTokenUtil.*;
 
 /**
  * TODO
@@ -53,16 +52,9 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
             return;
         }
         // 解析token
-        Long userId = null;
-        try {
-            Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
-            userId = (Long)claims.get("userId");
-        } catch (Exception e) {
-            LOG.error("解析token失败", e);
-            // 放行
-            filterChain.doFilter(request, response);
-            return;
-        }
+        Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
+        Long userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
+
         String loginStatusKey = loginUserType.equals(LogUserType.ADMIN.getType())
             ? RedisKeyConstant.getAdminInfo(userId) : RedisKeyConstant.getLoginStatus(userId);
 

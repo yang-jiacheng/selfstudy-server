@@ -8,6 +8,7 @@ import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.constant.SmsConstant;
 import com.lxy.common.constant.UserConstant;
 import com.lxy.common.constant.dict.RegisterTypeConstant;
+import com.lxy.common.util.DualTokenUtil;
 import com.lxy.system.dto.LoginPasswordDTO;
 import com.lxy.system.dto.LoginVerificationCodeDTO;
 import com.lxy.common.exception.ServiceException;
@@ -31,6 +32,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+
+import static com.lxy.common.util.DualTokenUtil.PARAM_NAME_USER_ID;
 
 /**
  * app登录服务 实现类
@@ -115,13 +118,8 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public void logout(String token) {
-        Long userId = -1L;
-        try {
-            Claims claims = JsonWebTokenUtil.getClaimsSign(token);
-            userId = (Long)claims.get("userId");
-        } catch (Exception e) {
-            logger.error("token解析失败", e);
-        }
+        Claims claims = JsonWebTokenUtil.getClaimsSign(token);
+        Long userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
         if (userId != -1) {
             String key = RedisKeyConstant.getLoginStatus(userId);
             // 移除登录状态
