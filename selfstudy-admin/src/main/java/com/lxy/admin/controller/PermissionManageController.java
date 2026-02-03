@@ -2,7 +2,7 @@ package com.lxy.admin.controller;
 
 import com.lxy.common.annotation.Log;
 import com.lxy.common.enums.dict.LogBusinessType;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.model.R;
 import com.lxy.system.po.Permission;
 import com.lxy.system.service.PermissionService;
@@ -50,7 +50,7 @@ public class PermissionManageController {
     }
 
     @PreAuthorize("hasAuthority('systemManage:permissionManage:save')")
-    @Log(title = "编辑权限", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "编辑权限", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     @PostMapping(value = "/saveOrUpdatePermission", produces = "application/json")
     public R<Object> saveOrUpdatePermission(@RequestBody Permission permission) {
         R<Object> r = permissionService.saveOrUpdatePermission(permission);
@@ -58,7 +58,7 @@ public class PermissionManageController {
     }
 
     @PreAuthorize("hasAuthority('systemManage:permissionManage:delete')")
-    @Log(title = "删除权限", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
+    @Log(title = "删除权限", businessType = LogBusinessType.DELETE, userType = UserType.ADMIN)
     @PostMapping(value = "/removePermission", produces = "application/json")
     public R<Object> removePermission(@RequestParam("id") Long id) {
         permissionService.removePermission(id);

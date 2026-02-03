@@ -3,7 +3,7 @@ package com.lxy.admin.controller;
 import com.lxy.common.annotation.Log;
 import com.lxy.common.dto.PageDTO;
 import com.lxy.common.enums.dict.LogBusinessType;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.model.PageResult;
 import com.lxy.common.model.R;
 import com.lxy.framework.security.util.UserIdUtil;
@@ -46,7 +46,7 @@ public class ObjectStorageManageController {
      */
     @PreAuthorize("hasAuthority('objectStorageManage:save')")
     @PostMapping(value = "/saveObjectStorage", produces = "application/json")
-    @Log(title = "保存文件", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "保存文件", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     public R<Object> saveObjectStorage(@RequestBody @Valid ObjectStorageDTO objectStorageDTO) {
         long adminId = UserIdUtil.getUserId();
         objectStorageService.saveObjectStorage(objectStorageDTO, adminId);
@@ -58,7 +58,7 @@ public class ObjectStorageManageController {
      */
     @PreAuthorize("hasAuthority('objectStorageManage:delete')")
     @PostMapping(value = "/deleteObjectStorage", produces = "application/json")
-    @Log(title = "保存文件", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
+    @Log(title = "保存文件", businessType = LogBusinessType.DELETE, userType = UserType.ADMIN)
     public R<Object> deleteObjectStorage(@RequestParam("id") Long id) {
         objectStorageService.deleteObjectStorage(id);
         return R.ok();

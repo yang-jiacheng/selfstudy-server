@@ -1,17 +1,16 @@
 package com.lxy.app.controller;
 
 import com.lxy.app.security.service.LoginService;
-import com.lxy.common.constant.AuthConstant;
+import com.lxy.common.constant.DeviceTypeConstant;
 import com.lxy.common.model.R;
+import com.lxy.common.util.DualTokenUtil;
 import com.lxy.system.dto.LoginPasswordDTO;
 import com.lxy.system.dto.LoginVerificationCodeDTO;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.system.service.PhoneCodeService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +45,7 @@ public class TokenController {
      */
     @PostMapping("/login")
     public R<Object> login(@RequestParam(value = "phone") String phone, @RequestParam(value = "password") String password) {
-        LoginPasswordDTO dto = new LoginPasswordDTO(password, phone, AuthConstant.DEVICE_ANDROID);
+        LoginPasswordDTO dto = new LoginPasswordDTO(password, phone, DeviceTypeConstant.DEVICE_ANDROID);
         String token = loginService.login(dto);
         return R.ok(token);
     }
@@ -85,7 +84,7 @@ public class TokenController {
      */
     @PostMapping("/logout")
     public R<Object> logout(HttpServletRequest request) {
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, AuthConstant.TOKEN_NAME_APP);
+        String accessToken = JsonWebTokenUtil.getAccessToken(request, DualTokenUtil.TOKEN_NAME_APP);
         loginService.logout(accessToken);
         return R.ok();
     }

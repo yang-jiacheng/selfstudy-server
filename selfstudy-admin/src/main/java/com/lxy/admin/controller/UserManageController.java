@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.common.annotation.Log;
 import com.lxy.common.enums.dict.LogBusinessType;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.model.R;
 import com.lxy.common.util.OssUtil;
 import com.lxy.common.util.excel.ExcelUtil;
@@ -57,7 +57,7 @@ public class UserManageController {
     }
 
     @PostMapping(value = "/saveUser", produces = "application/json")
-    @Log(title = "保存用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "保存用户", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     @PreAuthorize("hasAuthority('userManage:save')")
     public R<Object> saveUser(@RequestBody @NotNull User user) {
         String phone = user.getPhone();
@@ -72,7 +72,7 @@ public class UserManageController {
     }
 
     @PostMapping(value = "/removeUserByIds", produces = "application/json")
-    @Log(title = "批量删除用户", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
+    @Log(title = "批量删除用户", businessType = LogBusinessType.DELETE, userType = UserType.ADMIN)
     @PreAuthorize("hasAuthority('userManage:deleteBatch')")
     public R<Object> removeUserByIds(@RequestBody @NotEmpty List<Long> ids) {
         userStatisticsService.removeUserByIds(ids);
@@ -80,7 +80,7 @@ public class UserManageController {
     }
 
     @PostMapping(value = "/exportUserInExcel")
-    @Log(title = "导出用户信息", businessType = LogBusinessType.EXPORT, userType = LogUserType.ADMIN)
+    @Log(title = "导出用户信息", businessType = LogBusinessType.EXPORT, userType = UserType.ADMIN)
     @PreAuthorize("hasAuthority('userManage:export')")
     public void exportUserInExcel(@RequestBody UserPageDTO dto, HttpServletResponse response) {
         List<UserExportVO> list = userService.exportUserInExcel(dto);
@@ -94,7 +94,7 @@ public class UserManageController {
     }
 
     @PostMapping(value = "/importUsersInExcel")
-    @Log(title = "导入用户", businessType = LogBusinessType.IMPORT, userType = LogUserType.ADMIN)
+    @Log(title = "导入用户", businessType = LogBusinessType.IMPORT, userType = UserType.ADMIN)
     @PreAuthorize("hasAuthority('userManage:import')")
     public R<Object> importUsersInExcel(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         if (file.isEmpty()) {

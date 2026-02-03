@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.admin.service.AuthService;
 import com.lxy.common.annotation.Log;
 import com.lxy.common.enums.dict.LogBusinessType;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.model.R;
 import com.lxy.framework.security.util.UserIdUtil;
 import com.lxy.system.dto.AdminEditDTO;
@@ -87,14 +87,14 @@ public class AdminManageController {
     }
 
     @PreAuthorize("hasAuthority('systemManage:adminManage:save')")
-    @Log(title = "修改后管用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "修改后管用户", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     @PostMapping(value = "/editAdminInfo", produces = "application/json")
     public R<Object> editAdminInfo(@RequestBody @Valid AdminEditDTO adminEditDTO) {
         return authService.editAdminInfo(adminEditDTO);
     }
 
     @PreAuthorize("hasAuthority('systemManage:adminManage:updateStatus')")
-    @Log(title = "修改后管用户状态", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "修改后管用户状态", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     @PostMapping(value = "/disabledAdminInfo", produces = "application/json")
     public R<Object> disabledAdminInfo(@RequestBody @Valid AdminStatusDTO dto) {
         authService.disabledAdminInfo(dto);
@@ -102,7 +102,7 @@ public class AdminManageController {
     }
 
     @PreAuthorize("hasAuthority('systemManage:adminManage:deleteBatch')")
-    @Log(title = "批量删除后管用户", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "批量删除后管用户", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     @PostMapping(value = "/removeAdminInfoByIds", produces = "application/json")
     public R<Object> removeAdminInfoByIds(@RequestBody @NotEmpty List<Long> userIds) {
         authService.removeAdminInfoByIds(userIds);

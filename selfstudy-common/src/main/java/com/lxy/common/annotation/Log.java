@@ -1,7 +1,7 @@
 package com.lxy.common.annotation;
 
 import com.lxy.common.enums.dict.LogBusinessType;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 
 import java.lang.annotation.*;
 
@@ -32,6 +32,6 @@ public @interface Log {
     /**
      * 用户类型
      */
-    LogUserType userType() default LogUserType.USER;
+    UserType userType() default UserType.USER;
 
 }

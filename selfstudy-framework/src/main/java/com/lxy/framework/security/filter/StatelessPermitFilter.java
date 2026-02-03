@@ -1,7 +1,7 @@
 package com.lxy.framework.security.filter;
 
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.util.DualTokenUtil;
 import com.lxy.common.util.JsonWebTokenUtil;
 import com.lxy.framework.security.service.LoginStatusService;
@@ -42,7 +42,7 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
 
-        String tokenKey = loginUserType.equals(LogUserType.ADMIN.getType()) ? TOKEN_NAME_ADMIN : TOKEN_NAME_APP;
+        String tokenKey = loginUserType.equals(UserType.ADMIN.getType()) ? TOKEN_NAME_ADMIN : TOKEN_NAME_APP;
 
         // 访问的地址
         String accessToken = DualTokenUtil.getToken(request, tokenKey);
@@ -55,7 +55,7 @@ public class StatelessPermitFilter extends OncePerRequestFilter {
         Claims claims = JsonWebTokenUtil.getClaimsSign(accessToken);
         Long userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
 
-        String loginStatusKey = loginUserType.equals(LogUserType.ADMIN.getType())
+        String loginStatusKey = loginUserType.equals(UserType.ADMIN.getType())
             ? RedisKeyConstant.getAdminInfo(userId) : RedisKeyConstant.getLoginStatus(userId);
 
         // //存入SecurityContextHolder

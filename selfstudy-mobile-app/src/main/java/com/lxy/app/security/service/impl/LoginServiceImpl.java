@@ -2,8 +2,8 @@ package com.lxy.app.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lxy.app.security.service.LoginService;
-import com.lxy.common.constant.AuthConstant;
 import com.lxy.common.constant.ConfigConstant;
+import com.lxy.common.constant.DeviceTypeConstant;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.constant.SmsConstant;
 import com.lxy.common.constant.UserConstant;
@@ -112,7 +112,7 @@ public class LoginServiceImpl implements LoginService {
             userService.save(user);
         }
         LoginPasswordDTO loginPasswordDTO =
-            new LoginPasswordDTO(user.getPassword(), phone, AuthConstant.DEVICE_ANDROID);
+            new LoginPasswordDTO(user.getPassword(), phone, DeviceTypeConstant.DEVICE_ANDROID);
         return this.login(loginPasswordDTO);
     }
 

@@ -1,6 +1,5 @@
 package com.lxy.app.security.filter;
 
-import com.lxy.common.constant.AuthConstant;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.constant.RedisKeyConstant;
 import com.lxy.common.util.DualTokenUtil;
@@ -50,7 +49,7 @@ public class StatelessAuthenticationFilterUser extends OncePerRequestFilter {
         throws ServletException, IOException {
         // 获取token
         String msg = "";
-        String accessToken = JsonWebTokenUtil.getAccessToken(request, AuthConstant.TOKEN_NAME_APP);
+        String accessToken = JsonWebTokenUtil.getAccessToken(request, DualTokenUtil.TOKEN_NAME_APP);
         if (accessToken == null) {
             logger.error("token未获取到");
             filterChain.doFilter(request, response);

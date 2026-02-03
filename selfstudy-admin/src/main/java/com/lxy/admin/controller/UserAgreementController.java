@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lxy.common.annotation.Log;
 import com.lxy.common.enums.dict.LogBusinessType;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.model.R;
 import com.lxy.system.dto.AgreementEditDTO;
 import com.lxy.system.po.UserAgreement;
@@ -44,7 +44,7 @@ public class UserAgreementController {
     }
 
     @PreAuthorize("hasAuthority('userAgreementManage:save')")
-    @Log(title = "修改隐私政策与用户协议", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "修改隐私政策与用户协议", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     @PostMapping(value = "/saveAgreement", produces = "application/json")
     public R<Object> saveAgreement(@RequestBody @Valid AgreementEditDTO dto) {
         LambdaUpdateWrapper<UserAgreement> wrapper = new LambdaUpdateWrapper<>();

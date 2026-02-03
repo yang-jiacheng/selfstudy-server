@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.lxy.common.util.DateCusUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -49,7 +50,6 @@ public class RedisConfig {
 
     @Bean
     public RedisSerializer<Object> jackson2JsonRedisSerializer() {
-
         // 解决查询缓存转换异常的问题
         ObjectMapper objectMapper = new ObjectMapper();
         //所有属性可见 允许任何可见性的属性被序列化和反序列化
@@ -63,7 +63,7 @@ public class RedisConfig {
                 //将类型信息作为属性添加到 JSON 中
                 JsonTypeInfo.As.PROPERTY);
 
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        objectMapper.setDateFormat(new SimpleDateFormat(DateCusUtil.YYYY_MM_DD_HH_MM_SS));
         // 序列化空 Bean时不抛异常
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         // 反序列化时忽略未知属性

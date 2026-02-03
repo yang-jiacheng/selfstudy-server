@@ -3,7 +3,7 @@ package com.lxy.common.enums.dict;
 import lombok.Getter;
 
 /**
- * 操作日志用户类型
+ * 用户类型
  *
  * @author jiacheng yang.
  * @version 1.0
@@ -11,20 +11,20 @@ import lombok.Getter;
  */
 
 @Getter
-public enum LogUserType {
+public enum UserType {
 
     ADMIN("0", "后台用户"), USER("1", "APP用户");
 
     private final String type;
     private final String name;
 
-    LogUserType(String type, String name) {
+    UserType(String type, String name) {
         this.type = type;
         this.name = name;
     }
 
     public static String getName(String type) {
-        for (LogUserType logUserType : LogUserType.values()) {
+        for (UserType logUserType : UserType.values()) {
             if (logUserType.getType().equals(type)) {
                 return logUserType.name;
             }

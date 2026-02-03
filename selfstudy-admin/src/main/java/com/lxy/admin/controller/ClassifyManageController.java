@@ -2,7 +2,7 @@ package com.lxy.admin.controller;
 
 import com.lxy.common.annotation.Log;
 import com.lxy.common.enums.dict.LogBusinessType;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.model.R;
 import com.lxy.system.po.Catalog;
 import com.lxy.system.po.Classify;
@@ -49,14 +49,14 @@ public class ClassifyManageController {
 
     @PreAuthorize("hasAuthority('classifyManage:save')")
     @PostMapping(value = "/updateClassify", produces = "application/json")
-    @Log(title = "保存图书馆", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "保存图书馆", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     public R<Long> updateClassify(@RequestBody Classify classify) {
         return R.ok(classifyService.updateClassify(classify));
     }
 
     @PreAuthorize("hasAuthority('classifyManage:delete')")
     @PostMapping(value = "/removeClassify", produces = "application/json")
-    @Log(title = "删除图书馆", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
+    @Log(title = "删除图书馆", businessType = LogBusinessType.DELETE, userType = UserType.ADMIN)
     public R<Object> removeClassify(@RequestParam("id") Long id) {
         classifyService.removeClassify(id);
         return R.ok();
@@ -64,7 +64,7 @@ public class ClassifyManageController {
 
     @PreAuthorize("hasAuthority('classifyManage:delete')")
     @PostMapping(value = "/removeCatalog", produces = "application/json")
-    @Log(title = "删除节点", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
+    @Log(title = "删除节点", businessType = LogBusinessType.DELETE, userType = UserType.ADMIN)
     public R<Object> removeCatalog(@RequestParam("id") Long id) {
         catalogService.removeCatalog(id);
         return R.ok();
@@ -79,7 +79,7 @@ public class ClassifyManageController {
 
     @PreAuthorize("hasAuthority('classifyManage:save')")
     @PostMapping(value = "/saveCatalog", produces = "application/json")
-    @Log(title = "保存节点", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "保存节点", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     public R<Long> saveCatalog(@RequestBody Catalog catalog) {
         return R.ok(catalogService.saveCatalog(catalog));
     }

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxy.admin.service.AuthService;
 import com.lxy.common.annotation.Log;
 import com.lxy.common.enums.dict.LogBusinessType;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.model.CollResult;
 import com.lxy.common.model.R;
 import com.lxy.common.vo.LabelValueVO;
@@ -70,7 +70,7 @@ public class RoleManageController {
      * @since 2025/6/13 10:47
      */
     @PreAuthorize("hasAuthority('systemManage:roleManage:delete')")
-    @Log(title = "删除角色", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
+    @Log(title = "删除角色", businessType = LogBusinessType.DELETE, userType = UserType.ADMIN)
     @PostMapping(value = "/removeRoleById", produces = "application/json")
     public R<Object> removeRoleById(@RequestParam("id") Long id) {
         authService.removeRoleById(id);
@@ -97,7 +97,7 @@ public class RoleManageController {
      * @since 2025/6/13 10:44
      */
     @PreAuthorize("hasAuthority('systemManage:roleManage:save')")
-    @Log(title = "编辑角色", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "编辑角色", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     @PostMapping(value = "/addOrUpdateRole", produces = "application/json")
     public R<Long> addOrUpdateRole(@RequestBody @Valid RoleEditDTO roleEditDTO) {
         Long roleId = authService.addOrUpdateRole(roleEditDTO);

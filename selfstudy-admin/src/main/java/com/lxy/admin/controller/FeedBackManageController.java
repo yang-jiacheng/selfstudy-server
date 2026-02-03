@@ -2,7 +2,7 @@ package com.lxy.admin.controller;
 
 import com.lxy.common.annotation.Log;
 import com.lxy.common.enums.dict.LogBusinessType;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.model.PageResult;
 import com.lxy.common.model.R;
 import com.lxy.framework.security.util.UserIdUtil;
@@ -46,7 +46,7 @@ public class FeedBackManageController {
 
     @PreAuthorize("hasAuthority('feedBackManage:delete')")
     @PostMapping(value = "/removeFeedBackById", produces = "application/json")
-    @Log(title = "删除意见反馈", businessType = LogBusinessType.DELETE, userType = LogUserType.ADMIN)
+    @Log(title = "删除意见反馈", businessType = LogBusinessType.DELETE, userType = UserType.ADMIN)
     public R<Object> removeFeedBackById(@RequestParam("id") Long id) {
         feedbackService.removeById(id);
         return R.ok();
@@ -54,7 +54,7 @@ public class FeedBackManageController {
 
     @PreAuthorize("hasAuthority('feedBackManage:reply')")
     @PostMapping(value = "/replyFeedBackById", produces = "application/json")
-    @Log(title = "意见反馈-回复", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "意见反馈-回复", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     public R<Object> replyFeedBackById(@RequestBody FeedBackReplyDTO dto) {
         long userId = UserIdUtil.getUserId();
         Feedback feedback = new Feedback();

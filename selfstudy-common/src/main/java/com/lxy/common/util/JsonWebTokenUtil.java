@@ -3,7 +3,6 @@ package com.lxy.common.util;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lxy.common.constant.AuthConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -26,6 +25,18 @@ import java.util.Map;
 
 @Slf4j
 public class JsonWebTokenUtil {
+    /**
+     * JWT中的device(设备名称：android、ios、web)
+     */
+    public static String PARAM_NAME_DEVICE = "device";
+    /**
+     * JWT中userType参数的key名称 LogUserType
+     */
+    public static String PARAM_NAME_USER_TYPE = "userType";
+    /**
+     * JWT中userId参数的key名称
+     */
+    public static String PARAM_NAME_USER_ID = "userId";
 
     /**
      * JWT的分隔符
@@ -60,9 +71,9 @@ public class JsonWebTokenUtil {
         // long expiredTime = DateUtil.offsetDay(new Date(), EXPIRED_DAYS).getTime();
         // 自定义载荷属性
         Map<String, Object> claimsMap = new HashMap<String, Object>();
-        claimsMap.put(AuthConstant.PARAM_NAME_DEVICE, device);
-        claimsMap.put(AuthConstant.PARAM_NAME_USER_ID, userId);
-        claimsMap.put(AuthConstant.PARAM_NAME_USER_TYPE, userType);
+        claimsMap.put(PARAM_NAME_DEVICE, device);
+        claimsMap.put(PARAM_NAME_USER_ID, userId);
+        claimsMap.put(PARAM_NAME_USER_TYPE, userType);
         // 产生JWT
         JwtBuilder jwtBuilder = Jwts.builder();
         jwtBuilder.setClaims(claimsMap)
@@ -94,7 +105,7 @@ public class JsonWebTokenUtil {
             log.error("解析JWT失败", e);
             return null;
         }
-        Object value = claimsUnSign.get(AuthConstant.PARAM_NAME_USER_ID);
+        Object value = claimsUnSign.get(PARAM_NAME_USER_ID);
         Long userId = ((Number)value).longValue();
 
         // 获取用户的密钥

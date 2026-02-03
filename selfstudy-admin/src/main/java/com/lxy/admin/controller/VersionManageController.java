@@ -2,7 +2,7 @@ package com.lxy.admin.controller;
 
 import com.lxy.common.annotation.Log;
 import com.lxy.common.enums.dict.LogBusinessType;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.model.CollResult;
 import com.lxy.common.model.R;
 import com.lxy.system.po.Version;
@@ -46,7 +46,7 @@ public class VersionManageController {
     }
 
     @PreAuthorize("hasAuthority('versionManage:save')")
-    @Log(title = "修改APP版本", businessType = LogBusinessType.UPDATE, userType = LogUserType.ADMIN)
+    @Log(title = "修改APP版本", businessType = LogBusinessType.UPDATE, userType = UserType.ADMIN)
     @PostMapping(value = "/saveVersion", produces = "application/json")
     public R<Object> saveVersion(@RequestBody @NotNull Version version) {
         version.setUpdateTime(new Date());

@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.lxy.admin.security.service.LoginService;
 import com.lxy.common.constant.ConfigConstant;
 import com.lxy.common.constant.RedisKeyConstant;
-import com.lxy.common.enums.dict.LogUserType;
+import com.lxy.common.enums.dict.UserType;
 import com.lxy.common.model.R;
 import com.lxy.common.model.TokenPair;
 import com.lxy.common.util.DualTokenUtil;
@@ -70,7 +70,7 @@ public class DualTokenLoginServiceImpl implements LoginService {
         StatelessUser principal = (StatelessUser)authenticate.getPrincipal();
         Long userId = principal.getUserId();
         // 生成双Token
-        TokenPair tokenPair = DualTokenUtil.generateTokenPair(userId, LogUserType.ADMIN.getType());
+        TokenPair tokenPair = DualTokenUtil.generateTokenPair(userId, UserType.ADMIN.getType());
         // 设置ip
         tokenPair.setClientIp(dto.getClientIp());
         // 获取最大会话数量配置
@@ -119,7 +119,6 @@ public class DualTokenLoginServiceImpl implements LoginService {
         if (!isValid) {
             return r;
         }
-
         // 解析刷新令牌获取用户信息
         Claims claims = DualTokenUtil.parseToken(refreshToken);
         Long userId = DualTokenUtil.getLongFromClaims(claims, PARAM_NAME_USER_ID);
