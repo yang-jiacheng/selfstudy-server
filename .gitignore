@@ -14,3 +14,14 @@ buildNumber.properties
 *.iml
 logs/
 .promptx/
+
+# Compiled class file
+*.class
+# Log file
+*.log
+# Package Files #
+*.jar
+*.war
+*.zip
+*.tar.gz
+*.rar
