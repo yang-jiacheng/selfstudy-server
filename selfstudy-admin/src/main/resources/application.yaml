@@ -10,7 +10,7 @@ spring:
       initial-size: 5
       min-idle: 5
       max-active: 50
-      max-wait: 60000
+      max-wait: 30000
       time-between-eviction-runs-millis: 60000
       min-evictable-idle-time-millis: 300000
       validation-query: 'SELECT 1'
@@ -20,15 +20,17 @@ spring:
       test-on-borrow: false
       test-on-return: false
       # 配置防止连接泄漏（如果某个连接长时间未释放会强制回收，单位：秒）
-      remove-abandoned: false
-      remove-abandoned-timeout: 180
-      # 配置日志统计
+#      remove-abandoned: true
+#      remove-abandoned-timeout: 180
+      # 打印连接泄漏日志
       log-abandoned: true
+      filters: stat,slf4j
+      connection-properties: druid.stat.mergeSql=true,druid.stat.slowSqlMillis=500
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
-        login-username: admin
-        login-password: '@yjc+0827#520'
+        login-username:
+        login-password:
         allow: 0.0.0.0/0
   # redis
   data:
@@ -106,7 +108,7 @@ oss:
     # 是否开启oss上传
     enabled: true
     # oss存储空间
-    bucket: selfstudy-server
+    bucket:
     # oss资源访问路径(CDN)
     path:
     endpoint:
@@ -114,7 +116,7 @@ oss:
 # 加密配置
 crypto:
   des:
-    secret-key:
+    secret-key: hG7kP9vT2yLmX4qA1cZbR5sU
 
 # Security配置
 security:

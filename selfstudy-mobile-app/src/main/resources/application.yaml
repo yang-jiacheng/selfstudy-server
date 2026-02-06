@@ -27,8 +27,8 @@ spring:
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
-        login-username: admin
-        login-password: '@yjc+0827#520'
+        login-username:
+        login-password:
         allow: 0.0.0.0/0
   # redis
   data:
@@ -106,7 +106,7 @@ oss:
     # 是否开启oss上传
     enabled: true
     # oss存储空间
-    bucket: selfstudy-server
+    bucket:
     # oss资源访问路径(CDN)
     path:
     endpoint:
@@ -114,7 +114,7 @@ oss:
 # 加密配置
 crypto:
   des:
-    secret-key:
+    secret-key: hG7kP9vT2yLmX4qA1cZbR5sU
 
 # Security配置
 security:
