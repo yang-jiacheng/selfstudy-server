@@ -13,8 +13,8 @@ JARS=('selfstudy-admin.jar' 'selfstudy-mobile-app.jar')
 JAR_PATHS=('/java/selfstudy-admin/' '/java/selfstudy-mobile-app/')
 
 JAVA_OPTIONS=(
-'-Xms512m -Xmx512m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-admin.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-admin.hprof'
-'-Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=96m -XX:MetaspaceSize=96m -XX:MaxMetaspaceSize=192m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-mobile-app.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-mobile-app.hprof'
+'-Xms512m -Xmx512m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-admin.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-admin.hprof'
+'-Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=96m -XX:MetaspaceSize=96m -XX:MaxMetaspaceSize=192m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-mobile-app.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-mobile-app.hprof'
 )
 
 JDK_OPENS="--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED"
@@ -28,23 +28,34 @@ JDK_OPENS="--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/jav
 # -XX:MaxDirectMemorySize: 直接内存最大大小（限制堆外内存）
 # -XX:MetaspaceSize: 元空间初始大小
 # -XX:MaxMetaspaceSize: 元空间最大大小（存储类元数据）
-# -Xss: 线程栈大小（每个线程的栈空间）
 # -XX:MaxGCPauseMillis: GC停顿时间目标（毫秒）
-# -XX:G1HeapRegionSize: G1堆区域大小
 # -XX:+UseStringDeduplication: 启用字符串去重（节省内存）
 # -XX:+ParallelRefProcEnabled: 启用并行引用处理（提高GC效率）
+# -XX:+ZGenerational: （JDK21 新特性）启用 ZGC 分代模式，将对象分为新生代和老年代，减少扫描范围，提高吞吐量并降低 GC 开销
 # -Xlog:gc: GC日志配置（记录GC详细信息）
 # -XX:+HeapDumpOnOutOfMemoryError: 发生OOM时自动dump堆内存
 # -XX:HeapDumpPath: 堆dump文件保存路径
 
 ## 示例：
-# -Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=96m -XX:MetaspaceSize=96m -XX:MaxMetaspaceSize=192m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m
-# -Xms512m -Xmx512m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -Xss256k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=2m
-# -Xms1g -Xmx1g -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=256m -XX:MetaspaceSize=160m -XX:MaxMetaspaceSize=320m -Xss384k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=4m
-# -Xms2g -Xmx2g -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=512m -XX:MetaspaceSize=192m -XX:MaxMetaspaceSize=384m -Xss384k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=8m
-# -Xms3g -Xmx3g -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=768m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -Xss512k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=8m
-# -Xms4g -Xmx4g -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=768m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -Xss512k -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=16m
+# -Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=96m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
+# -Xms512m -Xmx512m -XX:+UseG1GC -XX:CICompilerCount=4 -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
+# -Xms1g -Xmx1g -XX:+UseG1GC -XX:CICompilerCount=6 -XX:MaxDirectMemorySize=256m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
+# -Xms2g -Xmx2g -XX:+UseG1GC -XX:CICompilerCount=6 -XX:MaxDirectMemorySize=512m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
+# -Xms3g -Xmx3g -XX:+UseG1GC -XX:CICompilerCount=8 -XX:MaxDirectMemorySize=768m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
+# -Xms4g -Xmx4g -XX:+UseG1GC -XX:CICompilerCount=8 -XX:MaxDirectMemorySize=768m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
+# -Xms6g -Xmx6g -XX:+UseG1GC -XX:CICompilerCount=8 -XX:MaxDirectMemorySize=1g -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
 
+# -Xms8g -Xmx8g -XX:+UseZGC -XX:CICompilerCount=8 -XX:MaxDirectMemorySize=2g -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=768m -XX:+UseStringDeduplication -XX:+ZGenerational
+# -Xms10g -Xmx10g -XX:+UseZGC -XX:CICompilerCount=10 -XX:MaxDirectMemorySize=2g -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=768m -XX:+UseStringDeduplication -XX:+ZGenerational
+# -Xms12g -Xmx12g -XX:+UseZGC -XX:CICompilerCount=12 -XX:MaxDirectMemorySize=3g -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=1g -XX:+UseStringDeduplication -XX:+ZGenerational
+
+# | 服务器内存 | JVM堆 |
+# | ----- | ---- |
+# | 4G    | 2G   |
+# | 8G    | 4G   |
+# | 16G   | 8G   |
+# | 32G   | 12G  |
+# | 64G   | 24G  |
 
 # ==================== 启动函数 ====================
 
