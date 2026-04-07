@@ -13,8 +13,8 @@ JARS=('selfstudy-admin.jar' 'selfstudy-mobile-app.jar')
 JAR_PATHS=('/java/selfstudy-admin/' '/java/selfstudy-mobile-app/')
 
 JAVA_OPTIONS=(
-'-Xms512m -Xmx512m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-admin.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-admin.hprof'
-'-Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=96m -XX:MetaspaceSize=96m -XX:MaxMetaspaceSize=192m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-mobile-app.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-mobile-app.hprof'
+'-Xms128m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-admin.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-admin.hprof'
+'-Xms128m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -Xlog:gc:/java/logs/gc/gc-selfstudy-mobile-app.log:time:filecount=5,filesize=50M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/java/logs/heap-dumps/selfstudy-mobile-app.hprof'
 )
 
 JDK_OPENS="--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED"
@@ -37,8 +37,8 @@ JDK_OPENS="--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/jav
 # -XX:HeapDumpPath: 堆dump文件保存路径
 
 ## 示例：
-# -Xms384m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxDirectMemorySize=96m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
-# -Xms512m -Xmx512m -XX:+UseG1GC -XX:CICompilerCount=4 -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
+# -Xms128m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
+# -Xms256m -Xmx512m -XX:+UseG1GC -XX:CICompilerCount=4 -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
 # -Xms1g -Xmx1g -XX:+UseG1GC -XX:CICompilerCount=6 -XX:MaxDirectMemorySize=256m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
 # -Xms2g -Xmx2g -XX:+UseG1GC -XX:CICompilerCount=6 -XX:MaxDirectMemorySize=512m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
 # -Xms3g -Xmx3g -XX:+UseG1GC -XX:CICompilerCount=8 -XX:MaxDirectMemorySize=768m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
