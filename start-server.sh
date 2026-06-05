@@ -35,11 +35,12 @@ JDK_OPENS="--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/jav
 # -Xlog:gc: GC日志配置（记录GC详细信息）
 # -XX:+HeapDumpOnOutOfMemoryError: 发生OOM时自动dump堆内存
 # -XX:HeapDumpPath: 堆dump文件保存路径
+# -Dfile.encoding=UTF-8
 
 ## 示例：
 # -Xms128m -Xmx384m -XX:+UseG1GC -XX:CICompilerCount=2 -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
 # -Xms256m -Xmx512m -XX:+UseG1GC -XX:CICompilerCount=4 -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
-# -Xms1g -Xmx1g -XX:+UseG1GC -XX:CICompilerCount=6 -XX:MaxDirectMemorySize=256m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
+# -Xms1g -Xmx1g -XX:+UseG1GC -XX:CICompilerCount=6 -XX:MaxDirectMemorySize=256m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled 
 # -Xms2g -Xmx2g -XX:+UseG1GC -XX:CICompilerCount=6 -XX:MaxDirectMemorySize=512m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
 # -Xms3g -Xmx3g -XX:+UseG1GC -XX:CICompilerCount=8 -XX:MaxDirectMemorySize=768m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
 # -Xms4g -Xmx4g -XX:+UseG1GC -XX:CICompilerCount=8 -XX:MaxDirectMemorySize=768m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
