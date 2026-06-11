@@ -41,17 +41,21 @@ public class DateCusUtil {
 
     public static final String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
 
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public static final ZoneId SYSTEM_ZONE = ZoneId.systemDefault();
 
     /**
      * 获取现在到今天结束的时间,秒数
      */
     public static long getEndByDay() {
         Date now = new Date();
-        //一天的结束
+        // 一天的结束
         DateTime endOfDay = DateUtil.endOfDay(now);
         return DateUtil.between(now, endOfDay, DateUnit.SECOND);
     }
-
 
     /**
      * 获取指定日期期间的每一天
@@ -60,7 +64,7 @@ public class DateCusUtil {
         List<String> allDate = new ArrayList<>();
 
         allDate.add(start);
-        //字符串格式化成Date
+        // 字符串格式化成Date
         Date dBegin = DateUtil.parse(start, DatePattern.NORM_DATE_PATTERN);
         Date dEnd = DateUtil.parse(end, DatePattern.NORM_DATE_PATTERN);
 
@@ -85,9 +89,8 @@ public class DateCusUtil {
         LocalDate startDate = LocalDate.parse(start, DateTimeFormatter.ofPattern(format));
         LocalDate endDate = LocalDate.parse(end, DateTimeFormatter.ofPattern(format));
         return Stream.iterate(startDate, date -> date.plusDays(1))
-                .limit(ChronoUnit.DAYS.between(startDate, endDate.plusDays(1)))
-                .map(date -> date.format(DateTimeFormatter.ofPattern(format)))
-                .collect(Collectors.toList());
+            .limit(ChronoUnit.DAYS.between(startDate, endDate.plusDays(1)))
+            .map(date -> date.format(DateTimeFormatter.ofPattern(format))).collect(Collectors.toList());
     }
 
     /**
@@ -95,7 +98,7 @@ public class DateCusUtil {
      */
     public static String getWeekByDay(Date date) {
         String[] weeks = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
-        //Date eeee = DateUtil.parse(date, DatePattern.NORM_DATE_PATTERN);
+        // Date eeee = DateUtil.parse(date, DatePattern.NORM_DATE_PATTERN);
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         int week_index = cal.get(Calendar.DAY_OF_WEEK) - 1;
@@ -125,13 +128,11 @@ public class DateCusUtil {
     }
 
     public static List<WeekData> monthsStream(int year) {
-        return IntStream.rangeClosed(1, 12)
-                .mapToObj(month -> {
-                    LocalDate start = LocalDate.of(year, month, 1);
-                    LocalDate end = start.with(TemporalAdjusters.lastDayOfMonth());
-                    return new WeekData(start, end);
-                })
-                .collect(Collectors.toList());
+        return IntStream.rangeClosed(1, 12).mapToObj(month -> {
+            LocalDate start = LocalDate.of(year, month, 1);
+            LocalDate end = start.with(TemporalAdjusters.lastDayOfMonth());
+            return new WeekData(start, end);
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -140,9 +141,11 @@ public class DateCusUtil {
     public static List<WeekData> weeks(int year, int month) {
         LocalDate start = LocalDate.now().withYear(year).withMonth(month).with(TemporalAdjusters.firstDayOfMonth());
         LocalDate end = LocalDate.now().withYear(year).withMonth(month).with(TemporalAdjusters.lastDayOfMonth());
-        Map<Integer, WeekData> map = Stream.iterate(start, localDate -> localDate.plusDays(1))
-                .limit(ChronoUnit.DAYS.between(start, end) + 1)
-                .collect(Collectors.groupingBy(localDate -> localDate.get(WeekFields.of(DayOfWeek.MONDAY, 1).weekOfMonth()),
+        Map<Integer,
+            WeekData> map =
+                Stream.iterate(start, localDate -> localDate.plusDays(1)).limit(ChronoUnit.DAYS.between(start, end) + 1)
+                    .collect(Collectors.groupingBy(
+                        localDate -> localDate.get(WeekFields.of(DayOfWeek.MONDAY, 1).weekOfMonth()),
                         Collectors.collectingAndThen(Collectors.toList(), WeekData::new)));
         List<WeekData> list = new ArrayList<>(map.size());
         map.forEach((key, value) -> list.add(value));
@@ -164,15 +167,14 @@ public class DateCusUtil {
         return weeks;
     }
 
-
     public static void main(String[] args) {
         DateTime parse = DateUtil.parse("2022-12-18 00:00:15", DatePattern.NORM_DATETIME_PATTERN);
 
         Date mon = getMon(parse);
 
         System.out.println(DateUtil.format(mon, DatePattern.NORM_DATE_PATTERN));
-//        String weekByDay = getWeekByDay(parse);
-//        System.out.println(weekByDay);
+        // String weekByDay = getWeekByDay(parse);
+        // System.out.println(weekByDay);
     }
 
     /**
@@ -185,10 +187,8 @@ public class DateCusUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.setWeekDate(calendar.getWeekYear(), calendar.get(Calendar.WEEK_OF_YEAR), Calendar.MONDAY);
-        calendar.set(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH),
-                0, 0, 0);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 0,
+            0, 0);
         return calendar.getTime();
     }
 
@@ -202,10 +202,8 @@ public class DateCusUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.setWeekDate(calendar.getWeekYear(), calendar.get(Calendar.WEEK_OF_YEAR) + 1, Calendar.SUNDAY);
-        calendar.set(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH),
-                23, 59, 59);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 23,
+            59, 59);
         return calendar.getTime();
     }
 
@@ -227,6 +225,5 @@ public class DateCusUtil {
         Instant instant = date.atStartOfDay().atZone(zone).toInstant();
         return Date.from(instant);
     }
-
 
 }

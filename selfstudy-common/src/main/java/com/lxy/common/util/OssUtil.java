@@ -19,7 +19,10 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static com.lxy.common.properties.AliYunProperties.*;
+import static com.lxy.common.properties.AliYunProperties.accessKeyId;
+import static com.lxy.common.properties.AliYunProperties.accessKeySecret;
+import static com.lxy.common.properties.AliYunProperties.ossBucket;
+import static com.lxy.common.properties.AliYunProperties.ossEndpoint;
 
 /**
  * 阿里云对象存储 OSS
@@ -122,8 +125,9 @@ public class OssUtil {
         String path = "file/" + fileName;
         OSS ossClient = initOssClient();
         try {
-            // 清空response
-            response.reset();
+            // 只清空输出缓冲区内容，保留 CorsFilter 等已写入的响应头（如 Access-Control-Allow-Origin）
+            // response.reset() 会清除所有头，导致跨域场景下 CORS 头丢失
+            response.resetBuffer();
             response.setCharacterEncoding("UTF-8");
             // 告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
             response.setHeader("Content-Disposition",

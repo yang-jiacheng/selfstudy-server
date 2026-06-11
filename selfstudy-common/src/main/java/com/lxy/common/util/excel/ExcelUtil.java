@@ -9,7 +9,19 @@ import com.lxy.common.annotation.ExcelHeader;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
@@ -48,9 +60,10 @@ public class ExcelUtil {
 
     private static final String XLSX_SUFFIX = ".xlsx";
 
-
     /**
-     * <P>居中对齐薄边框样式</P>
+     * <P>
+     * 居中对齐薄边框样式
+     * </P>
      *
      * @param wb wb
      * @return CellStyle
@@ -66,7 +79,9 @@ public class ExcelUtil {
     }
 
     /**
-     * <P>表头专用样式：灰色背景，粗体，居中对齐，薄边框</P>
+     * <P>
+     * 表头专用样式：灰色背景，粗体，居中对齐，薄边框
+     * </P>
      *
      * @param wb 工作簿
      * @return CellStyle 表头样式
@@ -81,7 +96,7 @@ public class ExcelUtil {
         // 设置字体为粗体
         Font headerFont = wb.createFont();
         headerFont.setBold(true);
-        headerFont.setFontHeightInPoints((short) 12);
+        headerFont.setFontHeightInPoints((short)12);
         headerFont.setColor(IndexedColors.BLACK.getIndex());
         headerStyle.setFont(headerFont);
 
@@ -106,10 +121,10 @@ public class ExcelUtil {
      * 设置四周薄边框
      *
      * @param firstRow 开始行
-     * @param lastRow  结束行
+     * @param lastRow 结束行
      * @param firstCol 开始单元格
-     * @param lastCol  结束单元格
-     * @param sheet    excel工作表
+     * @param lastCol 结束单元格
+     * @param sheet excel工作表
      */
     public static void setAroundBorderStyle(int firstRow, int lastRow, int firstCol, int lastCol, Sheet sheet) {
         RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
@@ -119,7 +134,9 @@ public class ExcelUtil {
     }
 
     /**
-     * <P>黑色粗体</P>
+     * <P>
+     * 黑色粗体
+     * </P>
      *
      * @param wb wb
      * @return Font
@@ -132,19 +149,23 @@ public class ExcelUtil {
     }
 
     /**
-     * <P>黑色粗体行高20磅</P>
+     * <P>
+     * 黑色粗体行高20磅
+     * </P>
      *
      * @param wb wb
      * @return XSSFFont
      */
     public static Font getBlackBoldHeight20Font(Workbook wb) {
         Font blackTitleFont = getBlackBoldFont(wb);
-        blackTitleFont.setFontHeightInPoints((short) 20);
+        blackTitleFont.setFontHeightInPoints((short)20);
         return blackTitleFont;
     }
 
     /**
-     * <P>红色字体</P>
+     * <P>
+     * 红色字体
+     * </P>
      *
      * @param wb wb
      * @return Font
@@ -156,7 +177,9 @@ public class ExcelUtil {
     }
 
     /**
-     * <P>红色粗体</P>
+     * <P>
+     * 红色粗体
+     * </P>
      *
      * @param wb wb
      * @return XSSFFont
@@ -172,7 +195,7 @@ public class ExcelUtil {
      * 创建sheet的row
      *
      * @param sheet sheet
-     * @param row   真实行数
+     * @param row 真实行数
      * @return XSSFRow
      */
     public static Row createRow(Sheet sheet, int row) {
@@ -182,8 +205,8 @@ public class ExcelUtil {
     /**
      * 创建单元格并写入数据和样式
      *
-     * @param row   行
-     * @param line  真实列
+     * @param row 行
+     * @param line 真实列
      * @param value 数据
      * @param style 样式
      * @return XSSFCell
@@ -204,18 +227,19 @@ public class ExcelUtil {
      * 导出excel
      *
      * @param response HttpServletResponse
-     * @param wb       Workbook
+     * @param wb Workbook
      * @param fileName 文件名
      */
     public static void exportExcel(HttpServletResponse response, Workbook wb, String fileName) {
         OutputStream output = null;
         try {
-            //清空response
+            // 清空response
             response.reset();
             response.setCharacterEncoding("UTF-8");
-            //告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
-            //类型为xlsx
+            // 告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
+            response.setHeader("Content-Disposition",
+                "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+            // 类型为xlsx
             response.setContentType("application/octet-stream");
             output = response.getOutputStream();
             wb.write(output);
@@ -226,20 +250,20 @@ public class ExcelUtil {
             IoUtil.close(output);
             // 释放 Workbook 临时文件
             if (wb instanceof SXSSFWorkbook) {
-                ((SXSSFWorkbook) wb).dispose();
+                ((SXSSFWorkbook)wb).dispose();
             }
             IoUtil.close(wb);
         }
     }
 
     /**
-     * 根据数据列表导出excel
-     * SXSSFWorkbook 专为处理大数据量设计，采用逐行写入磁盘的方式，减少内存占用，避免OOM。
+     * 根据数据列表导出excel SXSSFWorkbook 专为处理大数据量设计，采用逐行写入磁盘的方式，减少内存占用，避免OOM。
      *
      * @author jiacheng yang.
      * @since 2025/4/30 15:47
      */
-    public static <T> void exportExcelByRecords(String sheetName, List<T> dataList, Class<T> clazz, HttpServletResponse response) {
+    public static <T> void exportExcelByRecords(String sheetName, List<T> dataList, Class<T> clazz,
+        HttpServletResponse response) {
         sheetName = ReUtil.replaceAll(sheetName, "[\\\\/:*?\"<>|]", "_");
         // 创建工作簿
         SXSSFWorkbook wb = new SXSSFWorkbook();
@@ -251,14 +275,13 @@ public class ExcelUtil {
         Sheet sheet = wb.createSheet(sheetName);
         // ExcelHeader注解的字段
         List<Field> exportFields = Arrays.stream(ReflectUtil.getFields(clazz))
-                // 过滤掉没有ExcelHeader注解的字段
-                .filter(field -> field.isAnnotationPresent(ExcelHeader.class))
-                .toList();
-        //设置动态列宽（按实际导出字段数量）
+            // 过滤掉没有ExcelHeader注解的字段
+            .filter(field -> field.isAnnotationPresent(ExcelHeader.class)).toList();
+        // 设置动态列宽（按实际导出字段数量）
         for (int i = 0; i < exportFields.size(); i++) {
             sheet.setColumnWidth(i, 5000);
         }
-        //生成表头行（使用title属性和表头专用样式）
+        // 生成表头行（使用title属性和表头专用样式）
         Row headerRow = createRow(sheet, 1);
         // 设置表头行高为25磅
         headerRow.setHeightInPoints(25);
@@ -297,30 +320,29 @@ public class ExcelUtil {
     /**
      * Excel导入方法 - 使用BaseSheetHandler的注解驱动方式
      *
-     * @param file  Excel文件
+     * @param file Excel文件
      * @param clazz 要解析的实体类
      * @return 解析结果列表
      */
     public static <T> List<T> importExcel(MultipartFile file, Class<T> clazz) {
-        return importExcel(file, sheetIndex -> new BaseSheetHandler<T>(clazz, sheetIndex) {
-        });
+        return importExcel(file, sheetIndex -> new BaseSheetHandler<T>(clazz, sheetIndex) {});
     }
 
     /**
      * Excel导入方法 - 兼容原有方式
      *
-     * @param file            Excel文件
+     * @param file Excel文件
      * @param handlerSupplier sheet处理器Supplier，用于接收sheet编号参数
      * @return 解析结果列表
      */
-    public static <T> List<T> importExcel(MultipartFile file, Function<Integer, SheetHandlerResult<T>> handlerSupplier) {
+    public static <T> List<T> importExcel(MultipartFile file,
+        Function<Integer, SheetHandlerResult<T>> handlerSupplier) {
         List<T> records = new ArrayList<>();
         try (OPCPackage pkg = OPCPackage.open(file.getInputStream())) {
             XSSFReader reader = new XSSFReader(pkg);
             SharedStrings sst = reader.getSharedStringsTable();
             StylesTable styles = reader.getStylesTable();
-            XSSFReader.SheetIterator sheets = (XSSFReader.SheetIterator)
-                    reader.getSheetsData();
+            XSSFReader.SheetIterator sheets = (XSSFReader.SheetIterator)reader.getSheetsData();
 
             int sheetIndex = 1; // sheet编号从1开始
             while (sheets.hasNext()) {
@@ -328,13 +350,12 @@ public class ExcelUtil {
                     // 每个 sheet 取一个全新的 handler，并传递sheet编号
                     SheetHandlerResult<T> hl = handlerSupplier.apply(sheetIndex);
                     XMLReader parser = XMLReaderFactory.createXMLReader();
-                    parser.setContentHandler(new XSSFSheetXMLHandler(
-                            styles, sst, hl, new DataFormatter(Locale.CHINA), false
-                    ));
+                    parser.setContentHandler(
+                        new XSSFSheetXMLHandler(styles, sst, hl, new DataFormatter(Locale.CHINA), false));
 
                     InputSource sheetSource = new InputSource(sheetStream);
                     parser.parse(sheetSource);
-                    //解析后的操作
+                    // 解析后的操作
                     List<T> resultList = hl.getResultList();
                     if (CollUtil.isNotEmpty(resultList)) {
                         log.info("解析EXCEL第{}sheet成功, 共解析到{}条数据", sheetIndex, resultList.size());
@@ -348,6 +369,5 @@ public class ExcelUtil {
         }
         return records;
     }
-
 
 }

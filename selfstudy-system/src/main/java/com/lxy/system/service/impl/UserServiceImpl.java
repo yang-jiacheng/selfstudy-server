@@ -302,7 +302,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // List<UserImportVO> usersVo = ExcelUtil.importExcel(file, UserImportVO.class);
 
         // 方式2：使用自定义处理器（兼容原有方式）
-        List<UserImportVO> usersVo = ExcelUtil.importExcel(file, UserSheetHandler::new);
+        List<UserImportVO> usersVo = ExcelUtil.importExcel(file, sheetIndex -> new UserSheetHandler(sheetIndex));
 
         List<ExcelErrorInfoVO> errorList = checkUserList(usersVo);
         if (CollUtil.isNotEmpty(errorList)) {

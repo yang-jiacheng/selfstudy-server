@@ -73,7 +73,7 @@ public class FileUtil {
         if (!dir.exists()) {
             System.out.println("dir not exists, create it ...");
             try {
-                dir.mkdirs();        //新建所有子级目录
+                dir.mkdirs(); // 新建所有子级目录
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -84,8 +84,7 @@ public class FileUtil {
     }
 
     /**
-     * 获取格式化后的随机文件名：
-     * 原始文件名（最多15字符） + "_" + 当前时间戳 + 原始后缀
+     * 获取格式化后的随机文件名： 原始文件名（最多15字符） + "_" + 当前时间戳 + 原始后缀
      */
     public static String getRandomFileName(String fileName) {
         if (StrUtil.isBlank(fileName)) {
@@ -106,7 +105,6 @@ public class FileUtil {
 
         return StrUtil.format("{}_{}{}", namePart, DateUtil.current(), suffix);
     }
-
 
     /**
      * 删除upload文件夹里的具体文件
@@ -133,27 +131,24 @@ public class FileUtil {
     public static void deleteFileAndFolderByUpload() {
         try {
             Path path = Paths.get(CustomProperties.uploadPath);
-            Files.walkFileTree(path,
-                    new SimpleFileVisitor<Path>() {
-                        // 先去遍历删除文件
-                        @Override
-                        public FileVisitResult visitFile(Path file,
-                                                         BasicFileAttributes attrs) throws IOException {
-                            Files.delete(file);
-                            LOG.error("文件被删除 : {}", file);
-                            return FileVisitResult.CONTINUE;
-                        }
+            Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+                // 先去遍历删除文件
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    LOG.error("文件被删除 : {}", file);
+                    return FileVisitResult.CONTINUE;
+                }
 
-                        // 再去遍历删除目录
-                        @Override
-                        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                            Files.delete(dir);
-                            LOG.error("文件夹被删除: {}", dir);
-                            return FileVisitResult.CONTINUE;
-                        }
+                // 再去遍历删除目录
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    LOG.error("文件夹被删除: {}", dir);
+                    return FileVisitResult.CONTINUE;
+                }
 
-                    }
-            );
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -173,13 +168,15 @@ public class FileUtil {
         try {
             File file = new File(downloadPath);
             in = new FileInputStream(file);
-            //清空response
-            response.reset();
+            // 只清空输出缓冲区内容，保留 CorsFilter 等已写入的响应头（如 Access-Control-Allow-Origin）
+            // response.reset() 会清除所有头，导致跨域场景下 CORS 头丢失
+            response.resetBuffer();
             response.setCharacterEncoding("UTF-8");
-            //告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+            // 告知浏览器以下载的方式打开文件，文件名如果包含中文需要指定编码
+            response.setHeader("Content-Disposition",
+                "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
             out = response.getOutputStream();
-            //将输入流中的数据循环写入到响应输出流中，而不是一次性读取到内存，通过响应输出流输出到前端
+            // 将输入流中的数据循环写入到响应输出流中，而不是一次性读取到内存，通过响应输出流输出到前端
             byte[] data = new byte[1024];
             int len = 0;
             while ((len = in.read(data)) != -1) {
@@ -194,10 +191,10 @@ public class FileUtil {
     }
 
     public static void main(String[] args) {
-//        File file = new File("D:\\AndroidCode\\StudyRoom\\app\\prod\\release\\studyroom-1.0.0-1-20230310.apk");
-//        System.out.println(getHash(file,"MD5"));
-//        System.out.println(getHash(file,"SHA-1"));
-//        System.out.println(getHash(file,"SHA-256"));
+        // File file = new File("D:\\AndroidCode\\StudyRoom\\app\\prod\\release\\studyroom-1.0.0-1-20230310.apk");
+        // System.out.println(getHash(file,"MD5"));
+        // System.out.println(getHash(file,"SHA-1"));
+        // System.out.println(getHash(file,"SHA-256"));
         System.out.println(getRandomFileName("新建文本文档.txt"));
     }
 }
