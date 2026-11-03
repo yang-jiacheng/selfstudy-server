@@ -216,7 +216,7 @@ mvn clean package
 
 **联系方式：**
 
-- 📧 **邮箱：** yjc1529425632@gmail.com
+- 📧 **邮箱：** jace.yang.dev@gmail.com
 - 💬 **微信：** crushed_whiskey
 - 🐙 **GitHub：** https://github.com/yang-jiacheng
 

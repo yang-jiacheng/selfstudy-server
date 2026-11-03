@@ -216,7 +216,7 @@ The suggested structure is as follows, with the startup script in the project ro
 
 **Contact:**
 
-- 📧 **Email:** yjc1529425632@gmail.com
+- 📧 **Email:** jace.yang.dev@gmail.com
 - 💬 **WeChat:** crushed_whiskey
 - 🐙 **GitHub:** https://github.com/yang-jiacheng
 
